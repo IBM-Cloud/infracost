@@ -86,23 +86,32 @@ func (r *RedshiftCluster) BuildResource() *schema.Resource {
 
 	costComponents = append(costComponents, r.spectrumCostComponent(tbScanned))
 
+	var useNewMethod bool = true
 	if r.BackupStorageGB != nil {
 		storageSnapshotGB := decimal.NewFromFloat(*r.BackupStorageGB)
-		storageSnapshotTiers := usage.CalculateTierBuckets(storageSnapshotGB, []int{51200, 512000})
+		if useNewMethod {
+			fmt.Printf("using combined tier pricing...")
+			if storageSnapshotGB.GreaterThan(decimal.Zero) {
+				costComponents = append(costComponents, r.storageSnapshotCostComponent("Backup storage", &storageSnapshotGB))
+			}
+		} else {
+			storageSnapshotGB := decimal.NewFromFloat(*r.BackupStorageGB)
+			storageSnapshotTiers := usage.CalculateTierBuckets(storageSnapshotGB, []int{51200, 512000})
 
-		if storageSnapshotTiers[0].GreaterThan(decimal.Zero) {
-			costComponents = append(costComponents, r.storageSnapshotCostComponent("Backup storage (first 50 TB)", "0", &storageSnapshotTiers[0]))
-		}
+			if storageSnapshotTiers[0].GreaterThan(decimal.Zero) {
+				costComponents = append(costComponents, r.storageSnapshotCostComponentOld("Backup storage (first 50 TB)", "0", &storageSnapshotTiers[0]))
+			}
 
-		if storageSnapshotTiers[1].GreaterThan(decimal.Zero) {
-			costComponents = append(costComponents, r.storageSnapshotCostComponent("Backup storage (next 450 TB)", "51200", &storageSnapshotTiers[1]))
-		}
+			if storageSnapshotTiers[1].GreaterThan(decimal.Zero) {
+				costComponents = append(costComponents, r.storageSnapshotCostComponentOld("Backup storage (next 450 TB)", "51200", &storageSnapshotTiers[1]))
+			}
 
-		if storageSnapshotTiers[2].GreaterThan(decimal.Zero) {
-			costComponents = append(costComponents, r.storageSnapshotCostComponent("Backup storage (over 500 TB)", "512000", &storageSnapshotTiers[2]))
+			if storageSnapshotTiers[2].GreaterThan(decimal.Zero) {
+				costComponents = append(costComponents, r.storageSnapshotCostComponentOld("Backup storage (over 500 TB)", "512000", &storageSnapshotTiers[2]))
+			}
 		}
 	} else {
-		costComponents = append(costComponents, r.storageSnapshotCostComponent("Backup storage (first 50 TB)", "0", nil))
+		costComponents = append(costComponents, r.storageSnapshotCostComponentOld("Backup storage (first 50 TB)", "0", nil))
 	}
 
 	return &schema.Resource{
@@ -145,7 +154,25 @@ func (r *RedshiftCluster) spectrumCostComponent(tbScanned *decimal.Decimal) *sch
 	}
 }
 
-func (r *RedshiftCluster) storageSnapshotCostComponent(displayName string, startUsageAmount string, storageSnapshot *decimal.Decimal) *schema.CostComponent {
+func (r *RedshiftCluster) storageSnapshotCostComponent(displayName string, storageAmount *decimal.Decimal) *schema.CostComponent {
+	return &schema.CostComponent{
+		Name:            displayName,
+		Unit:            "GB",
+		UnitMultiplier:  decimal.NewFromInt(1),
+		MonthlyQuantity: storageAmount,
+		ProductFilter: &schema.ProductFilter{
+			VendorName:    strPtr("aws"),
+			Region:        strPtr(r.Region),
+			Service:       strPtr("AmazonRedshift"),
+			ProductFamily: strPtr("Storage Snapshot"),
+		},
+		PriceFilter: &schema.PriceFilter{
+			PurchaseOption: strPtr("on_demand"),
+		},
+	}
+}
+
+func (r *RedshiftCluster) storageSnapshotCostComponentOld(displayName string, startUsageAmount string, storageSnapshot *decimal.Decimal) *schema.CostComponent {
 	return &schema.CostComponent{
 		Name:            displayName,
 		Unit:            "GB",

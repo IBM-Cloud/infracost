@@ -205,13 +205,35 @@ func buildCostComponentRows(t table.Writer, currency string, costComponents []Co
 			labelPrefix = prefix + "└─"
 		}
 
-		label := fmt.Sprintf("%s %s", ui.FaintString(labelPrefix), c.Name)
+		if len(c.MonthlyTierCost) > 0 {
+			fmt.Printf("using tiered pricing...\n")
 
-		if c.MonthlyCost == nil {
+			for index, monthlyCost := range c.MonthlyTierCost {
+				fmt.Printf("***: MonthlyTierCost[%d]: %v\n", index, *monthlyCost)
+
+				var tableRow table.Row
+				label := fmt.Sprintf("%s %s", ui.FaintString(labelPrefix), c.TierNames[index])
+				tableRow = append(tableRow, label)
+
+				if contains(fields, "monthlyQuantity") {
+					tableRow = append(tableRow, formatQuantity(&c.TierQuantities[index]))
+				}
+				if contains(fields, "unit") {
+					tableRow = append(tableRow, c.Unit)
+				}
+				if contains(fields, "monthlyCost") {
+					tableRow = append(tableRow, formatCost2DP(currency, c.MonthlyTierCost[index]))
+				}
+
+				t.AppendRow(tableRow)
+
+			}
+		} else if c.MonthlyCost == nil {
 			price := fmt.Sprintf("Monthly cost depends on usage: %s per %s",
 				formatPrice(currency, c.Price),
 				c.Unit,
 			)
+			label := fmt.Sprintf("%s %s", ui.FaintString(labelPrefix), c.Name)
 
 			t.AppendRow(table.Row{
 				label,
@@ -222,6 +244,7 @@ func buildCostComponentRows(t table.Writer, currency string, costComponents []Co
 
 		} else {
 			var tableRow table.Row
+			label := fmt.Sprintf("%s %s", ui.FaintString(labelPrefix), c.Name)
 			tableRow = append(tableRow, label)
 
 			if contains(fields, "price") {

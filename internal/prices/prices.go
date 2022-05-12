@@ -1,11 +1,13 @@
 package prices
 
 import (
+	"fmt"
 	"runtime"
 
 	"github.com/infracost/infracost/internal/apiclient"
 	"github.com/infracost/infracost/internal/config"
 	"github.com/infracost/infracost/internal/schema"
+	"github.com/infracost/infracost/internal/usage"
 
 	"github.com/shopspring/decimal"
 	log "github.com/sirupsen/logrus"
@@ -135,28 +137,77 @@ func setCostComponentPrice(ctx *config.RunContext, currency string, r *schema.Re
 		return
 	}
 
-	if len(productsWithPrices) > 1 {
-		log.Warnf("Multiple products with prices found for %s %s, using the first product", r.Name, c.Name)
-		setResourceWarningEvent(ctx, r, "Multiple products found")
-	}
+	// if len(productsWithPrices) > 1 {
+	// 	log.Warnf("Multiple products with prices found for %s %s, using the first product", r.Name, c.Name)
+	// 	setResourceWarningEvent(ctx, r, "Multiple products found")
+	// }
+
+	// prices := productsWithPrices[0].Get("prices").Array()
+	// if len(prices) > 1 {
+	// 	log.Warnf("Multiple prices found for %s %s, using the first price", r.Name, c.Name)
+	// 	setResourceWarningEvent(ctx, r, "Multiple prices found")
+	// }
 
 	prices := productsWithPrices[0].Get("prices").Array()
-	if len(prices) > 1 {
-		log.Warnf("Multiple prices found for %s %s, using the first price", r.Name, c.Name)
-		setResourceWarningEvent(ctx, r, "Multiple prices found")
-	}
+	if len(productsWithPrices) > 1 || len(prices) > 1 {
 
-	var err error
-	p, err = decimal.NewFromString(prices[0].Get(currency).String())
-	if err != nil {
-		log.Warnf("Error converting price to '%v' (using 0.00)  '%v': %s", currency, prices[0].Get(currency).String(), err.Error())
-		setResourceWarningEvent(ctx, r, "Error converting price")
-		c.SetPrice(decimal.Zero)
-		return
-	}
+		var tierPrices []decimal.Decimal
+		var tierLimits []int
+		var tierPriceHashes []string
+		var tierQuantities []decimal.Decimal
+		var tierNames []string
 
-	c.SetPrice(p)
-	c.SetPriceHash(prices[0].Get("priceHash").String())
+		// TODO: I'm assuming the tiers are in the order they are read in here, ie tier 1, 2, 3 so will need to sort in order of increasing startUsageAmount value
+		for i := 0; i < len(prices); i++ {
+			var err error
+			p, err = decimal.NewFromString(prices[i].Get(currency).String())
+			if err != nil {
+				log.Warnf("Error converting price to '%v' (using 0.00)  '%v': %s", currency, prices[i].Get(currency).String(), err.Error())
+				c.SetPrice(decimal.Zero)
+				return
+			}
+			tierPrices = append(tierPrices, p)
+			tierPriceHashes = append(tierPriceHashes, prices[i].Get("priceHash").String())
+
+			if prices[i].Get("endUsageAmount").String() != "Inf" {
+				var tierSize int = int(prices[i].Get("endUsageAmount").Int()) - int(prices[i].Get("startUsageAmount").Int())
+				tierLimits = append(tierLimits, tierSize)
+
+				var tierName string
+				if i == 0 {
+					tierName = fmt.Sprintf("%s (first %d %s)", c.Name, tierSize, c.Unit)
+				} else {
+					tierName = fmt.Sprintf("%s (next %d %s)", c.Name, tierSize, c.Unit)
+				}
+				tierNames = append(tierNames, tierName)
+			} else {
+				var tierName string = fmt.Sprintf("%s (over %d %s)", c.Name, int(prices[i].Get("startUsageAmount").Int()), c.Unit)
+				tierNames = append(tierNames, tierName)
+			}
+		}
+		fmt.Printf("\n***: tierPrices: %v\n", tierPrices)
+		fmt.Printf("\n***: tierPriceHashes: %v\n", tierPriceHashes)
+		tierQuantities = usage.CalculateTierBuckets(*c.MonthlyQuantity, tierLimits)
+		fmt.Printf("\n***: tierQuantities: %v\n", tierQuantities)
+
+		c.SetTierPrices(tierPrices)
+		c.SetTierPriceHashes(tierPriceHashes)
+		c.SetTierQuantities(tierQuantities)
+		c.SetTierNames(tierNames)
+
+	} else {
+		var err error
+		p, err = decimal.NewFromString(prices[0].Get(currency).String())
+		if err != nil {
+			log.Warnf("Error converting price to '%v' (using 0.00)  '%v': %s", currency, prices[0].Get(currency).String(), err.Error())
+			setResourceWarningEvent(ctx, r, "Error converting price")
+			c.SetPrice(decimal.Zero)
+			return
+		}
+
+		c.SetPrice(p)
+		c.SetPriceHash(prices[0].Get("priceHash").String())
+	}
 }
 
 func setResourceWarningEvent(ctx *config.RunContext, r *schema.Resource, msg string) {

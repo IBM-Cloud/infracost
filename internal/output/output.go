@@ -142,13 +142,16 @@ type Breakdown struct {
 }
 
 type CostComponent struct {
-	Name            string           `json:"name"`
-	Unit            string           `json:"unit"`
-	HourlyQuantity  *decimal.Decimal `json:"hourlyQuantity"`
-	MonthlyQuantity *decimal.Decimal `json:"monthlyQuantity"`
-	Price           decimal.Decimal  `json:"price"`
-	HourlyCost      *decimal.Decimal `json:"hourlyCost"`
-	MonthlyCost     *decimal.Decimal `json:"monthlyCost"`
+	Name            string             `json:"name"`
+	Unit            string             `json:"unit"`
+	HourlyQuantity  *decimal.Decimal   `json:"hourlyQuantity"`
+	MonthlyQuantity *decimal.Decimal   `json:"monthlyQuantity"`
+	Price           decimal.Decimal    `json:"price"`
+	HourlyCost      *decimal.Decimal   `json:"hourlyCost"`
+	MonthlyCost     *decimal.Decimal   `json:"monthlyCost"`
+	MonthlyTierCost []*decimal.Decimal `json:"monthlyTierCost"`
+	TierQuantities  []decimal.Decimal  `json:"tierQuantities"`
+	TierNames       []string           `json:"tierNames"`
 }
 
 type Resource struct {
@@ -265,6 +268,7 @@ func outputBreakdown(resources []*schema.Resource) *Breakdown {
 func outputResource(r *schema.Resource) Resource {
 	comps := make([]CostComponent, 0, len(r.CostComponents))
 	for _, c := range r.CostComponents {
+
 		comps = append(comps, CostComponent{
 			Name:            c.Name,
 			Unit:            c.Unit,
@@ -273,6 +277,9 @@ func outputResource(r *schema.Resource) Resource {
 			Price:           c.UnitMultiplierPrice(),
 			HourlyCost:      c.HourlyCost,
 			MonthlyCost:     c.MonthlyCost,
+			MonthlyTierCost: c.MonthlyTierCost,
+			TierQuantities:  c.TierQuantities,
+			TierNames:       c.TierNames,
 		})
 	}
 
