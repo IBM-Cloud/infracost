@@ -137,27 +137,13 @@ func setCostComponentPrice(ctx *config.RunContext, currency string, r *schema.Re
 		return
 	}
 
-	// if len(productsWithPrices) > 1 {
-	// 	log.Warnf("Multiple products with prices found for %s %s, using the first product", r.Name, c.Name)
-	// 	setResourceWarningEvent(ctx, r, "Multiple products found")
-	// }
-
-	// prices := productsWithPrices[0].Get("prices").Array()
-	// if len(prices) > 1 {
-	// 	log.Warnf("Multiple prices found for %s %s, using the first price", r.Name, c.Name)
-	// 	setResourceWarningEvent(ctx, r, "Multiple prices found")
-	// }
-
 	prices := productsWithPrices[0].Get("prices").Array()
 	if len(productsWithPrices) > 1 || len(prices) > 1 {
 
-		var tierPrices []decimal.Decimal
+		var tierData []*schema.TierData
 		var tierLimits []int
-		var tierPriceHashes []string
-		var tierQuantities []decimal.Decimal
-		var tierNames []string
+		var tierName string
 
-		// TODO: I'm assuming the tiers are in the order they are read in here, ie tier 1, 2, 3 so will need to sort in order of increasing startUsageAmount value
 		for i := 0; i < len(prices); i++ {
 			var err error
 			p, err = decimal.NewFromString(prices[i].Get(currency).String())
@@ -166,34 +152,27 @@ func setCostComponentPrice(ctx *config.RunContext, currency string, r *schema.Re
 				c.SetPrice(decimal.Zero)
 				return
 			}
-			tierPrices = append(tierPrices, p)
-			tierPriceHashes = append(tierPriceHashes, prices[i].Get("priceHash").String())
 
 			if prices[i].Get("endUsageAmount").String() != "Inf" {
 				var tierSize int = int(prices[i].Get("endUsageAmount").Int()) - int(prices[i].Get("startUsageAmount").Int())
 				tierLimits = append(tierLimits, tierSize)
 
-				var tierName string
-				if i == 0 {
+				if int(prices[i].Get("startUsageAmount").Int()) == 0 {
+					// if i == 0 {
 					tierName = fmt.Sprintf("%s (first %d %s)", c.Name, tierSize, c.Unit)
 				} else {
 					tierName = fmt.Sprintf("%s (next %d %s)", c.Name, tierSize, c.Unit)
 				}
-				tierNames = append(tierNames, tierName)
 			} else {
-				var tierName string = fmt.Sprintf("%s (over %d %s)", c.Name, int(prices[i].Get("startUsageAmount").Int()), c.Unit)
-				tierNames = append(tierNames, tierName)
+				tierName = fmt.Sprintf("%s (over %d %s)", c.Name, int(prices[i].Get("startUsageAmount").Int()), c.Unit)
 			}
+			tierData = append(tierData, getTierData(tierName, p, prices[i].Get("priceHash").String()))
 		}
-		fmt.Printf("\n***: tierPrices: %v\n", tierPrices)
-		fmt.Printf("\n***: tierPriceHashes: %v\n", tierPriceHashes)
-		tierQuantities = usage.CalculateTierBuckets(*c.MonthlyQuantity, tierLimits)
+		var tierQuantities []decimal.Decimal = usage.CalculateTierBuckets(*c.MonthlyQuantity, tierLimits)
 		fmt.Printf("\n***: tierQuantities: %v\n", tierQuantities)
 
-		c.SetTierPrices(tierPrices)
-		c.SetTierPriceHashes(tierPriceHashes)
-		c.SetTierQuantities(tierQuantities)
-		c.SetTierNames(tierNames)
+		updateTierDataWithQuantities(tierData, tierQuantities)
+		c.SetTierData(tierData)
 
 	} else {
 		var err error
@@ -207,6 +186,22 @@ func setCostComponentPrice(ctx *config.RunContext, currency string, r *schema.Re
 
 		c.SetPrice(p)
 		c.SetPriceHash(prices[0].Get("priceHash").String())
+	}
+}
+
+func updateTierDataWithQuantities(tierData []*schema.TierData, tierQuantities []decimal.Decimal) {
+	for i, tierDatum := range tierData {
+		tierDatum.Quantity = tierQuantities[i]
+	}
+}
+
+func getTierData(name string, price decimal.Decimal, priceHash string) *schema.TierData {
+	return &schema.TierData{
+		Name:        name,
+		Price:       price,
+		PriceHash:   priceHash,
+		Quantity:    decimal.Zero,
+		MonthlyCost: nil,
 	}
 }
 

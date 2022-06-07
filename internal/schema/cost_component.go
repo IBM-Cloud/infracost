@@ -6,6 +6,13 @@ import (
 	"github.com/shopspring/decimal"
 )
 
+type TierData struct {
+	Name        string
+	Price       decimal.Decimal
+	PriceHash   string
+	Quantity    decimal.Decimal
+	MonthlyCost *decimal.Decimal
+}
 type CostComponent struct {
 	Name                 string
 	Unit                 string
@@ -21,21 +28,17 @@ type CostComponent struct {
 	priceHash            string
 	HourlyCost           *decimal.Decimal
 	MonthlyCost          *decimal.Decimal
-	tierPrices           []decimal.Decimal
-	tierPriceHashes      []string
-	TierQuantities       []decimal.Decimal
-	TierNames            []string
-	MonthlyTierCost      []*decimal.Decimal
+	TierData             []*TierData
 }
 
 func (c *CostComponent) CalculateCosts() {
 
-	if len(c.tierPrices) > 0 {
+	if len(c.TierData) > 0 {
 		fmt.Printf("using tiered pricing...")
 		var runningTotal decimal.Decimal = decimal.Zero
-		for i := 0; i < len(c.tierPrices); i++ {
-			runningTotal = runningTotal.Add(c.tierPrices[i].Mul(c.TierQuantities[i]))
-			c.MonthlyTierCost = append(c.MonthlyTierCost, decimalPtr(c.tierPrices[i].Mul(c.TierQuantities[i])))
+		for i := 0; i < len(c.TierData); i++ {
+			runningTotal = runningTotal.Add(c.TierData[i].Price.Mul(c.TierData[i].Quantity))
+			c.TierData[i].MonthlyCost = decimalPtr(c.TierData[i].Price.Mul(c.TierData[i].Quantity))
 		}
 		c.MonthlyCost = decimalPtr(runningTotal)
 	} else {
@@ -83,20 +86,8 @@ func (c *CostComponent) CustomPrice() *decimal.Decimal {
 	return c.customPrice
 }
 
-func (c *CostComponent) SetTierPrices(tierPrices []decimal.Decimal) {
-	c.tierPrices = tierPrices
-}
-
-func (c *CostComponent) SetTierPriceHashes(tierPriceHashes []string) {
-	c.tierPriceHashes = tierPriceHashes
-}
-
-func (c *CostComponent) SetTierQuantities(tierQuantities []decimal.Decimal) {
-	c.TierQuantities = tierQuantities
-}
-
-func (c *CostComponent) SetTierNames(tierNames []string) {
-	c.TierNames = tierNames
+func (c *CostComponent) SetTierData(tierData []*TierData) {
+	c.TierData = tierData
 }
 
 func (c *CostComponent) UnitMultiplierPrice() decimal.Decimal {

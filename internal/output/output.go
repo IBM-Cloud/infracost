@@ -149,9 +149,7 @@ type CostComponent struct {
 	Price           decimal.Decimal    `json:"price"`
 	HourlyCost      *decimal.Decimal   `json:"hourlyCost"`
 	MonthlyCost     *decimal.Decimal   `json:"monthlyCost"`
-	MonthlyTierCost []*decimal.Decimal `json:"monthlyTierCost"`
-	TierQuantities  []decimal.Decimal  `json:"tierQuantities"`
-	TierNames       []string           `json:"tierNames"`
+	TierData        []*schema.TierData `json:"tiers"`
 }
 
 type Resource struct {
@@ -277,9 +275,7 @@ func outputResource(r *schema.Resource) Resource {
 			Price:           c.UnitMultiplierPrice(),
 			HourlyCost:      c.HourlyCost,
 			MonthlyCost:     c.MonthlyCost,
-			MonthlyTierCost: c.MonthlyTierCost,
-			TierQuantities:  c.TierQuantities,
-			TierNames:       c.TierNames,
+			TierData:        c.TierData,
 		})
 	}
 
