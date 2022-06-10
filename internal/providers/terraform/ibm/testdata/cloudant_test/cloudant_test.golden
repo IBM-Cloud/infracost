@@ -1,0 +1,21 @@
+
+ Name                                                Monthly Qty  Unit            Monthly Cost 
+                                                                                               
+ ibm_cloudant.cloudant_std                                                                     
+ ├─ Read capacity (100 Reads/sec)                              1  capacity              $25.00 
+ ├─ Write capacity (50 writes/sec)                             1  capacity              $25.00 
+ ├─ Global query capacity (5 global queries/sec)               1  capacity              $25.00 
+ └─ Additional consumption-based charges           Monthly cost depends on usage: $1.00 per GB 
+                                                                                               
+ ibm_cloudant.with_usage                                                                       
+ ├─ Read capacity (200 Reads/sec)                              2  capacity              $50.00 
+ ├─ Write capacity (100 writes/sec)                            2  capacity              $50.00 
+ ├─ Global query capacity (10 global queries/sec)              2  capacity              $50.00 
+ └─ Additional consumption-based charges                       2  GB                     $2.00 
+                                                                                               
+ OVERALL TOTAL                                                                         $227.00 
+──────────────────────────────────
+3 cloud resources were detected:
+∙ 2 were estimated
+∙ 1 was free:
+  ∙ 1 x ibm_cloudant

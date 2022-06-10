@@ -1,0 +1,4 @@
+version: 0.1
+resource_usage:
+  ibm_cloudant.with_usage:
+    additional_consumption_storage_gb: 2
