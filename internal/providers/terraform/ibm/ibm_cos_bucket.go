@@ -7,7 +7,7 @@ import (
 
 func getIbmCosBucketRegistryItem() *schema.RegistryItem {
 	return &schema.RegistryItem{
-		Name:  "ibm_ibm_cos_bucket",
+		Name:  "ibm_cos_bucket",
 		RFunc: newIbmCosBucket,
 	}
 }
