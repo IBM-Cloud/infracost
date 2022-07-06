@@ -1,5 +1,11 @@
-# Run:
-#
-# ARGS="--run TestIbmCosBucket -v -update" make test_ibm
-#
-# to update this file with golden file outputs.
+
+ Name  Monthly Qty  Unit  Monthly Cost 
+                                       
+ OVERALL TOTAL                   $0.00 
+──────────────────────────────────
+3 cloud resources were detected:
+∙ 1 was estimated
+∙ 1 was free:
+  ∙ 1 x ibm_resource_group
+∙ 1 is not supported yet, see https://infracost.io/requested-resources:
+  ∙ 1 x ibm_resource_instance
