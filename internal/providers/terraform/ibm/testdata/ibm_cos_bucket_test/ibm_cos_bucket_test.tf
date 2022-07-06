@@ -24,7 +24,7 @@ resource "ibm_resource_instance" "cos_instance" {
 }
 
 resource "ibm_cos_bucket" "standard-us-south" {
-  bucket_name          = "a-smart-bucket-at-us-south"
+  bucket_name          = "a-standard-bucket-at-us-south"
   resource_instance_id = ibm_resource_instance.cos_instance.id
   region_location      = "us-south"
   storage_class        = "standard"
