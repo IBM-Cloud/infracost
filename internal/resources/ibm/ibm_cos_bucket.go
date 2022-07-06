@@ -18,8 +18,7 @@ type IbmCosBucket struct {
 }
 
 // IbmCosBucketUsageSchema defines a list which represents the usage schema of IbmCosBucket.
-var IbmCosBucketUsageSchema = []*schema.UsageItem{
-}
+var IbmCosBucketUsageSchema = []*schema.UsageItem{}
 
 // PopulateUsage parses the u schema.UsageData into the IbmCosBucket.
 // It uses the `infracost_usage` struct tags to populate data into the IbmCosBucket.
@@ -41,4 +40,3 @@ func (r *IbmCosBucket) BuildResource() *schema.Resource {
 		CostComponents: costComponents,
 	}
 }
-
