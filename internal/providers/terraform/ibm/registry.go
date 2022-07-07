@@ -6,6 +6,7 @@ var ResourceRegistry []*schema.RegistryItem = []*schema.RegistryItem{
 	getIsInstanceRegistryItem(),
 	getIbmIsVpcRegistryItem(),
 	getIbmCosBucketRegistryItem(),
+	getIbmContainerVpcWorkerPoolRegistryItem(),
 }
 
 // FreeResources grouped alphabetically
