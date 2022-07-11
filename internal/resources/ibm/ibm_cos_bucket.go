@@ -10,13 +10,11 @@ import (
 	"github.com/shopspring/decimal"
 )
 
-// IbmCosBucket struct represents <TODO: cloud service short description>.
+// IbmCosBucket struct represents IBM Cloud Object Storage instance
 //
-// <TODO: Add any important information about the resource and links to the
-// pricing pages or documentation that might be useful to developers in the future, e.g:>
-//
-// Resource information: https://cloud.ibm.com/<PATH/TO/RESOURCE>/
-// Pricing information: https://cloud.ibm.com/<PATH/TO/PRICING>/
+// Resource information: https://cloud.ibm.com/objectstorage
+// Pricing information: https://cloud.ibm.com/objectstorage/create#pricing
+
 type IbmCosBucket struct {
 	Address string
 	Region  string
