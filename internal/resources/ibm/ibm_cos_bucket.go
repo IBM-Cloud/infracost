@@ -16,8 +16,16 @@ import (
 // Pricing information: https://cloud.ibm.com/objectstorage/create#pricing
 
 type IbmCosBucket struct {
-	Address string
-	Region  string
+	Address      string
+	Region       string
+	Location     string
+	StorageClass string
+
+	MonthlyAverageCapacity *float64 `infracost_usage:"monthly_average_capacity"`
+	PublicStandardEgress   *float64 `infracost_usage:"public_standard_egress"`
+	ClassARequestCount     *int64   `infracost_usage:"class_a_request_count"`
+	ClassBRequestCount     *int64   `infracost_usage:"class_b_request_count"`
+	MonthlyDataRetrieval   *float64 `infracost_usage:"monthly_data_retrieval"`
 }
 
 // IbmCosBucketUsageSchema defines a list which represents the usage schema of IbmCosBucket.
