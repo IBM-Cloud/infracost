@@ -51,12 +51,30 @@ func (r *IbmCosBucket) PopulateUsage(u *schema.UsageData) {
 	resources.PopulateArgsWithUsage(r, u)
 }
 
+func (r *IbmCosBucket) COSBucketCostComponent(storageClass string) *schema.CostComponent {
+	return &schema.CostComponent{
+		Name:           fmt.Sprintf("Storage (%s)", strings.ToLower(storageClass)),
+		Unit:           "GiB",
+		UnitMultiplier: decimal.NewFromInt(1),
+		ProductFilter: &schema.ProductFilter{
+			VendorName:    strPtr("ibm"),
+			Region:        strPtr(r.Region),
+			Service:       strPtr(("cloud-object-storage")),
+			ProductFamily: strPtr("iaas"),
+			// AttributeFilters: []*schema.AttributeFilter{
+			// 	{Key: "flavor", ValueRegex: regexPtr(fmt.Sprintf("%s$", r.TruncatedProfile))},
+			// 	{Key: "isolation", ValueRegex: regexPtr(fmt.Sprintf("^%s$", instanceGetIsolation(r.IsDedicated)))},
+			// },
+		},
+	}
+}
+
 // BuildResource builds a schema.Resource from a valid IbmCosBucket struct.
 // This method is called after the resource is initialised by an IaC provider.
 // See providers folder for more information.
 func (r *IbmCosBucket) BuildResource() *schema.Resource {
 	costComponents := []*schema.CostComponent{
-		// TODO: add cost components
+		r.COSBucketCostComponent(r.StorageClass),
 	}
 
 	return &schema.Resource{
