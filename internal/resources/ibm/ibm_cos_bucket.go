@@ -28,8 +28,22 @@ type IbmCosBucket struct {
 	MonthlyDataRetrieval   *float64 `infracost_usage:"monthly_data_retrieval"`
 }
 
+// not sure we need this
+var IbmCosBucketNetworkEgressUsageSchema = []*schema.UsageItem{}
+
 // IbmCosBucketUsageSchema defines a list which represents the usage schema of IbmCosBucket.
-var IbmCosBucketUsageSchema = []*schema.UsageItem{}
+var IbmCosBucketUsageSchema = []*schema.UsageItem{
+	{Key: "monthly_average_capacity", ValueType: schema.Float64, DefaultValue: 0},
+	{Key: "public_standard_egress", ValueType: schema.Float64, DefaultValue: 0},
+	{Key: "class_a_request_count", ValueType: schema.Int64, DefaultValue: 0},
+	{Key: "class_b_request_count", ValueType: schema.Int64, DefaultValue: 0},
+	{Key: "monthly_data_retrieval", ValueType: schema.Int64, DefaultValue: 0},
+	{
+		Key:          "monthly_egress_data_transfer_gb",
+		ValueType:    schema.SubResourceUsage,
+		DefaultValue: &usage.ResourceUsage{Name: "monthly_egress_data_transfer_gb", Items: IbmCosBucketNetworkEgressUsageSchema},
+	},
+}
 
 // PopulateUsage parses the u schema.UsageData into the IbmCosBucket.
 // It uses the `infracost_usage` struct tags to populate data into the IbmCosBucket.
