@@ -39,7 +39,7 @@ func (r *IbmIsVpc) vpcCostComponent() *schema.CostComponent {
 	}
 	return &schema.CostComponent{
 		Name:            fmt.Sprintf("VPC egress %s", r.Region),
-		Unit:            "Gigabyte",
+		Unit:            "GB",
 		UnitMultiplier:  decimal.NewFromInt(1),
 		MonthlyQuantity: quantity,
 		ProductFilter: &schema.ProductFilter{
