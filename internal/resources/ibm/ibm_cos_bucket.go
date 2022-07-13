@@ -47,20 +47,103 @@ func (r *IbmCosBucket) PopulateUsage(u *schema.UsageData) {
 	resources.PopulateArgsWithUsage(r, u)
 }
 
-func (r *IbmCosBucket) COSBucketCostComponent(storageClass string) *schema.CostComponent {
+func (r *IbmCosBucket) MonthlyAverageCapacityCostComponent() *schema.CostComponent {
 	return &schema.CostComponent{
-		Name:           fmt.Sprintf("Storage (%s)", strings.ToLower(storageClass)),
-		Unit:           "GiB",
+		Name:           fmt.Sprintf("Storage-%s-%s", strings.ToLower(r.StorageClass), strings.ToLower(r.Region)),
+		Unit:           "hours",
 		UnitMultiplier: decimal.NewFromInt(1),
 		ProductFilter: &schema.ProductFilter{
-			VendorName:    strPtr("ibm"),
-			Region:        strPtr(r.Region),
-			Service:       strPtr(("cloud-object-storage")),
-			ProductFamily: strPtr("iaas"),
-			// AttributeFilters: []*schema.AttributeFilter{
-			// 	{Key: "flavor", ValueRegex: regexPtr(fmt.Sprintf("%s$", r.TruncatedProfile))},
-			// 	{Key: "isolation", ValueRegex: regexPtr(fmt.Sprintf("^%s$", instanceGetIsolation(r.IsDedicated)))},
-			// },
+			VendorName:       strPtr("ibm"),
+			Region:           strPtr(r.Region),
+			Service:          strPtr(("cloud-object-storage")),
+			ProductFamily:    strPtr("iaas"),
+			AttributeFilters: []*schema.AttributeFilter{},
+		},
+		PriceFilter: &schema.PriceFilter{
+			Unit: strPtr("FLEX_MAX_CAP"),
+		},
+	}
+}
+
+func (r *IbmCosBucket) ClassARequestCountCostComponent() *schema.CostComponent {
+	return &schema.CostComponent{
+		Name:           fmt.Sprintf("Storage-%s-%s", strings.ToLower(r.StorageClass), strings.ToLower(r.Region)),
+		Unit:           "hours",
+		UnitMultiplier: decimal.NewFromInt(1),
+		ProductFilter: &schema.ProductFilter{
+			VendorName:       strPtr("ibm"),
+			Region:           strPtr(r.Region),
+			Service:          strPtr(("cloud-object-storage")),
+			ProductFamily:    strPtr("iaas"),
+			AttributeFilters: []*schema.AttributeFilter{},
+		},
+		PriceFilter: &schema.PriceFilter{
+			Unit: strPtr("VAULT_CLASS_A_CALLS"),
+		},
+	}
+}
+
+func (r *IbmCosBucket) ClassBRequestCountCostComponent() *schema.CostComponent {
+	return &schema.CostComponent{
+		Name:           fmt.Sprintf("Storage-%s-%s", strings.ToLower(r.StorageClass), strings.ToLower(r.Region)),
+		Unit:           "hours",
+		UnitMultiplier: decimal.NewFromInt(1),
+		ProductFilter: &schema.ProductFilter{
+			VendorName:       strPtr("ibm"),
+			Region:           strPtr(r.Region),
+			Service:          strPtr(("cloud-object-storage")),
+			ProductFamily:    strPtr("iaas"),
+			AttributeFilters: []*schema.AttributeFilter{},
+		},
+		PriceFilter: &schema.PriceFilter{
+			Unit: strPtr("VAULT_CLASS_B_CALLS"),
+		},
+	}
+}
+
+func (r *IbmCosBucket) PublicStandardEgressCostComponent() *schema.CostComponent {
+	return &schema.CostComponent{
+		Name:           fmt.Sprintf("Storage-%s-%s", strings.ToLower(r.StorageClass), strings.ToLower(r.Region)),
+		Unit:           "hours",
+		UnitMultiplier: decimal.NewFromInt(1),
+		ProductFilter: &schema.ProductFilter{
+			VendorName:       strPtr("ibm"),
+			Region:           strPtr(r.Region),
+			Service:          strPtr(("cloud-object-storage")),
+			ProductFamily:    strPtr("iaas"),
+			AttributeFilters: []*schema.AttributeFilter{},
+		},
+		PriceFilter: &schema.PriceFilter{
+			Unit: strPtr(""),
+		},
+	}
+}
+
+func (r *IbmCosBucket) MonthlyDataRetrievalCostComponent() *schema.CostComponent {
+
+	retrieval := "FLEX_RETRIEVAL"
+
+	if r.StorageClass == "cold" {
+		retrieval = "COLD_VAULT_RETRIEVAL"
+	}
+
+	if r.StorageClass == "vault" {
+		retrieval = "VAULT_RETRIEVAL"
+	}
+
+	return &schema.CostComponent{
+		Name:           fmt.Sprintf("Storage-%s-%s", strings.ToLower(r.StorageClass), strings.ToLower(r.Region)),
+		Unit:           "hours",
+		UnitMultiplier: decimal.NewFromInt(1),
+		ProductFilter: &schema.ProductFilter{
+			VendorName:       strPtr("ibm"),
+			Region:           strPtr(r.Region),
+			Service:          strPtr(("cloud-object-storage")),
+			ProductFamily:    strPtr("iaas"),
+			AttributeFilters: []*schema.AttributeFilter{},
+		},
+		PriceFilter: &schema.PriceFilter{
+			Unit: strPtr(retrieval),
 		},
 	}
 }
@@ -69,8 +152,15 @@ func (r *IbmCosBucket) COSBucketCostComponent(storageClass string) *schema.CostC
 // This method is called after the resource is initialised by an IaC provider.
 // See providers folder for more information.
 func (r *IbmCosBucket) BuildResource() *schema.Resource {
+
 	costComponents := []*schema.CostComponent{
-		r.COSBucketCostComponent(r.StorageClass),
+		r.MonthlyAverageCapacityCostComponent(),
+		r.ClassARequestCountCostComponent(),
+		r.ClassBRequestCountCostComponent(),
+	}
+
+	if r.StorageClass == "vault" || r.StorageClass == "cold" || r.StorageClass == "smart" {
+		costComponents = append(costComponents, r.MonthlyDataRetrievalCostComponent())
 	}
 
 	return &schema.Resource{
