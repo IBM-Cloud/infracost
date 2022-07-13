@@ -133,7 +133,8 @@ func (r *IbmCosBucket) ClassBRequestCountCostComponent() *schema.CostComponent {
 }
 
 func (r *IbmCosBucket) PublicStandardEgressCostComponent() *schema.CostComponent {
-
+	// using bandwith for egress
+	// https://github.ibm.com/ibmcloud/estimator/blob/f9dfa477c27bbf7570d296816bdc07b706646572/__tests__/client/fixtures/callback-estimate.json#L41
 	s := r.StorageClass
 	u := "FLEX_BANDWIDTH"
 
