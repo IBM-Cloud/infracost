@@ -1,2 +1,3 @@
 version: 0.1
 resource_usage:
+  monthly_average_capacity: 10000
