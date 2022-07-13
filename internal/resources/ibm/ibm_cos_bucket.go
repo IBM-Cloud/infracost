@@ -133,6 +133,21 @@ func (r *IbmCosBucket) ClassBRequestCountCostComponent() *schema.CostComponent {
 }
 
 func (r *IbmCosBucket) PublicStandardEgressCostComponent() *schema.CostComponent {
+
+	s := r.StorageClass
+	u := "FLEX_BANDWIDTH"
+
+	switch s {
+	case "vault":
+		u = "VAULT_BANDWIDTH"
+	case "standard":
+		u = "STANDARD_BANDWIDTH"
+	case "cold":
+		u = "COLD_VAULT_BANDWIDTH"
+	case "smart":
+		u = "SMART_TIER_BANDWIDTH"
+	}
+
 	return &schema.CostComponent{
 		Name:           fmt.Sprintf("Storage-%s-%s", strings.ToLower(r.StorageClass), strings.ToLower(r.Region)),
 		Unit:           "hours",
@@ -145,7 +160,7 @@ func (r *IbmCosBucket) PublicStandardEgressCostComponent() *schema.CostComponent
 			AttributeFilters: []*schema.AttributeFilter{},
 		},
 		PriceFilter: &schema.PriceFilter{
-			Unit: strPtr(""),
+			Unit: strPtr(u),
 		},
 	}
 }
