@@ -67,21 +67,17 @@ func (r *IbmCosBucket) MonthlyAverageCapacityCostComponent() *schema.CostCompone
 
 func (r *IbmCosBucket) ClassARequestCountCostComponent() *schema.CostComponent {
 
+	s := r.StorageClass
 	u := "FLEX_CLASS_A_CALLS"
 
-	if r.StorageClass == "vault" {
+	switch s {
+	case "vault":
 		u = "VAULT_CLASS_A_CALLS"
-	}
-
-	if r.StorageClass == "standard" {
+	case "standard":
 		u = "STANDARD_CLASS_A_CALLS"
-	}
-
-	if r.StorageClass == "cold" {
+	case "cold":
 		u = "COLD_VAULT_CLASS_A_CALLS"
-	}
-
-	if r.StorageClass == "smart" {
+	case "smart":
 		u = "SMART_TIER_CLASS_A_CALLS"
 	}
 
@@ -106,19 +102,16 @@ func (r *IbmCosBucket) ClassBRequestCountCostComponent() *schema.CostComponent {
 
 	u := "FLEX_CLASS_B_CALLS"
 
-	if r.StorageClass == "vault" {
+	s := r.StorageClass
+
+	switch s {
+	case "vault":
 		u = "VAULT_CLASS_B_CALLS"
-	}
-
-	if r.StorageClass == "standard" {
+	case "standard":
 		u = "STANDARD_CLASS_B_CALLS"
-	}
-
-	if r.StorageClass == "cold" {
+	case "cold":
 		u = "COLD_VAULT_CLASS_B_CALLS"
-	}
-
-	if r.StorageClass == "smart" {
+	case "smart":
 		u = "SMART_TIER_CLASS_B_CALLS"
 	}
 
