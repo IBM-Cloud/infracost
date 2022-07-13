@@ -66,6 +66,25 @@ func (r *IbmCosBucket) MonthlyAverageCapacityCostComponent() *schema.CostCompone
 }
 
 func (r *IbmCosBucket) ClassARequestCountCostComponent() *schema.CostComponent {
+
+	u := "FLEX_CLASS_A_CALLS"
+
+	if r.StorageClass == "vault" {
+		u = "VAULT_CLASS_A_CALLS"
+	}
+
+	if r.StorageClass == "standard" {
+		u = "STANDARD_CLASS_A_CALLS"
+	}
+
+	if r.StorageClass == "cold" {
+		u = "COLD_VAULT_CLASS_A_CALLS"
+	}
+
+	if r.StorageClass == "smart" {
+		u = "SMART_TIER_CLASS_A_CALLS"
+	}
+
 	return &schema.CostComponent{
 		Name:           fmt.Sprintf("Storage-%s-%s", strings.ToLower(r.StorageClass), strings.ToLower(r.Region)),
 		Unit:           "hours",
@@ -78,12 +97,31 @@ func (r *IbmCosBucket) ClassARequestCountCostComponent() *schema.CostComponent {
 			AttributeFilters: []*schema.AttributeFilter{},
 		},
 		PriceFilter: &schema.PriceFilter{
-			Unit: strPtr("VAULT_CLASS_A_CALLS"),
+			Unit: strPtr(u),
 		},
 	}
 }
 
 func (r *IbmCosBucket) ClassBRequestCountCostComponent() *schema.CostComponent {
+
+	u := "FLEX_CLASS_B_CALLS"
+
+	if r.StorageClass == "vault" {
+		u = "VAULT_CLASS_B_CALLS"
+	}
+
+	if r.StorageClass == "standard" {
+		u = "STANDARD_CLASS_B_CALLS"
+	}
+
+	if r.StorageClass == "cold" {
+		u = "COLD_VAULT_CLASS_B_CALLS"
+	}
+
+	if r.StorageClass == "smart" {
+		u = "SMART_TIER_CLASS_B_CALLS"
+	}
+
 	return &schema.CostComponent{
 		Name:           fmt.Sprintf("Storage-%s-%s", strings.ToLower(r.StorageClass), strings.ToLower(r.Region)),
 		Unit:           "hours",
@@ -96,7 +134,7 @@ func (r *IbmCosBucket) ClassBRequestCountCostComponent() *schema.CostComponent {
 			AttributeFilters: []*schema.AttributeFilter{},
 		},
 		PriceFilter: &schema.PriceFilter{
-			Unit: strPtr("VAULT_CLASS_B_CALLS"),
+			Unit: strPtr(u),
 		},
 	}
 }
