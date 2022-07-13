@@ -6,7 +6,6 @@ import (
 
 	"github.com/infracost/infracost/internal/resources"
 	"github.com/infracost/infracost/internal/schema"
-	"github.com/infracost/infracost/internal/usage"
 	"github.com/shopspring/decimal"
 )
 
@@ -28,9 +27,6 @@ type IbmCosBucket struct {
 	MonthlyDataRetrieval   *float64 `infracost_usage:"monthly_data_retrieval"`
 }
 
-// not sure we need this
-var IbmCosBucketNetworkEgressUsageSchema = []*schema.UsageItem{}
-
 // IbmCosBucketUsageSchema defines a list which represents the usage schema of IbmCosBucket.
 var IbmCosBucketUsageSchema = []*schema.UsageItem{
 	{Key: "monthly_average_capacity", ValueType: schema.Float64, DefaultValue: 0},
@@ -41,7 +37,7 @@ var IbmCosBucketUsageSchema = []*schema.UsageItem{
 	{
 		Key:          "monthly_egress_data_transfer_gb",
 		ValueType:    schema.SubResourceUsage,
-		DefaultValue: &usage.ResourceUsage{Name: "monthly_egress_data_transfer_gb", Items: IbmCosBucketNetworkEgressUsageSchema},
+		DefaultValue: 0,
 	},
 }
 
