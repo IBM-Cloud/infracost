@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
+	"sort"
 	"strings"
 	"time"
 
@@ -12,20 +13,44 @@ import (
 	"github.com/pkg/errors"
 	"github.com/shopspring/decimal"
 	"golang.org/x/mod/semver"
+
+	"github.com/infracost/infracost/internal/schema"
 )
 
-var minOutputVersion = "0.2"
-var maxOutputVersion = "0.2"
+var (
+	minOutputVersion = "0.2"
+	maxOutputVersion = "0.2"
+)
 
 type ReportInput struct {
 	Metadata map[string]string
 	Root     Root
 }
 
-func Load(data []byte) (Root, error) {
+// Load reads the file at the location p and the file body into a Root struct. Load naively
+// validates that the Infracost JSON body is valid by checking the that the version attribute is within a supported range.
+func Load(p string) (Root, error) {
 	var out Root
-	err := json.Unmarshal(data, &out)
-	return out, err
+	_, err := os.Stat(p)
+	if errors.Is(err, os.ErrNotExist) {
+		return out, errors.New("Infracost JSON file does not exist")
+	}
+
+	data, err := os.ReadFile(p)
+	if err != nil {
+		return out, fmt.Errorf("error reading Infracost JSON file %w", err)
+	}
+
+	err = json.Unmarshal(data, &out)
+	if err != nil {
+		return out, fmt.Errorf("invalid Infracost JSON file %w", err)
+	}
+
+	if !checkOutputVersion(out.Version) {
+		return out, fmt.Errorf("invalid Infracost JSON file version. Supported versions are %s ≤ x ≤ %s", minOutputVersion, maxOutputVersion)
+	}
+
+	return out, nil
 }
 
 func LoadPaths(paths []string) ([]ReportInput, error) {
@@ -59,29 +84,70 @@ func LoadPaths(paths []string) ([]ReportInput, error) {
 	inputs := make([]ReportInput, 0, len(inputFiles))
 
 	for _, f := range inputFiles {
-		data, err := os.ReadFile(f)
+		r, err := Load(f)
 		if err != nil {
-			return nil, errors.Wrap(err, "Error reading JSON file")
-		}
-
-		j, err := Load(data)
-		if err != nil {
-			return nil, errors.Wrap(err, "Error parsing JSON file")
-		}
-
-		if !checkOutputVersion(j.Version) {
-			return nil, fmt.Errorf("Invalid Infracost JSON file version. Supported versions are %s ≤ x ≤ %s", minOutputVersion, maxOutputVersion)
+			return nil, fmt.Errorf("could not load input file %s err: %w", f, err)
 		}
 
 		inputs = append(inputs, ReportInput{
 			Metadata: map[string]string{
 				"filename": f,
 			},
-			Root: j,
+			Root: r,
 		})
 	}
 
 	return inputs, nil
+}
+
+// CompareTo generates an output Root using another Root as the base snapshot.
+// Each project in current Root will have all past resources overwritten with the matching projects
+// in the prior Root. If we can't find a matching project then we assume that the project
+// has been newly created and will show a 100% increase in the output Root.
+func CompareTo(current, prior Root) (Root, error) {
+	priorProjects := make(map[string]*schema.Project)
+	for _, p := range prior.Projects {
+		if _, ok := priorProjects[p.LabelWithMetadata()]; ok {
+			return Root{}, fmt.Errorf("Invalid --compare-to Infracost JSON, found duplicate project name %s", p.LabelWithMetadata())
+		}
+
+		priorProjects[p.LabelWithMetadata()] = p.ToSchemaProject()
+	}
+
+	var schemaProjects schema.Projects
+	for _, p := range current.Projects {
+		scp := p.ToSchemaProject()
+		scp.Diff = scp.Resources
+		scp.PastResources = nil
+		scp.HasDiff = true
+
+		if v, ok := priorProjects[p.LabelWithMetadata()]; ok {
+			scp.PastResources = v.Resources
+			scp.Diff = schema.CalculateDiff(scp.PastResources, scp.Resources)
+			delete(priorProjects, p.LabelWithMetadata())
+		}
+
+		schemaProjects = append(schemaProjects, scp)
+	}
+
+	for _, scp := range priorProjects {
+		scp.PastResources = scp.Resources
+		scp.Resources = nil
+		scp.HasDiff = true
+		scp.Diff = schema.CalculateDiff(scp.PastResources, scp.Resources)
+
+		schemaProjects = append(schemaProjects, scp)
+	}
+
+	sort.Sort(schemaProjects)
+
+	out, err := ToOutputFormat(schemaProjects)
+	if err != nil {
+		return out, err
+	}
+
+	out.Currency = current.Currency
+	return out, nil
 }
 
 func Combine(inputs []ReportInput) (Root, error) {
@@ -163,7 +229,7 @@ func Combine(inputs []ReportInput) (Root, error) {
 	combined.PastTotalMonthlyCost = pastTotalMonthlyCost
 	combined.DiffTotalHourlyCost = diffTotalHourlyCost
 	combined.DiffTotalMonthlyCost = diffTotalMonthlyCost
-	combined.TimeGenerated = time.Now()
+	combined.TimeGenerated = time.Now().UTC()
 	combined.Summary = MergeSummaries(summaries)
 
 	return combined, nil
@@ -191,4 +257,33 @@ func checkOutputVersion(v string) bool {
 		v = "v" + v
 	}
 	return semver.Compare(v, "v"+minOutputVersion) >= 0 && semver.Compare(v, "v"+maxOutputVersion) <= 0
+}
+
+// FormatOutput returns Root r as the format specified. The default format is a table output.
+func FormatOutput(format string, r Root, opts Options) ([]byte, error) {
+	var b []byte
+	var err error
+
+	switch format {
+	case "json":
+		b, err = ToJSON(r, opts)
+	case "html":
+		b, err = ToHTML(r, opts)
+	case "diff":
+		b, err = ToDiff(r, opts)
+	case "github-comment", "gitlab-comment", "azure-repos-comment":
+		b, err = ToMarkdown(r, opts, MarkdownOptions{})
+	case "bitbucket-comment":
+		b, err = ToMarkdown(r, opts, MarkdownOptions{BasicSyntax: true})
+	case "slack-message":
+		b, err = ToSlackMessage(r, opts)
+	default:
+		b, err = ToTable(r, opts)
+	}
+
+	if err != nil {
+		return nil, fmt.Errorf("error generating %s output %w", format, err)
+	}
+
+	return b, nil
 }

@@ -222,7 +222,7 @@ func (h *githubPRHandler) CallFindMatchingComments(ctx context.Context, tag stri
 
 	var matchingComments []Comment
 	for _, comment := range allComments {
-		if strings.Contains(comment.Body(), tag) {
+		if strings.Contains(comment.Body(), markdownTag(tag)) {
 			matchingComments = append(matchingComments, comment)
 		}
 	}
@@ -370,7 +370,7 @@ func (h *githubCommitHandler) CallFindMatchingComments(ctx context.Context, tag 
 	variables := map[string]interface{}{
 		"owner":     githubv4.String(h.owner),
 		"repo":      githubv4.String(h.repo),
-		"commitSha": githubv4.String(h.commitSHA),
+		"commitSha": githubv4.GitObjectID(h.commitSHA),
 		"after":     (*githubv4.String)(nil), // Null after argument to get first page.
 	}
 
@@ -404,7 +404,7 @@ func (h *githubCommitHandler) CallFindMatchingComments(ctx context.Context, tag 
 
 	var matchingComments []Comment
 	for _, comment := range allComments {
-		if strings.Contains(comment.Body(), tag) {
+		if strings.Contains(comment.Body(), markdownTag(tag)) {
 			matchingComments = append(matchingComments, comment)
 		}
 	}

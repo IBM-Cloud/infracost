@@ -5,6 +5,7 @@ import (
 	"testing"
 
 	"github.com/shopspring/decimal"
+	log "github.com/sirupsen/logrus"
 	"github.com/stretchr/testify/assert"
 
 	main "github.com/infracost/infracost/cmd/infracost"
@@ -27,8 +28,16 @@ func TestFlagErrorsConfigFileAndTerraformWorkspace(t *testing.T) {
 }
 
 func TestFlagErrorsConfigFileAndTerraformWorkspaceEnv(t *testing.T) {
-	os.Setenv("INFRACOST_TERRAFORM_WORKSPACE", "dev")
-	GoldenFileCommandTest(t, testutil.CalcGoldenFileTestdataDirName(), []string{"breakdown", "--config-file", "./testdata/infracost-config.yml"}, nil)
+	GoldenFileCommandTest(t, testutil.CalcGoldenFileTestdataDirName(),
+		[]string{
+			"breakdown",
+			"--config-file", "./testdata/infracost-config.yml",
+		},
+		&GoldenFileOptions{
+			Env: map[string]string{
+				"INFRACOST_TERRAFORM_WORKSPACE": "dev",
+			},
+		})
 }
 
 func TestConfigFileNilProjectsErrors(t *testing.T) {
@@ -44,8 +53,17 @@ func TestConfigFileInvalidPathErrors(t *testing.T) {
 }
 
 func TestFlagErrorsTerraformWorkspaceFlagAndEnv(t *testing.T) {
-	os.Setenv("INFRACOST_TERRAFORM_WORKSPACE", "dev")
-	GoldenFileCommandTest(t, testutil.CalcGoldenFileTestdataDirName(), []string{"breakdown", "--path", "../../examples/terraform", "--terraform-workspace", "prod"}, nil)
+	GoldenFileCommandTest(t, testutil.CalcGoldenFileTestdataDirName(),
+		[]string{
+			"breakdown",
+			"--path", "../../examples/terraform",
+			"--terraform-workspace", "prod",
+		},
+		&GoldenFileOptions{
+			Env: map[string]string{
+				"INFRACOST_TERRAFORM_WORKSPACE": "dev",
+			},
+		})
 }
 
 func TestCatchesRuntimeError(t *testing.T) {
@@ -386,7 +404,7 @@ func TestAddHCLEnvVars(t *testing.T) {
 }
 
 func newProjectContextWithCtx(m map[string]interface{}) *config.ProjectContext {
-	ctx := config.NewProjectContext(nil, nil)
+	ctx := config.NewProjectContext(nil, nil, log.Fields{})
 
 	for k, v := range m {
 		ctx.SetContextValue(k, v)

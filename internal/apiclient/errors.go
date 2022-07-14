@@ -3,8 +3,6 @@ package apiclient
 import (
 	"regexp"
 
-	"github.com/pkg/errors"
-
 	"github.com/infracost/infracost/internal/clierror"
 	"github.com/infracost/infracost/internal/config"
 	"github.com/infracost/infracost/internal/ui"
@@ -15,18 +13,23 @@ import (
 // too many things, but it's a start.
 var pathRegex = regexp.MustCompile(`(\w+:)?[\.~\w]*[\/\\]+([^\s:'\"\]]+)|([\w+-]\.\w{2,})`)
 
-func ReportCLIError(ctx *config.RunContext, cliErr error) error {
+func ReportCLIError(ctx *config.RunContext, cliErr error, replacePath bool) error {
 	errMsg := ui.StripColor(cliErr.Error())
-	var sanitizedErr *clierror.SanitizedError
+	stacktrace := ""
 
-	if errors.As(cliErr, &sanitizedErr) {
+	sanitizedErr, ok := cliErr.(clierror.SanitizedError)
+	if ok {
 		errMsg = ui.StripColor(sanitizedErr.SanitizedError())
+		stacktrace = sanitizedErr.SanitizedStack()
 	}
 
-	errMsg = pathRegex.ReplaceAllString(errMsg, "REPLACED_PATH")
+	if replacePath {
+		errMsg = pathRegex.ReplaceAllString(errMsg, "REPLACED_PATH")
+	}
 
 	d := ctx.EventEnv()
 	d["error"] = errMsg
+	d["stacktrace"] = stacktrace
 
 	c := NewPricingAPIClient(ctx)
 	return c.AddEvent("infracost-error", d)

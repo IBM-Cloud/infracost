@@ -20,6 +20,8 @@ import (
 	"github.com/spf13/cobra"
 	"golang.org/x/sync/errgroup"
 
+	"github.com/infracost/infracost/internal/logging"
+
 	"github.com/infracost/infracost/internal/apiclient"
 	"github.com/infracost/infracost/internal/clierror"
 	"github.com/infracost/infracost/internal/config"
@@ -48,17 +50,22 @@ type hclRunDiff struct {
 	missingResources []string
 }
 
-var validRunFormats = []string{"json", "table", "html"}
-
 func addRunFlags(cmd *cobra.Command) {
+	cmd.Flags().StringSlice("terraform-var-file", nil, "Load variable files, similar to Terraform's -var-file flag. Provided files must be relative to the --path flag")
+	cmd.Flags().StringSlice("terraform-var", nil, "Set value for an input variable, similar to Terraform's -var flag")
 	cmd.Flags().StringP("path", "p", "", "Path to the Terraform directory or JSON/plan file")
 
 	cmd.Flags().String("config-file", "", "Path to Infracost config file. Cannot be used with path, terraform* or usage-file flags")
 	cmd.Flags().String("usage-file", "", "Path to Infracost usage file that specifies values for usage-based resources")
 
-	cmd.Flags().String("terraform-plan-flags", "", "Flags to pass to 'terraform plan'. Applicable when path is a Terraform directory")
-	cmd.Flags().String("terraform-init-flags", "", "Flags to pass to 'terraform init'. Applicable when path is a Terraform directory")
+	cmd.Flags().String("project-name", "", "Name of project in the output. Defaults to path or git repo name")
+
+	cmd.Flags().Bool("terraform-force-cli", false, "Generate the Terraform plan JSON using the Terraform CLI. This may require cloud credentials")
+	cmd.Flags().String("terraform-plan-flags", "", "Flags to pass to 'terraform plan'. Applicable with --terraform-force-cli")
+	cmd.Flags().String("terraform-init-flags", "", "Flags to pass to 'terraform init'. Applicable with --terraform-force-cli")
 	cmd.Flags().String("terraform-workspace", "", "Terraform workspace to use. Applicable when path is a Terraform directory")
+
+	cmd.Flags().StringSlice("exclude-path", nil, "Paths of directories to exclude, glob patterns need quotes")
 
 	cmd.Flags().Bool("no-cache", false, "Don't attempt to cache Terraform plans")
 
@@ -69,109 +76,27 @@ func addRunFlags(cmd *cobra.Command) {
 	_ = cmd.MarkFlagFilename("path", "json", "tf")
 	_ = cmd.MarkFlagFilename("config-file", "yml")
 	_ = cmd.MarkFlagFilename("usage-file", "yml")
-}
 
-// panicError is used to collect goroutine panics into an error interface so
-// that we can do type assertion on err checking.
-type panicError struct {
-	msg string
-}
-
-func (p *panicError) Error() string {
-	return p.msg
+	_ = cmd.Flags().MarkHidden("terraform-force-cli")
+	// These are deprecated and will show a warning if used without --terraform-force-cli
+	_ = cmd.Flags().MarkHidden("terraform-plan-flags")
+	_ = cmd.Flags().MarkHidden("terraform-init-flags")
 }
 
 func runMain(cmd *cobra.Command, runCtx *config.RunContext) error {
-	if runCtx.Config.IsSelfHosted() && runCtx.Config.EnableDashboard {
-		ui.PrintWarning(cmd.ErrOrStderr(), "The dashboard is part of Infracost's hosted services. Contact hello@infracost.io for help.")
+	if runCtx.Config.IsSelfHosted() && runCtx.IsCloudEnabled() {
+		ui.PrintWarning(cmd.ErrOrStderr(), "Infracost Cloud is part of Infracost's hosted services. Contact hello@infracost.io for help.")
 	}
 
-	parallelism, err := getParallelism(cmd, runCtx)
-	if err != nil {
-		return err
-	}
-	runCtx.SetContextValue("parallelism", parallelism)
-
-	numJobs := len(runCtx.Config.Projects)
-	jobs := make(chan projectJob, numJobs)
-
-	projectResultChan := make(chan projectResult, numJobs)
-	errGroup, _ := errgroup.WithContext(context.Background())
-
-	runInParallel := parallelism > 1 && numJobs > 1
-	if (runInParallel || runCtx.IsCIRun()) && !runCtx.Config.IsLogging() {
-		if runInParallel {
-			cmd.PrintErrln("Running multiple projects in parallel, so log-level=info is enabled by default.")
-			cmd.PrintErrln("Run with INFRACOST_PARALLELISM=1 to disable parallelism to help debugging.")
-			cmd.PrintErrln()
-		}
-
-		runCtx.Config.LogLevel = "info"
-		err := runCtx.Config.ConfigureLogger()
-		if err != nil {
-			return err
-		}
-	}
-
-	// Create a mutex for each path, so we can synchronize the runs of any
-	// projects that have the same path. This is necessary because Terraform
-	// can't run multiple operations in parallel on the same path.
-	pathMuxs := map[string]*sync.Mutex{}
-	for _, projectCfg := range runCtx.Config.Projects {
-		pathMuxs[projectCfg.Path] = &sync.Mutex{}
-	}
-
-	for i := 0; i < parallelism; i++ {
-		errGroup.Go(func() (err error) {
-			// defer a function to recover from any panics spawned by child goroutines.
-			// This is done as recover works only in the same goroutine that it is called.
-			// We need to catch any child goroutine panics and hand them up to the main caller
-			// so that it can be caught and displayed correctly to the user.
-			defer func() {
-				e := recover()
-				if e != nil {
-					err = &panicError{msg: fmt.Sprintf("%s\n%s", e, debug.Stack())}
-				}
-			}()
-
-			for job := range jobs {
-				mux := pathMuxs[job.projectCfg.Path]
-
-				ctx := config.NewProjectContext(runCtx, job.projectCfg)
-				configProjects, err := runProjectConfig(cmd, runCtx, ctx, job.projectCfg, mux)
-				if err != nil {
-					return err
-				}
-
-				projectResultChan <- projectResult{
-					index:      job.index,
-					ctx:        ctx,
-					projectOut: configProjects,
-				}
-			}
-
-			return nil
-		})
-	}
-
-	for i, p := range runCtx.Config.Projects {
-		jobs <- projectJob{index: i, projectCfg: p}
-	}
-	close(jobs)
-
-	err = errGroup.Wait()
+	pr, err := newParallelRunner(cmd, runCtx)
 	if err != nil {
 		return err
 	}
 
-	close(projectResultChan)
-	projectResults := make([]projectResult, 0, len(runCtx.Config.Projects))
-	for result := range projectResultChan {
-		projectResults = append(projectResults, result)
+	projectResults, err := pr.run()
+	if err != nil {
+		return err
 	}
-	sort.Slice(projectResults, func(i, j int) bool {
-		return projectResults[i].index < projectResults[j].index
-	})
 
 	projects := make([]*schema.Project, 0)
 	projectContexts := make([]*config.ProjectContext, 0)
@@ -194,9 +119,20 @@ func runMain(cmd *cobra.Command, runCtx *config.RunContext) error {
 		go formatHCLProjects(wg, runCtx, hclProjects, hclR)
 	}
 
+	for _, project := range projects {
+		project.Metadata.InfracostCommand = cmd.Name()
+	}
+
 	r, err := output.ToOutputFormat(projects)
 	if err != nil {
 		return err
+	}
+
+	if pr.prior != nil {
+		r, err = output.CompareTo(r, *pr.prior)
+		if err != nil {
+			return err
+		}
 	}
 
 	wg.Wait()
@@ -204,38 +140,30 @@ func runMain(cmd *cobra.Command, runCtx *config.RunContext) error {
 	r.Currency = runCtx.Config.Currency
 
 	dashboardClient := apiclient.NewDashboardAPIClient(runCtx)
-	result, err := dashboardClient.AddRun(runCtx, projectContexts, r)
+	result, err := dashboardClient.AddRun(runCtx, r)
 	if err != nil {
-		log.Errorf("Error reporting run: %s", err)
+		log.WithError(err).Error("Failed to upload to Infracost Cloud")
 	}
 
 	r.RunID, r.ShareURL = result.RunID, result.ShareURL
 
-	opts := output.Options{
-		DashboardEnabled: runCtx.Config.EnableDashboard,
-		ShowSkipped:      runCtx.Config.ShowSkipped,
-		NoColor:          runCtx.Config.NoColor,
-		Fields:           runCtx.Config.Fields,
+	format := strings.ToLower(runCtx.Config.Format)
+	isCompareRun := runCtx.Config.CompareTo != ""
+	if isCompareRun && !validCompareToFormats[format] {
+		return errors.New("The --compare-to option cannot be used with table and html formats as they output breakdowns, specify a different --format.")
 	}
 
-	var b []byte
-
-	switch strings.ToLower(runCtx.Config.Format) {
-	case "json":
-		b, err = output.ToJSON(r, opts)
-	case "html":
-		b, err = output.ToHTML(r, opts)
-	case "diff":
-		b, err = output.ToDiff(r, opts)
-	default:
-		b, err = output.ToTable(r, opts)
-	}
-
+	b, err := output.FormatOutput(format, r, output.Options{
+		DashboardEndpoint: runCtx.Config.DashboardEndpoint,
+		ShowSkipped:       runCtx.Config.ShowSkipped,
+		NoColor:           runCtx.Config.NoColor,
+		Fields:            runCtx.Config.Fields,
+	})
 	if err != nil {
-		return errors.Wrap(err, "Error generating output")
+		return err
 	}
 
-	if runCtx.Config.Format == "diff" || runCtx.Config.Format == "table" {
+	if format == "diff" || format == "table" {
 		lines := bytes.Count(b, []byte("\n")) + 1
 		runCtx.SetContextValue("lineCount", lines)
 	}
@@ -270,7 +198,7 @@ func formatHCLProjects(wg *sync.WaitGroup, ctx *config.RunContext, hclProjects [
 		wg.Done()
 
 		if err != nil {
-			err = apiclient.ReportCLIError(ctx, fmt.Errorf("hcl-runtime-error: formatting hcl projects %s\n%s", err, debug.Stack()))
+			err = apiclient.ReportCLIError(ctx, fmt.Errorf("hcl-runtime-error: formatting hcl projects %s\n%s", err, debug.Stack()), false)
 			if err != nil {
 				log.Debugf("error reporting unexpected hcl runtime error: %s", err)
 			}
@@ -290,42 +218,186 @@ type projectOutput struct {
 	hclProjects []*schema.Project
 }
 
-func runProjectConfig(cmd *cobra.Command, runCtx *config.RunContext, ctx *config.ProjectContext, projectCfg *config.Project, mux *sync.Mutex) (*projectOutput, error) {
+type parallelRunner struct {
+	cmd         *cobra.Command
+	runCtx      *config.RunContext
+	pathMuxs    map[string]*sync.Mutex
+	prior       *output.Root
+	parallelism int
+	numJobs     int
+}
+
+func newParallelRunner(cmd *cobra.Command, runCtx *config.RunContext) (*parallelRunner, error) {
+	// Create a mutex for each path, so we can synchronize the runs of any
+	// projects that have the same path. This is necessary because Terraform
+	// can't run multiple operations in parallel on the same path.
+	pathMuxs := map[string]*sync.Mutex{}
+	for _, projectCfg := range runCtx.Config.Projects {
+		pathMuxs[projectCfg.Path] = &sync.Mutex{}
+	}
+
+	var prior *output.Root
+	if runCtx.Config.CompareTo != "" {
+		snapshot, err := output.Load(runCtx.Config.CompareTo)
+		if err != nil {
+			return nil, fmt.Errorf("Error loading %s used by --compare-to flag. %s", runCtx.Config.CompareTo, err)
+		}
+
+		prior = &snapshot
+	}
+
+	parallelism, err := getParallelism(cmd, runCtx)
+	if err != nil {
+		return nil, err
+	}
+	runCtx.SetContextValue("parallelism", parallelism)
+
+	numJobs := len(runCtx.Config.Projects)
+
+	runInParallel := parallelism > 1 && numJobs > 1
+	if (runInParallel || runCtx.IsCIRun()) && !runCtx.Config.IsLogging() {
+		if runInParallel {
+			cmd.PrintErrln("Running multiple projects in parallel, so log-level=info is enabled by default.")
+			cmd.PrintErrln("Run with INFRACOST_PARALLELISM=1 to disable parallelism to help debugging.")
+			cmd.PrintErrln()
+		}
+
+		runCtx.Config.LogLevel = "info"
+		err := logging.ConfigureBaseLogger(runCtx.Config)
+		if err != nil {
+			return nil, err
+		}
+	}
+
+	return &parallelRunner{
+		parallelism: parallelism,
+		numJobs:     numJobs,
+		runCtx:      runCtx,
+		cmd:         cmd,
+		pathMuxs:    pathMuxs,
+		prior:       prior,
+	}, nil
+}
+
+func (r *parallelRunner) run() ([]projectResult, error) {
+	projectResultChan := make(chan projectResult, r.numJobs)
+	jobs := make(chan projectJob, r.numJobs)
+
+	errGroup, _ := errgroup.WithContext(context.Background())
+	for i := 0; i < r.parallelism; i++ {
+		i := i
+		errGroup.Go(func() (err error) {
+			// defer a function to recover from any panics spawned by child goroutines.
+			// This is done as recover works only in the same goroutine that it is called.
+			// We need to catch any child goroutine panics and hand them up to the main caller
+			// so that it can be caught and displayed correctly to the user.
+			defer func() {
+				e := recover()
+				if e != nil {
+					err = clierror.NewPanicError(fmt.Errorf("%s", e), debug.Stack())
+				}
+			}()
+
+			for job := range jobs {
+				ctx := config.NewProjectContext(r.runCtx, job.projectCfg, log.Fields{
+					"routine": i,
+				})
+				configProjects, err := r.runProjectConfig(ctx)
+				if err != nil {
+					return err
+				}
+
+				projectResultChan <- projectResult{
+					index:      job.index,
+					ctx:        ctx,
+					projectOut: configProjects,
+				}
+			}
+
+			return nil
+		})
+	}
+
+	for i, p := range r.runCtx.Config.Projects {
+		jobs <- projectJob{index: i, projectCfg: p}
+	}
+	close(jobs)
+
+	err := errGroup.Wait()
+	if err != nil {
+		return nil, err
+	}
+
+	close(projectResultChan)
+
+	projectResults := make([]projectResult, 0, len(r.runCtx.Config.Projects))
+	for result := range projectResultChan {
+		projectResults = append(projectResults, result)
+	}
+
+	sort.Slice(projectResults, func(i, j int) bool {
+		return projectResults[i].index < projectResults[j].index
+	})
+
+	return projectResults, nil
+}
+
+func (r *parallelRunner) runProjectConfig(ctx *config.ProjectContext) (*projectOutput, error) {
+	mux := r.pathMuxs[ctx.ProjectConfig.Path]
 	if mux != nil {
 		mux.Lock()
 		defer mux.Unlock()
 	}
 
-	for k, v := range projectCfg.Env {
-		os.Setenv(k, v)
-	}
+	provider, err := providers.Detect(ctx, r.prior == nil)
+	var warn *string
+	if v, ok := err.(*providers.ValidationError); ok {
+		if v.Warn() == nil {
+			return nil, err
+		}
 
-	provider, err := providers.Detect(ctx)
-	if err != nil {
+		warn = v.Warn()
+	} else if err != nil {
 		m := fmt.Sprintf("%s\n\n", err)
 		m += fmt.Sprintf("Try setting --path to a Terraform plan JSON file. See %s for how to generate this.", ui.LinkString("https://infracost.io/troubleshoot"))
 
-		return nil, clierror.NewSanitizedError(errors.New(m), "Could not detect path type")
+		return nil, clierror.NewCLIError(errors.New(m), "Could not detect path type")
 	}
+
 	ctx.SetContextValue("projectType", provider.Type())
 
-	if cmd.Name() == "diff" && provider.Type() == "terraform_state_json" {
+	projectTypes := []interface{}{}
+	if t, ok := ctx.RunContext.ContextValues()["projectTypes"]; ok {
+		projectTypes = t.([]interface{})
+	}
+	projectTypes = append(projectTypes, provider.Type())
+	ctx.RunContext.SetContextValue("projectTypes", projectTypes)
+
+	if r.cmd.Name() == "diff" && provider.Type() == "terraform_state_json" {
 		m := "Cannot use Terraform state JSON with the infracost diff command.\n\n"
 		m += fmt.Sprintf("Use the %s flag to specify the path to one of the following:\n", ui.PrimaryString("--path"))
 		m += " - Terraform plan JSON file\n - Terraform/Terragrunt directory\n - Terraform plan file"
-		return nil, clierror.NewSanitizedError(errors.New(m), "Cannot use Terraform state JSON with the infracost diff command")
+		return nil, clierror.NewCLIError(errors.New(m), "Cannot use Terraform state JSON with the infracost diff command")
 	}
 
-	m := fmt.Sprintf("Detected %s at %s", provider.DisplayType(), ui.DisplayPath(projectCfg.Path))
-	if runCtx.Config.IsLogging() {
+	m := fmt.Sprintf("Detected %s at %s", provider.DisplayType(), ui.DisplayPath(ctx.ProjectConfig.Path))
+	if provider.Type() == "terraform_dir" {
+		m = fmt.Sprintf("Evaluating %s at %s", provider.DisplayType(), ui.DisplayPath(ctx.ProjectConfig.Path))
+	}
+
+	if r.runCtx.Config.IsLogging() {
 		log.Info(m)
 	} else {
 		fmt.Fprintln(os.Stderr, m)
 	}
 
+	if warn != nil {
+		ui.PrintWarning(r.runCtx.ErrWriter, *warn)
+	}
+
 	// Generate usage file
-	if runCtx.Config.SyncUsageFile {
-		err := generateUsageFile(cmd, runCtx, ctx, projectCfg, provider)
+	if r.runCtx.Config.SyncUsageFile {
+		err := r.generateUsageFile(ctx, provider)
 		if err != nil {
 			return nil, errors.Wrap(err, "Error generating usage file")
 		}
@@ -335,9 +407,9 @@ func runProjectConfig(cmd *cobra.Command, runCtx *config.RunContext, ctx *config
 	usageData := make(map[string]*schema.UsageData)
 	var usageFile *usage.UsageFile
 
-	if projectCfg.UsageFile != "" {
+	if ctx.ProjectConfig.UsageFile != "" {
 		var err error
-		usageFile, err = usage.LoadUsageFile(projectCfg.UsageFile)
+		usageFile, err = usage.LoadUsageFile(ctx.ProjectConfig.UsageFile)
 		if err != nil {
 			return nil, err
 		}
@@ -346,7 +418,7 @@ func runProjectConfig(cmd *cobra.Command, runCtx *config.RunContext, ctx *config
 		if err != nil {
 			log.Errorf("Error checking usage file keys: %v", err)
 		} else if len(invalidKeys) > 0 {
-			ui.PrintWarningf(cmd.ErrOrStderr(),
+			ui.PrintWarningf(r.cmd.ErrOrStderr(),
 				"The following usage file parameters are invalid and will be ignored: %s\n",
 				strings.Join(invalidKeys, ", "),
 			)
@@ -390,38 +462,42 @@ func runProjectConfig(cmd *cobra.Command, runCtx *config.RunContext, ctx *config
 	// if the provider is the dir provider let's run the hcl provider at the same time to get reporting metrics.
 	if _, ok := provider.(*terraform.DirProvider); ok {
 		wg.Add(1)
-		go runHCLProvider(wg, ctx, usageFile, runCtx, out)
+		go r.runHCLProvider(wg, ctx, usageFile, out)
 	}
 
 	t1 := time.Now()
 	projects, err := provider.LoadResources(usageData)
 	if err != nil {
-		cmd.PrintErrln()
+		r.cmd.PrintErrln()
 		return nil, err
 	}
 
 	spinnerOpts := ui.SpinnerOptions{
-		EnableLogging: runCtx.Config.IsLogging(),
-		NoColor:       runCtx.Config.NoColor,
+		EnableLogging: r.runCtx.Config.IsLogging(),
+		NoColor:       r.runCtx.Config.NoColor,
 		Indent:        "  ",
 	}
 	spinner := ui.NewSpinner("Retrieving cloud prices to calculate costs", spinnerOpts)
 	defer spinner.Fail()
 
 	for _, project := range projects {
-		if err := prices.PopulatePrices(runCtx, project); err != nil {
+		if err := prices.PopulatePrices(r.runCtx, project); err != nil {
 			spinner.Fail()
-			cmd.PrintErrln()
+			r.cmd.PrintErrln()
 
 			if e := unwrapped(err); errors.Is(e, apiclient.ErrInvalidAPIKey) {
-				return nil, fmt.Errorf("%v\n%s %s %s %s %s\n%s",
+				return nil, fmt.Errorf("%v\n%s %s %s %s %s\n%s %s.\n%s %s %s",
 					e.Error(),
 					"Please check your",
 					ui.PrimaryString(config.CredentialsFilePath()),
 					"file or",
 					ui.PrimaryString("INFRACOST_API_KEY"),
 					"environment variable.",
-					"If you continue having issues please email hello@infracost.io",
+					"If you recently regenerated your API key, you can retrieve it from",
+					ui.PrimaryString(r.runCtx.Config.DashboardEndpoint),
+					"See",
+					ui.PrimaryString("https://infracost.io/support"),
+					"if you continue having issues.",
 				)
 			}
 
@@ -433,6 +509,7 @@ func runProjectConfig(cmd *cobra.Command, runCtx *config.RunContext, ctx *config
 		}
 
 		schema.CalculateCosts(project)
+
 		project.CalculateDiff()
 	}
 
@@ -446,33 +523,33 @@ func runProjectConfig(cmd *cobra.Command, runCtx *config.RunContext, ctx *config
 	spinner.Success()
 	out.projects = projects
 
-	if !runCtx.Config.IsLogging() && !runCtx.Config.SkipErrLine {
-		cmd.PrintErrln()
+	if !r.runCtx.Config.IsLogging() && !r.runCtx.Config.SkipErrLine {
+		r.cmd.PrintErrln()
 	}
 
 	return out, nil
 }
 
-func runHCLProvider(wg *sync.WaitGroup, ctx *config.ProjectContext, usageFile *usage.UsageFile, runCtx *config.RunContext, out *projectOutput) {
+func (r *parallelRunner) runHCLProvider(wg *sync.WaitGroup, ctx *config.ProjectContext, usageFile *usage.UsageFile, out *projectOutput) {
 	defer func() {
 		err := recover()
 		wg.Done()
 
 		if err != nil {
 			log.Debugf("recovered from hcl provider panic %s", err)
-			err = apiclient.ReportCLIError(runCtx, fmt.Errorf("hcl-runtime-error: loading resources %s\n%s", err, debug.Stack()))
+			err = apiclient.ReportCLIError(r.runCtx, fmt.Errorf("hcl-runtime-error: loading resources %s\n%s", err, debug.Stack()), false)
 			if err != nil {
 				log.Debugf("error reporting unexpected hcl runtime error: %s", err)
 			}
 		}
 	}()
-	if runCtx.Config.DisableHCLParsing {
+	if r.runCtx.Config.DisableHCLParsing {
 		return
 	}
 
 	t1 := time.Now()
 
-	hclProvider, err := terraform.NewHCLProvider(ctx, terraform.NewPlanJSONProvider(ctx))
+	hclProvider, err := terraform.NewHCLProvider(ctx, &terraform.HCLProviderConfig{SuppressLogging: true})
 	if err != nil {
 		log.Debugf("Could not init HCL provider: %s", err)
 		return
@@ -485,7 +562,7 @@ func runHCLProvider(wg *sync.WaitGroup, ctx *config.ProjectContext, usageFile *u
 	}
 
 	for _, project := range projects {
-		err := prices.PopulatePrices(runCtx, project)
+		err := prices.PopulatePrices(r.runCtx, project)
 		if err != nil {
 			log.Debugf("Error populating prices for HCL project: %s", err)
 			return
@@ -501,15 +578,15 @@ func runHCLProvider(wg *sync.WaitGroup, ctx *config.ProjectContext, usageFile *u
 	ctx.SetContextValue("hclProjectRunTimeMs", taken)
 }
 
-func generateUsageFile(cmd *cobra.Command, runCtx *config.RunContext, projectCtx *config.ProjectContext, projectCfg *config.Project, provider schema.Provider) error {
-	if projectCfg.UsageFile == "" {
+func (r *parallelRunner) generateUsageFile(ctx *config.ProjectContext, provider schema.Provider) error {
+	if ctx.ProjectConfig.UsageFile == "" {
 		// This should not happen as we check earlier in the code that usage-file is not empty when sync-usage-file flag is on.
 		return fmt.Errorf("Error generating usage: no usage file given")
 	}
 
 	var usageFile *usage.UsageFile
 
-	usageFilePath := projectCfg.UsageFile
+	usageFilePath := ctx.ProjectConfig.UsageFile
 	err := usage.CreateUsageFile(usageFilePath)
 	if err != nil {
 		return errors.Wrap(err, "Error creating usage file")
@@ -527,28 +604,28 @@ func generateUsageFile(cmd *cobra.Command, runCtx *config.RunContext, projectCtx
 	}
 
 	spinnerOpts := ui.SpinnerOptions{
-		EnableLogging: runCtx.Config.IsLogging(),
-		NoColor:       runCtx.Config.NoColor,
+		EnableLogging: r.runCtx.Config.IsLogging(),
+		NoColor:       r.runCtx.Config.NoColor,
 		Indent:        "  ",
 	}
 
 	spinner := ui.NewSpinner("Syncing usage data from cloud", spinnerOpts)
 	defer spinner.Fail()
 
-	syncResult, err := usage.SyncUsageData(usageFile, providerProjects)
+	syncResult, err := usage.SyncUsageData(ctx, usageFile, providerProjects)
 
 	if err != nil {
 		spinner.Fail()
 		return errors.Wrap(err, "Error synchronizing usage data")
 	}
 
-	projectCtx.SetFrom(syncResult)
+	ctx.SetFrom(syncResult)
 	if err != nil {
 		spinner.Fail()
 		return errors.Wrap(err, "Error summarizing usage")
 	}
 
-	err = usageFile.WriteToPath(projectCfg.UsageFile)
+	err = usageFile.WriteToPath(ctx.ProjectConfig.UsageFile)
 	if err != nil {
 		spinner.Fail()
 		return errors.Wrap(err, "Error writing usage file")
@@ -568,7 +645,7 @@ func generateUsageFile(cmd *cobra.Command, runCtx *config.RunContext, projectCtx
 		}
 
 		spinner.Success()
-		cmd.PrintErrln(fmt.Sprintf("    %s Synced %d of %d resource%s",
+		r.cmd.PrintErrln(fmt.Sprintf("    %s Synced %d of %d resource%s",
 			ui.FaintString("└─"),
 			successes,
 			resources,
@@ -608,6 +685,8 @@ func loadRunFlags(cfg *config.Config, cmd *cobra.Command) error {
 	hasPathFlag := cmd.Flags().Changed("path")
 	hasConfigFile := cmd.Flags().Changed("config-file")
 
+	cfg.CompareTo, _ = cmd.Flags().GetString("compare-to")
+
 	if cmd.Name() != "infracost" && !hasPathFlag && !hasConfigFile {
 		m := fmt.Sprintf("No path specified\n\nUse the %s flag to specify the path to one of the following:\n", ui.PrimaryString("--path"))
 		m += " - Terraform plan JSON file\n - Terraform/Terragrunt directory\n - Terraform plan file\n - Terraform state JSON file"
@@ -619,14 +698,17 @@ func loadRunFlags(cfg *config.Config, cmd *cobra.Command) error {
 
 	hasProjectFlags := (hasPathFlag ||
 		cmd.Flags().Changed("usage-file") ||
+		cmd.Flags().Changed("project-name") ||
 		cmd.Flags().Changed("terraform-plan-flags") ||
+		cmd.Flags().Changed("terraform-var-file") ||
+		cmd.Flags().Changed("terraform-var") ||
 		cmd.Flags().Changed("terraform-init-flags") ||
 		cmd.Flags().Changed("terraform-workspace") ||
 		cmd.Flags().Changed("terraform-use-state"))
 
 	if hasConfigFile && hasProjectFlags {
 		m := "--config-file flag cannot be used with the following flags: "
-		m += "--path, --terraform-*, --usage-file"
+		m += "--path, --project-name, --terraform-*, --usage-file"
 		ui.PrintUsage(cmd)
 		return errors.New(m)
 	}
@@ -635,13 +717,16 @@ func loadRunFlags(cfg *config.Config, cmd *cobra.Command) error {
 
 	if hasProjectFlags {
 		projectCfg.Path, _ = cmd.Flags().GetString("path")
-		projectCfg.TerraformParseHCL, _ = cmd.Flags().GetBool("terraform-parse-hcl")
 		projectCfg.TerraformVarFiles, _ = cmd.Flags().GetStringSlice("terraform-var-file")
-		projectCfg.TerraformVars, _ = cmd.Flags().GetStringSlice("terraform-var")
+		tfVars, _ := cmd.Flags().GetStringSlice("terraform-var")
+		projectCfg.TerraformVars = tfVarsToMap(tfVars)
 		projectCfg.UsageFile, _ = cmd.Flags().GetString("usage-file")
+		projectCfg.Name, _ = cmd.Flags().GetString("project-name")
+		projectCfg.TerraformForceCLI, _ = cmd.Flags().GetBool("terraform-force-cli")
 		projectCfg.TerraformPlanFlags, _ = cmd.Flags().GetString("terraform-plan-flags")
 		projectCfg.TerraformInitFlags, _ = cmd.Flags().GetString("terraform-init-flags")
 		projectCfg.TerraformUseState, _ = cmd.Flags().GetBool("terraform-use-state")
+		projectCfg.ExcludePaths, _ = cmd.Flags().GetStringSlice("exclude-path")
 
 		if cmd.Flags().Changed("terraform-workspace") {
 			projectCfg.TerraformWorkspace, _ = cmd.Flags().GetString("terraform-workspace")
@@ -656,22 +741,17 @@ func loadRunFlags(cfg *config.Config, cmd *cobra.Command) error {
 			return err
 		}
 
-		if parseHCL, _ := cmd.Flags().GetBool("terraform-parse-hcl"); parseHCL {
+		cfg.ConfigFilePath = cfgFilePath
+
+		if forceCLI, _ := cmd.Flags().GetBool("terraform-force-cli"); forceCLI {
 			for _, p := range cfg.Projects {
-				p.TerraformParseHCL = true
+				p.TerraformForceCLI = true
 			}
 		}
 	}
 
 	cfg.NoCache, _ = cmd.Flags().GetBool("no-cache")
-
 	cfg.Format, _ = cmd.Flags().GetString("format")
-
-	if cfg.Format != "" && !contains(validRunFormats, cfg.Format) {
-		ui.PrintUsage(cmd)
-		return fmt.Errorf("--format only supports %s", strings.Join(validRunFormats, ", "))
-	}
-
 	cfg.ShowSkipped, _ = cmd.Flags().GetBool("show-skipped")
 	cfg.SyncUsageFile, _ = cmd.Flags().GetBool("sync-usage-file")
 
@@ -701,6 +781,24 @@ func loadRunFlags(cfg *config.Config, cmd *cobra.Command) error {
 	}
 
 	return nil
+}
+
+func tfVarsToMap(vars []string) map[string]string {
+	if len(vars) == 0 {
+		return nil
+	}
+
+	m := make(map[string]string, len(vars))
+	for _, v := range vars {
+		pieces := strings.Split(v, "=")
+		if len(pieces) != 2 {
+			continue
+		}
+
+		m[pieces[0]] = pieces[1]
+	}
+
+	return m
 }
 
 func checkRunConfig(warningWriter io.Writer, cfg *config.Config) error {
@@ -764,6 +862,10 @@ func buildRunEnv(runCtx *config.RunContext, projectContexts []*config.ProjectCon
 	if hclR != nil {
 		AddHCLEnvVars(projectContexts, r, projects, *hclR, hclProjects, env)
 
+	}
+
+	if warnings := runCtx.GetResourceWarnings(); warnings != nil {
+		env["resourceWarnings"] = warnings
 	}
 
 	if n := r.ExampleProjectName(); n != "" {

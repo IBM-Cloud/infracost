@@ -208,6 +208,10 @@ func GoldenFileResourceTestsWithOpts(t *testing.T, testName string, options *Gol
 	})
 }
 
+func GoldenFileHCLResourceTestsWithOpts(t *testing.T, testName string, options *GoldenFileOptions) {
+	goldenFileResourceTestWithOpts(t, "hcl", testName, options)
+}
+
 func goldenFileResourceTestWithOpts(t *testing.T, pName string, testName string, options *GoldenFileOptions) {
 	t.Helper()
 
@@ -296,12 +300,9 @@ func loadResources(t *testing.T, pName string, tfProject TerraformProject, runCt
 	if pName == "hcl" {
 		provider = newHCLProvider(t, runCtx, tfdir)
 	} else {
-		provider = terraform.NewDirProvider(config.NewProjectContext(
-			runCtx,
-			&config.Project{
-				Path: tfdir,
-			},
-		))
+		provider = terraform.NewDirProvider(config.NewProjectContext(runCtx, &config.Project{
+			Path: tfdir,
+		}, log.Fields{}), false)
 	}
 
 	projects, err := provider.LoadResources(usageData)
@@ -348,22 +349,24 @@ func goldenFileSyncTest(t *testing.T, pName, testName string) {
 		},
 	}
 
+	projectCtx := config.NewProjectContext(runCtx, &config.Project{}, log.Fields{})
+
 	usageFilePath := filepath.Join("testdata", testName, testName+"_existing_usage.yml")
 	projects := loadResources(t, pName, tfProject, runCtx, map[string]*schema.UsageData{})
 
-	actual := RunSyncUsage(t, projects, usageFilePath)
+	actual := RunSyncUsage(t, projectCtx, projects, usageFilePath)
 	require.NoError(t, err)
 
 	goldenFilePath := filepath.Join("testdata", testName, testName+".golden")
 	testutil.AssertGoldenFile(t, goldenFilePath, actual)
 }
 
-func RunSyncUsage(t *testing.T, projects []*schema.Project, usageFilePath string) []byte {
+func RunSyncUsage(t *testing.T, projectCtx *config.ProjectContext, projects []*schema.Project, usageFilePath string) []byte {
 	t.Helper()
 	usageFile, err := usage.LoadUsageFile(usageFilePath)
 	require.NoError(t, err)
 
-	_, err = usage.SyncUsageData(usageFile, projects)
+	_, err = usage.SyncUsageData(projectCtx, usageFile, projects)
 	require.NoError(t, err)
 
 	out := filepath.Join(t.TempDir(), "actual_usage.yml")
@@ -380,17 +383,14 @@ func CreateTerraformProject(tmpDir string, tfProject TerraformProject) (string, 
 	return writeToTmpDir(tmpDir, tfProject)
 }
 
-func newHCLProvider(t *testing.T, runCtx *config.RunContext, tfdir string) terraform.HCLProvider {
+func newHCLProvider(t *testing.T, runCtx *config.RunContext, tfdir string) *terraform.HCLProvider {
 	t.Helper()
 
-	projectCtx := config.NewProjectContext(
-		runCtx,
-		&config.Project{
-			Path: tfdir,
-		},
-	)
+	projectCtx := config.NewProjectContext(runCtx, &config.Project{
+		Path: tfdir,
+	}, log.Fields{})
 
-	provider, err := terraform.NewHCLProvider(projectCtx, terraform.NewPlanJSONProvider(projectCtx))
+	provider, err := terraform.NewHCLProvider(projectCtx, &terraform.HCLProviderConfig{SuppressLogging: true})
 	require.NoError(t, err)
 
 	return provider
@@ -405,7 +405,7 @@ func createTerraformProject(t *testing.T, tfProject TerraformProject) string {
 		err := copyInitCacheToPath(initCache, tmpDir)
 		require.NoError(t, err)
 	} else {
-		t.Log(fmt.Sprintf("Couldn't copy terraform init cache from %s", initCache))
+		t.Logf("Couldn't copy terraform init cache from %s", initCache)
 	}
 
 	tfdir, err := CreateTerraformProject(tmpDir, tfProject)

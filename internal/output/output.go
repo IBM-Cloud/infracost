@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"regexp"
 	"sort"
+	"strings"
 	"time"
 
 	"github.com/shopspring/decimal"
@@ -22,7 +23,7 @@ type Root struct {
 	RunID                string           `json:"runId,omitempty"`
 	ShareURL             string           `json:"shareUrl,omitempty"`
 	Currency             string           `json:"currency"`
-	Projects             []Project        `json:"projects"`
+	Projects             Projects         `json:"projects"`
 	TotalHourlyCost      *decimal.Decimal `json:"totalHourlyCost"`
 	TotalMonthlyCost     *decimal.Decimal `json:"totalMonthlyCost"`
 	PastTotalHourlyCost  *decimal.Decimal `json:"pastTotalHourlyCost"`
@@ -45,6 +46,68 @@ type Project struct {
 	fullSummary   *Summary
 }
 
+// ToSchemaProject generates a schema.Project from a Project. The created schema.Project is not suitable to be
+// used outside simple schema.Project to schema.Project comparisons. It contains missing information
+// that cannot be inferred from a Project.
+func (p Project) ToSchemaProject() *schema.Project {
+	var pastResources []*schema.Resource
+	if p.PastBreakdown != nil {
+		pastResources = convertOutputResources(p.PastBreakdown.Resources)
+	}
+
+	var resources []*schema.Resource
+	if p.Breakdown != nil {
+		resources = convertOutputResources(p.Breakdown.Resources)
+	}
+
+	return &schema.Project{
+		Name:          p.Name,
+		Metadata:      p.Metadata,
+		PastResources: pastResources,
+		Resources:     resources,
+	}
+}
+
+func convertOutputResources(outResources []Resource) []*schema.Resource {
+	resources := make([]*schema.Resource, len(outResources))
+
+	for i, resource := range outResources {
+		resources[i] = &schema.Resource{
+			Name:           resource.Name,
+			CostComponents: convertCostComponents(resource.CostComponents),
+			SubResources:   convertOutputResources(resource.SubResources),
+			HourlyCost:     resource.HourlyCost,
+			MonthlyCost:    resource.MonthlyCost,
+			ResourceType:   resource.ResourceType(),
+		}
+	}
+
+	return resources
+}
+
+func convertCostComponents(outComponents []CostComponent) []*schema.CostComponent {
+	components := make([]*schema.CostComponent, len(outComponents))
+
+	for i, c := range outComponents {
+		sc := &schema.CostComponent{
+			Name:            c.Name,
+			Unit:            c.Unit,
+			UnitMultiplier:  decimal.NewFromInt(1),
+			HourlyCost:      c.HourlyCost,
+			MonthlyCost:     c.MonthlyCost,
+			HourlyQuantity:  c.HourlyQuantity,
+			MonthlyQuantity: c.MonthlyQuantity,
+		}
+		sc.SetPrice(c.Price)
+
+		components[i] = sc
+	}
+
+	return components
+}
+
+type Projects []Project
+
 var exampleProjectsRegex = regexp.MustCompile(`^infracost\/(infracost\/examples|example-terraform)\/`)
 
 func (r *Root) ExampleProjectName() string {
@@ -61,11 +124,27 @@ func (r *Root) ExampleProjectName() string {
 	return r.Projects[0].Name
 }
 
-func (p *Project) Label(dashboardEnabled bool) string {
-	if !dashboardEnabled {
+// Label returns the display name of the project
+func (p *Project) Label() string {
+	return p.Name
+}
+
+// LabelWithMetadata returns the display name of the project appended with any distinguishing
+// metadata (Module path or Workspace)
+func (p *Project) LabelWithMetadata() string {
+	metadataInfo := []string{}
+	if p.Metadata.TerraformModulePath != "" {
+		metadataInfo = append(metadataInfo, "Module path: "+p.Metadata.TerraformModulePath)
+	}
+	if p.Metadata.WorkspaceLabel() != "" {
+		metadataInfo = append(metadataInfo, "Workspace: "+p.Metadata.WorkspaceLabel())
+	}
+
+	if len(metadataInfo) == 0 {
 		return p.Name
 	}
-	return fmt.Sprintf("%s (%s)", p.Name, p.Metadata.Path)
+
+	return fmt.Sprintf("%s (%s)", p.Name, strings.Join(metadataInfo, ", "))
 }
 
 type Breakdown struct {
@@ -85,13 +164,23 @@ type CostComponent struct {
 }
 
 type Resource struct {
-	Name           string            `json:"name"`
-	Tags           map[string]string `json:"tags,omitempty"`
-	Metadata       map[string]string `json:"metadata"`
-	HourlyCost     *decimal.Decimal  `json:"hourlyCost"`
-	MonthlyCost    *decimal.Decimal  `json:"monthlyCost"`
-	CostComponents []CostComponent   `json:"costComponents,omitempty"`
-	SubResources   []Resource        `json:"subresources,omitempty"`
+	Name           string                 `json:"name"`
+	Tags           map[string]string      `json:"tags,omitempty"`
+	Metadata       map[string]interface{} `json:"metadata"`
+	HourlyCost     *decimal.Decimal       `json:"hourlyCost"`
+	MonthlyCost    *decimal.Decimal       `json:"monthlyCost"`
+	CostComponents []CostComponent        `json:"costComponents,omitempty"`
+	SubResources   []Resource             `json:"subresources,omitempty"`
+}
+
+func (r Resource) ResourceType() string {
+	pieces := strings.Split(r.Name, ".")
+
+	if len(pieces) >= 2 {
+		return pieces[len(pieces)-2]
+	}
+
+	return r.Name
 }
 
 type Summary struct {
@@ -118,12 +207,12 @@ type SummaryOptions struct {
 }
 
 type Options struct {
-	DashboardEnabled bool
-	NoColor          bool
-	ShowSkipped      bool
-	Fields           []string
-	IncludeHTML      bool
-	PolicyChecks     PolicyCheck
+	DashboardEndpoint string
+	NoColor           bool
+	ShowSkipped       bool
+	Fields            []string
+	IncludeHTML       bool
+	PolicyChecks      PolicyCheck
 }
 
 // PolicyCheck holds information if a given run has any policy checks enabled.
@@ -188,7 +277,6 @@ func outputBreakdown(resources []*schema.Resource) *Breakdown {
 func outputResource(r *schema.Resource) Resource {
 	comps := make([]CostComponent, 0, len(r.CostComponents))
 	for _, c := range r.CostComponents {
-
 		comps = append(comps, CostComponent{
 			Name:            c.Name,
 			Unit:            c.Unit,
@@ -205,9 +293,16 @@ func outputResource(r *schema.Resource) Resource {
 		subresources = append(subresources, outputResource(s))
 	}
 
+	metadata := make(map[string]interface{})
+	if r.Metadata != nil {
+		for k, v := range r.Metadata {
+			metadata[k] = v.Value()
+		}
+	}
+
 	return Resource{
 		Name:           r.Name,
-		Metadata:       map[string]string{},
+		Metadata:       metadata,
 		Tags:           r.Tags,
 		HourlyCost:     r.HourlyCost,
 		MonthlyCost:    r.MonthlyCost,
@@ -325,7 +420,7 @@ func ToOutputFormat(projects []*schema.Project) (Root, error) {
 		PastTotalMonthlyCost: pastTotalMonthlyCost,
 		DiffTotalHourlyCost:  diffTotalHourlyCost,
 		DiffTotalMonthlyCost: diffTotalMonthlyCost,
-		TimeGenerated:        time.Now(),
+		TimeGenerated:        time.Now().UTC(),
 		Summary:              MergeSummaries(summaries),
 		FullSummary:          MergeSummaries(fullSummaries),
 	}
@@ -630,7 +725,7 @@ func sortResources(resources []Resource, groupKey string) {
 		}
 
 		// Sort by the group key
-		return resources[i].Metadata[groupKey] < resources[j].Metadata[groupKey]
+		return resources[i].Metadata[groupKey].(string) < resources[j].Metadata[groupKey].(string)
 	})
 }
 

@@ -16,25 +16,27 @@ import (
 
 type PlanProvider struct {
 	*DirProvider
-	Path           string
-	cachedPlanJSON []byte
+	Path                 string
+	cachedPlanJSON       []byte
+	includePastResources bool
 }
 
-func NewPlanProvider(ctx *config.ProjectContext) schema.Provider {
-	dirProvider := NewDirProvider(ctx).(*DirProvider)
+func NewPlanProvider(ctx *config.ProjectContext, includePastResources bool) schema.Provider {
+	dirProvider := NewDirProvider(ctx, includePastResources).(*DirProvider)
 
 	return &PlanProvider{
-		DirProvider: dirProvider,
-		Path:        ctx.ProjectConfig.Path,
+		DirProvider:          dirProvider,
+		Path:                 ctx.ProjectConfig.Path,
+		includePastResources: includePastResources,
 	}
 }
 
 func (p *PlanProvider) Type() string {
-	return "terraform_plan"
+	return "terraform_plan_binary"
 }
 
 func (p *PlanProvider) DisplayType() string {
-	return "Terraform plan file"
+	return "Terraform plan binary file"
 }
 
 func (p *PlanProvider) LoadResources(usage map[string]*schema.UsageData) ([]*schema.Project, error) {
@@ -53,10 +55,10 @@ func (p *PlanProvider) LoadResources(usage map[string]*schema.UsageData) ([]*sch
 	metadata := config.DetectProjectMetadata(p.ctx.ProjectConfig.Path)
 	metadata.Type = p.Type()
 	p.AddMetadata(metadata)
-	name := schema.GenerateProjectName(metadata, p.ctx.RunContext.Config.EnableDashboard)
+	name := schema.GenerateProjectName(metadata, p.ctx.ProjectConfig.Name, p.ctx.RunContext.IsCloudEnabled())
 
 	project := schema.NewProject(name, metadata)
-	parser := NewParser(p.ctx)
+	parser := NewParser(p.ctx, p.includePastResources)
 
 	pastResources, resources, err := parser.parseJSON(j, usage)
 	if err != nil {
@@ -96,7 +98,7 @@ func (p *PlanProvider) generatePlanJSON() ([]byte, error) {
 				"and then run Infracost with",
 				ui.PrimaryString("--path=plan.json"),
 			)
-			return []byte{}, clierror.NewSanitizedError(errors.New(m), "Could not detect Terraform directory for plan file")
+			return []byte{}, clierror.NewCLIError(errors.New(m), "Could not detect Terraform directory for plan file")
 		}
 	}
 

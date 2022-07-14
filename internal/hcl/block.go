@@ -3,48 +3,121 @@ package hcl
 import (
 	"fmt"
 	"os"
+	"regexp"
+	"sort"
+	"strconv"
 	"strings"
 
 	"github.com/google/uuid"
 	"github.com/hashicorp/hcl/v2"
 	"github.com/hashicorp/hcl/v2/hclsyntax"
+	"github.com/sirupsen/logrus"
 	"github.com/zclconf/go-cty/cty"
 	"github.com/zclconf/go-cty/cty/gocty"
 )
 
-var terraformSchemaV012 = &hcl.BodySchema{
-	Blocks: []hcl.BlockHeaderSchema{
-		{
-			Type: "terraform",
+var (
+	terraformSchemaV012 = &hcl.BodySchema{
+		Blocks: []hcl.BlockHeaderSchema{
+			{
+				Type: "terraform",
+			},
+			{
+				Type:       "provider",
+				LabelNames: []string{"name"},
+			},
+			{
+				Type:       "variable",
+				LabelNames: []string{"name"},
+			},
+			{
+				Type: "locals",
+			},
+			{
+				Type:       "output",
+				LabelNames: []string{"name"},
+			},
+			{
+				Type:       "module",
+				LabelNames: []string{"name"},
+			},
+			{
+				Type:       "resource",
+				LabelNames: []string{"type", "name"},
+			},
+			{
+				Type:       "data",
+				LabelNames: []string{"type", "name"},
+			},
 		},
-		{
-			Type:       "provider",
-			LabelNames: []string{"name"},
+	}
+	justProviderBlocks = &hcl.BodySchema{
+		Blocks: []hcl.BlockHeaderSchema{
+			{
+				Type:       "provider",
+				LabelNames: []string{"name"},
+			},
 		},
-		{
-			Type:       "variable",
-			LabelNames: []string{"name"},
+	}
+	justModuleBlocks = &hcl.BodySchema{
+		Blocks: []hcl.BlockHeaderSchema{
+			{
+				Type:       "module",
+				LabelNames: []string{"name"},
+			},
 		},
-		{
-			Type: "locals",
-		},
-		{
-			Type:       "output",
-			LabelNames: []string{"name"},
-		},
-		{
-			Type:       "module",
-			LabelNames: []string{"name"},
-		},
-		{
-			Type:       "resource",
-			LabelNames: []string{"type", "name"},
-		},
-		{
-			Type:       "data",
-			LabelNames: []string{"type", "name"},
-		},
-	},
+	}
+
+	errorNoHCLContents = fmt.Errorf("file contents is empty")
+)
+
+// referencedBlocks is a helper in interface adheres to the sort.Interface interface.
+// This enables us to sort the blocks by their references to provide a list order
+// safe for context evaluation.
+type referencedBlocks []*Block
+
+func (b referencedBlocks) Len() int      { return len(b) }
+func (b referencedBlocks) Swap(i, j int) { b[i], b[j] = b[j], b[i] }
+
+// Less reports whether the Block with index i must sort before the Block with index j.
+// If the i's name is referenced by Block j then i should start before j. This is
+// because we need to evaluate the output of Block i before we can continue to j.
+func (b referencedBlocks) Less(i, j int) bool {
+	moduleName := b[i].Reference().nameLabel
+
+	attrs := b[j].GetAttributes()
+	for _, attr := range attrs {
+		refs := attr.AllReferences()
+		for _, ref := range refs {
+			if ref.typeLabel == moduleName {
+				return true
+			}
+		}
+	}
+
+	return false
+}
+
+// ModuleBlocks returns all the Blocks of type module. The returned Blocks
+// are sorted in order of reference. Blocks that are referenced by others are
+// the first in this list.
+//
+// So if we start with a list of [A,B,C] and A references B the returned list will
+// be [B,A,C].
+//
+// This makes the list returned safe for context evaluation, as we evaluate modules that have
+// outputs that other modules rely on first.
+func (blocks Blocks) ModuleBlocks() Blocks {
+	justModules := blocks.OfType("module")
+	toSort := make(referencedBlocks, len(justModules))
+
+	copy(toSort, justModules)
+
+	sort.Sort(toSort)
+
+	copy(justModules, toSort)
+
+	return justModules
 }
 
 // Blocks is a helper type around a slice of blocks to provide easy access
@@ -62,6 +135,63 @@ func (blocks Blocks) OfType(t string) Blocks {
 	}
 
 	return results
+}
+
+// BlockMatcher defines a struct that can be used to filter a list of blocks to a single Block.
+type BlockMatcher struct {
+	Type  string
+	Label string
+}
+
+// Matching returns a single block filtered from the given pattern.
+// If more than one Block is filtered by the pattern, Matching returns the first Block found.
+func (blocks Blocks) Matching(pattern BlockMatcher) *Block {
+	search := blocks
+
+	if pattern.Type != "" {
+		search = blocks.OfType(pattern.Type)
+	}
+
+	for _, block := range search {
+		if pattern.Label == block.Label() {
+			return block
+		}
+	}
+
+	if len(search) > 0 {
+		return search[0]
+	}
+
+	return nil
+}
+
+// Outputs returns a map of all the evaluated outputs from the list of Blocks.
+func (blocks Blocks) Outputs(suppressNil bool) cty.Value {
+	data := make(map[string]cty.Value)
+
+	for _, block := range blocks.OfType("output") {
+		attr := block.GetAttribute("value")
+		if attr == nil {
+			continue
+		}
+
+		value := attr.Value()
+
+		if suppressNil {
+			// resolve the attribute value. This will evaluate any expressions that
+			// the attribute uses and try and return the final value. If the end
+			// value can't be resolved we set it as a blank string. This is
+			// safe to use for callers and won't cause panics when marshalling
+			// the returned cty.Value.
+			if value == cty.NilVal {
+				value = cty.StringVal("")
+			}
+		}
+
+		data[block.Label()] = value
+	}
+
+	return cty.ObjectVal(data)
 }
 
 // Block wraps a hcl.Block type with additional methods and context.
@@ -108,91 +238,218 @@ type Block struct {
 	// See Block docs for more information about child Blocks.
 	childBlocks Blocks
 	// verbose determines whether the block uses verbose debug logging.
-	verbose bool
+	verbose  bool
+	newMock  func(attr *Attribute) cty.Value
+	Filename string
+	logger   *logrus.Entry
 }
 
-// NewHCLBlock returns a Block with Context and child Blocks initialised.
-func NewHCLBlock(hclBlock *hcl.Block, ctx *Context, moduleBlock *Block) *Block {
+// BlockBuilder handles generating new Blocks as part of the parsing and evaluation process.
+type BlockBuilder struct {
+	MockFunc      func(a *Attribute) cty.Value
+	SetAttributes []SetAttributesFunc
+	Logger        *logrus.Entry
+}
+
+// NewBlock returns a Block with Context and child Blocks initialised.
+func (b BlockBuilder) NewBlock(filename string, hclBlock *hcl.Block, ctx *Context, moduleBlock *Block) *Block {
 	if ctx == nil {
-		ctx = NewContext(&hcl.EvalContext{}, nil)
+		ctx = NewContext(&hcl.EvalContext{}, nil, b.Logger)
 	}
 
 	isLoggingVerbose := strings.TrimSpace(os.Getenv("INFRACOST_HCL_DEBUG_VERBOSE")) == "true"
 	var children Blocks
 	if body, ok := hclBlock.Body.(*hclsyntax.Body); ok {
-		for _, b := range body.Blocks {
-			children = append(children, NewHCLBlock(b.AsHCLBlock(), ctx, moduleBlock))
+		for _, bb := range body.Blocks {
+			children = append(children, b.NewBlock(filename, bb.AsHCLBlock(), ctx, moduleBlock))
 		}
 
-		if hclBlock.Type == "resource" || hclBlock.Type == "data" {
-			// add commonly used identifiers to the block so that if it's referenced by other
-			// blocks in context evaluation.
-			if _, ok := body.Attributes["id"]; !ok {
-				body.Attributes["id"] = newUniqueAttribute("id")
-			}
-
-			if _, ok := body.Attributes["arn"]; !ok {
-				body.Attributes["arn"] = newArnAttribute("arn")
-			}
+		for _, f := range b.SetAttributes {
+			f(moduleBlock, hclBlock)
 		}
 
-		return &Block{
+		block := &Block{
+			Filename:    filename,
 			context:     ctx,
 			hclBlock:    hclBlock,
 			moduleBlock: moduleBlock,
 			childBlocks: children,
 			verbose:     isLoggingVerbose,
+			newMock:     b.MockFunc,
 		}
+		block.setLogger(b.Logger)
+
+		return block
 	}
 
 	// if we can't get a *hclsyntax.Body from this block let's try and parse blocks from the root level schema.
 	// This might be because the *hcl.Block represents a whole file contents.
 	content, _, diag := hclBlock.Body.PartialContent(terraformSchemaV012)
 	if diag != nil && diag.HasErrors() {
-		log.Debugf("error loading partial content from hcl file %s", diag.Error())
+		b.Logger.Debugf("error loading partial content from hcl file %s", diag.Error())
 
-		return &Block{
+		block := &Block{
 			context:     ctx,
 			hclBlock:    hclBlock,
 			moduleBlock: moduleBlock,
 			childBlocks: children,
 			verbose:     isLoggingVerbose,
+			newMock:     b.MockFunc,
 		}
+		block.setLogger(b.Logger)
+
+		return block
 	}
 
 	for _, hb := range content.Blocks {
-		children = append(children, NewHCLBlock(hb, ctx, moduleBlock))
+		children = append(children, b.NewBlock(filename, hb, ctx, moduleBlock))
 	}
 
-	return &Block{
+	block := &Block{
 		context:     ctx,
 		hclBlock:    hclBlock,
 		moduleBlock: moduleBlock,
 		childBlocks: children,
 		verbose:     isLoggingVerbose,
+		newMock:     b.MockFunc,
+	}
+
+	block.setLogger(b.Logger)
+	return block
+}
+
+// CloneBlock creates a duplicate of the block and sets the returned Block's Context to include the
+// index provided. This is primarily used when Blocks are expanded as part of a count evaluation.
+func (b BlockBuilder) CloneBlock(block *Block, index cty.Value) *Block {
+	var childCtx *Context
+	if block.context != nil {
+		childCtx = block.context.NewChild()
+	} else {
+		childCtx = NewContext(&hcl.EvalContext{}, nil, b.Logger)
+	}
+
+	cloneHCL := *block.hclBlock
+
+	clone := b.NewBlock(block.Filename, &cloneHCL, childCtx, block.moduleBlock)
+	if len(clone.hclBlock.Labels) > 0 {
+		position := len(clone.hclBlock.Labels) - 1
+		labels := make([]string, len(clone.hclBlock.Labels))
+		for i := 0; i < len(labels); i++ {
+			labels[i] = clone.hclBlock.Labels[i]
+		}
+		if index.IsKnown() && !index.IsNull() {
+			switch index.Type() {
+			case cty.Number:
+				f, _ := index.AsBigFloat().Float64()
+				labels[position] = fmt.Sprintf("%s[%d]", clone.hclBlock.Labels[position], int(f))
+			case cty.String:
+				labels[position] = fmt.Sprintf("%s[%q]", clone.hclBlock.Labels[position], index.AsString())
+			default:
+				b.Logger.Debugf("Invalid key type in iterable: %#v", index.Type())
+				labels[position] = fmt.Sprintf("%s[%#v]", clone.hclBlock.Labels[position], index)
+			}
+		} else {
+			labels[position] = fmt.Sprintf("%s[%d]", clone.hclBlock.Labels[position], block.cloneIndex)
+		}
+		clone.hclBlock.Labels = labels
+	}
+
+	indexVal, _ := gocty.ToCtyValue(index, cty.Number)
+	clone.context.SetByDot(indexVal, "count.index")
+	clone.expanded = true
+	block.cloneIndex++
+
+	return clone
+}
+
+// BuildModuleBlocks loads all the Blocks for the module at the given path
+func (b BlockBuilder) BuildModuleBlocks(block *Block, modulePath string) (Blocks, error) {
+	var blocks Blocks
+	moduleFiles, err := loadDirectory(b.Logger, modulePath, true)
+	if err != nil {
+		return blocks, fmt.Errorf("failed to load module %s: %w", block.Label(), err)
+	}
+
+	moduleCtx := NewContext(&hcl.EvalContext{}, nil, b.Logger)
+	for _, file := range moduleFiles {
+		fileBlocks, err := loadBlocksFromFile(file, nil)
+		if err != nil {
+			return blocks, err
+		}
+
+		if len(fileBlocks) > 0 {
+			b.Logger.Debugf("Added %d blocks from %s...", len(fileBlocks), fileBlocks[0].DefRange.Filename)
+		}
+
+		for _, fileBlock := range fileBlocks {
+			blocks = append(blocks, b.NewBlock(file.path, fileBlock, moduleCtx, block))
+		}
+	}
+
+	return blocks, err
+}
+
+// SetAttributesFunc defines a function that sets required attributes on a hcl.Block.
+// This is done so that identifiers that are normally propagated from a Terraform state/apply
+// are set on the Block. This means they can be used properly in references and outputs.
+type SetAttributesFunc func(moduleBlock *Block, block *hcl.Block)
+
+// SetUUIDAttributes adds commonly used identifiers to the block so that it can be referenced by other
+// blocks in context evaluation. The identifiers are only set if they don't already exist as attributes
+// on the block.
+func SetUUIDAttributes(moduleBlock *Block, block *hcl.Block) {
+	if body, ok := block.Body.(*hclsyntax.Body); ok {
+		if block.Type == "resource" || block.Type == "data" {
+			_, withCount := body.Attributes["count"]
+			if _, ok := body.Attributes["id"]; !ok {
+				body.Attributes["id"] = newUniqueAttribute("id", withCount)
+			}
+
+			if _, ok := body.Attributes["arn"]; !ok {
+				body.Attributes["arn"] = newArnAttribute("arn", withCount)
+			}
+		}
 	}
 }
 
-func newUniqueAttribute(name string) *hclsyntax.Attribute {
+func newUniqueAttribute(name string, withCount bool) *hclsyntax.Attribute {
+	var exp hclsyntax.Expression = &hclsyntax.LiteralValueExpr{
+		Val: cty.StringVal(uuid.NewString()),
+	}
+
+	if withCount {
+		e, diags := hclsyntax.ParseExpression([]byte(`"`+uuid.NewString()+`-${count.index}"`), name, hcl.Pos{})
+		if !diags.HasErrors() {
+			exp = e
+		}
+	}
+
 	return &hclsyntax.Attribute{
 		Name: name,
-		Expr: &hclsyntax.LiteralValueExpr{
-			Val: cty.StringVal(uuid.NewString()),
-		},
+		Expr: exp,
 	}
 }
 
-func newArnAttribute(name string) *hclsyntax.Attribute {
+func newArnAttribute(name string, withCount bool) *hclsyntax.Attribute {
 	// fakeARN replicates an aws arn string it deliberately leaves the
 	// region section (in between the 3rd and 4th semicolon) blank as
 	// Infracost will try and parse this region later down the line.
 	// Keeping it blank will defer the region to what the provider has defined.
 	fakeARN := fmt.Sprintf("arn:aws:hcl::%s", uuid.NewString())
+	var exp hclsyntax.Expression = &hclsyntax.LiteralValueExpr{
+		Val: cty.StringVal(fakeARN),
+	}
+
+	if withCount {
+		e, diags := hclsyntax.ParseExpression([]byte(`"`+fakeARN+`-${count.index}"`), name, hcl.Pos{})
+		if !diags.HasErrors() {
+			exp = e
+		}
+	}
+
 	return &hclsyntax.Attribute{
 		Name: name,
-		Expr: &hclsyntax.LiteralValueExpr{
-			Val: cty.StringVal(fakeARN),
-		},
+		Expr: exp,
 	}
 }
 
@@ -215,48 +472,12 @@ func (b *Block) IsCountExpanded() bool {
 	return b.expanded
 }
 
-// Clone creates a duplicate of the block and sets the returned Block's Context to include the
-// index provided. This is primarily used when Blocks are expanded as part of a count evaluation.
-func (b *Block) Clone(index cty.Value) *Block {
-	var childCtx *Context
-	if b.context != nil {
-		childCtx = b.context.NewChild()
-	} else {
-		childCtx = NewContext(&hcl.EvalContext{}, nil)
+func (b Block) ShouldExpand() bool {
+	if b.IsCountExpanded() {
+		return false
 	}
 
-	cloneHCL := *b.hclBlock
-
-	clone := NewHCLBlock(&cloneHCL, childCtx, b.moduleBlock)
-	if len(clone.hclBlock.Labels) > 0 {
-		position := len(clone.hclBlock.Labels) - 1
-		labels := make([]string, len(clone.hclBlock.Labels))
-		for i := 0; i < len(labels); i++ {
-			labels[i] = clone.hclBlock.Labels[i]
-		}
-		if index.IsKnown() && !index.IsNull() {
-			switch index.Type() {
-			case cty.Number:
-				f, _ := index.AsBigFloat().Float64()
-				labels[position] = fmt.Sprintf("%s[%d]", clone.hclBlock.Labels[position], int(f))
-			case cty.String:
-				labels[position] = fmt.Sprintf("%s[%q]", clone.hclBlock.Labels[position], index.AsString())
-			default:
-				log.Debugf("Invalid key type in iterable: %#v", index.Type())
-				labels[position] = fmt.Sprintf("%s[%#v]", clone.hclBlock.Labels[position], index)
-			}
-		} else {
-			labels[position] = fmt.Sprintf("%s[%d]", clone.hclBlock.Labels[position], b.cloneIndex)
-		}
-		clone.hclBlock.Labels = labels
-	}
-
-	indexVal, _ := gocty.ToCtyValue(index, cty.Number)
-	clone.context.SetByDot(indexVal, "count.index")
-	clone.expanded = true
-	b.cloneIndex++
-
-	return clone
+	return b.Type() == "resource" || b.Type() == "module" || b.Type() == "data"
 }
 
 // SetContext sets the Block.context to the provided ctx. This ctx is also set on the child Blocks as
@@ -276,6 +497,47 @@ func (b *Block) HasModuleBlock() bool {
 	}
 
 	return b.moduleBlock != nil
+}
+
+type ModuleMetadata struct {
+	Filename  string `json:"filename"`
+	BlockName string `json:"blockName"`
+}
+
+func (b *Block) setLogger(logger *logrus.Entry) {
+	blockLogger := logger.WithFields(logrus.Fields{
+		"block_name": b.FullName(),
+	})
+
+	b.logger = blockLogger
+}
+
+// CallDetails returns the tree of module calls that were used to create this resource. Each step of the tree
+// contains a full file path and block name that were used to create the resource.
+//
+// CallDetails returns a list of ModuleMetadata that are ordered by appearance in the Terraform config tree.
+func (b *Block) CallDetails() []ModuleMetadata {
+	block := b
+	var meta []ModuleMetadata
+	for {
+		meta = append(meta, ModuleMetadata{
+			Filename:  block.Filename,
+			BlockName: stripCount(block.LocalName()),
+		})
+
+		if block.moduleBlock == nil {
+			break
+		}
+
+		block = block.moduleBlock
+	}
+
+	reversed := make([]ModuleMetadata, 0, len(meta))
+	for i := len(meta) - 1; i >= 0; i-- {
+		reversed = append(reversed, meta[i])
+	}
+
+	return reversed
 }
 
 // ModuleAddress returns the address of the module associated with this Block or "" if it is part of the root Module
@@ -327,6 +589,12 @@ func (b *Block) Provider() string {
 	attr := b.GetAttribute("provider")
 	if attr != nil {
 		value := attr.Value()
+		r, err := attr.Reference()
+		if err == nil {
+			// An explicit provider is provided so use that
+			return r.String()
+		}
+
 		if value.Type() == cty.String {
 			// An explicit provider is provided so use that
 			return value.AsString()
@@ -405,7 +673,15 @@ func (b *Block) GetAttributes() []*Attribute {
 	}
 
 	for _, attr := range b.getHCLAttributes() {
-		results = append(results, &Attribute{HCLAttr: attr, Ctx: b.context, Verbose: b.verbose})
+		results = append(results, &Attribute{
+			newMock: b.newMock,
+			HCLAttr: attr,
+			Ctx:     b.context,
+			Verbose: b.verbose,
+			Logger: b.logger.WithFields(logrus.Fields{
+				"attribute_name": attr.Name,
+			}),
+		})
 	}
 
 	return results
@@ -526,6 +802,10 @@ func (b *Block) LocalName() string {
 // Would have its FullName as module.web_app.aws_instance.t3_standard
 // FullName is what Terraform uses in its JSON output file.
 func (b *Block) FullName() string {
+	if b == nil {
+		return ""
+	}
+
 	if b.moduleBlock != nil {
 		return fmt.Sprintf(
 			"%s.%s",
@@ -563,19 +843,58 @@ func (b *Block) NameLabel() string {
 	return ""
 }
 
+var (
+	countRegex   = regexp.MustCompile(`\[(\d+)\]$`)
+	foreachRegex = regexp.MustCompile(`\["(\w+)"\]$`)
+)
+
+// Index returns the count index of the block using the name label.
+// Index returns nil if the block has no count.
+func (b *Block) Index() *int64 {
+	m := countRegex.FindStringSubmatch(b.NameLabel())
+
+	if len(m) > 0 {
+		i, _ := strconv.ParseInt(m[1], 10, 64)
+
+		return &i
+	}
+
+	return nil
+}
+
+// Key returns the foreach key of the block using the name label.
+// Key returns nil if the block has no each key.
+func (b *Block) Key() *string {
+	m := foreachRegex.FindStringSubmatch(b.NameLabel())
+
+	if len(m) > 0 {
+		return &m[1]
+	}
+
+	return nil
+}
+
 func (b *Block) Label() string {
 	return strings.Join(b.hclBlock.Labels, ".")
 }
 
-func loadBlocksFromFile(file *hcl.File) (hcl.Blocks, error) {
-	contents, diags := file.Body.Content(terraformSchemaV012)
+func loadBlocksFromFile(file file, schema *hcl.BodySchema) (hcl.Blocks, error) {
+	if schema == nil {
+		schema = terraformSchemaV012
+	}
+
+	contents, diags := file.hclFile.Body.Content(schema)
 	if diags != nil && diags.HasErrors() {
 		return nil, diags
 	}
 
 	if contents == nil {
-		return nil, fmt.Errorf("file contents is empty")
+		return nil, errorNoHCLContents
 	}
 
 	return contents.Blocks, nil
+}
+
+func stripCount(s string) string {
+	return foreachRegex.ReplaceAllString(countRegex.ReplaceAllString(s, ""), "")
 }

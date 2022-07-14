@@ -27,6 +27,7 @@ type TerragruntProvider struct {
 	Path            string
 	TerragruntFlags string
 	*DirProvider
+	includePastResources bool
 }
 
 type TerragruntInfo struct {
@@ -39,8 +40,8 @@ type terragruntProjectDirs struct {
 	WorkingDir string
 }
 
-func NewTerragruntProvider(ctx *config.ProjectContext) schema.Provider {
-	dirProvider := NewDirProvider(ctx).(*DirProvider)
+func NewTerragruntProvider(ctx *config.ProjectContext, includePastResources bool) schema.Provider {
+	dirProvider := NewDirProvider(ctx, includePastResources).(*DirProvider)
 
 	terragruntBinary := ctx.ProjectConfig.TerraformBinary
 	if terragruntBinary == "" {
@@ -51,23 +52,35 @@ func NewTerragruntProvider(ctx *config.ProjectContext) schema.Provider {
 	dirProvider.IsTerragrunt = true
 
 	return &TerragruntProvider{
-		ctx:             ctx,
-		DirProvider:     dirProvider,
-		Path:            ctx.ProjectConfig.Path,
-		TerragruntFlags: ctx.ProjectConfig.TerragruntFlags,
+		ctx:                  ctx,
+		DirProvider:          dirProvider,
+		Path:                 ctx.ProjectConfig.Path,
+		TerragruntFlags:      ctx.ProjectConfig.TerragruntFlags,
+		includePastResources: includePastResources,
 	}
 }
 
 func (p *TerragruntProvider) Type() string {
-	return "terragrunt"
+	return "terragrunt_cli"
 }
 
 func (p *TerragruntProvider) DisplayType() string {
-	return "Terragrunt directory"
+	return "Terragrunt CLI"
 }
 
 func (p *TerragruntProvider) AddMetadata(metadata *schema.ProjectMetadata) {
-	// no op
+	basePath := p.ctx.ProjectConfig.Path
+	if p.ctx.RunContext.Config.ConfigFilePath != "" {
+		basePath = filepath.Dir(p.ctx.RunContext.Config.ConfigFilePath)
+	}
+
+	modulePath, err := filepath.Rel(basePath, metadata.Path)
+	if err == nil && modulePath != "" && modulePath != "." {
+		log.Debugf("Calculated relative terraformModulePath for %s from %s", basePath, metadata.Path)
+		metadata.TerraformModulePath = modulePath
+	}
+
+	metadata.TerraformWorkspace = p.ctx.ProjectConfig.TerraformWorkspace
 }
 
 func (p *TerragruntProvider) LoadResources(usage map[string]*schema.UsageData) ([]*schema.Project, error) {
@@ -100,14 +113,22 @@ func (p *TerragruntProvider) LoadResources(usage map[string]*schema.UsageData) (
 	})
 	defer spinner.Fail()
 	for i, projectDir := range projectDirs {
-		metadata := config.DetectProjectMetadata(projectDir.ConfigDir)
+		projectPath := projectDir.ConfigDir
+		// attempt to convert project path to be relative to the top level provider path
+		if absPath, err := filepath.Abs(p.ctx.ProjectConfig.Path); err == nil {
+			if relProjectPath, err := filepath.Rel(absPath, projectPath); err == nil {
+				projectPath = filepath.Join(p.ctx.ProjectConfig.Path, relProjectPath)
+			}
+		}
+
+		metadata := config.DetectProjectMetadata(projectPath)
 		metadata.Type = p.Type()
 		p.AddMetadata(metadata)
-		name := schema.GenerateProjectName(metadata, p.ctx.RunContext.Config.EnableDashboard)
+		name := schema.GenerateProjectName(metadata, p.ctx.ProjectConfig.Name, p.ctx.RunContext.Config.EnableDashboard)
 
 		project := schema.NewProject(name, metadata)
 
-		parser := NewParser(p.ctx)
+		parser := NewParser(p.ctx, p.includePastResources)
 		pastResources, resources, err := parser.parseJSON(outs[i], usage)
 		if err != nil {
 			return projects, errors.Wrap(err, "Error parsing Terraform JSON")
@@ -146,7 +167,7 @@ func (p *TerragruntProvider) getProjectDirs() ([]terragruntProjectDirs, error) {
 		err = p.buildTerraformErr(err, false)
 
 		msg := "terragrunt run-all terragrunt-info failed"
-		return []terragruntProjectDirs{}, clierror.NewSanitizedError(fmt.Errorf("%s: %s", msg, err), msg)
+		return []terragruntProjectDirs{}, clierror.NewCLIError(fmt.Errorf("%s: %s", msg, err), msg)
 	}
 
 	var jsons [][]byte

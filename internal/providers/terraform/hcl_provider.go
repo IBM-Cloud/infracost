@@ -4,19 +4,38 @@ import (
 	"encoding/json"
 	"flag"
 	"fmt"
+	"os"
+	"path/filepath"
 	"regexp"
+	"strconv"
+	"strings"
 
+	log "github.com/sirupsen/logrus"
 	"github.com/zclconf/go-cty/cty"
 	ctyJson "github.com/zclconf/go-cty/cty/json"
 
 	"github.com/infracost/infracost/internal/config"
 	"github.com/infracost/infracost/internal/hcl"
+	"github.com/infracost/infracost/internal/hcl/modules"
 	"github.com/infracost/infracost/internal/schema"
+	"github.com/infracost/infracost/internal/ui"
 )
 
 type HCLProvider struct {
-	Parser   *hcl.Parser
-	Provider *PlanJSONProvider
+	parsers        []*hcl.Parser
+	planJSONParser *Parser
+	logger         *log.Entry
+
+	schema      *PlanSchema
+	providerKey string
+	ctx         *config.ProjectContext
+	cache       []*hcl.Module
+	config      HCLProviderConfig
+}
+
+type HCLProviderConfig struct {
+	SuppressLogging     bool
+	CacheParsingModules bool
 }
 
 type flagStringSlice []string
@@ -56,198 +75,420 @@ func varsFromPlanFlags(planFlags string) (vars, error) {
 // NewHCLProvider returns a HCLProvider with a hcl.Parser initialised using the config.ProjectContext.
 // It will use input flags from either the terraform-plan-flags or top level var and var-file flags to
 // set input vars and files on the underlying hcl.Parser.
-func NewHCLProvider(ctx *config.ProjectContext, provider *PlanJSONProvider) (HCLProvider, error) {
-	v, err := varsFromPlanFlags(ctx.ProjectConfig.TerraformPlanFlags)
-	if err != nil {
-		return HCLProvider{}, fmt.Errorf("could not parse vars from plan flags %w", err)
+func NewHCLProvider(ctx *config.ProjectContext, config *HCLProviderConfig, opts ...hcl.Option) (*HCLProvider, error) {
+	if config == nil {
+		config = &HCLProviderConfig{}
 	}
 
-	var options []hcl.Option
+	v, err := varsFromPlanFlags(ctx.ProjectConfig.TerraformPlanFlags)
+	if err != nil {
+		return nil, fmt.Errorf("could not parse vars from plan flags %w", err)
+	}
+
+	options := []hcl.Option{hcl.OptionWithTFEnvVars(ctx.ProjectConfig.Env)}
+
+	if len(v.vars) > 0 {
+		withPlanFlagVars := hcl.OptionWithPlanFlagVars(v.vars)
+		options = append(options, withPlanFlagVars)
+	}
+
 	v.files = append(v.files, ctx.ProjectConfig.TerraformVarFiles...)
 	if len(v.files) > 0 {
 		withFiles := hcl.OptionWithTFVarsPaths(v.files)
 		options = append(options, withFiles)
 	}
 
-	v.vars = append(v.vars, ctx.ProjectConfig.TerraformVars...)
-	if len(v.vars) > 0 {
-		withVars := hcl.OptionWithInputVars(v.vars)
-		options = append(options, withVars)
+	if len(ctx.ProjectConfig.TerraformVars) > 0 {
+		withInputVars := hcl.OptionWithInputVars(ctx.ProjectConfig.TerraformVars)
+		options = append(options, withInputVars)
 	}
 
-	p := hcl.New(ctx.ProjectConfig.Path, options...)
+	options = append(options, opts...)
 
-	return HCLProvider{
-		Parser:   p,
-		Provider: provider,
+	credsSource, err := modules.NewTerraformCredentialsSource(modules.BaseCredentialSet{
+		Token: ctx.ProjectConfig.TerraformCloudToken,
+		Host:  ctx.ProjectConfig.TerraformCloudHost,
+	})
+	localWorkspace := ctx.ProjectConfig.TerraformWorkspace
+	if err == nil {
+		options = append(options, hcl.OptionWithRemoteVarLoader(
+			credsSource.BaseCredentialSet.Host,
+			credsSource.BaseCredentialSet.Token,
+			localWorkspace),
+		)
+	}
+	options = append(options, hcl.OptionWithCredentialsSource(credsSource))
+
+	logger := ctx.Logger().WithFields(log.Fields{"provider": "terraform_dir"})
+	parsers, err := hcl.LoadParsers(ctx.ProjectConfig.Path, ctx.ProjectConfig.ExcludePaths, logger, options...)
+	if err != nil {
+		return nil, err
+	}
+
+	return &HCLProvider{
+		parsers:        parsers,
+		planJSONParser: NewParser(ctx, false),
+		ctx:            ctx,
+		config:         *config,
+		logger:         logger,
 	}, err
 }
 
-func (p HCLProvider) Type() string                                 { return "terraform_hcl" }
-func (p HCLProvider) DisplayType() string                          { return "Terraform directory (HCL)" }
-func (p HCLProvider) AddMetadata(metadata *schema.ProjectMetadata) {}
+func (p *HCLProvider) Type() string        { return "terraform_dir" }
+func (p *HCLProvider) DisplayType() string { return "Terraform directory" }
+func (p *HCLProvider) AddMetadata(metadata *schema.ProjectMetadata) {
+	basePath := p.ctx.ProjectConfig.Path
+	if p.ctx.RunContext.Config.ConfigFilePath != "" {
+		basePath = filepath.Dir(p.ctx.RunContext.Config.ConfigFilePath)
+	}
+
+	modulePath, err := filepath.Rel(basePath, metadata.Path)
+	if err == nil && modulePath != "" && modulePath != "." {
+		p.logger.Debugf("calculated relative terraformModulePath for %s from %s", basePath, metadata.Path)
+		metadata.TerraformModulePath = modulePath
+	}
+
+	metadata.TerraformWorkspace = p.ctx.ProjectConfig.TerraformWorkspace
+}
 
 // LoadResources calls a hcl.Parser to parse the directory config files into hcl.Blocks. It then builds a shallow
 // representation of the terraform plan JSON files from these Blocks, this is passed to the PlanJSONProvider.
 // The PlanJSONProvider uses this shallow representation to actually load Infracost resources.
-func (p HCLProvider) LoadResources(usage map[string]*schema.UsageData) ([]*schema.Project, error) {
-	b, err := p.loadPlanJSON()
+func (p *HCLProvider) LoadResources(usage map[string]*schema.UsageData) ([]*schema.Project, error) {
+	jsons, err := p.LoadPlanJSONs()
 	if err != nil {
 		return nil, err
 	}
 
-	return p.Provider.LoadResourcesFromSrc(usage, b, nil)
+	var projects = make([]*schema.Project, len(jsons))
+	for i, j := range jsons {
+		project, err := p.parseResources(j.path, j.json, usage)
+		if err != nil {
+			return nil, err
+		}
+
+		projects[i] = project
+	}
+
+	return projects, nil
 }
 
-func (p HCLProvider) loadPlanJSON() ([]byte, error) {
-	modules, err := p.Parser.ParseDirectory()
+func (p *HCLProvider) parseResources(path string, j []byte, usage map[string]*schema.UsageData) (*schema.Project, error) {
+	metadata := config.DetectProjectMetadata(path)
+	metadata.Type = p.Type()
+	p.AddMetadata(metadata)
+	name := schema.GenerateProjectName(metadata, p.ctx.ProjectConfig.Name, p.ctx.RunContext.IsCloudEnabled())
+
+	project := schema.NewProject(name, metadata)
+
+	pastResources, resources, err := p.planJSONParser.parseJSON(j, usage)
+	if err != nil {
+		return project, fmt.Errorf("Error parsing Terraform plan JSON file %w", err)
+	}
+
+	project.PastResources = pastResources
+	project.Resources = resources
+
+	return project, nil
+}
+
+type hclProject struct {
+	path string
+	json []byte
+}
+
+// LoadPlanJSONs parses the found directories and return the blocks in Terraform plan JSON format.
+func (p *HCLProvider) LoadPlanJSONs() ([]hclProject, error) {
+	var jsons = make([]hclProject, len(p.parsers))
+	modules, err := p.Modules()
 	if err != nil {
 		return nil, err
 	}
 
-	sch := p.modulesToPlanJSON(modules)
-	b, err := json.Marshal(sch)
-	if err != nil {
-		return nil, fmt.Errorf("error handling built plan json from hcl %w", err)
+	for i, module := range modules {
+		b, err := p.modulesToPlanJSON(module)
+		if err != nil {
+			return nil, err
+		}
+
+		jsons[i] = hclProject{json: b, path: module.RootPath}
 	}
-	return b, nil
+
+	return jsons, nil
 }
 
-func (p HCLProvider) modulesToPlanJSON(modules []*hcl.Module) PlanSchema {
-	sch := PlanSchema{
+// Modules parses the found directories into hcl modules representing a config tree of Terraform information.
+// Modules returns the raw hcl blocks associated with each found Terraform project. This can be used
+// to fetch raw information like outputs, vars, resources, e.t.c.
+func (p *HCLProvider) Modules() ([]*hcl.Module, error) {
+	if p.cache != nil {
+		return p.cache, nil
+	}
+
+	var modules = make([]*hcl.Module, len(p.parsers))
+
+	for i, parser := range p.parsers {
+		if len(p.parsers) > 1 && !p.config.SuppressLogging {
+			fmt.Fprintf(os.Stderr, "Detected Terraform project at %s\n", ui.DisplayPath(parser.Path()))
+		}
+
+		module, err := parser.ParseDirectory()
+		if err != nil {
+			return nil, err
+		}
+
+		modules[i] = module
+	}
+
+	if p.config.CacheParsingModules {
+		p.cache = modules
+	}
+
+	return modules, nil
+}
+
+// InvalidateCache removes the module cache from the prior hcl parse.
+func (p *HCLProvider) InvalidateCache() *HCLProvider {
+	p.cache = nil
+
+	return p
+}
+
+func (p *HCLProvider) newPlanSchema() {
+	p.schema = &PlanSchema{
 		FormatVersion:    "1.0",
 		TerraformVersion: "1.1.0",
 		Variables:        nil,
 		PlannedValues: struct {
-			RootModule PlanRootModule `json:"root_module"`
+			RootModule PlanModule `json:"root_module"`
 		}{
-			RootModule: PlanRootModule{
+			RootModule: PlanModule{
 				Resources:    []ResourceJSON{},
-				ChildModules: []ChildModule{{}},
+				ChildModules: []PlanModule{},
 			},
 		},
 		ResourceChanges: []ResourceChangesJSON{},
 		Configuration: Configuration{
 			ProviderConfig: make(map[string]ProviderConfig),
-			RootModule: struct {
-				Resources   []ResourceData        `json:"resources,omitempty"`
-				ModuleCalls map[string]ModuleCall `json:"module_calls"`
-			}{
+			RootModule: ModuleConfig{
 				Resources:   []ResourceData{},
 				ModuleCalls: map[string]ModuleCall{},
 			},
 		},
 	}
 
-	for _, module := range modules {
-		var providerKey string
+	p.providerKey = ""
+}
 
-		for _, block := range module.Blocks {
-			if block.Type() == "provider" {
-				name := block.TypeLabel()
-				if a := block.GetAttribute("alias"); a != nil {
-					name = a.Value().AsString()
-				}
+func (p *HCLProvider) modulesToPlanJSON(rootModule *hcl.Module) ([]byte, error) {
+	p.newPlanSchema()
 
-				// set the default provider key
-				if providerKey == "" {
-					providerKey = name
-				}
+	mo := p.marshalModule(rootModule)
+	p.schema.Configuration.RootModule = mo.ModuleConfig
+	p.schema.PlannedValues.RootModule = mo.PlanModule
 
-				region := ""
-				value := block.GetAttribute("region").Value()
-				if value != cty.NilVal {
-					region = value.AsString()
-				}
+	b, err := json.MarshalIndent(p.schema, "", "  ")
+	if err != nil {
+		return nil, fmt.Errorf("error handling built plan json from hcl %w", err)
+	}
+	return b, nil
+}
 
-				sch.Configuration.ProviderConfig[name] = ProviderConfig{
-					Name: name,
-					Expressions: map[string]interface{}{
-						"region": map[string]interface{}{
-							"constant_value": region,
-						},
-					},
-				}
-			}
-		}
+func (p *HCLProvider) marshalModule(module *hcl.Module) ModuleOut {
+	moduleConfig := ModuleConfig{
+		ModuleCalls: map[string]ModuleCall{},
+	}
 
-		for _, block := range module.Blocks {
-			if block.Type() == "resource" {
-				r := ResourceJSON{
-					Address:       block.FullName(),
-					Mode:          "managed",
-					Type:          block.TypeLabel(),
-					Name:          block.NameLabel(),
-					SchemaVersion: 1,
-				}
+	planModule := PlanModule{
+		Address: newString(module.Name),
+	}
 
-				c := ResourceChangesJSON{
-					Address:       block.FullName(),
-					ModuleAddress: block.ModuleAddress(),
-					Mode:          "managed",
-					Type:          block.TypeLabel(),
-					Name:          block.NameLabel(),
-					Change: ResourceChange{
-						Actions: []string{"create"},
-					},
-				}
-
-				jsonValues := marshalAttributeValues(block.Type(), block.Values())
-				marshalBlock(block, jsonValues)
-
-				c.Change.After = jsonValues
-				r.Values = jsonValues
-
-				providerConfigKey := providerKey
-				providerAttr := block.GetAttribute("provider")
-				if providerAttr != nil {
-					value := providerAttr.Value()
-					if value.Type() == cty.String {
-						providerConfigKey = value.AsString()
-					}
-				}
-
-				if block.HasModuleBlock() {
-					modCall, ok := sch.Configuration.RootModule.ModuleCalls[block.ModuleName()]
-					if !ok {
-						modCall = ModuleCall{
-							Source: block.ModuleSource(),
-							Module: ModuleCallModule{
-								Resources: []ResourceData{},
-							},
-						}
-					}
-
-					modCall.Module.Resources = append(modCall.Module.Resources, ResourceData{
-						Address:           block.LocalName(),
-						Mode:              "managed",
-						Type:              block.TypeLabel(),
-						Name:              block.NameLabel(),
-						ProviderConfigKey: block.ModuleName() + ":" + block.Provider(),
-						Expressions:       blockToReferences(block), // This doesn't seem to work for module calls, but it is not clear that it is needed.
-					})
-					sch.Configuration.RootModule.ModuleCalls[block.ModuleName()] = modCall
-
-					sch.PlannedValues.RootModule.ChildModules[0].Resources = append(sch.PlannedValues.RootModule.ChildModules[0].Resources, r)
-				} else {
-					sch.Configuration.RootModule.Resources = append(sch.Configuration.RootModule.Resources, ResourceData{
-						Address:           block.FullName(),
-						Mode:              "managed",
-						Type:              block.TypeLabel(),
-						Name:              block.LocalName(),
-						ProviderConfigKey: providerConfigKey,
-						Expressions:       blockToReferences(block),
-					})
-
-					sch.PlannedValues.RootModule.Resources = append(sch.PlannedValues.RootModule.Resources, r)
-				}
-
-				sch.ResourceChanges = append(sch.ResourceChanges, c)
-			}
+	for _, block := range module.Blocks {
+		if block.Type() == "provider" {
+			p.marshalProviderBlock(block)
 		}
 	}
 
-	return sch
+	configResources := map[string]struct{}{}
+	for _, block := range module.Blocks {
+		if block.Type() == "resource" {
+			out := p.getResourceOutput(block)
+
+			if _, ok := configResources[out.Configuration.Address]; !ok {
+				moduleConfig.Resources = append(moduleConfig.Resources, out.Configuration)
+
+				configResources[out.Configuration.Address] = struct{}{}
+			}
+
+			planModule.Resources = append(planModule.Resources, out.Planned)
+
+			p.schema.ResourceChanges = append(p.schema.ResourceChanges, out.Changes)
+		}
+	}
+
+	for _, m := range module.Modules {
+		pieces := strings.Split(m.Name, ".")
+		modKey := pieces[len(pieces)-1]
+
+		mo := p.marshalModule(m)
+
+		moduleConfig.ModuleCalls[modKey] = ModuleCall{
+			Source:       m.Source,
+			ModuleConfig: mo.ModuleConfig,
+		}
+
+		planModule.ChildModules = append(planModule.ChildModules, mo.PlanModule)
+	}
+
+	return ModuleOut{
+		PlanModule:   planModule,
+		ModuleConfig: moduleConfig,
+	}
+}
+
+func (p *HCLProvider) getResourceOutput(block *hcl.Block) ResourceOutput {
+	planned := ResourceJSON{
+		Address:       block.FullName(),
+		Mode:          "managed",
+		Type:          block.TypeLabel(),
+		Name:          stripCount(block.NameLabel()),
+		Index:         block.Index(),
+		SchemaVersion: 0,
+		InfracostMetadata: map[string]interface{}{
+			"filename": block.Filename,
+			"calls":    block.CallDetails(),
+		},
+	}
+
+	changes := ResourceChangesJSON{
+		Address:       block.FullName(),
+		ModuleAddress: newString(block.ModuleAddress()),
+		Mode:          "managed",
+		Type:          block.TypeLabel(),
+		Name:          stripCount(block.NameLabel()),
+		Index:         block.Index(),
+		Change: ResourceChange{
+			Actions: []string{"create"},
+		},
+	}
+
+	jsonValues := marshalAttributeValues(block.Type(), block.Values())
+	marshalBlock(block, jsonValues)
+
+	changes.Change.After = jsonValues
+	planned.Values = jsonValues
+
+	providerConfigKey := p.providerKey
+	providerAttr := block.GetAttribute("provider")
+	if providerAttr != nil {
+		value := providerAttr.Value()
+		r, err := providerAttr.Reference()
+		if err == nil {
+			providerConfigKey = r.String()
+		}
+
+		if err != nil && value.Type() == cty.String {
+			providerConfigKey = value.AsString()
+		}
+	}
+
+	var configuration ResourceData
+	if block.HasModuleBlock() {
+		configuration = ResourceData{
+			Address:           stripCount(block.LocalName()),
+			Mode:              "managed",
+			Type:              block.TypeLabel(),
+			Name:              stripCount(block.NameLabel()),
+			ProviderConfigKey: block.ModuleName() + ":" + block.Provider(),
+			Expressions:       blockToReferences(block),
+			CountExpression:   p.countReferences(block),
+		}
+	} else {
+		configuration = ResourceData{
+			Address:           stripCount(block.FullName()),
+			Mode:              "managed",
+			Type:              block.TypeLabel(),
+			Name:              stripCount(block.NameLabel()),
+			ProviderConfigKey: providerConfigKey,
+			Expressions:       blockToReferences(block),
+			CountExpression:   p.countReferences(block),
+		}
+	}
+
+	return ResourceOutput{
+		Planned:       planned,
+		Changes:       changes,
+		Configuration: configuration,
+	}
+}
+
+func (p *HCLProvider) marshalProviderBlock(block *hcl.Block) string {
+	name := block.TypeLabel()
+	if a := block.GetAttribute("alias"); a != nil {
+		name = name + "." + a.Value().AsString()
+	}
+
+	region := ""
+	value := block.GetAttribute("region").Value()
+	if value != cty.NilVal {
+		region = value.AsString()
+	}
+
+	p.schema.Configuration.ProviderConfig[name] = ProviderConfig{
+		Name: name,
+		Expressions: map[string]interface{}{
+			"region": map[string]interface{}{
+				"constant_value": region,
+			},
+		},
+	}
+
+	if p.providerKey == "" {
+		p.providerKey = name
+	}
+
+	return name
+}
+
+func (p *HCLProvider) countReferences(block *hcl.Block) *countExpression {
+	for _, attribute := range block.GetAttributes() {
+		name := attribute.Name()
+		if name != "count" {
+			continue
+		}
+
+		exp := countExpression{}
+
+		references := attribute.AllReferences()
+		if len(references) > 0 {
+			for _, ref := range references {
+				exp.References = append(
+					exp.References,
+					strings.ReplaceAll(ref.String(), "variable", "var"),
+				)
+			}
+
+			return &exp
+		}
+
+		v := attribute.Value()
+		ty := v.Type()
+		var i int64
+		switch ty {
+		case cty.Number:
+			i, _ = v.AsBigFloat().Int64()
+		case cty.String:
+			s := v.AsString()
+			i, _ = strconv.ParseInt(s, 10, 64)
+		default:
+			p.logger.Debugf("unsupported go cty type %s expected either Number or String for count expression, using 0", ty)
+		}
+
+		exp.ConstantValue = &i
+		return &exp
+	}
+
+	return nil
 }
 
 func blockToReferences(block *hcl.Block) map[string]interface{} {
@@ -258,10 +499,17 @@ func blockToReferences(block *hcl.Block) map[string]interface{} {
 		if len(references) > 0 {
 			r := refs{}
 			for _, ref := range references {
-				r.References = append(r.References, ref.String())
+				r.References = append(r.References, ref.JSONString())
 			}
 
-			expressionValues[attribute.Name()] = r
+			// counts are special expressions that have their own json key.
+			// So we ignore them here.
+			name := attribute.Name()
+			if name == "count" {
+				continue
+			}
+
+			expressionValues[name] = r
 		}
 
 		childExpressions := make(map[string][]interface{})
@@ -286,17 +534,22 @@ func blockToReferences(block *hcl.Block) map[string]interface{} {
 
 func marshalBlock(block *hcl.Block, jsonValues map[string]interface{}) {
 	for _, b := range block.Children() {
-		childValues := marshalAttributeValues(b.Type(), b.Values())
+		key := b.Type()
+		if key == "dynamic" || key == "depends_on" {
+			continue
+		}
+
+		childValues := marshalAttributeValues(key, b.Values())
 		if len(b.Children()) > 0 {
 			marshalBlock(b, childValues)
 		}
 
-		if v, ok := jsonValues[b.Type()]; ok {
-			jsonValues[b.Type()] = append(v.([]interface{}), childValues)
+		if v, ok := jsonValues[key]; ok {
+			jsonValues[key] = append(v.([]interface{}), childValues)
 			continue
 		}
 
-		jsonValues[b.Type()] = []interface{}{childValues}
+		jsonValues[key] = []interface{}{childValues}
 	}
 }
 
@@ -321,21 +574,30 @@ func marshalAttributeValues(blockType string, value cty.Value) map[string]interf
 	return ret
 }
 
+type ResourceOutput struct {
+	Planned       ResourceJSON
+	Changes       ResourceChangesJSON
+	Configuration ResourceData
+}
+
 type ResourceJSON struct {
-	Address       string                 `json:"address"`
-	Mode          string                 `json:"mode"`
-	Type          string                 `json:"type"`
-	Name          string                 `json:"name"`
-	SchemaVersion int                    `json:"schema_version"`
-	Values        map[string]interface{} `json:"values"`
+	Address           string                 `json:"address"`
+	Mode              string                 `json:"mode"`
+	Type              string                 `json:"type"`
+	Name              string                 `json:"name"`
+	Index             *int64                 `json:"index,omitempty"`
+	SchemaVersion     int                    `json:"schema_version"`
+	Values            map[string]interface{} `json:"values"`
+	InfracostMetadata map[string]interface{} `json:"infracost_metadata"`
 }
 
 type ResourceChangesJSON struct {
 	Address       string         `json:"address"`
-	ModuleAddress string         `json:"module_address"`
+	ModuleAddress *string        `json:"module_address,omitempty"`
 	Mode          string         `json:"mode"`
 	Type          string         `json:"type"`
 	Name          string         `json:"name"`
+	Index         *int64         `json:"index,omitempty"`
 	Change        ResourceChange `json:"change"`
 }
 
@@ -350,28 +612,36 @@ type PlanSchema struct {
 	TerraformVersion string      `json:"terraform_version"`
 	Variables        interface{} `json:"variables,omitempty"`
 	PlannedValues    struct {
-		RootModule PlanRootModule `json:"root_module"`
+		RootModule PlanModule `json:"root_module"`
 	} `json:"planned_values"`
 	ResourceChanges []ResourceChangesJSON `json:"resource_changes"`
 	Configuration   Configuration         `json:"configuration"`
 }
 
-type PlanRootModule struct {
+type PlanModule struct {
 	Resources    []ResourceJSON `json:"resources,omitempty"`
-	ChildModules []ChildModule  `json:"child_modules"`
+	Address      *string        `json:"address,omitempty"`
+	ChildModules []PlanModule   `json:"child_modules,omitempty"`
 }
 
 type Configuration struct {
 	ProviderConfig map[string]ProviderConfig `json:"provider_config"`
-	RootModule     struct {
-		Resources   []ResourceData        `json:"resources,omitempty"`
-		ModuleCalls map[string]ModuleCall `json:"module_calls"`
-	} `json:"root_module"`
+	RootModule     ModuleConfig              `json:"root_module"`
+}
+
+type ModuleConfig struct {
+	Resources   []ResourceData        `json:"resources,omitempty"`
+	ModuleCalls map[string]ModuleCall `json:"module_calls,omitempty"`
+}
+
+type ModuleOut struct {
+	PlanModule   PlanModule
+	ModuleConfig ModuleConfig
 }
 
 type ProviderConfig struct {
 	Name        string                 `json:"name"`
-	Expressions map[string]interface{} `json:"expressions"`
+	Expressions map[string]interface{} `json:"expressions,omitempty"`
 }
 
 type ResourceData struct {
@@ -380,22 +650,35 @@ type ResourceData struct {
 	Type              string                 `json:"type"`
 	Name              string                 `json:"name"`
 	ProviderConfigKey string                 `json:"provider_config_key"`
-	Expressions       map[string]interface{} `json:"expressions"`
+	Expressions       map[string]interface{} `json:"expressions,omitempty"`
+	SchemaVersion     int                    `json:"schema_version"`
+	CountExpression   *countExpression       `json:"count_expression,omitempty"`
 }
 
 type ModuleCall struct {
-	Source string           `json:"source"`
-	Module ModuleCallModule `json:"module"`
+	Source       string       `json:"source"`
+	ModuleConfig ModuleConfig `json:"module"`
 }
 
-type ModuleCallModule struct {
-	Resources []ResourceData `json:"resources"`
-}
-
-type ChildModule struct {
-	Resources []ResourceJSON `json:"resources"`
+type countExpression struct {
+	References    []string `json:"references,omitempty"`
+	ConstantValue *int64   `json:"constant_value,omitempty"`
 }
 
 type refs struct {
 	References []string `json:"references"`
+}
+
+func newString(s string) *string {
+	if s == "" {
+		return nil
+	}
+
+	return &s
+}
+
+var countRegex = regexp.MustCompile(`\[\d+\]$`)
+
+func stripCount(s string) string {
+	return countRegex.ReplaceAllString(s, "")
 }

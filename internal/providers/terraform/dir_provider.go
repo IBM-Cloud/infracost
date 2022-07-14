@@ -18,6 +18,7 @@ import (
 
 	"github.com/infracost/infracost/internal/clierror"
 	"github.com/infracost/infracost/internal/config"
+	"github.com/infracost/infracost/internal/credentials"
 	"github.com/infracost/infracost/internal/schema"
 	"github.com/infracost/infracost/internal/ui"
 
@@ -27,27 +28,28 @@ import (
 var minTerraformVer = "v0.12"
 
 type DirProvider struct {
-	ctx                 *config.ProjectContext
-	Path                string
-	spinnerOpts         ui.SpinnerOptions
-	IsTerragrunt        bool
-	PlanFlags           string
-	InitFlags           string
-	Workspace           string
-	UseState            bool
-	TerraformBinary     string
-	TerraformCloudHost  string
-	TerraformCloudToken string
-	Env                 map[string]string
-	cachedStateJSON     []byte
-	cachedPlanJSON      []byte
+	ctx                  *config.ProjectContext
+	Path                 string
+	spinnerOpts          ui.SpinnerOptions
+	IsTerragrunt         bool
+	PlanFlags            string
+	InitFlags            string
+	Workspace            string
+	UseState             bool
+	TerraformBinary      string
+	TerraformCloudHost   string
+	TerraformCloudToken  string
+	Env                  map[string]string
+	cachedStateJSON      []byte
+	cachedPlanJSON       []byte
+	includePastResources bool
 }
 
 type RunShowOptions struct {
 	CmdOptions *CmdOptions
 }
 
-func NewDirProvider(ctx *config.ProjectContext) schema.Provider {
+func NewDirProvider(ctx *config.ProjectContext, includePastResources bool) schema.Provider {
 	terraformBinary := ctx.ProjectConfig.TerraformBinary
 	if terraformBinary == "" {
 		terraformBinary = defaultTerraformBinary
@@ -61,23 +63,24 @@ func NewDirProvider(ctx *config.ProjectContext) schema.Provider {
 			NoColor:       ctx.RunContext.Config.NoColor,
 			Indent:        "  ",
 		},
-		PlanFlags:           ctx.ProjectConfig.TerraformPlanFlags,
-		InitFlags:           ctx.ProjectConfig.TerraformInitFlags,
-		Workspace:           ctx.ProjectConfig.TerraformWorkspace,
-		UseState:            ctx.ProjectConfig.TerraformUseState,
-		TerraformBinary:     terraformBinary,
-		TerraformCloudHost:  ctx.ProjectConfig.TerraformCloudHost,
-		TerraformCloudToken: ctx.ProjectConfig.TerraformCloudToken,
-		Env:                 ctx.ProjectConfig.Env,
+		PlanFlags:            ctx.ProjectConfig.TerraformPlanFlags,
+		InitFlags:            ctx.ProjectConfig.TerraformInitFlags,
+		Workspace:            ctx.ProjectConfig.TerraformWorkspace,
+		UseState:             ctx.ProjectConfig.TerraformUseState,
+		TerraformBinary:      terraformBinary,
+		TerraformCloudHost:   ctx.ProjectConfig.TerraformCloudHost,
+		TerraformCloudToken:  ctx.ProjectConfig.TerraformCloudToken,
+		Env:                  ctx.ProjectConfig.Env,
+		includePastResources: includePastResources,
 	}
 }
 
 func (p *DirProvider) Type() string {
-	return "terraform_dir"
+	return "terraform_cli"
 }
 
 func (p *DirProvider) DisplayType() string {
-	return "Terraform directory"
+	return "Terraform CLI"
 }
 
 func (p *DirProvider) checks() error {
@@ -90,13 +93,13 @@ func (p *DirProvider) checks() error {
 		msg := fmt.Sprintf("Terraform binary '%s' could not be found. You have two options:\n", binary)
 		msg += "1. Set a custom Terraform binary using the environment variable INFRACOST_TERRAFORM_BINARY.\n\n"
 		msg += fmt.Sprintf("2. Set --path to a Terraform plan JSON file. See %s for how to generate this.", ui.LinkString("https://infracost.io/troubleshoot"))
-		return clierror.NewSanitizedError(errors.Errorf(msg), "Terraform binary could not be found")
+		return clierror.NewCLIError(errors.Errorf(msg), "Terraform binary could not be found")
 	}
 
 	out, err := exec.Command(binary, "-version").Output()
 	if err != nil {
 		msg := fmt.Sprintf("Could not get version of Terraform binary '%s'", binary)
-		return clierror.NewSanitizedError(errors.Errorf(msg), "Could not get version of Terraform binary")
+		return clierror.NewCLIError(errors.Errorf(msg), "Could not get version of Terraform binary")
 	}
 
 	fullVersion := strings.SplitN(string(out), "\n", 2)[0]
@@ -109,6 +112,17 @@ func (p *DirProvider) checks() error {
 }
 
 func (p *DirProvider) AddMetadata(metadata *schema.ProjectMetadata) {
+	basePath := p.ctx.ProjectConfig.Path
+	if p.ctx.RunContext.Config.ConfigFilePath != "" {
+		basePath = filepath.Dir(p.ctx.RunContext.Config.ConfigFilePath)
+	}
+
+	modulePath, err := filepath.Rel(basePath, metadata.Path)
+	if err == nil && modulePath != "" && modulePath != "." {
+		log.Debugf("Calculated relative terraformModulePath for %s from %s", basePath, metadata.Path)
+		metadata.TerraformModulePath = modulePath
+	}
+
 	terraformWorkspace := p.Workspace
 
 	if terraformWorkspace == "" {
@@ -159,11 +173,11 @@ func (p *DirProvider) LoadResources(usage map[string]*schema.UsageData) ([]*sche
 		metadata := config.DetectProjectMetadata(p.ctx.ProjectConfig.Path)
 		metadata.Type = p.Type()
 		p.AddMetadata(metadata)
-		name := schema.GenerateProjectName(metadata, p.ctx.RunContext.Config.EnableDashboard)
+		name := schema.GenerateProjectName(metadata, p.ctx.ProjectConfig.Name, p.ctx.RunContext.IsCloudEnabled())
 
 		project := schema.NewProject(name, metadata)
 
-		parser := NewParser(p.ctx)
+		parser := NewParser(p.ctx, p.includePastResources)
 		pastResources, resources, err := parser.parseJSON(j, usage)
 		if err != nil {
 			return projects, errors.Wrap(err, "Error parsing Terraform JSON")
@@ -319,6 +333,7 @@ func (p *DirProvider) runPlan(opts *CmdOptions, spinner *ui.Spinner, initOnFail 
 			p.ctx.SetContextValue("terraformRemoteExecutionModeEnabled", true)
 			planJSON, err = p.runRemotePlan(opts, args)
 		} else if initOnFail && (strings.Contains(extractedErr, "Error: Could not load plugin") ||
+			strings.Contains(extractedErr, "Error: Required plugins are not installed") ||
 			strings.Contains(extractedErr, "Error: Initialization required") ||
 			strings.Contains(extractedErr, "Error: Backend initialization required") ||
 			strings.Contains(extractedErr, "Error: Provider requirements cannot be satisfied by locked dependencies") ||
@@ -344,7 +359,7 @@ func (p *DirProvider) runPlan(opts *CmdOptions, spinner *ui.Spinner, initOnFail 
 			cmdName = "terragrunt run-all plan"
 		}
 		msg := fmt.Sprintf("%s failed", cmdName)
-		return "", planJSON, clierror.NewSanitizedError(fmt.Errorf("%s: %s", msg, err), msg)
+		return "", planJSON, clierror.NewCLIError(fmt.Errorf("%s: %s", msg, err), msg)
 	}
 
 	spinner.Success()
@@ -361,7 +376,7 @@ func (p *DirProvider) runInit(opts *CmdOptions, spinner *ui.Spinner) error {
 	flags, err := shellquote.Split(p.InitFlags)
 	if err != nil {
 		msg := "parsing terraform-init-flags failed"
-		return clierror.NewSanitizedError(fmt.Errorf("%s: %s", msg, err), msg)
+		return clierror.NewCLIError(fmt.Errorf("%s: %s", msg, err), msg)
 	}
 
 	args = append(args, "init", "-input=false", "-no-color")
@@ -381,7 +396,7 @@ func (p *DirProvider) runInit(opts *CmdOptions, spinner *ui.Spinner) error {
 			cmdName = "terragrunt run-all init"
 		}
 		msg := fmt.Sprintf("%s failed", cmdName)
-		return clierror.NewSanitizedError(fmt.Errorf("%s: %s", msg, err), msg)
+		return clierror.NewCLIError(fmt.Errorf("%s: %s", msg, err), msg)
 	}
 
 	spinner.Success()
@@ -389,8 +404,8 @@ func (p *DirProvider) runInit(opts *CmdOptions, spinner *ui.Spinner) error {
 }
 
 func (p *DirProvider) runRemotePlan(opts *CmdOptions, args []string) ([]byte, error) {
-	if p.TerraformCloudToken == "" && !checkCloudConfigSet() {
-		return []byte{}, ErrMissingCloudToken
+	if p.TerraformCloudToken == "" && !credentials.CheckCloudConfigSet() {
+		return []byte{}, credentials.ErrMissingCloudToken
 	}
 
 	stdout, err := Cmd(opts, args...)
@@ -414,10 +429,10 @@ func (p *DirProvider) runRemotePlan(opts *CmdOptions, args []string) ([]byte, er
 
 	token := p.TerraformCloudToken
 	if token == "" {
-		token = findCloudToken(host)
+		token = credentials.FindTerraformCloudToken(host)
 	}
 	if token == "" {
-		return []byte{}, ErrMissingCloudToken
+		return []byte{}, credentials.ErrMissingCloudToken
 	}
 
 	body, err := cloudAPI(host, fmt.Sprintf("/api/v2/runs/%s/plan", runID), token)
@@ -456,7 +471,7 @@ func (p *DirProvider) runShow(opts *CmdOptions, spinner *ui.Spinner, planFile st
 			cmdName = "terragrunt show"
 		}
 		msg := fmt.Sprintf("%s failed", cmdName)
-		return []byte{}, clierror.NewSanitizedError(fmt.Errorf("%s: %s", msg, err), msg)
+		return []byte{}, clierror.NewCLIError(fmt.Errorf("%s: %s", msg, err), msg)
 	}
 	spinner.Success()
 
@@ -518,7 +533,7 @@ func (p *DirProvider) buildTerraformErr(err error, isInit bool) error {
 		msg += "\n\nYou have two options:\n"
 		msg += "1. Run `terraform workspace select your_workspace` first or set the TF_WORKSPACE environment variable.\n\n"
 		msg += fmt.Sprintf("2. Set --path to a Terraform plan JSON file. See %s for how to generate this.", ui.LinkString("https://infracost.io/troubleshoot"))
-	} else if errors.Is(err, ErrMissingCloudToken) || errors.Is(err, ErrInvalidCloudToken) || strings.HasPrefix(stderr, "Error: Required token could not be found") {
+	} else if errors.Is(err, credentials.ErrMissingCloudToken) || errors.Is(err, credentials.ErrInvalidCloudToken) || strings.HasPrefix(stderr, "Error: Required token could not be found") {
 		msg += "\n\nYou have two options:\n"
 		msg += "1. Run `terraform login` or set the INFRACOST_TERRAFORM_CLOUD_TOKEN environment variable.'\n\n"
 		msg += fmt.Sprintf("2. Set --path to a Terraform plan JSON file. See %s for how to generate this.", ui.LinkString("https://infracost.io/troubleshoot"))

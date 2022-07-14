@@ -26,16 +26,18 @@ func toAzureCLIName(location string) string {
 
 func lookupRegion(d *schema.ResourceData, parentResourceKeys []string) string {
 	// First check for a location set directly on a resource
-	if d.Get("location").String() != "" {
-		return toAzureCLIName(d.Get("location").String())
+	location := d.Get("location").String()
+	if location != "" && !strings.Contains(location, "mock") {
+		return toAzureCLIName(location)
 	}
 
 	// Then check for any parent resources with a location
 	for _, k := range parentResourceKeys {
 		parents := d.References(k)
 		for _, p := range parents {
-			if p.Get("location").String() != "" {
-				return toAzureCLIName(p.Get("location").String())
+			location := p.Get("location").String()
+			if location != "" && !strings.Contains(location, "mock") {
+				return toAzureCLIName(location)
 			}
 		}
 	}
@@ -113,4 +115,13 @@ func locationNameMapping(l string) string {
 
 func intPtr(i int64) *int64 {
 	return &i
+}
+
+func contains(arr []string, e string) bool {
+	for _, a := range arr {
+		if a == e {
+			return true
+		}
+	}
+	return false
 }

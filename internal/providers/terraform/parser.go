@@ -12,45 +12,34 @@ import (
 	"github.com/tidwall/gjson"
 
 	"github.com/infracost/infracost/internal/config"
+	"github.com/infracost/infracost/internal/providers/terraform/aws"
+	"github.com/infracost/infracost/internal/providers/terraform/azure"
+	"github.com/infracost/infracost/internal/providers/terraform/google"
+	"github.com/infracost/infracost/internal/providers/terraform/ibm"
 	"github.com/infracost/infracost/internal/schema"
 )
 
 // These show differently in the plan JSON for Terraform 0.12 and 0.13.
 var infracostProviderNames = []string{"infracost", "registry.terraform.io/infracost/infracost"}
-var defaultProviderRegions = map[string]string{
-	"aws":     "us-east-1",
-	"google":  "us-central1",
-	"azurerm": "eastus",
-}
-
-// ARN attribute mapping for resources that don't have a standard 'arn' attribute
-var arnAttributeMap = map[string]string{
-	"aws_cloudwatch_dashboard":     "dashboard_arn",
-	"aws_db_snapshot":              "db_snapshot_arn",
-	"aws_db_cluster_snapshot":      "db_cluster_snapshot_arn",
-	"aws_ecs_service":              "id",
-	"aws_neptune_cluster_snapshot": "db_cluster_snapshot_arn",
-	"aws_docdb_cluster_snapshot":   "db_cluster_snapshot_arn",
-	"aws_dms_certificate":          "certificate_arn",
-	"aws_dms_endpoint":             "endpoint_arn",
-	"aws_dms_replication_instance": "replication_instance_arn",
-	"aws_dms_replication_task":     "replication_task_arn",
-}
 
 type Parser struct {
-	ctx              *config.ProjectContext
-	terraformVersion string
+	ctx                  *config.ProjectContext
+	terraformVersion     string
+	includePastResources bool
 }
 
-func NewParser(ctx *config.ProjectContext) *Parser {
-	return &Parser{ctx, ""}
+func NewParser(ctx *config.ProjectContext, includePastResources bool) *Parser {
+	return &Parser{
+		ctx:                  ctx,
+		includePastResources: includePastResources,
+	}
 }
 
 func (p *Parser) createResource(d *schema.ResourceData, u *schema.UsageData) *schema.Resource {
 	registryMap := GetResourceRegistryMap()
 
-	if isAwsChina(d) {
-		p.ctx.SetContextValue("isAWSChina", true)
+	for cKey, cValue := range getSpecialContext(d) {
+		p.ctx.SetContextValue(cKey, cValue)
 	}
 
 	if registryItem, ok := (*registryMap)[d.Type]; ok {
@@ -62,6 +51,7 @@ func (p *Parser) createResource(d *schema.ResourceData, u *schema.UsageData) *sc
 				IsSkipped:    true,
 				NoPrice:      true,
 				SkipMessage:  "Free resource.",
+				Metadata:     d.Metadata,
 			}
 		}
 
@@ -69,6 +59,8 @@ func (p *Parser) createResource(d *schema.ResourceData, u *schema.UsageData) *sc
 		if res != nil {
 			res.ResourceType = d.Type
 			res.Tags = d.Tags
+			res.Metadata = d.Metadata
+
 			if u != nil {
 				res.EstimationSummary = u.CalcEstimationSummary()
 			}
@@ -82,6 +74,7 @@ func (p *Parser) createResource(d *schema.ResourceData, u *schema.UsageData) *sc
 		Tags:         d.Tags,
 		IsSkipped:    true,
 		SkipMessage:  "This resource is not currently supported",
+		Metadata:     d.Metadata,
 	}
 }
 
@@ -150,16 +143,19 @@ func (p *Parser) parseJSON(j []byte, usage map[string]*schema.UsageData) ([]*sch
 	conf := parsed.Get("configuration.root_module")
 	vars := parsed.Get("variables")
 
-	pastResources := p.parseJSONResources(true, baseResources, usage, parsed, providerConf, conf, vars)
 	resources := p.parseJSONResources(false, baseResources, usage, parsed, providerConf, conf, vars)
+	if !p.includePastResources {
+		return nil, resources, nil
+	}
 
+	pastResources := p.parseJSONResources(true, baseResources, usage, parsed, providerConf, conf, vars)
 	resourceChanges := parsed.Get("resource_changes").Array()
 	pastResources = stripNonTargetResources(pastResources, resources, resourceChanges)
 
 	return pastResources, resources, nil
 }
 
-// StripTerraformWrapper removes any output added from the setup-terraform
+// StripSetupTerraformWrapper removes any output added from the setup-terraform
 // GitHub action terraform wrapper, so we can parse the output of this as
 // valid JSON. It returns the stripped out JSON and a boolean that is true
 // if the wrapper output was found and removed.
@@ -261,7 +257,9 @@ func (p *Parser) parseResourceData(isState bool, providerConf, planVals gjson.Re
 
 		tags := parseTags(t, v)
 
-		resources[addr] = schema.NewResourceData(t, provider, addr, tags, v)
+		data := schema.NewResourceData(t, provider, addr, tags, v)
+		data.Metadata = r.Get("infracost_metadata").Map()
+		resources[addr] = data
 	}
 
 	// Recursively add any resources for child modules
@@ -274,50 +272,60 @@ func (p *Parser) parseResourceData(isState bool, providerConf, planVals gjson.Re
 	return resources
 }
 
+func getSpecialContext(d *schema.ResourceData) map[string]interface{} {
+	providerPrefix := strings.Split(d.Type, "_")[0]
+
+	switch providerPrefix {
+	case "aws":
+		return aws.GetSpecialContext(d)
+	case "azurerm":
+		return azure.GetSpecialContext(d)
+	case "google":
+		return google.GetSpecialContext(d)
+	case "ibm":
+		return ibm.GetSpecialContext(d)
+	default:
+		log.Debugf("Unsupported provider %s", providerPrefix)
+		return map[string]interface{}{}
+	}
+}
+
 func parseTags(resourceType string, v gjson.Result) map[string]string {
-	tags := make(map[string]string)
 
-	a := "tags"
-	if strings.HasPrefix(resourceType, "google_") {
-		a = "labels"
+	providerPrefix := strings.Split(resourceType, "_")[0]
+
+	switch providerPrefix {
+	case "aws":
+		return aws.ParseTags(resourceType, v)
+	case "azurerm":
+		return azure.ParseTags(resourceType, v)
+	case "google":
+		return google.ParseTags(resourceType, v)
+	case "ibm":
+		return ibm.ParseTags(resourceType, v)
+	default:
+		log.Debugf("Unsupported provider %s", providerPrefix)
+		return map[string]string{}
 	}
-
-	for k, v := range v.Get(a).Map() {
-		tags[k] = v.String()
-	}
-
-	return tags
 }
 
 func resourceRegion(resourceType string, v gjson.Result) string {
+
 	providerPrefix := strings.Split(resourceType, "_")[0]
-	if providerPrefix != "aws" {
+
+	switch providerPrefix {
+	case "aws":
+		return aws.GetResourceRegion(resourceType, v)
+	case "azurerm":
+		return azure.GetResourceRegion(resourceType, v)
+	case "google":
+		return google.GetResourceRegion(resourceType, v)
+	case "ibm":
+		return ibm.GetResourceRegion(resourceType, v)
+	default:
+		log.Debugf("Unsupported provider %s", providerPrefix)
 		return ""
 	}
-
-	// If a region key exists in the values use that
-	if v.Get("region").String() != "" {
-		return v.Get("region").String()
-	}
-
-	// Otherwise try and parse the ARN from the values
-	arnAttr, ok := arnAttributeMap[resourceType]
-	if !ok {
-		arnAttr = "arn"
-	}
-
-	if !v.Get(arnAttr).Exists() {
-		return ""
-	}
-
-	arn := v.Get(arnAttr).String()
-	p := strings.Split(arn, ":")
-	if len(p) < 4 {
-		log.Debugf("Unexpected ARN format for %s", arn)
-		return ""
-	}
-
-	return p[3]
 }
 
 func providerRegion(addr string, providerConf gjson.Result, vars gjson.Result, resourceType string, resConf gjson.Result) string {
@@ -337,7 +345,17 @@ func providerRegion(addr string, providerConf gjson.Result, vars gjson.Result, r
 		region = parseRegion(providerConf, vars, providerPrefix)
 
 		if region == "" {
-			region = defaultProviderRegions[providerPrefix]
+
+			switch providerPrefix {
+			case "aws":
+				region = aws.DefaultProviderRegion
+			case "azurerm":
+				region = azure.DefaultProviderRegion
+			case "google":
+				region = google.DefaultProviderRegion
+			case "ibm":
+				region = ibm.DefaultProviderRegion
+			}
 
 			// Don't show this log for azurerm users since they have a different method of looking up the region.
 			// A lot of Azure resources get their region from their referenced azurerm_resource_group resource
@@ -376,6 +394,10 @@ func parseRegion(providerConf gjson.Result, vars gjson.Result, providerKey strin
 		}
 	}
 
+	if strings.Contains(region, "mock") {
+		return ""
+	}
+
 	return region
 }
 
@@ -408,17 +430,20 @@ func (p *Parser) stripDataResources(resData map[string]*schema.ResourceData) {
 func (p *Parser) parseReferences(resData map[string]*schema.ResourceData, conf gjson.Result) {
 	registryMap := GetResourceRegistryMap()
 
-	// Create a map of id -> resource data and arn -> resource data so we can lookup references
+	// Create a map of id -> resource data so we can lookup references
 	idMap := make(map[string][]*schema.ResourceData)
-	arnMap := make(map[string][]*schema.ResourceData)
 
 	for _, d := range resData {
-		id := d.Get("id").String()
-		if _, ok := idMap[id]; !ok {
-			idMap[id] = []*schema.ResourceData{}
-		}
 
-		idMap[id] = append(idMap[id], d)
+		// check for any "default" ids declared by the provider for this resource
+		if f := registryMap.GetDefaultRefIDFunc(d.Type); f != nil {
+			for _, defaultID := range f(d) {
+				if _, ok := idMap[defaultID]; !ok {
+					idMap[defaultID] = []*schema.ResourceData{}
+				}
+				idMap[defaultID] = append(idMap[defaultID], d)
+			}
+		}
 
 		// check for any "custom" ids specified by the resource and add them.
 		if f := registryMap.GetCustomRefIDFunc(d.Type); f != nil {
@@ -430,17 +455,6 @@ func (p *Parser) parseReferences(resData map[string]*schema.ResourceData, conf g
 			}
 		}
 
-		arnAttr, ok := arnAttributeMap[d.Type]
-		if !ok {
-			arnAttr = "arn"
-		}
-
-		arn := d.Get(arnAttr).String()
-		if _, ok := arnMap[arn]; !ok {
-			arnMap[arn] = []*schema.ResourceData{}
-		}
-
-		arnMap[arn] = append(arnMap[arn], d)
 	}
 
 	parseKnownModuleRefs(resData, conf)
@@ -472,15 +486,6 @@ func (p *Parser) parseReferences(resData map[string]*schema.ResourceData, conf g
 				if ok {
 
 					for _, ref := range idRefs {
-						reverseRefAttrs := registryMap.GetReferenceAttributes(ref.Type)
-						d.AddReference(attr, ref, reverseRefAttrs)
-					}
-				}
-
-				// Check arn map
-				arnRefs, ok := arnMap[refVal.String()]
-				if ok {
-					for _, ref := range arnRefs {
 						reverseRefAttrs := registryMap.GetReferenceAttributes(ref.Type)
 						d.AddReference(attr, ref, reverseRefAttrs)
 					}
@@ -517,7 +522,7 @@ func (p *Parser) parseConfReferences(resData map[string]*schema.ResourceData, co
 	found := false
 
 	for _, ref := range refs {
-		if ref == "count.index" || strings.HasPrefix(ref, "var.") {
+		if ref == "count.index" || ref == "each.key" || strings.HasPrefix(ref, "var.") {
 			continue
 		}
 
@@ -530,12 +535,21 @@ func (p *Parser) parseConfReferences(resData map[string]*schema.ResourceData, co
 		refData, ok := resData[refAddr]
 
 		// if there's a count ref value then try with the array index of the count ref
-		if !ok && containsString(refs, "count.index") {
-			a := fmt.Sprintf("%s[%d]", refAddr, addressCountIndex(d.Address))
-			refData, ok = resData[a]
+		if !ok {
+			if containsString(refs, "count.index") {
+				a := fmt.Sprintf("%s[%d]", refAddr, addressCountIndex(d.Address))
+				refData, ok = resData[a]
 
-			if ok {
-				log.Debugf("reference specifies a count: using resource %s for %s.%s", a, d.Address, attr)
+				if ok {
+					log.Debugf("reference specifies a count: using resource %s for %s.%s", a, d.Address, attr)
+				}
+			} else if containsString(refs, "each.key") {
+				a := fmt.Sprintf("%s[\"%s\"]", refAddr, addressKey(d.Address))
+				refData, ok = resData[a]
+
+				if ok {
+					log.Debugf("reference specifies a key: using resource %s for %s.%s", a, d.Address, attr)
+				}
 			}
 		}
 
@@ -665,6 +679,17 @@ func addressCountIndex(addr string) int {
 	return -1
 }
 
+func addressKey(addr string) string {
+	r := regexp.MustCompile(`\["([^"]+)"\]`)
+	m := r.FindStringSubmatch(addr)
+
+	if len(m) > 0 {
+		return m[1]
+	}
+
+	return ""
+}
+
 func removeAddressArrayPart(addr string) string {
 	r := regexp.MustCompile(`([^\[]+)`)
 	m := r.FindStringSubmatch(addressResourcePart(addr))
@@ -681,10 +706,6 @@ func splitAddress(addr string) []string {
 		}
 		return !quoted && r == '.'
 	})
-}
-
-func isAwsChina(d *schema.ResourceData) bool {
-	return strings.HasPrefix(d.Type, "aws_") && strings.HasPrefix(d.Get("region").String(), "cn-")
 }
 
 func containsString(a []string, s string) bool {

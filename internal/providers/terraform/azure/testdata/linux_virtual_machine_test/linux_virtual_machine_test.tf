@@ -3,6 +3,32 @@ provider "azurerm" {
   features {}
 }
 
+resource "azurerm_linux_virtual_machine" "basic_b1" {
+  name                = "basic_b1"
+  resource_group_name = "fake_resource_group"
+  location            = "eastus"
+
+  size           = "Standard_B1s"
+  admin_username = "fakeuser"
+  admin_password = "fakepass"
+
+  network_interface_ids = [
+    "/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/testrg/providers/Microsoft.Network/networkInterfaces/fakenic",
+  ]
+
+  os_disk {
+    caching              = "ReadWrite"
+    storage_account_type = "Standard_LRS"
+  }
+
+  source_image_reference {
+    publisher = "Canonical"
+    offer     = "UbuntuServer"
+    sku       = "16.04-LTS"
+    version   = "latest"
+  }
+}
+
 resource "azurerm_linux_virtual_machine" "basic_a2" {
   name                = "basic_a2"
   resource_group_name = "fake_resource_group"
@@ -102,6 +128,32 @@ resource "azurerm_linux_virtual_machine" "standard_a2_ultra_enabled" {
 
   additional_capabilities {
     ultra_ssd_enabled = true
+  }
+
+  source_image_reference {
+    publisher = "Canonical"
+    offer     = "UbuntuServer"
+    sku       = "16.04-LTS"
+    version   = "latest"
+  }
+}
+
+resource "azurerm_linux_virtual_machine" "basic_b1_withMonthlyHours" {
+  name                = "basic_b1"
+  resource_group_name = "fake_resource_group"
+  location            = "eastus"
+
+  size           = "Standard_B1s"
+  admin_username = "fakeuser"
+  admin_password = "fakepass"
+
+  network_interface_ids = [
+    "/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/testrg/providers/Microsoft.Network/networkInterfaces/fakenic",
+  ]
+
+  os_disk {
+    caching              = "ReadWrite"
+    storage_account_type = "Standard_LRS"
   }
 
   source_image_reference {

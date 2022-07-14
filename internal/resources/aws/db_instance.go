@@ -3,6 +3,7 @@ package aws
 import (
 	"github.com/infracost/infracost/internal/resources"
 	"github.com/infracost/infracost/internal/schema"
+	log "github.com/sirupsen/logrus"
 
 	"fmt"
 	"strings"
@@ -26,12 +27,16 @@ type DBInstance struct {
 	MonthlyStandardIORequests                    *int64   `infracost_usage:"monthly_standard_io_requests"`
 	AdditionalBackupStorageGB                    *float64 `infracost_usage:"additional_backup_storage_gb"`
 	MonthlyAdditionalPerformanceInsightsRequests *int64   `infracost_usage:"monthly_additional_performance_insights_requests"`
+	ReservedInstanceTerm                         *string  `infracost_usage:"reserved_instance_term"`
+	ReservedInstancePaymentOption                *string  `infracost_usage:"reserved_instance_payment_option"`
 }
 
 var DBInstanceUsageSchema = []*schema.UsageItem{
 	{Key: "monthly_standard_io_requests", ValueType: schema.Int64, DefaultValue: 0},
 	{Key: "additional_backup_storage_gb", ValueType: schema.Float64, DefaultValue: 0},
 	{Key: "monthly_additional_performance_insights_requests", ValueType: schema.Int64, DefaultValue: 0},
+	{Key: "reserved_instance_term", DefaultValue: "", ValueType: schema.String},
+	{Key: "reserved_instance_payment_option", DefaultValue: "", ValueType: schema.String},
 }
 
 func (r *DBInstance) PopulateUsage(u *schema.UsageData) {
@@ -61,7 +66,7 @@ func (r *DBInstance) BuildResource() *schema.Resource {
 		databaseEngine = "Aurora MySQL"
 	case "aurora-postgresql":
 		databaseEngine = "Aurora PostgreSQL"
-	case "oracle-se", "oracle-se1", "oracle-se2", "oracle-ee":
+	case "oracle-se", "oracle-se1", "oracle-se2", "oracle-se2-cdb", "oracle-ee", "oracle-ee-cdb":
 		databaseEngine = "Oracle"
 	case "sqlserver-ex", "sqlserver-web", "sqlserver-se", "sqlserver-ee":
 		databaseEngine = "SQL Server"
@@ -73,9 +78,9 @@ func (r *DBInstance) BuildResource() *schema.Resource {
 		databaseEdition = "Standard"
 	case "oracle-se1":
 		databaseEdition = "Standard One"
-	case "oracle-se2":
+	case "oracle-se2", "oracle-se2-cdb":
 		databaseEdition = "Standard Two"
-	case "oracle-ee", "sqlserver-ee":
+	case "oracle-ee", "oracle-ee-cdb", "sqlserver-ee":
 		databaseEdition = "Enterprise"
 	case "sqlserver-ex":
 		databaseEdition = "Express"
@@ -85,7 +90,7 @@ func (r *DBInstance) BuildResource() *schema.Resource {
 
 	var licenseModel string
 	engineVal := strings.ToLower(r.Engine)
-	if engineVal == "oracle-se1" || engineVal == "oracle-se2" || strings.HasPrefix(engineVal, "sqlserver-") {
+	if engineVal == "oracle-se1" || engineVal == "oracle-se2" || engineVal == "oracle-se2-cdb" || strings.HasPrefix(engineVal, "sqlserver-") {
 		licenseModel = "License included"
 	}
 	if strings.ToLower(r.LicenseModel) == "bring-your-own-license" {
@@ -134,9 +139,27 @@ func (r *DBInstance) BuildResource() *schema.Resource {
 		})
 	}
 
+	purchaseOptionLabel := "on-demand"
+	priceFilter := &schema.PriceFilter{
+		PurchaseOption: strPtr("on_demand"),
+	}
+
+	var err error
+	if r.ReservedInstanceTerm != nil {
+		resolver := &rdsReservationResolver{
+			term:          strVal(r.ReservedInstanceTerm),
+			paymentOption: strVal(r.ReservedInstancePaymentOption),
+		}
+		priceFilter, err = resolver.PriceFilter()
+		if err != nil {
+			log.Warnf(err.Error())
+		}
+		purchaseOptionLabel = "reserved"
+	}
+
 	costComponents := []*schema.CostComponent{
 		{
-			Name:           fmt.Sprintf("Database instance (on-demand, %s, %s)", deploymentOption, r.InstanceClass),
+			Name:           fmt.Sprintf("Database instance (%s, %s, %s)", purchaseOptionLabel, deploymentOption, r.InstanceClass),
 			Unit:           "hours",
 			UnitMultiplier: decimal.NewFromInt(1),
 			HourlyQuantity: decimalPtr(decimal.NewFromInt(1)),
@@ -147,9 +170,7 @@ func (r *DBInstance) BuildResource() *schema.Resource {
 				ProductFamily:    strPtr("Database Instance"),
 				AttributeFilters: instanceAttributeFilters,
 			},
-			PriceFilter: &schema.PriceFilter{
-				PurchaseOption: strPtr("on_demand"),
-			},
+			PriceFilter: priceFilter,
 		},
 		{
 			Name:            storageName,
@@ -164,6 +185,7 @@ func (r *DBInstance) BuildResource() *schema.Resource {
 				AttributeFilters: []*schema.AttributeFilter{
 					{Key: "volumeType", Value: strPtr(volumeType)},
 					{Key: "deploymentOption", Value: strPtr(deploymentOption)},
+					{Key: "databaseEngine", Value: strPtr("Any")},
 				},
 			},
 		},
@@ -200,6 +222,7 @@ func (r *DBInstance) BuildResource() *schema.Resource {
 				ProductFamily: strPtr("Provisioned IOPS"),
 				AttributeFilters: []*schema.AttributeFilter{
 					{Key: "deploymentOption", Value: strPtr(deploymentOption)},
+					{Key: "databaseEngine", Value: strPtr("Any")},
 				},
 			},
 		})

@@ -226,6 +226,12 @@ iVBORw0KGgoAAAANSUhEUgAAAMAAAADACAMAAABlApw1AAAABGdBTUEAALGPC/xhBQAAAAFzUkdCAK7O
 {{define "projectBlock"}}
   {{$fields := .Options.Fields}}
   <p class="project-name">Project: {{.Project | projectLabel}}</p>
+  {{- if .Project | projectModulePath }}
+  <p class="project-name">Module path: {{.Project | projectModulePath}}</p>
+  {{- end }}
+  {{- if .Project | projectWorkspace }}
+  <p class="project-name">Workspace: {{.Project | projectWorkspace}}</p>
+  {{- end }}
   <table class="breakdown">
     <thead>
       {{template "tableHeaders" dict "Fields" $fields}}
@@ -292,6 +298,9 @@ var CommentMarkdownWithHTMLTemplate = `
 {{- define "summaryRow"}}
     <tr>
       <td>{{ truncateMiddle .Name 64 "..." }}</td>
+  {{- range .MetadataFields }}
+      <td>{{ truncateMiddle . 64 "..." }}</td>
+  {{- end }}
       <td align="right">{{ formatCost .PastCost }}</td>
       <td align="right">{{ formatCost .Cost }}</td>
       <td>{{ formatCostChange .PastCost .Cost }}</td>
@@ -301,6 +310,9 @@ var CommentMarkdownWithHTMLTemplate = `
 <table>
   <thead>
     <td>Project</td>
+{{- range metadataHeaders }}
+    <td>{{ . }}</td>
+{{- end }}
     <td>Previous</td>
     <td>New</td>
     <td>Diff</td>
@@ -309,10 +321,10 @@ var CommentMarkdownWithHTMLTemplate = `
   <tbody>
   {{- range .Root.Projects }}
     {{- if hasDiff . }}
-      {{- template "summaryRow" dict "Name" .Name "PastCost" .PastBreakdown.TotalMonthlyCost "Cost" .Breakdown.TotalMonthlyCost  }}
+      {{- template "summaryRow" dict "Name" .Name "MetadataFields" (. | metadataFields) "PastCost" .PastBreakdown.TotalMonthlyCost "Cost" .Breakdown.TotalMonthlyCost  }}
     {{- end }}
   {{- end }}
-  {{- template "summaryRow" dict "Name" "All projects" "PastCost" .Root.PastTotalMonthlyCost "Cost" .Root.TotalMonthlyCost  }}
+  {{- template "summaryRow" dict "Name" "All projects" "MetadataFields" (metadataPlaceholders) "PastCost" .Root.PastTotalMonthlyCost "Cost" .Root.TotalMonthlyCost  }}
   </tbody>
 </table>
 
@@ -326,7 +338,7 @@ var CommentMarkdownWithHTMLTemplate = `
 {{- else }}
   <tbody>
   {{- range .Root.Projects }}
-    {{- template "summaryRow" dict "Name" .Name "PastCost" .PastBreakdown.TotalMonthlyCost "Cost" .Breakdown.TotalMonthlyCost  }}
+    {{- template "summaryRow" dict "Name" .Name "MetadataFields" (. | metadataFields) "PastCost" .PastBreakdown.TotalMonthlyCost "Cost" .Breakdown.TotalMonthlyCost  }}
   {{- end }}
   </tbody>
 </table>
@@ -367,27 +379,28 @@ This comment will be replaced when the cost estimate changes
 {{- if .MarkdownOptions.IncludeFeedbackLink }}
 
 <sub>
-  Is this comment useful? <a href="https://www.infracost.io/feedback/submit/?value=yes" rel="noopener noreferrer" target="_blank">Yes</a>, <a href="https://www.infracost.io/feedback/submit/?value=no" rel="noopener noreferrer" target="_blank">No</a>
+  {{- $feedbackURL := (print .Options.DashboardEndpoint "/feedback/redirect?runId=" .Root.RunID) }}
+  Is this comment useful? <a href="{{ $feedbackURL }}&value=yes" rel="noopener noreferrer" target="_blank">Yes</a>, <a href="{{ $feedbackURL }}&value=no" rel="noopener noreferrer" target="_blank">No</a>, <a href="{{ $feedbackURL }}&value=other" rel="noopener noreferrer" target="_blank">Other</a>
 </sub>
 {{- end}}
 `
 
 var CommentMarkdownTemplate = `
 {{- define "summaryRow"}}
-| {{ truncateMiddle .Name 64 "..." }} | {{ formatCost .PastCost }} | {{ formatCost .Cost }} | {{ formatCostChange .PastCost .Cost }} |
+| {{ truncateMiddle .Name 64 "..." }}{{- range .MetadataFields }} | {{ . }} {{- end }} | {{ formatCost .PastCost }} | {{ formatCost .Cost }} | {{ formatCostChange .PastCost .Cost }} |
 {{- end }}
 {{- define "totalRow"}}
-| **{{ truncateMiddle .Name 64 "..." }}** | **{{ formatCost .PastCost }}** | **{{ formatCost .Cost }}** | **{{ formatCostChange .PastCost .Cost }}** |
+| **{{ truncateMiddle .Name 64 "..." }}**{{- range metadataHeaders }} | {{- end }} | **{{ formatCost .PastCost }}** | **{{ formatCost .Cost }}** | **{{ formatCostChange .PastCost .Cost }}** |
 {{- end }}
 ## Infracost estimate: **{{ formatCostChangeSentence .Root.Currency .Root.PastTotalMonthlyCost .Root.TotalMonthlyCost false }}**
 
-| **Project** | **Previous** | **New** | **Diff** |
-| ----------- | -----------: | ------: | -------- |
+| **Project**{{- range metadataHeaders }} | **{{ . }}** {{- end }} | **Previous** | **New** | **Diff** |
+| -----------{{- range metadataHeaders }} | ---------- {{- end }} | -----------: | ------: | -------- |
 
 {{- if gt (len .Root.Projects) 1  }}
   {{- range .Root.Projects }}
     {{- if hasDiff . }}
-      {{- template "summaryRow" dict "Name" .Name "PastCost" .PastBreakdown.TotalMonthlyCost "Cost" .Breakdown.TotalMonthlyCost  }}
+      {{- template "summaryRow" dict "Name" .Name "MetadataFields" (. | metadataFields) "PastCost" .PastBreakdown.TotalMonthlyCost "Cost" .Breakdown.TotalMonthlyCost  }}
     {{- end }}
   {{- end }}
   {{- template "totalRow" dict "Name" "All projects" "PastCost" .Root.PastTotalMonthlyCost "Cost" .Root.TotalMonthlyCost  }}
@@ -401,7 +414,7 @@ var CommentMarkdownTemplate = `
   {{- end }}
 {{- else }}
   {{- range .Root.Projects }}
-    {{- template "summaryRow" dict "Name" .Name "PastCost" .PastBreakdown.TotalMonthlyCost "Cost" .Breakdown.TotalMonthlyCost  }}
+    {{- template "summaryRow" dict "Name" .Name "MetadataFields" (. | metadataFields) "PastCost" .PastBreakdown.TotalMonthlyCost "Cost" .Breakdown.TotalMonthlyCost  }}
   {{- end }}
 {{- end }}
 
@@ -438,6 +451,7 @@ This comment will be replaced when the cost estimate changes
 {{- end }}
 {{- if .MarkdownOptions.IncludeFeedbackLink }}
 
-Is this comment useful? [Yes](https://www.infracost.io/feedback/submit/?value=yes), [No](https://www.infracost.io/feedback/submit/?value=no)
+{{- $feedbackURL := (print .Options.DashboardEndpoint "/feedback/redirect?runId=" .Root.RunID) }}
+Is this comment useful? [Yes]({{ $feedbackURL }}&value=yes), [No]({{ $feedbackURL }}&value=no), [Other]({{ $feedbackURL }}&value=other)
 {{- end }}
 `

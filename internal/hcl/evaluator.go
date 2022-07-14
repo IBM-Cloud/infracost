@@ -1,22 +1,39 @@
 package hcl
 
 import (
+	"errors"
 	"fmt"
 	"os"
 	"path/filepath"
 	"reflect"
+	"regexp"
 	"strings"
 
 	"github.com/hashicorp/hcl/v2"
 	"github.com/hashicorp/hcl/v2/ext/tryfunc"
+	"github.com/hashicorp/hcl/v2/hclsyntax"
+	"github.com/sirupsen/logrus"
 	yaml "github.com/zclconf/go-cty-yaml"
 	"github.com/zclconf/go-cty/cty"
+	"github.com/zclconf/go-cty/cty/convert"
 	"github.com/zclconf/go-cty/cty/function"
 	"github.com/zclconf/go-cty/cty/function/stdlib"
 	"github.com/zclconf/go-cty/cty/gocty"
 
 	"github.com/infracost/infracost/internal/hcl/funcs"
 	"github.com/infracost/infracost/internal/hcl/modules"
+	"github.com/infracost/infracost/internal/ui"
+)
+
+var (
+	errorNoVarValue     = errors.New("no value found")
+	modReplace          = regexp.MustCompile(`module\.`)
+	validBlocksToExpand = map[string]struct{}{
+		"resource": {},
+		"module":   {},
+		"dynamic":  {},
+		"data":     {},
+	}
 )
 
 const maxContextIterations = 32
@@ -29,8 +46,6 @@ type Evaluator struct {
 	// ctx is the master Context for evaluating the current set of Blocks. This is extremely important
 	// and gets slowly built up as the Evaluator runs across the list of Blocks.
 	ctx *Context
-	// blocks is the list of Blocks that the Evaluator will evaluate over.
-	blocks Blocks
 	// inputVars are the given input variables for this Evaluator run. At the root module level these are variables
 	// provided by the user as tfvars. Further down the config tree these input vars are module variables provided in
 	// HCL attributes.
@@ -41,103 +56,150 @@ type Evaluator struct {
 	// Terraform or Infracost init.
 	moduleMetadata *modules.Manifest
 	// visitedModules is a lookup map to hold information by the Evaluator of modules that it has already evaluated.
-	visitedModules map[string]struct{}
-	// projectRootPath is the path to the root module for this project.
-	projectRootPath string
-	// modulePath is the path to the local representation of the module as defined in ModulesManifest.
-	modulePath string
+	visitedModules map[string]map[string]cty.Value
+	// module defines the input and module path for the Evaluator. It is the root module of the config.
+	module Module
 	// workingDir is the current directory the evaluator is running within. This is used to set Context information on
 	// child modules that the evaluator visits.
 	workingDir string
 	// workspace is the Terraform workspace that the Evaluator is running within.
 	workspace string
+	// blockBuilder handles generating blocks in the evaluation step.
+	blockBuilder BlockBuilder
+	newSpinner   ui.SpinnerFunc
+	logger       *logrus.Entry
 }
 
 // NewEvaluator returns an Evaluator with Context initialised with top level variables.
 // This Context is then passed to all Blocks as child Context so that variables built in Evaluation
 // are propagated to the Block Attributes.
 func NewEvaluator(
-	projectRootPath string,
-	modulePath string,
+	module Module,
 	workingDir string,
-	blocks Blocks,
 	inputVars map[string]cty.Value,
 	moduleMetadata *modules.Manifest,
-	visitedModules map[string]struct{},
+	visitedModules map[string]map[string]cty.Value,
 	workspace string,
+	blockBuilder BlockBuilder,
+	spinFunc ui.SpinnerFunc,
+	logger *logrus.Entry,
 ) *Evaluator {
 	ctx := NewContext(&hcl.EvalContext{
-		Functions: expFunctions(modulePath),
-	}, nil)
+		Functions: expFunctions(module.RootPath),
+	}, nil, logger)
 
 	if visitedModules == nil {
-		visitedModules = make(map[string]struct{})
+		visitedModules = make(map[string]map[string]cty.Value)
+	}
+
+	modulePath, err := filepath.Rel(module.RootPath, module.ModulePath)
+	if err != nil {
+		logrus.WithError(err).WithFields(logrus.Fields{
+			"rootPath":   module.RootPath,
+			"modulePath": module.ModulePath,
+		}).Debug("Could not calculate relative path.module")
+
+		modulePath = module.ModulePath
 	}
 
 	// set the global evaluation parameters.
 	ctx.SetByDot(cty.StringVal(workspace), "terraform.workspace")
-	ctx.SetByDot(cty.StringVal(projectRootPath), "path.root")
+	ctx.SetByDot(cty.StringVal(module.RootPath), "path.root")
 	ctx.SetByDot(cty.StringVal(modulePath), "path.module")
-	ctx.SetByDot(cty.StringVal(workingDir), "path.cwd")
+	ctx.SetByDot(cty.StringVal(filepath.Join(workingDir, module.RootPath)), "path.cwd")
 
-	for _, b := range blocks {
+	for _, b := range module.Blocks {
 		b.SetContext(ctx.NewChild())
 	}
 
-	return &Evaluator{
-		modulePath:      modulePath,
-		projectRootPath: projectRootPath,
-		ctx:             ctx,
-		blocks:          blocks,
-		inputVars:       inputVars,
-		moduleMetadata:  moduleMetadata,
-		visitedModules:  visitedModules,
-		workspace:       workspace,
+	moduleName := module.Name
+	if moduleName == "" {
+		moduleName = "root"
 	}
+
+	l := logger.WithFields(logrus.Fields{
+		"module_name":   moduleName,
+		"module_source": module.Source,
+		"module_path":   module.ModulePath,
+	})
+
+	return &Evaluator{
+		module:         module,
+		ctx:            ctx,
+		inputVars:      inputVars,
+		moduleMetadata: moduleMetadata,
+		visitedModules: visitedModules,
+		workspace:      workspace,
+		workingDir:     workingDir,
+		blockBuilder:   blockBuilder,
+		newSpinner:     spinFunc,
+		logger:         l,
+	}
+}
+
+// MissingVars returns a list of names of the variable blocks with missing input values.
+func (e *Evaluator) MissingVars() []string {
+	var missing []string
+
+	blocks := e.module.Blocks.OfType("variable")
+	for _, block := range blocks {
+		_, v := e.evaluateVariable(block)
+		if v == errorNoVarValue {
+			missing = append(missing, fmt.Sprintf("'variable.%s'", block.Label()))
+		}
+	}
+
+	return missing
 }
 
 // Run builds the Evaluator Context using all the provided Blocks. It will build up the Context to hold
 // variable and reference information so that this can be used by Attribute evaluation. Run will also
 // parse and build up and child modules that are referenced in the Blocks and runs child Evaluator on
-// these Modules.
-func (e *Evaluator) Run() ([]*Module, error) {
+// this Module.
+func (e *Evaluator) Run() (*Module, error) {
+	if e.newSpinner != nil {
+		spin := e.newSpinner("Evaluating Terraform directory")
+		defer spin.Success()
+	}
+
 	var lastContext hcl.EvalContext
 	// first we need to evaluate the top level Context - so this can be passed to any child modules that are found.
+	e.logger.Debug("evaluating top level context")
 	e.evaluate(lastContext)
 
 	// let's load the modules now we have our top level context.
 	e.moduleCalls = e.loadModules()
+	e.logger.Debug("evaluating context after loading modules")
+	e.evaluate(lastContext)
 
 	// expand out resources and modules via count and evaluate again so that we can include
 	// any module outputs and or count references.
-	e.blocks = e.expandBlocks(e.blocks)
+	e.module.Blocks = e.expandBlocks(e.module.Blocks)
+	e.logger.Debug("evaluating context after expanding blocks")
 	e.evaluate(lastContext)
 
-	// returns all the evaluated Blocks under their given Modules.
+	// returns all the evaluated Blocks under their given Module.
 	return e.collectModules(), nil
 }
 
-func (e *Evaluator) collectModules() []*Module {
-	rootModule := &Module{Blocks: e.blocks, RootPath: e.projectRootPath, ModulePath: e.modulePath}
-	modules := []*Module{rootModule}
-
+func (e *Evaluator) collectModules() *Module {
 	for _, definition := range e.moduleCalls {
-		modules = append(modules, definition.Modules...)
+		e.module.Modules = append(e.module.Modules, definition.Module)
 	}
 
-	return modules
+	return &e.module
 }
 
+// evaluate runs a context evaluation loop until the context values are unchanged. We run this in a loop
+// because variables can change because of outputs from other blocks in the context. Once all outputs have
+// been evaluated and the context variables should remain unchanged. In reality 90% of cases will require
+// 2 loops, however other complex modules will take > 2.
 func (e *Evaluator) evaluate(lastContext hcl.EvalContext) {
-	// TODO: we need to work out why the evaluation step takes place in a loop. I have been unable to decipher
-	// why we need to evaluate the context at least twice. No tests that we've seen can replicated the scenario
-	// where lastContext.Variables change after the first `evaluateStep`. We should reach out to tfsec guys and
-	// work out why this loop was put in there. If they can't come up with a good reason we can nuke it and
-	// make the evaluate method much easier to understand.
 	for i := 0; i < maxContextIterations; i++ {
 		e.evaluateStep(i)
 
 		if reflect.DeepEqual(lastContext.Variables, e.ctx.Inner().Variables) {
+			e.logger.Debug("evaluated outputs are the same a last context, exiting")
 			break
 		}
 
@@ -154,7 +216,7 @@ func (e *Evaluator) evaluate(lastContext hcl.EvalContext) {
 // evaluateStep gets the values for all the Block types in the current Module that affect Context.
 // It then sets these values on the Context so that they can be used in Block Attribute evaluation.
 func (e *Evaluator) evaluateStep(i int) {
-	log.Debugf("Starting context evaluation for module %s iteration %d", e.modulePath, i+1)
+	e.logger.Debugf("starting context evaluation iteration %d", i+1)
 
 	e.ctx.Set(e.getValuesByBlockType("variable"), "var")
 	e.ctx.Set(e.getValuesByBlockType("locals"), "local")
@@ -174,44 +236,50 @@ func (e *Evaluator) evaluateStep(i int) {
 // evaluateModules loops over each of the moduleCalls in this Module and set a child Evaluator
 // to run on the child Module Blocks. It passes the Evaluator the top level module Attributes as input variables.
 func (e *Evaluator) evaluateModules() {
-	for _, module := range e.moduleCalls {
-		if _, ok := e.visitedModules[module.Definition.FullName()]; ok {
-			continue
+	for _, moduleCall := range e.moduleCalls {
+		fullName := moduleCall.Definition.FullName()
+		e.logger.Debugf("evaluating module call %s with source %s", fullName, moduleCall.Module.Source)
+		vars := moduleCall.Definition.Values().AsValueMap()
+		if oldVars, ok := e.visitedModules[fullName]; ok {
+			if reflect.DeepEqual(vars, oldVars) {
+				continue
+			}
+
+			e.logger.Debugf("module %s output vars have changed, evaluating again", fullName)
 		}
 
-		e.visitedModules[module.Definition.FullName()] = struct{}{}
+		e.visitedModules[fullName] = vars
 
-		vars := module.Definition.Values().AsValueMap()
 		moduleEvaluator := NewEvaluator(
-			e.projectRootPath,
-			module.Path,
+			Module{
+				Name:       fullName,
+				Source:     moduleCall.Module.Source,
+				Blocks:     moduleCall.Module.RawBlocks,
+				RawBlocks:  moduleCall.Module.RawBlocks,
+				RootPath:   e.module.RootPath,
+				ModulePath: moduleCall.Path,
+				Modules:    nil,
+				Parent:     &e.module,
+			},
 			e.workingDir,
-			module.Modules[0].Blocks,
 			vars,
 			e.moduleMetadata,
 			e.visitedModules,
 			e.workspace,
+			e.blockBuilder,
+			nil,
+			e.logger,
 		)
-		module.Modules, _ = moduleEvaluator.Run()
 
-		e.ctx.Set(moduleEvaluator.exportOutputs(), "module", module.Name)
+		moduleCall.Module, _ = moduleEvaluator.Run()
+		outputs := moduleEvaluator.exportOutputs()
+		e.ctx.Set(outputs, "module", moduleCall.Name)
 	}
 }
 
 // exportOutputs exports module outputs so that it can be used in Context evaluation.
 func (e *Evaluator) exportOutputs() cty.Value {
-	data := make(map[string]cty.Value)
-
-	for _, block := range e.blocks.OfType("output") {
-		attr := block.GetAttribute("value")
-		if attr == nil {
-			continue
-		}
-
-		data[block.Label()] = attr.Value()
-	}
-
-	return cty.ObjectVal(data)
+	return e.module.Blocks.Outputs(false)
 }
 
 func (e *Evaluator) expandBlocks(blocks Blocks) Blocks {
@@ -231,6 +299,8 @@ func (e *Evaluator) expandDynamicBlock(b *Block) {
 	}
 
 	for _, sub := range b.Children().OfType("dynamic") {
+		e.logger.Debugf("expanding block %s because a dynamic blocka was found %s", b.LocalName(), sub.LocalName())
+
 		blockName := sub.TypeLabel()
 		expanded := e.expandBlockForEaches([]*Block{sub})
 		for _, ex := range expanded {
@@ -246,14 +316,16 @@ func (e *Evaluator) expandBlockForEaches(blocks Blocks) Blocks {
 	var forEachFiltered Blocks
 	for _, block := range blocks {
 		forEachAttr := block.GetAttribute("for_each")
-		if forEachAttr == nil || block.IsCountExpanded() || (block.Type() != "resource" && block.Type() != "module" && block.Type() != "dynamic") {
+		if forEachAttr == nil || block.IsCountExpanded() || !shouldExpandBlock(block) {
 			forEachFiltered = append(forEachFiltered, block)
 			continue
 		}
 
+		e.logger.Debugf("expanding block %s because a for_each attribute was found", block.LocalName())
+
 		if !forEachAttr.Value().IsNull() && forEachAttr.Value().IsKnown() && forEachAttr.IsIterable() {
 			forEachAttr.Value().ForEachElement(func(key cty.Value, val cty.Value) bool {
-				clone := block.Clone(key)
+				clone := e.blockBuilder.CloneBlock(block, key)
 
 				ctx := clone.Context()
 
@@ -265,7 +337,6 @@ func (e *Evaluator) expandBlockForEaches(blocks Blocks) Blocks {
 				ctx.Set(key, block.TypeLabel(), "key")
 				ctx.Set(val, block.TypeLabel(), "value")
 
-				log.Debugf("Added %s from for_each", clone.Reference())
 				forEachFiltered = append(forEachFiltered, clone)
 
 				return false
@@ -276,30 +347,41 @@ func (e *Evaluator) expandBlockForEaches(blocks Blocks) Blocks {
 	return forEachFiltered
 }
 
+func shouldExpandBlock(block *Block) bool {
+	_, isValidType := validBlocksToExpand[block.Type()]
+	return isValidType
+}
+
 func (e *Evaluator) expandBlockCounts(blocks Blocks) Blocks {
 	var countFiltered Blocks
 	for _, block := range blocks {
 		countAttr := block.GetAttribute("count")
-		if countAttr == nil || block.IsCountExpanded() || (block.Type() != "resource" && block.Type() != "module") {
+		if countAttr == nil || !block.ShouldExpand() {
 			countFiltered = append(countFiltered, block)
 			continue
 		}
 
 		count := 1
-		if !countAttr.Value().IsNull() && countAttr.Value().IsKnown() {
-			if countAttr.Value().Type() == cty.Number {
-				f, _ := countAttr.Value().AsBigFloat().Float64()
+		value := countAttr.Value()
+		if !value.IsNull() && value.IsKnown() {
+			if value.Type() == cty.Number {
+				f, _ := value.AsBigFloat().Float64()
 				count = int(f)
 			}
 		}
 
+		e.logger.Debugf("expanding block %s because a count attribute of value %d was found", block.LocalName(), count)
+
+		vals := make([]cty.Value, count)
 		for i := 0; i < count; i++ {
 			c, _ := gocty.ToCtyValue(i, cty.Number)
-			clone := block.Clone(c)
-			block.TypeLabel()
-			log.Debugf("Added %s from count var", clone.Reference())
+			clone := e.blockBuilder.CloneBlock(block, c)
+
 			countFiltered = append(countFiltered, clone)
+			vals[i] = clone.Values()
 		}
+
+		e.ctx.SetByDot(cty.TupleVal(vals), block.Reference().String())
 	}
 
 	return countFiltered
@@ -325,7 +407,7 @@ func (e *Evaluator) copyVariables(from, to *Block) {
 
 	srcValue := e.ctx.Root().Get(fromBase, fromRel)
 	if srcValue == cty.NilVal {
-		log.Debugf("error trying to copyVariable from the source of '%s.%s'", fromBase, fromRel)
+		e.logger.Debugf("error trying to copyVariable from the source of '%s.%s'", fromBase, fromRel)
 		return
 	}
 	e.ctx.Root().Set(srcValue, fromBase, toRel)
@@ -341,15 +423,54 @@ func (e *Evaluator) evaluateVariable(b *Block) (cty.Value, error) {
 		return cty.NilVal, fmt.Errorf("cannot resolve variable with no attributes")
 	}
 
+	attribute := attributes["type"]
 	if override, exists := e.inputVars[b.Label()]; exists {
-		return override, nil
+		return convertType(override, attribute), nil
 	}
 
 	if def, exists := attributes["default"]; exists {
 		return def.Value(), nil
 	}
 
-	return cty.NilVal, fmt.Errorf("no value found")
+	return convertType(cty.NilVal, attribute), errorNoVarValue
+}
+
+func convertType(val cty.Value, attribute *Attribute) cty.Value {
+	if attribute == nil {
+		return val
+	}
+
+	var t string
+	switch v := attribute.HCLAttr.Expr.(type) {
+	case *hclsyntax.ScopeTraversalExpr:
+		t = v.Traversal.RootName()
+	case *hclsyntax.LiteralValueExpr:
+		t = attribute.Value().AsString()
+	}
+
+	switch t {
+	case "string":
+		return valueToType(val, cty.String)
+	case "number":
+		return valueToType(val, cty.Number)
+	case "bool":
+		return valueToType(val, cty.Bool)
+	}
+
+	return val
+}
+
+func valueToType(val cty.Value, want cty.Type) cty.Value {
+	if val == cty.NilVal {
+		return val
+	}
+
+	newVal, err := convert.Convert(val, want)
+	if err != nil {
+		return val
+	}
+
+	return newVal
 }
 
 func (e *Evaluator) evaluateOutput(b *Block) (cty.Value, error) {
@@ -365,7 +486,7 @@ func (e *Evaluator) evaluateOutput(b *Block) (cty.Value, error) {
 }
 
 func (e *Evaluator) getValuesByBlockType(blockType string) cty.Value {
-	blocksOfType := e.blocks.OfType(blockType)
+	blocksOfType := e.module.Blocks.OfType(blockType)
 	values := make(map[string]cty.Value)
 
 	for _, b := range blocksOfType {
@@ -373,47 +494,118 @@ func (e *Evaluator) getValuesByBlockType(blockType string) cty.Value {
 		case "variable": // variables are special in that their value comes from the "default" attribute
 			val, err := e.evaluateVariable(b)
 			if err != nil {
+				e.logger.WithError(err).Debugf("could not evaluate variable %s ignoring", b.FullName())
 				continue
 			}
+
+			e.logger.Debugf("adding variable %s to the evaluation context", b.Label())
 			values[b.Label()] = val
 		case "output":
 			val, err := e.evaluateOutput(b)
 			if err != nil {
+				e.logger.WithError(err).Debugf("could not evaluate output %s ignoring", b.FullName())
 				continue
 			}
+
+			e.logger.Debugf("adding output %s to the evaluation context", b.Label())
 			values[b.Label()] = val
 		case "locals":
 			for key, val := range b.Values().AsValueMap() {
+				e.logger.Debugf("adding local %s to the evaluation context", key)
+
 				values[key] = val
 			}
 		case "provider", "module":
 			if b.Label() == "" {
 				continue
 			}
+
+			e.logger.Debugf("adding %s %s to the evaluation context", b.Type(), b.Label())
 			values[b.Label()] = b.Values()
 		case "resource", "data":
 			if len(b.Labels()) < 2 {
 				continue
 			}
 
-			blockMap, ok := values[b.Labels()[0]]
-			if !ok {
-				values[b.Labels()[0]] = cty.ObjectVal(make(map[string]cty.Value))
-				blockMap = values[b.Labels()[0]]
-			}
-
-			valueMap := blockMap.AsValueMap()
-			if valueMap == nil {
-				valueMap = make(map[string]cty.Value)
-			}
-
-			valueMap[b.Labels()[1]] = b.Values()
-			values[b.Labels()[0]] = cty.ObjectVal(valueMap)
+			e.logger.Debugf("adding %s %s to the evaluation context", b.Type(), b.Label())
+			values[b.Labels()[0]] = e.evaluateResource(b, values)
 		}
 
 	}
 
 	return cty.ObjectVal(values)
+}
+
+func (e *Evaluator) evaluateResource(b *Block, values map[string]cty.Value) cty.Value {
+	labels := b.Labels()
+
+	blockMap, ok := values[labels[0]]
+	if !ok {
+		values[labels[0]] = cty.ObjectVal(make(map[string]cty.Value))
+		blockMap = values[labels[0]]
+	}
+
+	valueMap := blockMap.AsValueMap()
+	if valueMap == nil {
+		valueMap = make(map[string]cty.Value)
+	}
+
+	if k := b.Key(); k != nil {
+		e.logger.Debugf("expanding block %s to be available for for_each key %s", b.FullName(), *k)
+		valueMap[stripCount(labels[1])] = expandedEachBlockToValue(b, valueMap)
+		return cty.ObjectVal(valueMap)
+	}
+
+	if k := b.Index(); k != nil {
+		e.logger.Debugf("expanding block %s to be available for index key %d", b.FullName(), *k)
+		valueMap[stripCount(labels[1])] = expandCountBlockToValue(b, valueMap)
+		return cty.ObjectVal(valueMap)
+	}
+
+	valueMap[b.Labels()[1]] = b.Values()
+	return cty.ObjectVal(valueMap)
+}
+
+func expandCountBlockToValue(b *Block, existingValues map[string]cty.Value) cty.Value {
+	k := b.Index()
+	if k == nil {
+		return cty.NilVal
+	}
+
+	vals := existingValues[stripCount(b.Labels()[1])]
+	sourceTy := vals.Type()
+	isList := sourceTy.IsTupleType() || sourceTy.IsListType() || sourceTy.IsSetType()
+
+	var elements []cty.Value
+	if isList {
+		it := vals.ElementIterator()
+		for it.Next() {
+			_, v := it.Element()
+			elements = append(elements, v)
+		}
+	}
+
+	elements = append(elements, b.Values())
+	return cty.TupleVal(elements)
+}
+
+func expandedEachBlockToValue(b *Block, existingValues map[string]cty.Value) cty.Value {
+	k := b.Key()
+	if k == nil {
+		return cty.NilVal
+	}
+
+	ob := make(map[string]cty.Value)
+
+	eachMap := existingValues[stripCount(b.Labels()[1])]
+	if eachMap != cty.NilVal {
+		for e, v := range eachMap.AsValueMap() {
+			ob[e] = v
+		}
+	}
+
+	ob[*k] = b.Values()
+	return cty.ObjectVal(ob)
 }
 
 // loadModule takes in a module "x" {} block and loads resources etc. into e.moduleBlocks.
@@ -430,6 +622,7 @@ func (e *Evaluator) loadModule(b *Block) (*ModuleCall, error) {
 			sourceVal := attr.Value()
 			if sourceVal.Type() == cty.String {
 				source = sourceVal.AsString()
+				break
 			}
 		}
 	}
@@ -443,9 +636,9 @@ func (e *Evaluator) loadModule(b *Block) (*ModuleCall, error) {
 	if e.moduleMetadata != nil {
 		// if we have module metadata we can parse all the modules as they'll be cached locally!
 		for _, module := range e.moduleMetadata.Modules {
-			reg := "registry.terraform.io/" + source
-			if module.Source == source || module.Source == reg {
-				modulePath = filepath.Clean(filepath.Join(e.projectRootPath, module.Dir))
+			key := modReplace.ReplaceAllString(b.FullName(), "")
+			if module.Key == key {
+				modulePath = filepath.Clean(filepath.Join(e.module.RootPath, module.Dir))
 				break
 			}
 		}
@@ -458,31 +651,38 @@ func (e *Evaluator) loadModule(b *Block) (*ModuleCall, error) {
 		}
 
 		// combine the current calling module with relative source of the module
-		modulePath = filepath.Join(e.modulePath, source)
+		modulePath = filepath.Join(e.module.ModulePath, source)
 	}
 
-	blocks, err := b.getModuleBlocks(modulePath)
+	blocks, err := e.blockBuilder.BuildModuleBlocks(b, modulePath)
 	if err != nil {
 		return nil, err
 	}
-	log.Debugf("Loaded module '%s' (requested at %s)", modulePath, b.FullName())
+	e.logger.Debugf("loaded module '%s' (requested at %s)", modulePath, b.FullName())
 
 	return &ModuleCall{
 		Name:       b.Label(),
 		Path:       modulePath,
 		Definition: b,
-		Modules: []*Module{
-			{RootPath: e.projectRootPath, ModulePath: modulePath, Blocks: blocks},
+		Module: &Module{
+			Name:       b.TypeLabel(),
+			Source:     source,
+			Blocks:     blocks,
+			RawBlocks:  blocks,
+			RootPath:   e.module.RootPath,
+			ModulePath: modulePath,
+			Parent:     &e.module,
 		},
 	}, nil
 }
 
 // loadModules reads all module blocks and loads the underlying modules, adding blocks to moduleCalls.
 func (e *Evaluator) loadModules() []*ModuleCall {
-	blocks := e.blocks
+	e.logger.Debug("loading module calls")
 	var moduleDefinitions []*ModuleCall
 
-	expanded := e.expandBlocks(blocks.OfType("module"))
+	// TODO: if a module uses a count that depends on a module output, then the block expansion might be incorrect.
+	expanded := e.expandBlocks(e.module.Blocks.ModuleBlocks())
 
 	for _, moduleBlock := range expanded {
 		if moduleBlock.Label() == "" {
@@ -491,7 +691,7 @@ func (e *Evaluator) loadModules() []*ModuleCall {
 
 		moduleCall, err := e.loadModule(moduleBlock)
 		if err != nil {
-			log.Warnf("Failed to load module err: %s", err)
+			e.logger.WithError(err).Warnf("failed to load module %s ignoring", moduleBlock.LocalName())
 			continue
 		}
 

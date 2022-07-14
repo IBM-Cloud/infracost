@@ -7,21 +7,38 @@ import (
 
 func getComputeAddressRegistryItem() *schema.RegistryItem {
 	return &schema.RegistryItem{
-		Name:                "google_compute_address",
-		RFunc:               NewComputeAddress,
-		ReferenceAttributes: []string{},
+		Name:  "google_compute_address",
+		RFunc: newComputeAddress,
+		ReferenceAttributes: []string{
+			"google_compute_instance.network_interface.0.access_config.0.nat_ip",
+		},
 	}
 }
-func GetComputeGlobalAddressRegistryItem() *schema.RegistryItem {
+func getComputeGlobalAddressRegistryItem() *schema.RegistryItem {
 	return &schema.RegistryItem{
-		Name:                "google_compute_global_address",
-		RFunc:               NewComputeAddress,
-		ReferenceAttributes: []string{},
+		Name:  "google_compute_global_address",
+		RFunc: newComputeAddress,
+		ReferenceAttributes: []string{
+			"google_compute_instance.network_interface.0.access_config.0.nat_ip",
+		},
 	}
 }
 
-func NewComputeAddress(d *schema.ResourceData, u *schema.UsageData) *schema.Resource {
-	r := &google.ComputeAddress{Address: d.Address, Region: d.Get("region").String(), AddressType: d.Get("address_type").String()}
+func newComputeAddress(d *schema.ResourceData, u *schema.UsageData) *schema.Resource {
+	purchaseOption := ""
+	instanceRefs := d.References("google_compute_instance.network_interface.0.access_config.0.nat_ip")
+	if len(instanceRefs) > 0 {
+		purchaseOption = getComputePurchaseOption(instanceRefs[0].RawValues)
+	}
+
+	r := &google.ComputeAddress{
+		Address:                d.Address,
+		Region:                 d.Get("region").String(),
+		AddressType:            d.Get("address_type").String(),
+		Purpose:                d.Get("purpose").String(),
+		InstancePurchaseOption: purchaseOption,
+	}
 	r.PopulateUsage(u)
+
 	return r.BuildResource()
 }

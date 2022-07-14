@@ -9,18 +9,50 @@ import (
 	"path/filepath"
 	"regexp"
 	"strings"
+	"time"
 
 	log "github.com/sirupsen/logrus"
 )
 
 type ProjectMetadata struct {
-	Path               string `json:"path"`
-	Type               string `json:"type"`
-	VCSRepoURL         string `json:"vcsRepoUrl,omitempty"`
-	VCSSubPath         string `json:"vcsSubPath,omitempty"`
-	VCSPullRequestURL  string `json:"vcsPullRequestUrl,omitempty"`
-	TerraformWorkspace string `json:"terraformWorkspace,omitempty"`
+	Path                string `json:"path"`
+	InfracostCommand    string `json:"infracostCommand"`
+	Type                string `json:"type"`
+	TerraformModulePath string `json:"terraformModulePath,omitempty"`
+	TerraformWorkspace  string `json:"terraformWorkspace,omitempty"`
+
+	Branch            string    `json:"branch"`
+	Commit            string    `json:"commit"`
+	CommitAuthorName  string    `json:"commitAuthorName"`
+	CommitAuthorEmail string    `json:"commitAuthorEmail"`
+	CommitTimestamp   time.Time `json:"commitTimestamp"`
+	CommitMessage     string    `json:"commitMessage"`
+
+	VCSRepoURL           string `json:"vcsRepoUrl,omitempty"`
+	VCSSubPath           string `json:"vcsSubPath,omitempty"`
+	VCSProvider          string `json:"vcsProvider,omitempty"`
+	VCSBaseBranch        string `json:"vcsBaseBranch,omitempty"`
+	VCSPullRequestTitle  string `json:"vcsPullRequestTitle,omitempty"`
+	VCSPullRequestURL    string `json:"vcsPullRequestUrl,omitempty"`
+	VCSPullRequestAuthor string `json:"vcsPullRequestAuthor,omitempty"`
+	VCSPipelineRunID     string `json:"vcsPipelineRunId,omitempty"`
+	VCSPullRequestID     string `json:"vcsPullRequestId,omitempty"`
 }
+
+func (m *ProjectMetadata) WorkspaceLabel() string {
+	if m.TerraformWorkspace == "default" {
+		return ""
+	}
+
+	return m.TerraformWorkspace
+}
+
+// Projects is a slice of Project that is ordered alphabetically by project name.
+type Projects []*Project
+
+func (p Projects) Len() int           { return len(p) }
+func (p Projects) Swap(i, j int)      { p[i], p[j] = p[j], p[i] }
+func (p Projects) Less(i, j int) bool { return p[i].Name < p[j].Name }
 
 // Project contains the existing, planned state of
 // resources and the diff between them.
@@ -52,7 +84,7 @@ func (p *Project) AllResources() []*Resource {
 // CalculateDiff calculates the diff of past and current resources
 func (p *Project) CalculateDiff() {
 	if p.HasDiff {
-		p.Diff = calculateDiff(p.PastResources, p.Resources)
+		p.Diff = CalculateDiff(p.PastResources, p.Resources)
 	}
 }
 
@@ -67,11 +99,14 @@ func AllProjectResources(projects []*Project) []*Resource {
 	return resources
 }
 
-func GenerateProjectName(metadata *ProjectMetadata, dashboardEnabled bool) string {
+func GenerateProjectName(metadata *ProjectMetadata, projectName string, dashboardEnabled bool) string {
 	var n string
 
-	// If the VCS repo is set, create the name from that
-	if metadata.VCSRepoURL != "" {
+	// If there is a user defined project name, use it.
+	if projectName != "" {
+		n = projectName
+		// If the VCS repo is set, create the name from that
+	} else if metadata.VCSRepoURL != "" {
 		n = nameFromRepoURL(metadata.VCSRepoURL)
 
 		if metadata.VCSSubPath != "" {
@@ -88,10 +123,6 @@ func GenerateProjectName(metadata *ProjectMetadata, dashboardEnabled bool) strin
 		n = fmt.Sprintf("project_%s", shortHash(absPath, 8))
 	} else {
 		n = metadata.Path
-	}
-
-	if metadata.TerraformWorkspace != "" && metadata.TerraformWorkspace != "default" {
-		n += fmt.Sprintf(" (%s)", metadata.TerraformWorkspace)
 	}
 
 	return n

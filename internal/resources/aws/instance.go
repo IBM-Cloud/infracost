@@ -33,12 +33,13 @@ type Instance struct {
 	EBSBlockDevices                 []*EBSVolume
 
 	// "usage" args
-	OperatingSystem               *string `infracost_usage:"operating_system"`
-	ReservedInstanceType          *string `infracost_usage:"reserved_instance_type"`
-	ReservedInstanceTerm          *string `infracost_usage:"reserved_instance_term"`
-	ReservedInstancePaymentOption *string `infracost_usage:"reserved_instance_payment_option"`
-	MonthlyCPUCreditHours         *int64  `infracost_usage:"monthly_cpu_credit_hrs"`
-	VCPUCount                     *int64  `infracost_usage:"vcpu_count"`
+	OperatingSystem               *string  `infracost_usage:"operating_system"`
+	ReservedInstanceType          *string  `infracost_usage:"reserved_instance_type"`
+	ReservedInstanceTerm          *string  `infracost_usage:"reserved_instance_term"`
+	ReservedInstancePaymentOption *string  `infracost_usage:"reserved_instance_payment_option"`
+	MonthlyCPUCreditHours         *int64   `infracost_usage:"monthly_cpu_credit_hrs"`
+	VCPUCount                     *int64   `infracost_usage:"vcpu_count"`
+	MonthlyHours                  *float64 `infracost_usage:"monthly_hrs"`
 }
 
 var InstanceUsageSchema = []*schema.UsageItem{
@@ -48,6 +49,7 @@ var InstanceUsageSchema = []*schema.UsageItem{
 	{Key: "reserved_instance_payment_option", DefaultValue: "", ValueType: schema.String},
 	{Key: "monthly_cpu_credit_hrs", DefaultValue: 0, ValueType: schema.Int64},
 	{Key: "vcpu_count", DefaultValue: 0, ValueType: schema.Int64},
+	{Key: "monthly_hrs", DefaultValue: 730, ValueType: schema.Float64},
 }
 
 func (a *Instance) PopulateUsage(u *schema.UsageData) {
@@ -154,22 +156,35 @@ func (a *Instance) computeCostComponent() *schema.CostComponent {
 		}
 	}
 
+	priceFilter := &schema.PriceFilter{
+		PurchaseOption: strPtr(a.PurchaseOption),
+	}
+
 	if a.ReservedInstanceType != nil {
-		valid, err := a.validateReserveInstanceParams()
-		if err != "" {
-			log.Warnf(err)
+		resolver := &ec2ReservationResolver{
+			term:              strVal(a.ReservedInstanceTerm),
+			paymentOption:     strVal(a.ReservedInstancePaymentOption),
+			termOfferingClass: strVal(a.ReservedInstanceType),
 		}
-		if valid {
-			purchaseOptionLabel = "reserved"
-			return a.reservedInstanceCostComponent(osLabel, osFilterVal, purchaseOptionLabel)
+		reservedFilter, err := resolver.PriceFilter()
+		if err != nil {
+			log.Warnf(err.Error())
+		} else {
+			priceFilter = reservedFilter
 		}
+		purchaseOptionLabel = "reserved"
+	}
+
+	qty := decimal.NewFromFloat(730)
+	if a.MonthlyHours != nil {
+		qty = decimal.NewFromFloat(*a.MonthlyHours)
 	}
 
 	return &schema.CostComponent{
-		Name:           fmt.Sprintf("Instance usage (%s, %s, %s)", osLabel, purchaseOptionLabel, a.InstanceType),
-		Unit:           "hours",
-		UnitMultiplier: decimal.NewFromInt(1),
-		HourlyQuantity: decimalPtr(decimal.NewFromInt(1)),
+		Name:            fmt.Sprintf("Instance usage (%s, %s, %s)", osLabel, purchaseOptionLabel, a.InstanceType),
+		Unit:            "hours",
+		UnitMultiplier:  decimal.NewFromInt(1),
+		MonthlyQuantity: decimalPtr(qty),
 		ProductFilter: &schema.ProductFilter{
 			VendorName:    strPtr("aws"),
 			Region:        strPtr(a.Region),
@@ -184,76 +199,32 @@ func (a *Instance) computeCostComponent() *schema.CostComponent {
 				{Key: "capacitystatus", Value: strPtr("Used")},
 			},
 		},
-		PriceFilter: &schema.PriceFilter{
-			PurchaseOption: strPtr(a.PurchaseOption),
-		},
-	}
-}
-
-func (a *Instance) validateReserveInstanceParams() (bool, string) {
-	validTypes := []string{"convertible", "standard"}
-	if !stringInSlice(validTypes, strVal(a.ReservedInstanceType)) {
-		return false, fmt.Sprintf("Invalid reserved_instance_type, ignoring reserved options. Expected: convertible, standard. Got: %s", strVal(a.ReservedInstanceType))
-	}
-
-	validTerms := []string{"1_year", "3_year"}
-	if !stringInSlice(validTerms, strVal(a.ReservedInstanceTerm)) {
-		return false, fmt.Sprintf("Invalid reserved_instance_term, ignoring reserved options. Expected: 1_year, 3_year. Got: %s", strVal(a.ReservedInstanceTerm))
-	}
-
-	validOptions := []string{"no_upfront", "partial_upfront", "all_upfront"}
-	if !stringInSlice(validOptions, strVal(a.ReservedInstancePaymentOption)) {
-		return false, fmt.Sprintf("Invalid reserved_instance_payment_option, ignoring reserved options. Expected: no_upfront, partial_upfront, all_upfront. Got: %s", strVal(a.ReservedInstancePaymentOption))
-	}
-
-	return true, ""
-}
-
-func (a *Instance) reservedInstanceCostComponent(osLabel, osFilterVal, purchaseOptionLabel string) *schema.CostComponent {
-	reservedTermName := map[string]string{
-		"1_year": "1yr",
-		"3_year": "3yr",
-	}[strVal(a.ReservedInstanceTerm)]
-
-	reservedPaymentOptionName := map[string]string{
-		"no_upfront":      "No Upfront",
-		"partial_upfront": "Partial Upfront",
-		"all_upfront":     "All Upfront",
-	}[strVal(a.ReservedInstancePaymentOption)]
-
-	return &schema.CostComponent{
-		Name:           fmt.Sprintf("Instance usage (%s, %s, %s)", osLabel, purchaseOptionLabel, a.InstanceType),
-		Unit:           "hours",
-		UnitMultiplier: decimal.NewFromInt(1),
-		HourlyQuantity: decimalPtr(decimal.NewFromInt(1)),
-		ProductFilter: &schema.ProductFilter{
-			VendorName:    strPtr("aws"),
-			Region:        strPtr(a.Region),
-			Service:       strPtr("AmazonEC2"),
-			ProductFamily: strPtr("Compute Instance"),
-			AttributeFilters: []*schema.AttributeFilter{
-				{Key: "instanceType", Value: strPtr(a.InstanceType)},
-				{Key: "tenancy", Value: strPtr(a.Tenancy)},
-				{Key: "operatingSystem", Value: strPtr(osFilterVal)},
-				{Key: "preInstalledSw", Value: strPtr("NA")},
-				{Key: "capacitystatus", Value: strPtr("Used")},
-			},
-		},
-		PriceFilter: &schema.PriceFilter{
-			StartUsageAmount:   strPtr("0"),
-			TermOfferingClass:  a.ReservedInstanceType,
-			TermLength:         strPtr(reservedTermName),
-			TermPurchaseOption: strPtr(reservedPaymentOptionName),
-		},
+		PriceFilter: priceFilter,
 	}
 }
 
 func (a *Instance) ebsOptimizedCostComponent() *schema.CostComponent {
+	/**
+	 * EBS Optimized instances are billed hourly whenever the attached instance is live.
+	 *
+	 * From the EBS-opimized instance docs:
+	 *    > For Current Generation Instance types, EBS-optimization is enabled by default
+	 *    > at no additional cost. For Previous Generation Instances types, EBS-optimization
+	 *    > prices are on the Previous Generation Pricing Page.
+	 *    >
+	 *    > The hourly price for EBS-optimized instances is in addition to the hourly usage fee
+	 *    > for supported instance types.
+	 */
+	qty := decimal.NewFromFloat(730)
+	if a.MonthlyHours != nil {
+		qty = decimal.NewFromFloat(*a.MonthlyHours)
+	}
+
 	return &schema.CostComponent{
 		Name:                 "EBS-optimized usage",
 		Unit:                 "hours",
 		UnitMultiplier:       decimal.NewFromInt(1),
-		HourlyQuantity:       decimalPtr(decimal.NewFromInt(1)),
+		MonthlyQuantity:      decimalPtr(qty),
 		IgnoreIfMissingPrice: true,
 		ProductFilter: &schema.ProductFilter{
 			VendorName:    strPtr("aws"),
@@ -288,11 +259,23 @@ func (a *Instance) detailedMonitoringCostComponent() *schema.CostComponent {
 }
 
 func (a *Instance) elasticInferenceAcceleratorCostComponent() *schema.CostComponent {
+	/**
+	 * Elastic inference accelerators are billed hourly whenever the attached instance is live.
+	 *
+	 * From the elastic inference accelerator  docs:
+	 *    > With Amazon Elastic Inference, you pay only for the accelerator hours you use.
+	 *    > There are no upfront costs or minimum fees.
+	 */
+	qty := decimal.NewFromFloat(730)
+	if a.MonthlyHours != nil {
+		qty = decimal.NewFromFloat(*a.MonthlyHours)
+	}
+
 	return &schema.CostComponent{
-		Name:           fmt.Sprintf("Inference accelerator (%s)", strVal(a.ElasticInferenceAcceleratorType)),
-		Unit:           "hours",
-		UnitMultiplier: decimal.NewFromInt(1),
-		HourlyQuantity: decimalPtr(decimal.NewFromInt(1)),
+		Name:            fmt.Sprintf("Inference accelerator (%s)", strVal(a.ElasticInferenceAcceleratorType)),
+		Unit:            "hours",
+		UnitMultiplier:  decimal.NewFromInt(1),
+		MonthlyQuantity: decimalPtr(qty),
 		ProductFilter: &schema.ProductFilter{
 			VendorName:    strPtr("aws"),
 			Region:        strPtr(a.Region),
@@ -327,4 +310,37 @@ func (a *Instance) cpuCreditCostComponent(instanceFamily string) *schema.CostCom
 			},
 		},
 	}
+}
+
+type ec2ReservationResolver struct {
+	term              string
+	paymentOption     string
+	termOfferingClass string
+}
+
+// PriceFilter implementation for ec2ReservationResolver
+// Allowed values for ReservedInstanceTerm: ["1_year", "3_year"]
+// Allowed values for ReservedInstancePaymentOption: ["all_upfront", "partial_upfront", "no_upfront"]
+// Allowed values for ReservedTermOfferingClass: ["standard", "convertible"]
+func (r ec2ReservationResolver) PriceFilter() (*schema.PriceFilter, error) {
+	termLength := reservedTermsMapping[r.term]
+	purchaseOption := reservedPaymentOptionMapping[r.paymentOption]
+	validTypes := []string{"convertible", "standard"}
+	if !stringInSlice(validTypes, r.termOfferingClass) {
+		return nil, fmt.Errorf("Invalid reserved_instance_type, ignoring reserved options. Expected: convertible, standard. Got: %s", r.termOfferingClass)
+	}
+	validTerms := sliceOfKeysFromMap(reservedTermsMapping)
+	if !stringInSlice(validTerms, r.term) {
+		return nil, fmt.Errorf("Invalid reserved_instance_term, ignoring reserved options. Expected: %s. Got: %s", strings.Join(validTerms, ", "), r.term)
+	}
+	validOptions := sliceOfKeysFromMap(reservedPaymentOptionMapping)
+	if !stringInSlice(validOptions, r.paymentOption) {
+		return nil, fmt.Errorf("Invalid reserved_instance_payment_option, ignoring reserved options. Expected: %s. Got: %s", strings.Join(validOptions, ", "), r.paymentOption)
+	}
+	return &schema.PriceFilter{
+		StartUsageAmount:   strPtr("0"),
+		TermOfferingClass:  strPtr(r.termOfferingClass),
+		TermLength:         strPtr(termLength),
+		TermPurchaseOption: strPtr(purchaseOption),
+	}, nil
 }

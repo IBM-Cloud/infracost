@@ -1,12 +1,16 @@
 package modules
 
 import (
+	"io"
 	"os"
 	"path/filepath"
 	"sort"
 	"testing"
 
+	"github.com/sirupsen/logrus"
 	"github.com/stretchr/testify/assert"
+
+	"github.com/infracost/infracost/internal/credentials"
 )
 
 func testLoaderE2E(t *testing.T, path string, expectedModules []*ManifestModule, cleanup bool) {
@@ -15,7 +19,10 @@ func testLoaderE2E(t *testing.T, path string, expectedModules []*ManifestModule,
 		assert.NoError(t, err)
 	}
 
-	moduleLoader := NewModuleLoader(path)
+	logger := logrus.New()
+	logger.SetOutput(io.Discard)
+
+	moduleLoader := NewModuleLoader(path, &CredentialsSource{FetchToken: credentials.FindTerraformCloudToken}, logrus.NewEntry(logger))
 
 	manifest, err := moduleLoader.Load()
 	if !assert.NoError(t, err) {

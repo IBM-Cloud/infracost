@@ -1,9 +1,11 @@
 package main
 
 import (
+	"bytes"
 	"context"
 	"fmt"
 	"io/ioutil"
+	stdLog "log"
 	"os"
 	"runtime/debug"
 
@@ -14,11 +16,19 @@ import (
 	"github.com/spf13/pflag"
 
 	"github.com/infracost/infracost/internal/apiclient"
+	"github.com/infracost/infracost/internal/clierror"
 	"github.com/infracost/infracost/internal/config"
+	"github.com/infracost/infracost/internal/logging"
 	"github.com/infracost/infracost/internal/ui"
 	"github.com/infracost/infracost/internal/update"
 	"github.com/infracost/infracost/internal/version"
 )
+
+func init() {
+	// set the stdlib default logger to flush to discard, this is done as a number of
+	// Terraform libs use the std logger directly, which impacts Infracost output.
+	stdLog.SetOutput(ioutil.Discard)
+}
 
 func main() {
 	Run(nil, nil)
@@ -46,7 +56,7 @@ func Run(modifyCtx func(*config.RunContext), args *[]string) {
 
 	defer func() {
 		if appErr != nil {
-			if v, ok := appErr.(*panicError); ok {
+			if v, ok := appErr.(*clierror.PanicError); ok {
 				handleUnexpectedErr(ctx, v)
 			} else {
 				handleCLIError(ctx, appErr)
@@ -55,8 +65,8 @@ func Run(modifyCtx func(*config.RunContext), args *[]string) {
 
 		unexpectedErr := recover()
 		if unexpectedErr != nil {
-			withStack := fmt.Errorf("%s\n%s", unexpectedErr, debug.Stack())
-			handleUnexpectedErr(ctx, withStack)
+			panicErr := clierror.NewPanicError(fmt.Errorf("%s", unexpectedErr), debug.Stack())
+			handleUnexpectedErr(ctx, panicErr)
 		}
 
 		handleUpdateMessage(updateMessageChan)
@@ -76,6 +86,15 @@ func Run(modifyCtx func(*config.RunContext), args *[]string) {
 	appErr = rootCmd.Execute()
 }
 
+type debugWriter struct {
+	f *os.File
+}
+
+func (d debugWriter) Write(p []byte) (n int, err error) {
+	p = bytes.Trim(p, " \n\t")
+	return d.f.Write(append(p, []byte(",\n")...))
+}
+
 func newRootCmd(ctx *config.RunContext) *cobra.Command {
 	rootCmd := &cobra.Command{
 		Use:     "infracost",
@@ -86,29 +105,75 @@ func newRootCmd(ctx *config.RunContext) *cobra.Command {
 %s
   Quick start: https://infracost.io/docs
   Add cost estimates to your pull requests: https://infracost.io/cicd`, ui.BoldString("DOCS")),
-		Example: `  Show cost diff from Terraform directory, using any required flags:
+		Example: `  Show cost diff from Terraform directory:
 
-      infracost diff --path /path/to/code --terraform-plan-flags "-var-file=my.tfvars"
+      infracost breakdown --path /code --format json --out-file infracost-base.json
+      # Make Terraform code changes
+      infracost diff --path /code --compare-to infracost-base.json
 
-  Show full cost breakdown from Terraform directory, using any required flags:
+  Show cost breakdown from Terraform directory:
 
-      infracost breakdown --path /path/to/code --terraform-plan-flags "-var-file=my.tfvars"`,
+      infracost breakdown --path /code --terraform-var-file my.tfvars`,
 		SilenceErrors: true,
 		PersistentPreRunE: func(cmd *cobra.Command, args []string) error {
 			cmd.SilenceUsage = true
 			ctx.SetContextValue("command", cmd.Name())
+			if cmd.Name() == "comment" || (cmd.Parent() != nil && cmd.Parent().Name() == "comment") {
+				ctx.SetIsInfracostComment()
+			}
+			out, _ := cmd.Flags().GetBool("debug-report")
+			if out {
+				debugFile := "infracost-debug-report.json"
+				var f *os.File
+				var err error
 
-			return loadGlobalFlags(ctx, cmd)
+				if _, serr := os.Stat(debugFile); serr != nil {
+					f, err = os.OpenFile(debugFile, os.O_RDWR|os.O_CREATE|os.O_TRUNC, 0755)
+				} else {
+					f, err = os.Create(debugFile)
+				}
+
+				if err != nil {
+					return fmt.Errorf("could not generate debug report file %w", err)
+				}
+				_, _ = f.WriteString("[\n")
+
+				writer := debugWriter{f: f}
+				ctx.ErrWriter = writer
+				ctx.Config.SetLogWriter(writer)
+			}
+			err := loadGlobalFlags(ctx, cmd)
+			if err != nil {
+				return err
+			}
+
+			loadCloudSettings(ctx)
+			return nil
 		},
 		RunE: func(cmd *cobra.Command, args []string) error {
 			// Show the help
 			return cmd.Help()
 		},
+		PersistentPostRunE: func(cmd *cobra.Command, args []string) error {
+			out, _ := cmd.Flags().GetBool("debug-report")
+			if out {
+				if f, ok := ctx.Config.LogWriter().(debugWriter); ok {
+					_, _ = f.f.WriteString("{\"msg\":\"program finished\"}\n")
+
+					_, _ = f.f.WriteString("]")
+					_ = f.f.Close()
+				}
+			}
+
+			return nil
+		},
 	}
 
 	rootCmd.PersistentFlags().Bool("no-color", false, "Turn off colored output")
 	rootCmd.PersistentFlags().String("log-level", "", "Log level (trace, debug, info, warn, error, fatal)")
+	rootCmd.PersistentFlags().Bool("debug-report", false, "Generate a debug report file which can be sent to Infracost team")
 
+	rootCmd.AddCommand(authCmd(ctx))
 	rootCmd.AddCommand(registerCmd(ctx))
 	rootCmd.AddCommand(configureCmd(ctx))
 	rootCmd.AddCommand(diffCmd(ctx))
@@ -162,11 +227,28 @@ func startUpdateCheck(ctx *config.RunContext, c chan *update.Info) {
 	go func() {
 		updateInfo, err := update.CheckForUpdate(ctx)
 		if err != nil {
-			log.Debugf("error checking for update: %v", err)
+			logging.Logger.WithError(err).Debug("error checking for Infracost CLI update")
 		}
 		c <- updateInfo
 		close(c)
 	}()
+}
+
+func loadCloudSettings(ctx *config.RunContext) {
+	if ctx.Config.IsSelfHosted() || (ctx.Config.EnableCloud != nil && !*ctx.Config.EnableCloud) {
+		return
+	}
+
+	dashboardClient := apiclient.NewDashboardAPIClient(ctx)
+	result, err := dashboardClient.QueryCLISettings()
+	if err != nil {
+		logging.Logger.WithError(err).Debug("Failed to load settings from Infracost Cloud ")
+		// ignore the error so the command can continue without failing
+		return
+	}
+	logging.Logger.WithFields(log.Fields{"result": fmt.Sprintf("%+v", result)}).Debug("Successfully loaded settings from Infracost Cloud")
+
+	ctx.Config.EnableCloudForComment = result.CloudEnabled
 }
 
 func checkAPIKey(apiKey string, apiEndpoint string, defaultEndpoint string) error {
@@ -185,18 +267,18 @@ func handleCLIError(ctx *config.RunContext, cliErr error) {
 		ui.PrintError(ctx.ErrWriter, cliErr.Error())
 	}
 
-	err := apiclient.ReportCLIError(ctx, cliErr)
+	err := apiclient.ReportCLIError(ctx, cliErr, true)
 	if err != nil {
-		log.Warnf("Error reporting CLI error: %s", err)
+		logging.Logger.WithError(err).Warn("error reporting CLI error")
 	}
 }
 
 func handleUnexpectedErr(ctx *config.RunContext, err error) {
 	ui.PrintUnexpectedErrorStack(ctx.ErrWriter, err)
 
-	err = apiclient.ReportCLIError(ctx, err)
+	err = apiclient.ReportCLIError(ctx, err, false)
 	if err != nil {
-		log.Warnf("Error reporting unexpected error: %s", err)
+		logging.Logger.WithError(err).Warn("error sending unexpected runtime error")
 	}
 }
 
@@ -215,6 +297,9 @@ func handleUpdateMessage(updateMessageChan chan *update.Info) {
 }
 
 func loadGlobalFlags(ctx *config.RunContext, cmd *cobra.Command) error {
+	if ctx.IsCIRun() {
+		ctx.Config.NoColor = true
+	}
 	if cmd.Flags().Changed("no-color") {
 		ctx.Config.NoColor, _ = cmd.Flags().GetBool("no-color")
 	}
@@ -222,13 +307,24 @@ func loadGlobalFlags(ctx *config.RunContext, cmd *cobra.Command) error {
 
 	if cmd.Flags().Changed("log-level") {
 		ctx.Config.LogLevel, _ = cmd.Flags().GetString("log-level")
-		err := ctx.Config.ConfigureLogger()
+		err := logging.ConfigureBaseLogger(ctx.Config)
+		if err != nil {
+			return err
+		}
+	}
+
+	if cmd.Flags().Changed("debug-report") {
+		ctx.Config.DebugReport, _ = cmd.Flags().GetBool("debug-report")
+		err := logging.ConfigureBaseLogger(ctx.Config)
 		if err != nil {
 			return err
 		}
 	}
 
 	ctx.SetContextValue("dashboardEnabled", ctx.Config.EnableDashboard)
+	if ctx.Config.EnableCloud != nil {
+		ctx.SetContextValue("cloudEnabled", ctx.Config.EnableCloud)
+	}
 	ctx.SetContextValue("isDefaultPricingAPIEndpoint", ctx.Config.PricingAPIEndpoint == ctx.Config.DefaultPricingAPIEndpoint)
 
 	flagNames := make([]string, 0)
@@ -255,7 +351,7 @@ func saveOutFileWithMsg(ctx *config.RunContext, cmd *cobra.Command, outFile, suc
 	}
 
 	if ctx.Config.IsLogging() {
-		log.Info(successMsg)
+		logging.Logger.Info(successMsg)
 	} else {
 		cmd.PrintErrf("%s\n", successMsg)
 	}

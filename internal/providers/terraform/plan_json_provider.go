@@ -10,14 +10,16 @@ import (
 )
 
 type PlanJSONProvider struct {
-	ctx  *config.ProjectContext
-	Path string
+	ctx                  *config.ProjectContext
+	Path                 string
+	includePastResources bool
 }
 
-func NewPlanJSONProvider(ctx *config.ProjectContext) *PlanJSONProvider {
+func NewPlanJSONProvider(ctx *config.ProjectContext, includePastResources bool) *PlanJSONProvider {
 	return &PlanJSONProvider{
-		ctx:  ctx,
-		Path: ctx.ProjectConfig.Path,
+		ctx:                  ctx,
+		Path:                 ctx.ProjectConfig.Path,
+		includePastResources: includePastResources,
 	}
 }
 
@@ -48,21 +50,26 @@ func (p *PlanJSONProvider) LoadResources(usage map[string]*schema.UsageData) ([]
 		return []*schema.Project{}, fmt.Errorf("Error reading Terraform plan JSON file %w", err)
 	}
 
-	return p.LoadResourcesFromSrc(usage, j, spinner)
+	project, err := p.LoadResourcesFromSrc(usage, j, spinner)
+	if err != nil {
+		return nil, err
+	}
+
+	return []*schema.Project{project}, nil
 }
 
-func (p *PlanJSONProvider) LoadResourcesFromSrc(usage map[string]*schema.UsageData, j []byte, spinner *ui.Spinner) ([]*schema.Project, error) {
+func (p *PlanJSONProvider) LoadResourcesFromSrc(usage map[string]*schema.UsageData, j []byte, spinner *ui.Spinner) (*schema.Project, error) {
 	metadata := config.DetectProjectMetadata(p.ctx.ProjectConfig.Path)
 	metadata.Type = p.Type()
 	p.AddMetadata(metadata)
-	name := schema.GenerateProjectName(metadata, p.ctx.RunContext.Config.EnableDashboard)
+	name := schema.GenerateProjectName(metadata, p.ctx.ProjectConfig.Name, p.ctx.RunContext.IsCloudEnabled())
 
 	project := schema.NewProject(name, metadata)
-	parser := NewParser(p.ctx)
+	parser := NewParser(p.ctx, p.includePastResources)
 
 	pastResources, resources, err := parser.parseJSON(j, usage)
 	if err != nil {
-		return []*schema.Project{project}, fmt.Errorf("Error parsing Terraform plan JSON file %w", err)
+		return project, fmt.Errorf("Error parsing Terraform plan JSON file %w", err)
 	}
 
 	project.PastResources = pastResources
@@ -71,5 +78,5 @@ func (p *PlanJSONProvider) LoadResourcesFromSrc(usage map[string]*schema.UsageDa
 	if spinner != nil {
 		spinner.Success()
 	}
-	return []*schema.Project{project}, nil
+	return project, nil
 }

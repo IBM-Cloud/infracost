@@ -8,9 +8,11 @@ import (
 	"strings"
 	"sync"
 
-	log "github.com/sirupsen/logrus"
+	"github.com/sirupsen/logrus"
 
+	"github.com/infracost/infracost/internal/logging"
 	"github.com/infracost/infracost/internal/schema"
+	"github.com/infracost/infracost/internal/vcs"
 )
 
 type ProjectContexter interface {
@@ -20,27 +22,38 @@ type ProjectContexter interface {
 type ProjectContext struct {
 	RunContext    *RunContext
 	ProjectConfig *Project
+	logger        *logrus.Entry
 	contextVals   map[string]interface{}
-	mu            *sync.Mutex
+	mu            *sync.RWMutex
 
 	UsingCache bool
 	CacheErr   string
 }
 
-func NewProjectContext(runCtx *RunContext, projectCfg *Project) *ProjectContext {
+func NewProjectContext(runCtx *RunContext, projectCfg *Project, fields logrus.Fields) *ProjectContext {
+	contextLogger := logging.Logger.WithFields(fields)
+
 	return &ProjectContext{
 		RunContext:    runCtx,
 		ProjectConfig: projectCfg,
+		logger:        contextLogger,
 		contextVals:   map[string]interface{}{},
-		mu:            &sync.Mutex{},
+		mu:            &sync.RWMutex{},
 	}
 }
 
-func EmptyProjectContext() *ProjectContext {
-	return &ProjectContext{
-		RunContext:    EmptyRunContext(),
-		ProjectConfig: &Project{},
-		contextVals:   map[string]interface{}{},
+func (p *ProjectContext) Logger() *logrus.Entry {
+	if p.logger == nil {
+		return logging.Logger.WithFields(p.logFields())
+	}
+
+	return p.logger.WithFields(p.logFields())
+}
+
+func (p *ProjectContext) logFields() logrus.Fields {
+	return logrus.Fields{
+		"project_name": p.ProjectConfig.Name,
+		"project_path": p.ProjectConfig.Path,
 	}
 }
 
@@ -51,6 +64,8 @@ func (c *ProjectContext) SetContextValue(key string, value interface{}) {
 }
 
 func (c *ProjectContext) ContextValues() map[string]interface{} {
+	c.mu.RLock()
+	defer c.mu.RUnlock()
 	return c.contextVals
 }
 
@@ -85,17 +100,42 @@ func DetectProjectMetadata(path string) *schema.ProjectMetadata {
 
 	vcsRepoURL = stripVCSRepoPassword(vcsRepoURL)
 
-	return &schema.ProjectMetadata{
+	meta, err := vcs.MetadataFetcher.Get(path)
+	if err != nil {
+		logging.Logger.WithError(err).Debugf("failed to fetch vcs metadata for path %s", path)
+	}
+
+	pm := &schema.ProjectMetadata{
 		Path:               path,
+		TerraformWorkspace: terraformWorkspace,
+		Branch:             meta.Branch.Name,
+		Commit:             meta.Commit.SHA,
+		CommitAuthorEmail:  meta.Commit.AuthorEmail,
+		CommitAuthorName:   meta.Commit.AuthorName,
+		CommitTimestamp:    meta.Commit.Time.UTC(),
+		CommitMessage:      meta.Commit.Message,
 		VCSRepoURL:         vcsRepoURL,
 		VCSSubPath:         vcsSubPath,
 		VCSPullRequestURL:  vcsPullRequestURL,
-		TerraformWorkspace: terraformWorkspace,
 	}
+
+	if meta.PullRequest != nil {
+		pm.VCSProvider = meta.PullRequest.VCSProvider
+		pm.VCSPullRequestID = meta.PullRequest.ID
+		pm.VCSBaseBranch = meta.PullRequest.BaseBranch
+		pm.VCSPullRequestTitle = meta.PullRequest.Title
+		pm.VCSPullRequestAuthor = meta.PullRequest.Author
+	}
+
+	if meta.Pipeline != nil {
+		pm.VCSPipelineRunID = meta.Pipeline.ID
+	}
+
+	return pm
 }
 
 func gitRepo(path string) string {
-	log.Debugf("Checking if %s is a git repo", path)
+	logging.Logger.Debugf("Checking if %s is a git repo", path)
 	cmd := exec.Command("git", "ls-remote", "--get-url")
 
 	if isDir(path) {
@@ -106,7 +146,7 @@ func gitRepo(path string) string {
 
 	out, err := cmd.Output()
 	if err != nil {
-		log.Debugf("Could not detect a git repo at %s", path)
+		logging.Logger.WithError(err).Debugf("could not detect a git repo at %s", path)
 		return ""
 	}
 	return strings.Split(string(out), "\n")[0]
@@ -115,19 +155,19 @@ func gitRepo(path string) string {
 func gitSubPath(path string) string {
 	topLevel, err := gitToplevel(path)
 	if err != nil {
-		log.Debugf("Could not get git top level directory for %s", path)
+		logging.Logger.WithError(err).Debugf("Could not get git top level directory for %s", path)
 		return ""
 	}
 
 	absPath, err := filepath.Abs(path)
 	if err != nil {
-		log.Debugf("Could not get absolute path for %s", path)
+		logging.Logger.WithError(err).Debugf("Could not get absolute path for %s", path)
 		return ""
 	}
 
 	subPath, err := filepath.Rel(topLevel, absPath)
 	if err != nil {
-		log.Debugf("Could not get relative path for %s from %s", absPath, topLevel)
+		logging.Logger.WithError(err).Debugf("Could not get relative path for %s from %s", absPath, topLevel)
 		return ""
 	}
 

@@ -4,10 +4,11 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/infracost/infracost/internal/schema"
 	"github.com/shopspring/decimal"
 	log "github.com/sirupsen/logrus"
 	"github.com/tidwall/gjson"
+
+	"github.com/infracost/infracost/internal/schema"
 )
 
 func GetAzureRMCosmosdbCassandraKeyspaceRegistryItem() *schema.RegistryItem {
@@ -45,6 +46,22 @@ func cosmosDBCostComponents(d *schema.ResourceData, u *schema.UsageData, account
 	// Find the region in from the passed-in account
 	region := lookupRegion(account, []string{"account_name", "resource_group_name"})
 	geoLocations := account.Get("geo_location").Array()
+
+	// The geo_location attribute is a required attribute however it can be an empty list because of
+	// expressions evaluating as nil, e.g. using a data block. If the geoLocations variable is empty
+	// we set it as a sane default which is using the location from the parent region.
+	if len(geoLocations) == 0 {
+		log.WithFields(log.Fields{
+			"resource": d.Address,
+		}).Debugf("empty set of geo_location attributes provided using fallback region %s", region)
+
+		geoLocations = []gjson.Result{
+			gjson.Parse(fmt.Sprintf(`{
+    "location": %q,
+    "failover_priority": 1
+  }`, region)),
+		}
+	}
 
 	costComponents := []*schema.CostComponent{}
 
@@ -310,7 +327,7 @@ func backupStorageCosmosCostComponents(account *schema.ResourceData, u *schema.U
 	if u != nil && u.Get("monthly_restored_data_gb").Exists() {
 		pitr = decimalPtr(decimal.NewFromInt(u.Get("monthly_restored_data_gb").Int()))
 	}
-	meterName = "Data Restore"
+	meterName = "Backup Data Restore"
 	skuName = "Backup"
 	productName = "Azure Cosmos DB - PITR"
 
@@ -362,7 +379,7 @@ func backupCosmosCostComponent(name, location, skuName, productName, meterName s
 			Service:       strPtr("Azure Cosmos DB"),
 			ProductFamily: strPtr("Databases"),
 			AttributeFilters: []*schema.AttributeFilter{
-				{Key: "meterName", Value: strPtr(meterName)},
+				{Key: "meterName", ValueRegex: strPtr(fmt.Sprintf("/%s/i", meterName))},
 				{Key: "skuName", Value: strPtr(skuName)},
 				{Key: "productName", Value: strPtr(productName)},
 			},

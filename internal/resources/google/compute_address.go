@@ -10,9 +10,11 @@ import (
 )
 
 type ComputeAddress struct {
-	Address     string
-	Region      string
-	AddressType string
+	Address                string
+	Region                 string
+	AddressType            string
+	Purpose                string
+	InstancePurchaseOption string
 }
 
 var ComputeAddressUsageSchema = []*schema.UsageItem{}
@@ -23,27 +25,38 @@ func (r *ComputeAddress) PopulateUsage(u *schema.UsageData) {
 
 func (r *ComputeAddress) BuildResource() *schema.Resource {
 	addressType := r.AddressType
-	if strings.ToLower(addressType) == "internal" {
+	isFreePurpose := r.Purpose != "" && strings.ToLower(r.Purpose) != "gce_endpoint"
+
+	if strings.ToLower(addressType) == "internal" || isFreePurpose {
 		return &schema.Resource{
-			Name:      r.Address,
-			NoPrice:   true,
-			IsSkipped: true, UsageSchema: ComputeAddressUsageSchema,
+			Name:        r.Address,
+			NoPrice:     true,
+			IsSkipped:   true,
+			UsageSchema: ComputeAddressUsageSchema,
 		}
 	}
 
+	costComponents := []*schema.CostComponent{}
+
+	switch r.InstancePurchaseOption {
+	case "on_demand":
+		costComponents = append(costComponents, r.standardVMComputeAddress())
+	case "preemptible":
+		costComponents = append(costComponents, r.preemptibleVMComputeAddress())
+	default:
+		costComponents = append(costComponents, r.unusedVMComputeAddress())
+	}
+
 	return &schema.Resource{
-		Name: r.Address,
-		CostComponents: []*schema.CostComponent{
-			r.standardVMComputeAddress(),
-			r.preemptibleVMComputeAddress(),
-			r.unusedVMComputeAddress(),
-		}, UsageSchema: ComputeAddressUsageSchema,
+		Name:           r.Address,
+		CostComponents: costComponents,
+		UsageSchema:    ComputeAddressUsageSchema,
 	}
 }
 
 func (r *ComputeAddress) standardVMComputeAddress() *schema.CostComponent {
 	return &schema.CostComponent{
-		Name:           "IP address (if used by standard VM)",
+		Name:           "IP address (standard VM)",
 		Unit:           "hours",
 		UnitMultiplier: decimal.NewFromInt(1),
 		HourlyQuantity: decimalPtr(decimal.NewFromInt(1)),
@@ -64,7 +77,7 @@ func (r *ComputeAddress) standardVMComputeAddress() *schema.CostComponent {
 
 func (r *ComputeAddress) preemptibleVMComputeAddress() *schema.CostComponent {
 	return &schema.CostComponent{
-		Name:           "IP address (if used by preemptible VM)",
+		Name:           "IP address (preemptible VM)",
 		Unit:           "hours",
 		UnitMultiplier: decimal.NewFromInt(1),
 		HourlyQuantity: decimalPtr(decimal.NewFromInt(1)),
@@ -85,7 +98,7 @@ func (r *ComputeAddress) preemptibleVMComputeAddress() *schema.CostComponent {
 
 func (r *ComputeAddress) unusedVMComputeAddress() *schema.CostComponent {
 	return &schema.CostComponent{
-		Name:           "IP address (if unused)",
+		Name:           "IP address (unused)",
 		Unit:           "hours",
 		UnitMultiplier: decimal.NewFromInt(1),
 		HourlyQuantity: decimalPtr(decimal.NewFromInt(1)),

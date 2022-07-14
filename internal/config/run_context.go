@@ -8,11 +8,13 @@ import (
 	"os"
 	"runtime"
 	"strings"
+	"sync"
 	"time"
 
 	"github.com/google/uuid"
 	log "github.com/sirupsen/logrus"
 
+	"github.com/infracost/infracost/internal/ui"
 	"github.com/infracost/infracost/internal/version"
 )
 
@@ -22,7 +24,10 @@ type RunContext struct {
 	Config      *Config
 	State       *State
 	contextVals map[string]interface{}
+	mu          *sync.RWMutex
 	StartTime   int64
+
+	isCommentCmd bool
 
 	OutWriter io.Writer
 	ErrWriter io.Writer
@@ -47,6 +52,7 @@ func NewRunContextFromEnv(rootCtx context.Context) (*RunContext, error) {
 		Config:      cfg,
 		State:       state,
 		contextVals: map[string]interface{}{},
+		mu:          &sync.RWMutex{},
 		StartTime:   time.Now().Unix(),
 	}
 
@@ -60,11 +66,33 @@ func EmptyRunContext() *RunContext {
 		Config:      &Config{},
 		State:       &State{},
 		contextVals: map[string]interface{}{},
+		mu:          &sync.RWMutex{},
 		StartTime:   time.Now().Unix(),
 		OutWriter:   os.Stdout,
 		ErrWriter:   os.Stderr,
 		Exit:        os.Exit,
 	}
+}
+
+var (
+	outputIndent = "  "
+)
+
+// NewWarningWriter returns a function that can be used to write a message to the RunContext.ErrWriter.
+// This can be useful to pass to functions or structs that don't use a full RunContext.
+func (r *RunContext) NewWarningWriter() ui.WriteWarningFunc {
+	return func(msg string) {
+		fmt.Fprintf(r.ErrWriter, "%s%s %s\n", outputIndent, ui.WarningString("Warning:"), msg)
+	}
+}
+
+// NewSpinner returns an ui.Spinner built from the RunContext.
+func (r *RunContext) NewSpinner(msg string) *ui.Spinner {
+	return ui.NewSpinner(msg, ui.SpinnerOptions{
+		EnableLogging: r.Config.IsLogging(),
+		NoColor:       r.Config.NoColor,
+		Indent:        outputIndent,
+	})
 }
 
 // Context returns the underlying context.
@@ -78,11 +106,26 @@ func (r *RunContext) UUID() uuid.UUID {
 }
 
 func (r *RunContext) SetContextValue(key string, value interface{}) {
+	r.mu.Lock()
 	r.contextVals[key] = value
+	r.mu.Unlock()
 }
 
 func (r *RunContext) ContextValues() map[string]interface{} {
+	r.mu.RLock()
+	defer r.mu.RUnlock()
 	return r.contextVals
+}
+
+func (r *RunContext) GetResourceWarnings() map[string]map[string]int {
+	if warnings := r.contextVals["resourceWarnings"]; warnings != nil {
+		return warnings.(map[string]map[string]int)
+	}
+	return nil
+}
+
+func (r *RunContext) SetResourceWarnings(resourceWarnings map[string]map[string]int) {
+	r.contextVals["resourceWarnings"] = resourceWarnings
 }
 
 func (r *RunContext) EventEnv() map[string]interface{} {
@@ -116,6 +159,7 @@ func (r *RunContext) loadInitialContextValues() {
 	r.SetContextValue("isDev", IsDev())
 	r.SetContextValue("os", runtime.GOOS)
 	r.SetContextValue("ciPlatform", ciPlatform())
+	r.SetContextValue("cliPlatform", os.Getenv("INFRACOST_CLI_PLATFORM"))
 	r.SetContextValue("ciScript", ciScript())
 	r.SetContextValue("ciPostCondition", os.Getenv("INFRACOST_CI_POST_CONDITION"))
 	r.SetContextValue("ciPercentageThreshold", os.Getenv("INFRACOST_CI_PERCENTAGE_THRESHOLD"))
@@ -123,6 +167,24 @@ func (r *RunContext) loadInitialContextValues() {
 
 func (r *RunContext) IsCIRun() bool {
 	return r.contextVals["ciPlatform"] != "" && !IsTest()
+}
+
+// SetIsInfracostComment identifies that the primary command being run is `infracost comment`
+func (r *RunContext) SetIsInfracostComment() {
+	r.isCommentCmd = true
+}
+
+func (r *RunContext) IsInfracostComment() bool {
+	return r.isCommentCmd
+}
+
+func (r *RunContext) IsCloudEnabled() bool {
+	if r.isCommentCmd && r.Config.EnableCloudForComment {
+		log.Debug("IsCloudEnabled is true for comment with org level setting enabled.")
+		return true
+	}
+
+	return (r.Config.EnableCloud != nil && *r.Config.EnableCloud) || r.Config.EnableDashboard
 }
 
 func baseVersion(v string) string {

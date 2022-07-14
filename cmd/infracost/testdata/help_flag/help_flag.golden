@@ -9,13 +9,15 @@ USAGE
   infracost [command]
 
 EXAMPLES
-  Show cost diff from Terraform directory, using any required flags:
+  Show cost diff from Terraform directory:
 
-      infracost diff --path /path/to/code --terraform-plan-flags "-var-file=my.tfvars"
+      infracost breakdown --path /code --format json --out-file infracost-base.json
+      # Make Terraform code changes
+      infracost diff --path /code --compare-to infracost-base.json
 
-  Show full cost breakdown from Terraform directory, using any required flags:
+  Show cost breakdown from Terraform directory:
 
-      infracost breakdown --path /path/to/code --terraform-plan-flags "-var-file=my.tfvars"
+      infracost breakdown --path /code --terraform-var-file my.tfvars
 
 AVAILABLE COMMANDS
   breakdown        Show breakdown of costs
@@ -28,6 +30,7 @@ AVAILABLE COMMANDS
   register         Register for a free Infracost API key
 
 FLAGS
+      --debug-report       Generate a debug report file which can be sent to Infracost team
   -h, --help               help for infracost
       --log-level string   Log level (trace, debug, info, warn, error, fatal)
       --no-color           Turn off colored output

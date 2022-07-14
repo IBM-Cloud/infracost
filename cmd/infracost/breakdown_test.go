@@ -2,6 +2,7 @@ package main_test
 
 import (
 	"io/ioutil"
+	"os"
 	"path"
 	"path/filepath"
 	"testing"
@@ -18,6 +19,17 @@ func TestBreakdownHelp(t *testing.T) {
 
 func TestBreakdownFormatHTML(t *testing.T) {
 	GoldenFileCommandTest(t, testutil.CalcGoldenFileTestdataDirName(), []string{"breakdown", "--format", "html", "--path", "./testdata/example_plan.json", "--usage-file", "./testdata/example_usage.yml"}, nil)
+}
+
+func TestBreakdownFormatHTMLProjectName(t *testing.T) {
+	GoldenFileCommandTest(t, testutil.CalcGoldenFileTestdataDirName(),
+		[]string{
+			"breakdown",
+			"--format", "html",
+			"--project-name", "my-custom-project-name",
+			"--path", "../../examples/terragrunt",
+			"--terraform-workspace", "testworkspace",
+		}, nil)
 }
 
 func TestBreakdownFormatJSON(t *testing.T) {
@@ -41,7 +53,50 @@ func TestBreakdownTerraformPlanJSON(t *testing.T) {
 }
 
 func TestBreakdownTerraformDirectory(t *testing.T) {
-	GoldenFileCommandTest(t, testutil.CalcGoldenFileTestdataDirName(), []string{"breakdown", "--path", "../../examples/terraform"}, &GoldenFileOptions{RunHCL: true})
+	GoldenFileCommandTest(t, testutil.CalcGoldenFileTestdataDirName(), []string{"breakdown", "--path", "../../examples/terraform"}, &GoldenFileOptions{RunTerraformCLI: true})
+}
+
+func TestBreakdownMultiProjectAutodetect(t *testing.T) {
+	testName := testutil.CalcGoldenFileTestdataDirName()
+	dir := path.Join("./testdata", testName)
+	GoldenFileCommandTest(
+		t,
+		testutil.CalcGoldenFileTestdataDirName(),
+		[]string{
+			"breakdown",
+			"--path", dir,
+		}, nil,
+	)
+}
+
+func TestBreakdownMultiProjectSkipPaths(t *testing.T) {
+	testName := testutil.CalcGoldenFileTestdataDirName()
+	dir := path.Join("./testdata", testName)
+	GoldenFileCommandTest(
+		t,
+		testutil.CalcGoldenFileTestdataDirName(),
+		[]string{
+			"breakdown",
+			"--path", dir,
+			"--exclude-path", "glob/*/shown",
+			"--exclude-path", "ignored",
+		}, nil,
+	)
+}
+
+func TestBreakdownMultiProjectSkipPathsRootLevel(t *testing.T) {
+	testName := testutil.CalcGoldenFileTestdataDirName()
+	dir := path.Join("./testdata", testName)
+	GoldenFileCommandTest(
+		t,
+		testutil.CalcGoldenFileTestdataDirName(),
+		[]string{
+			"breakdown",
+			"--path", dir,
+			"--exclude-path", "dev",
+			"--exclude-path", "prod",
+		}, nil,
+	)
 }
 
 func TestBreakdownTerraformDirectoryWithDefaultVarFiles(t *testing.T) {
@@ -55,8 +110,9 @@ func TestBreakdownTerraformDirectoryWithDefaultVarFiles(t *testing.T) {
 				"breakdown",
 				"--path", dir,
 				"--terraform-plan-flags", "-var-file=input.tfvars -var=block2_ebs_volume_size=2000 -var block2_volume_type=io1",
+				"--terraform-force-cli",
 			},
-			&GoldenFileOptions{RunHCL: true},
+			nil,
 		)
 	})
 
@@ -67,18 +123,49 @@ func TestBreakdownTerraformDirectoryWithDefaultVarFiles(t *testing.T) {
 			[]string{
 				"breakdown",
 				"--path", dir,
-				"--terraform-var-file", "input.tfvars",
+				"--terraform-var-file", "hcl.tfvars",
+				"--terraform-var-file", "hcl.tfvars.json",
 				"--terraform-var", "block2_ebs_volume_size=2000",
 				"--terraform-var", "block2_volume_type=io1",
 			},
-			&GoldenFileOptions{OnlyRunHCL: true},
+			nil,
 		)
 	})
+
+	t.Run("with hcl TF_VAR env variables", func(t *testing.T) {
+		GoldenFileCommandTest(
+			t,
+			testName,
+			[]string{
+				"breakdown",
+				"--path", dir,
+				"--terraform-var-file", "input.tfvars",
+			},
+			&GoldenFileOptions{
+				Env: map[string]string{
+					"TF_VAR_block2_ebs_volume_size": "2000",
+					"TF_VAR_block2_volume_type":     "io1",
+				},
+			},
+		)
+	})
+
+	// t.Run("with hcl TF_VAR env variables in config file", func(t *testing.T) {
+	//	GoldenFileCommandTest(
+	//		t,
+	//		testName,
+	//		[]string{
+	//			"breakdown",
+	//			"--config-file", path.Join(dir, "infracost-config.yml"),
+	//		},
+	//		nil,
+	//	)
+	// })
 }
 
 func TestBreakdownTerraformDirectoryWithRecursiveModules(t *testing.T) {
 	dir := path.Join("./testdata", testutil.CalcGoldenFileTestdataDirName())
-	GoldenFileCommandTest(t, testutil.CalcGoldenFileTestdataDirName(), []string{"breakdown", "--path", dir}, &GoldenFileOptions{RunHCL: true})
+	GoldenFileCommandTest(t, testutil.CalcGoldenFileTestdataDirName(), []string{"breakdown", "--path", dir}, &GoldenFileOptions{RunTerraformCLI: true})
 }
 
 func TestBreakdownTerraformFieldsAll(t *testing.T) {
@@ -162,9 +249,7 @@ func TestBreakdownInvalidPath(t *testing.T) {
 }
 
 func TestBreakdownPlanError(t *testing.T) {
-	GoldenFileCommandTest(t, testutil.CalcGoldenFileTestdataDirName(), []string{"breakdown", "--path", "../..//examples/terraform", "--terraform-plan-flags", "-var-file=invalid"}, nil, func(ctx *config.RunContext) {
-		ctx.Config.DisableHCLParsing = true
-	})
+	GoldenFileCommandTest(t, testutil.CalcGoldenFileTestdataDirName(), []string{"breakdown", "--path", "../..//examples/terraform", "--terraform-plan-flags", "-var-file=invalid", "--terraform-force-cli"}, &GoldenFileOptions{CaptureLogs: true})
 }
 
 func TestBreakdownTerragrunt(t *testing.T) {
@@ -175,6 +260,58 @@ func TestBreakdownTerragruntWithDashboardEnabled(t *testing.T) {
 	GoldenFileCommandTest(t, testutil.CalcGoldenFileTestdataDirName(), []string{"breakdown", "--path", "../../examples/terragrunt"}, nil, func(c *config.RunContext) {
 		c.Config.EnableDashboard = true
 	})
+}
+
+func TestBreakdownTerragruntHCLSingle(t *testing.T) {
+	GoldenFileCommandTest(t, testutil.CalcGoldenFileTestdataDirName(), []string{"breakdown", "--path", "../../examples/terragrunt/prod"}, nil)
+}
+
+func TestBreakdownTerragruntHCLMulti(t *testing.T) {
+	GoldenFileCommandTest(t, testutil.CalcGoldenFileTestdataDirName(), []string{"breakdown", "--path", "../../examples/terragrunt"}, nil)
+}
+
+func TestBreakdownTerragruntHCLDepsOutput(t *testing.T) {
+	GoldenFileCommandTest(t, testutil.CalcGoldenFileTestdataDirName(), []string{"breakdown", "--path", path.Join("./testdata", testutil.CalcGoldenFileTestdataDirName())}, nil)
+}
+
+func TestBreakdownTerragruntGetEnv(t *testing.T) {
+	os.Setenv("CUSTOM_OS_VAR", "test")
+	os.Setenv("CUSTOM_OS_VAR_PROD", "test-prod")
+	defer func() {
+		os.Unsetenv("CUSTOM_OS_VAR")
+		os.Unsetenv("CUSTOM_OS_VAR_PROD")
+	}()
+
+}
+
+func TestBreakdownTerragruntHCLDepsOutputMocked(t *testing.T) {
+	GoldenFileCommandTest(t, testutil.CalcGoldenFileTestdataDirName(), []string{"breakdown", "--path", path.Join("./testdata", testutil.CalcGoldenFileTestdataDirName())}, nil)
+}
+
+func TestBreakdownTerragruntSkipPaths(t *testing.T) {
+	GoldenFileCommandTest(
+		t,
+		testutil.CalcGoldenFileTestdataDirName(),
+		[]string{
+			"breakdown",
+			"--path", path.Join("./testdata", testutil.CalcGoldenFileTestdataDirName()),
+			"--exclude-path", "glob/*/ignored",
+			"--exclude-path", "ignored",
+		},
+		nil,
+	)
+}
+
+func TestBreakdownTerragruntHCLDepsOutputInclude(t *testing.T) {
+	GoldenFileCommandTest(t, testutil.CalcGoldenFileTestdataDirName(), []string{"breakdown", "--path", path.Join("./testdata", testutil.CalcGoldenFileTestdataDirName()+"/dev")}, nil)
+}
+
+func TestBreakdownTerragruntHCLDepsOutputSingleProject(t *testing.T) {
+	GoldenFileCommandTest(t, testutil.CalcGoldenFileTestdataDirName(), []string{"breakdown", "--path", path.Join("./testdata", testutil.CalcGoldenFileTestdataDirName()+"/dev")}, nil)
+}
+
+func TestBreakdownTerragruntHCLMultiNoSource(t *testing.T) {
+	GoldenFileCommandTest(t, testutil.CalcGoldenFileTestdataDirName(), []string{"breakdown", "--path", "./testdata/breakdown_terragrunt_hclmulti_no_source/example"}, nil)
 }
 
 func TestBreakdownTerragruntNested(t *testing.T) {
@@ -225,8 +362,22 @@ func TestBreakdownInitFlagsError(t *testing.T) {
 			"-plugin-dir=does/not/exist",
 		},
 		nil,
-		func(ctx *config.RunContext) {
-			ctx.Config.DisableHCLParsing = true
+	)
+}
+
+func TestBreakdownWithPrivateTerraformRegistryModule(t *testing.T) {
+	if _, ok := os.LookupEnv("INFRACOST_TERRAFORM_CLOUD_TOKEN"); !ok {
+		t.Skip("Skipping because INFRACOST_TERRAFORM_CLOUD_TOKEN is not set and external contributors won't have this.")
+	}
+
+	GoldenFileCommandTest(
+		t,
+		testutil.CalcGoldenFileTestdataDirName(),
+		[]string{
+			"breakdown",
+			"--path",
+			path.Join("./testdata", testutil.CalcGoldenFileTestdataDirName()),
 		},
+		nil,
 	)
 }

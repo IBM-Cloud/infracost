@@ -13,17 +13,29 @@ import (
 	"github.com/infracost/infracost/internal/ui"
 )
 
-var validOutputFormats = []string{
-	"table",
-	"diff",
-	"json",
-	"html",
-	"github-comment",
-	"gitlab-comment",
-	"azure-repos-comment",
-	"bitbucket-comment",
-	"slack-message",
-}
+var (
+	validOutputFormats = []string{
+		"table",
+		"diff",
+		"json",
+		"html",
+		"github-comment",
+		"gitlab-comment",
+		"azure-repos-comment",
+		"bitbucket-comment",
+		"slack-message",
+	}
+
+	validCompareToFormats = map[string]bool{
+		"diff":                true,
+		"json":                true,
+		"github-comment":      true,
+		"gitlab-comment":      true,
+		"azure-repos-comment": true,
+		"bitbucket-comment":   true,
+		"slack-message":       true,
+	}
+)
 
 func outputCmd(ctx *config.RunContext) *cobra.Command {
 	cmd := &cobra.Command{
@@ -62,6 +74,7 @@ func outputCmd(ctx *config.RunContext) *cobra.Command {
 			var err error
 
 			format, _ := cmd.Flags().GetString("format")
+			format = strings.ToLower(format)
 			ctx.SetContextValue("outputFormat", format)
 
 			if format != "" && !contains(validOutputFormats, format) {
@@ -81,6 +94,9 @@ func outputCmd(ctx *config.RunContext) *cobra.Command {
 				return err
 			}
 			combined.IsCIRun = ctx.IsCIRun()
+			for _, p := range combined.Projects {
+				p.Metadata.InfracostCommand = "output"
+			}
 
 			includeAllFields := "all"
 			validFields := []string{"price", "monthlyQuantity", "unit", "hourlyCost", "monthlyCost"}
@@ -106,9 +122,9 @@ func outputCmd(ctx *config.RunContext) *cobra.Command {
 			}
 
 			opts := output.Options{
-				DashboardEnabled: ctx.Config.EnableDashboard,
-				NoColor:          ctx.Config.NoColor,
-				Fields:           fields,
+				DashboardEndpoint: ctx.Config.DashboardEndpoint,
+				NoColor:           ctx.Config.NoColor,
+				Fields:            fields,
 			}
 			opts.ShowSkipped, _ = cmd.Flags().GetBool("show-skipped")
 
@@ -118,32 +134,15 @@ func outputCmd(ctx *config.RunContext) *cobra.Command {
 				ui.PrintWarning(cmd.ErrOrStderr(), "fields is only supported for table and html output formats")
 			}
 
-			if ctx.Config.EnableDashboard {
+			if ctx.IsCloudEnabled() {
 				if ctx.Config.IsSelfHosted() {
-					ui.PrintWarning(cmd.ErrOrStderr(), "The dashboard is part of Infracost's hosted services. Contact hello@infracost.io for help.")
+					ui.PrintWarning(cmd.ErrOrStderr(), "Infracost Cloud is part of Infracost's hosted services. Contact hello@infracost.io for help.")
 				}
 
 				combined.RunID, combined.ShareURL = shareCombinedRun(ctx, combined, inputs)
 			}
 
-			var b []byte
-
-			switch strings.ToLower(format) {
-			case "json":
-				b, err = output.ToJSON(combined, opts)
-			case "html":
-				b, err = output.ToHTML(combined, opts)
-			case "diff":
-				b, err = output.ToDiff(combined, opts)
-			case "github-comment", "gitlab-comment", "azure-repos-comment":
-				b, err = output.ToMarkdown(combined, opts, output.MarkdownOptions{})
-			case "bitbucket-comment":
-				b, err = output.ToMarkdown(combined, opts, output.MarkdownOptions{BasicSyntax: true})
-			case "slack-message":
-				b, err = output.ToSlackMessage(combined, opts)
-			default:
-				b, err = output.ToTable(combined, opts)
-			}
+			b, err := output.FormatOutput(format, combined, opts)
 			if err != nil {
 				return err
 			}
@@ -190,11 +189,6 @@ func shareCombinedRun(ctx *config.RunContext, combined output.Root, inputs []out
 		return result.RunID, result.ShareURL
 	}
 
-	projectContexts := make([]*config.ProjectContext, len(combined.Projects))
-	for i := range combined.Projects {
-		projectContexts[i] = config.EmptyProjectContext()
-	}
-
 	combinedRunIds := []string{}
 	for _, input := range inputs {
 		if id := input.Root.RunID; id != "" {
@@ -204,9 +198,9 @@ func shareCombinedRun(ctx *config.RunContext, combined output.Root, inputs []out
 	ctx.SetContextValue("runIds", combinedRunIds)
 
 	dashboardClient := apiclient.NewDashboardAPIClient(ctx)
-	result, err := dashboardClient.AddRun(ctx, projectContexts, combined)
+	result, err := dashboardClient.AddRun(ctx, combined)
 	if err != nil {
-		log.Errorf("Error reporting run: %s", err)
+		log.WithError(err).Error("Failed to upload to Infracost Cloud")
 	}
 
 	return result.RunID, result.ShareURL
