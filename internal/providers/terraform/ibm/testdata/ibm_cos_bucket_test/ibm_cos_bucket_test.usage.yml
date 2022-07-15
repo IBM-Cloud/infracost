@@ -1,3 +1,4 @@
 version: 0.1
 resource_usage:
-  monthly_average_capacity: 10000
+  ibm_cos_bucket.standard-us-south:
+    monthly_average_capacity: 10000

@@ -20,11 +20,12 @@ resource "ibm_resource_instance" "cos_instance" {
   resource_group_id = ibm_resource_group.cos_group.id
   service           = "cloud-object-storage"
   plan              = "standard"
-  location          = "global"
+  location          = "us-south"
 }
 
 resource "ibm_cos_bucket" "standard-us-south" {
   bucket_name          = "a-standard-bucket-at-us-south"
   resource_instance_id = ibm_resource_instance.cos_instance.id
   storage_class        = "standard"
+  region_location = "us-south"
 }
