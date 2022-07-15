@@ -96,7 +96,7 @@ func (r *IbmCosBucket) ClassARequestCountCostComponent() *schema.CostComponent {
 
 	return &schema.CostComponent{
 		Name:            fmt.Sprintf("Storage-%s-%s", strings.ToLower(r.StorageClass), strings.ToLower(r.Region)),
-		Unit:            "API_CALLS",
+		Unit:            "API calls",
 		UnitMultiplier:  decimal.NewFromInt(1),
 		MonthlyQuantity: q,
 		ProductFilter: &schema.ProductFilter{
@@ -137,7 +137,7 @@ func (r *IbmCosBucket) ClassBRequestCountCostComponent() *schema.CostComponent {
 
 	return &schema.CostComponent{
 		Name:            fmt.Sprintf("Storage-%s-%s", strings.ToLower(r.StorageClass), strings.ToLower(r.Region)),
-		Unit:            "API_CALLS",
+		Unit:            "API calls",
 		UnitMultiplier:  decimal.NewFromInt(1),
 		MonthlyQuantity: q,
 		ProductFilter: &schema.ProductFilter{
