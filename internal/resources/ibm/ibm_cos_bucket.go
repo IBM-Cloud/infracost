@@ -48,10 +48,17 @@ func (r *IbmCosBucket) PopulateUsage(u *schema.UsageData) {
 }
 
 func (r *IbmCosBucket) MonthlyAverageCapacityCostComponent() *schema.CostComponent {
+	var q *decimal.Decimal
+
+	if r.MonthlyAverageCapacity != nil {
+		q = decimalPtr(decimal.NewFromInt(int64(*r.MonthlyAverageCapacity)))
+	}
+
 	return &schema.CostComponent{
-		Name:           fmt.Sprintf("Storage-%s-%s", strings.ToLower(r.StorageClass), strings.ToLower(r.Region)),
-		Unit:           "hours",
-		UnitMultiplier: decimal.NewFromInt(1),
+		Name:            fmt.Sprintf("Storage-%s-%s", strings.ToLower(r.StorageClass), strings.ToLower(r.Region)),
+		Unit:            "GB",
+		UnitMultiplier:  decimal.NewFromInt(1),
+		MonthlyQuantity: q,
 		ProductFilter: &schema.ProductFilter{
 			VendorName:       strPtr("ibm"),
 			Region:           strPtr(r.Region),
@@ -66,6 +73,12 @@ func (r *IbmCosBucket) MonthlyAverageCapacityCostComponent() *schema.CostCompone
 }
 
 func (r *IbmCosBucket) ClassARequestCountCostComponent() *schema.CostComponent {
+
+	var q *decimal.Decimal
+
+	if r.ClassARequestCount != nil {
+		q = decimalPtr(decimal.NewFromInt(*r.ClassARequestCount))
+	}
 
 	s := r.StorageClass
 	u := "FLEX_CLASS_A_CALLS"
@@ -82,9 +95,10 @@ func (r *IbmCosBucket) ClassARequestCountCostComponent() *schema.CostComponent {
 	}
 
 	return &schema.CostComponent{
-		Name:           fmt.Sprintf("Storage-%s-%s", strings.ToLower(r.StorageClass), strings.ToLower(r.Region)),
-		Unit:           "hours",
-		UnitMultiplier: decimal.NewFromInt(1),
+		Name:            fmt.Sprintf("Storage-%s-%s", strings.ToLower(r.StorageClass), strings.ToLower(r.Region)),
+		Unit:            "API_CALLS",
+		UnitMultiplier:  decimal.NewFromInt(1),
+		MonthlyQuantity: q,
 		ProductFilter: &schema.ProductFilter{
 			VendorName:       strPtr("ibm"),
 			Region:           strPtr(r.Region),
@@ -99,6 +113,12 @@ func (r *IbmCosBucket) ClassARequestCountCostComponent() *schema.CostComponent {
 }
 
 func (r *IbmCosBucket) ClassBRequestCountCostComponent() *schema.CostComponent {
+
+	var q *decimal.Decimal
+
+	if r.ClassBRequestCount != nil {
+		q = decimalPtr(decimal.NewFromInt(*r.ClassBRequestCount))
+	}
 
 	u := "FLEX_CLASS_B_CALLS"
 
@@ -116,9 +136,10 @@ func (r *IbmCosBucket) ClassBRequestCountCostComponent() *schema.CostComponent {
 	}
 
 	return &schema.CostComponent{
-		Name:           fmt.Sprintf("Storage-%s-%s", strings.ToLower(r.StorageClass), strings.ToLower(r.Region)),
-		Unit:           "hours",
-		UnitMultiplier: decimal.NewFromInt(1),
+		Name:            fmt.Sprintf("Storage-%s-%s", strings.ToLower(r.StorageClass), strings.ToLower(r.Region)),
+		Unit:            "API_CALLS",
+		UnitMultiplier:  decimal.NewFromInt(1),
+		MonthlyQuantity: q,
 		ProductFilter: &schema.ProductFilter{
 			VendorName:       strPtr("ibm"),
 			Region:           strPtr(r.Region),
@@ -133,6 +154,13 @@ func (r *IbmCosBucket) ClassBRequestCountCostComponent() *schema.CostComponent {
 }
 
 func (r *IbmCosBucket) PublicStandardEgressCostComponent() *schema.CostComponent {
+
+	var q *decimal.Decimal
+
+	if r.PublicStandardEgress != nil {
+		q = decimalPtr(decimal.NewFromInt(int64(*r.PublicStandardEgress)))
+	}
+
 	// using bandwith for egress
 	// https://github.ibm.com/ibmcloud/estimator/blob/f9dfa477c27bbf7570d296816bdc07b706646572/__tests__/client/fixtures/callback-estimate.json#L41
 	s := r.StorageClass
@@ -150,9 +178,10 @@ func (r *IbmCosBucket) PublicStandardEgressCostComponent() *schema.CostComponent
 	}
 
 	return &schema.CostComponent{
-		Name:           fmt.Sprintf("Storage-%s-%s", strings.ToLower(r.StorageClass), strings.ToLower(r.Region)),
-		Unit:           "hours",
-		UnitMultiplier: decimal.NewFromInt(1),
+		Name:            fmt.Sprintf("Storage-%s-%s", strings.ToLower(r.StorageClass), strings.ToLower(r.Region)),
+		Unit:            "GB",
+		UnitMultiplier:  decimal.NewFromInt(1),
+		MonthlyQuantity: q,
 		ProductFilter: &schema.ProductFilter{
 			VendorName:       strPtr("ibm"),
 			Region:           strPtr(r.Region),
@@ -168,6 +197,12 @@ func (r *IbmCosBucket) PublicStandardEgressCostComponent() *schema.CostComponent
 
 func (r *IbmCosBucket) MonthlyDataRetrievalCostComponent() *schema.CostComponent {
 
+	var q *decimal.Decimal
+
+	if r.MonthlyDataRetrieval != nil {
+		q = decimalPtr(decimal.NewFromInt(int64(*r.MonthlyDataRetrieval)))
+	}
+
 	retrieval := "FLEX_RETRIEVAL"
 
 	if r.StorageClass == "cold" {
@@ -179,9 +214,10 @@ func (r *IbmCosBucket) MonthlyDataRetrievalCostComponent() *schema.CostComponent
 	}
 
 	return &schema.CostComponent{
-		Name:           fmt.Sprintf("Storage-%s-%s", strings.ToLower(r.StorageClass), strings.ToLower(r.Region)),
-		Unit:           "hours",
-		UnitMultiplier: decimal.NewFromInt(1),
+		Name:            fmt.Sprintf("Storage-%s-%s", strings.ToLower(r.StorageClass), strings.ToLower(r.Region)),
+		Unit:            "GB",
+		UnitMultiplier:  decimal.NewFromInt(1),
+		MonthlyQuantity: q,
 		ProductFilter: &schema.ProductFilter{
 			VendorName:       strPtr("ibm"),
 			Region:           strPtr(r.Region),
