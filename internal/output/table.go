@@ -236,7 +236,7 @@ func buildCostComponentRows(t table.Writer, currency string, costComponents []Co
 					tableRow = append(tableRow, c.Unit)
 				}
 				if contains(fields, "monthlyCost") {
-					tableRow = append(tableRow, formatCost2DP(currency, c.TierData[index].MontlyCost))
+					tableRow = append(tableRow, formatCost2DP(currency, c.TierData[index].MonthlyCost))
 				}
 
 				t.AppendRow(tableRow)

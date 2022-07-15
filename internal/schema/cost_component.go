@@ -11,7 +11,7 @@ type PriceTier struct {
 	EndUsageAmount   decimal.Decimal
 	HourlyQuantity   *decimal.Decimal
 	MonthlyQuantity  *decimal.Decimal
-	MontlyCost       *decimal.Decimal
+	MonthlyCost      *decimal.Decimal
 	HourlyCost       *decimal.Decimal
 }
 
@@ -61,7 +61,7 @@ func (c *CostComponent) CalculateCosts() {
 			}
 			if c.MonthlyQuantity != nil {
 				tier.MonthlyQuantity = decimalPtr(decimal.NewFromInt(0))
-				tier.MontlyCost = decimalPtr(decimal.NewFromInt(0))
+				tier.MonthlyCost = decimalPtr(decimal.NewFromInt(0))
 				if tier.EndUsageAmount.GreaterThanOrEqual(*c.MonthlyQuantity) && tier.StartUsageAmount.LessThan(*c.MonthlyQuantity) {
 					tier.MonthlyQuantity = decimalPtr(c.MonthlyQuantity.Sub(tier.StartUsageAmount))
 				} else if tier.EndUsageAmount.LessThan(*c.MonthlyQuantity) {
@@ -69,9 +69,9 @@ func (c *CostComponent) CalculateCosts() {
 				}
 
 				if tier.MonthlyQuantity.GreaterThan(decimal.NewFromInt(0)) {
-					tier.MontlyCost = decimalPtr(tier.Price.Mul(*tier.MonthlyQuantity))
+					tier.MonthlyCost = decimalPtr(tier.Price.Mul(*tier.MonthlyQuantity))
 					discountMul := decimal.NewFromFloat(1.0 - c.MonthlyDiscountPerc)
-					tier.MontlyCost = decimalPtr((*tier.MontlyCost).Mul(discountMul))
+					tier.MonthlyCost = decimalPtr((*tier.MonthlyCost).Mul(discountMul))
 				}
 			}
 			c.priceTiers[i] = tier
@@ -89,8 +89,8 @@ func (c *CostComponent) CalculateCosts() {
 				if i == 0 {
 					c.MonthlyCost = decimalPtr(decimal.NewFromInt(0))
 				}
-				if tier.MontlyCost.GreaterThanOrEqual(decimal.NewFromInt(0)) {
-					c.MonthlyCost = decimalPtr(c.MonthlyCost.Add(*tier.MontlyCost))
+				if tier.MonthlyCost.GreaterThanOrEqual(decimal.NewFromInt(0)) {
+					c.MonthlyCost = decimalPtr(c.MonthlyCost.Add(*tier.MonthlyCost))
 				}
 			}
 		}
