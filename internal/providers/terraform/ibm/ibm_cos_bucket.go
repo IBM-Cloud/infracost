@@ -1,8 +1,6 @@
 package ibm
 
 import (
-	"fmt"
-
 	"github.com/infracost/infracost/internal/resources/ibm"
 	"github.com/infracost/infracost/internal/schema"
 	"github.com/tidwall/gjson"
@@ -32,9 +30,9 @@ func getLocation(d *schema.ResourceData) string {
 func newIbmCosBucket(d *schema.ResourceData, u *schema.UsageData) *schema.Resource {
 	l := getLocation(d)
 
-	refs := d.References("resource_instance_id")
+	// refs := d.References("resource_instance_id")
 
-	fmt.Println("refs: ", refs)
+	// i := refs[0]
 
 	r := &ibm.IbmCosBucket{
 		Address:      d.Address,
