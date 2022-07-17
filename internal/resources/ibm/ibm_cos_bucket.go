@@ -48,11 +48,7 @@ func (r *IbmCosBucket) PopulateUsage(u *schema.UsageData) {
 }
 
 func (r *IbmCosBucket) MonthlyAverageCapacityCostComponent() *schema.CostComponent {
-	var q *decimal.Decimal
-
-	if r.MonthlyAverageCapacity != nil {
-		q = decimalPtr(decimal.NewFromInt(int64(*r.MonthlyAverageCapacity)))
-	}
+	q := decimalPtr(decimal.NewFromInt(int64(*r.MonthlyAverageCapacity)))
 
 	return &schema.CostComponent{
 		Name:            fmt.Sprintf("Storage-%s-%s", strings.ToLower(r.StorageClass), strings.ToLower(r.Region)),
@@ -74,11 +70,7 @@ func (r *IbmCosBucket) MonthlyAverageCapacityCostComponent() *schema.CostCompone
 
 func (r *IbmCosBucket) ClassARequestCountCostComponent() *schema.CostComponent {
 
-	var q *decimal.Decimal
-
-	if r.ClassARequestCount != nil {
-		q = decimalPtr(decimal.NewFromInt(*r.ClassARequestCount))
-	}
+	q := decimalPtr(decimal.NewFromInt(*r.ClassARequestCount))
 
 	s := r.StorageClass
 	u := "FLEX_CLASS_A_CALLS"
@@ -114,11 +106,7 @@ func (r *IbmCosBucket) ClassARequestCountCostComponent() *schema.CostComponent {
 
 func (r *IbmCosBucket) ClassBRequestCountCostComponent() *schema.CostComponent {
 
-	var q *decimal.Decimal
-
-	if r.ClassBRequestCount != nil {
-		q = decimalPtr(decimal.NewFromInt(*r.ClassBRequestCount))
-	}
+	q := decimalPtr(decimal.NewFromInt(*r.ClassBRequestCount))
 
 	u := "FLEX_CLASS_B_CALLS"
 
@@ -155,11 +143,7 @@ func (r *IbmCosBucket) ClassBRequestCountCostComponent() *schema.CostComponent {
 
 func (r *IbmCosBucket) PublicStandardEgressCostComponent() *schema.CostComponent {
 
-	var q *decimal.Decimal
-
-	if r.PublicStandardEgress != nil {
-		q = decimalPtr(decimal.NewFromInt(int64(*r.PublicStandardEgress)))
-	}
+	q := decimalPtr(decimal.NewFromInt(int64(*r.PublicStandardEgress)))
 
 	// using bandwith for egress
 	// https://github.ibm.com/ibmcloud/estimator/blob/f9dfa477c27bbf7570d296816bdc07b706646572/__tests__/client/fixtures/callback-estimate.json#L41
@@ -197,11 +181,7 @@ func (r *IbmCosBucket) PublicStandardEgressCostComponent() *schema.CostComponent
 
 func (r *IbmCosBucket) MonthlyDataRetrievalCostComponent() *schema.CostComponent {
 
-	var q *decimal.Decimal
-
-	if r.MonthlyDataRetrieval != nil {
-		q = decimalPtr(decimal.NewFromInt(int64(*r.MonthlyDataRetrieval)))
-	}
+	q := decimalPtr(decimal.NewFromInt(int64(*r.MonthlyDataRetrieval)))
 
 	retrieval := "FLEX_RETRIEVAL"
 
@@ -236,14 +216,28 @@ func (r *IbmCosBucket) MonthlyDataRetrievalCostComponent() *schema.CostComponent
 // See providers folder for more information.
 func (r *IbmCosBucket) BuildResource() *schema.Resource {
 
-	costComponents := []*schema.CostComponent{
-		r.MonthlyAverageCapacityCostComponent(),
-		r.ClassARequestCountCostComponent(),
-		r.ClassBRequestCountCostComponent(),
+	costComponents := []*schema.CostComponent{}
+
+	if r.MonthlyAverageCapacity != nil {
+		costComponents = append(costComponents, r.MonthlyAverageCapacityCostComponent())
+	}
+
+	if r.ClassARequestCount != nil {
+		costComponents = append(costComponents, r.ClassARequestCountCostComponent())
+	}
+
+	if r.ClassBRequestCount != nil {
+		costComponents = append(costComponents, r.ClassBRequestCountCostComponent())
+	}
+
+	if r.PublicStandardEgress != nil {
+		costComponents = append(costComponents, r.PublicStandardEgressCostComponent())
 	}
 
 	if r.StorageClass == "vault" || r.StorageClass == "cold" || r.StorageClass == "smart" {
-		costComponents = append(costComponents, r.MonthlyDataRetrievalCostComponent())
+		if r.MonthlyDataRetrieval != nil {
+			costComponents = append(costComponents, r.MonthlyDataRetrievalCostComponent())
+		}
 	}
 
 	return &schema.Resource{
