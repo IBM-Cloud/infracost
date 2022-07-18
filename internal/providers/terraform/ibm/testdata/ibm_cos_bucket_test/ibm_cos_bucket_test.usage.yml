@@ -2,3 +2,4 @@ version: 0.1
 resource_usage:
   ibm_cos_bucket.standard-us-south:
     monthly_average_capacity: 10000
+    public_standard_egress: 1000
