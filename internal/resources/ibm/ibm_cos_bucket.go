@@ -143,7 +143,8 @@ func (r *IbmCosBucket) ClassBRequestCountCostComponent() *schema.CostComponent {
 
 func (r *IbmCosBucket) PublicStandardEgressCostComponent() *schema.CostComponent {
 
-	q := decimalPtr(decimal.NewFromInt(int64(*r.PublicStandardEgress)))
+	quantity := int64(*r.PublicStandardEgress)
+	quantityPtr := decimalPtr(decimal.NewFromInt(quantity))
 
 	// using bandwith for egress
 	// https://github.ibm.com/ibmcloud/estimator/blob/f9dfa477c27bbf7570d296816bdc07b706646572/__tests__/client/fixtures/callback-estimate.json#L41
@@ -161,11 +162,19 @@ func (r *IbmCosBucket) PublicStandardEgressCostComponent() *schema.CostComponent
 		u = "SMART_TIER_BANDWIDTH"
 	}
 
+	endUsageAmount := "50000"
+
+	if quantity > 50000 && quantity <= 150000 {
+		endUsageAmount = "150000"
+	} else if quantity > 150000 {
+		endUsageAmount = "999999999"
+	}
+
 	return &schema.CostComponent{
 		Name:            fmt.Sprintf("Storage-%s-%s", strings.ToLower(r.StorageClass), strings.ToLower(r.Region)),
 		Unit:            "GB",
 		UnitMultiplier:  decimal.NewFromInt(1),
-		MonthlyQuantity: q,
+		MonthlyQuantity: quantityPtr,
 		ProductFilter: &schema.ProductFilter{
 			VendorName:       strPtr("ibm"),
 			Region:           strPtr(r.Region),
@@ -174,7 +183,8 @@ func (r *IbmCosBucket) PublicStandardEgressCostComponent() *schema.CostComponent
 			AttributeFilters: []*schema.AttributeFilter{},
 		},
 		PriceFilter: &schema.PriceFilter{
-			Unit: strPtr(u),
+			Unit:           strPtr(u),
+			EndUsageAmount: strPtr(endUsageAmount),
 		},
 	}
 }
