@@ -86,7 +86,7 @@ func (r *IbmCosBucket) ClassARequestCountCostComponent() *schema.CostComponent {
 	return &schema.CostComponent{
 		Name:            "Class A requests",
 		Unit:            "API calls",
-		UnitMultiplier:  decimal.NewFromInt(1),
+		UnitMultiplier:  decimal.NewFromInt(1000),
 		MonthlyQuantity: q,
 		ProductFilter: &schema.ProductFilter{
 			VendorName:       strPtr("ibm"),
@@ -123,7 +123,7 @@ func (r *IbmCosBucket) ClassBRequestCountCostComponent() *schema.CostComponent {
 	return &schema.CostComponent{
 		Name:            "Class B requests",
 		Unit:            "API calls",
-		UnitMultiplier:  decimal.NewFromInt(1),
+		UnitMultiplier:  decimal.NewFromInt(1000),
 		MonthlyQuantity: q,
 		ProductFilter: &schema.ProductFilter{
 			VendorName:       strPtr("ibm"),
