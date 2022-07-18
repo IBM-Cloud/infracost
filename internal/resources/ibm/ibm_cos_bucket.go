@@ -1,9 +1,6 @@
 package ibm
 
 import (
-	"fmt"
-	"strings"
-
 	"github.com/infracost/infracost/internal/resources"
 	"github.com/infracost/infracost/internal/schema"
 	"github.com/shopspring/decimal"
@@ -51,7 +48,7 @@ func (r *IbmCosBucket) MonthlyAverageCapacityCostComponent() *schema.CostCompone
 	q := decimalPtr(decimal.NewFromInt(int64(*r.MonthlyAverageCapacity)))
 
 	return &schema.CostComponent{
-		Name:            fmt.Sprintf("Storage-%s-%s", strings.ToLower(r.StorageClass), strings.ToLower(r.Region)),
+		Name:            "Monthly Average Capacity",
 		Unit:            "GB",
 		UnitMultiplier:  decimal.NewFromInt(1),
 		MonthlyQuantity: q,
@@ -87,7 +84,7 @@ func (r *IbmCosBucket) ClassARequestCountCostComponent() *schema.CostComponent {
 	}
 
 	return &schema.CostComponent{
-		Name:            fmt.Sprintf("Storage-%s-%s", strings.ToLower(r.StorageClass), strings.ToLower(r.Region)),
+		Name:            "Class A requests",
 		Unit:            "API calls",
 		UnitMultiplier:  decimal.NewFromInt(1),
 		MonthlyQuantity: q,
@@ -124,7 +121,7 @@ func (r *IbmCosBucket) ClassBRequestCountCostComponent() *schema.CostComponent {
 	}
 
 	return &schema.CostComponent{
-		Name:            fmt.Sprintf("Storage-%s-%s", strings.ToLower(r.StorageClass), strings.ToLower(r.Region)),
+		Name:            "Class B requests",
 		Unit:            "API calls",
 		UnitMultiplier:  decimal.NewFromInt(1),
 		MonthlyQuantity: q,
@@ -171,7 +168,7 @@ func (r *IbmCosBucket) PublicStandardEgressCostComponent() *schema.CostComponent
 	}
 
 	return &schema.CostComponent{
-		Name:            fmt.Sprintf("Storage-%s-%s", strings.ToLower(r.StorageClass), strings.ToLower(r.Region)),
+		Name:            "Public Standard Egress",
 		Unit:            "GB",
 		UnitMultiplier:  decimal.NewFromInt(1),
 		MonthlyQuantity: quantityPtr,
@@ -204,7 +201,7 @@ func (r *IbmCosBucket) MonthlyDataRetrievalCostComponent() *schema.CostComponent
 	}
 
 	return &schema.CostComponent{
-		Name:            fmt.Sprintf("Storage-%s-%s", strings.ToLower(r.StorageClass), strings.ToLower(r.Region)),
+		Name:            "Data Retrieval",
 		Unit:            "GB",
 		UnitMultiplier:  decimal.NewFromInt(1),
 		MonthlyQuantity: q,
