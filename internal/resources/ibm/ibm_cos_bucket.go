@@ -124,7 +124,7 @@ func (r *IbmCosBucket) ClassBRequestCountCostComponent() *schema.CostComponent {
 		Name:            "Class B requests",
 		Unit:            "API calls",
 		UnitMultiplier:  decimal.NewFromInt(1),
-		MonthlyQuantity: decimalPtr(q.Div(decimal.NewFromInt(1000))),
+		MonthlyQuantity: decimalPtr(q.Div(decimal.NewFromInt(10000))),
 		ProductFilter: &schema.ProductFilter{
 			VendorName:       strPtr("ibm"),
 			Region:           strPtr(r.Region),
