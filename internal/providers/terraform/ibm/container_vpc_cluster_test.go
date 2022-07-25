@@ -6,11 +6,11 @@ import (
 	"github.com/infracost/infracost/internal/providers/terraform/tftest"
 )
 
-func TestIsInstance(t *testing.T) {
+func TestContainerVpcCluster(t *testing.T) {
 	t.Parallel()
 	if testing.Short() {
 		t.Skip("skipping test in short mode")
 	}
 
-	tftest.GoldenFileResourceTests(t, "is_instance_test")
+	tftest.GoldenFileResourceTests(t, "container_vpc_cluster_test")
 }
