@@ -187,7 +187,7 @@ func (r *IbmCosBucket) AsperaIngressCostComponent() *schema.CostComponent {
 	u := "ASPERA_INGRESS"
 
 	costComponent := schema.CostComponent{
-		Name:            "Asepra Ingress",
+		Name:            "Aspera Ingress Free",
 		Unit:            "GB",
 		UnitMultiplier:  decimal.NewFromInt(1),
 		MonthlyQuantity: q,
