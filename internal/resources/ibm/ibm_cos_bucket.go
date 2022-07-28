@@ -186,7 +186,7 @@ func (r *IbmCosBucket) AsperaIngressCostComponent() *schema.CostComponent {
 
 	u := "ASPERA_INGRESS"
 
-	return &schema.CostComponent{
+	costComponent := schema.CostComponent{
 		Name:            "Asepra Ingress",
 		Unit:            "GB",
 		UnitMultiplier:  decimal.NewFromInt(1),
@@ -202,6 +202,10 @@ func (r *IbmCosBucket) AsperaIngressCostComponent() *schema.CostComponent {
 			Unit: strPtr(u),
 		},
 	}
+
+	costComponent.SetCustomPrice(decimalPtr(decimal.NewFromInt(0)))
+
+	return &costComponent
 }
 
 func (r *IbmCosBucket) MonthlyDataRetrievalCostComponent() *schema.CostComponent {
