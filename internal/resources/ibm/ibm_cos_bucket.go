@@ -19,6 +19,7 @@ type IbmCosBucket struct {
 
 	MonthlyAverageCapacity *float64 `infracost_usage:"monthly_average_capacity"`
 	PublicStandardEgress   *float64 `infracost_usage:"public_standard_egress"`
+	AsperaIngress          *float64 `infracost_usage:"aspera_ingress"`
 	ClassARequestCount     *int64   `infracost_usage:"class_a_request_count"`
 	ClassBRequestCount     *int64   `infracost_usage:"class_b_request_count"`
 	MonthlyDataRetrieval   *float64 `infracost_usage:"monthly_data_retrieval"`
@@ -28,6 +29,7 @@ type IbmCosBucket struct {
 var IbmCosBucketUsageSchema = []*schema.UsageItem{
 	{Key: "monthly_average_capacity", ValueType: schema.Float64, DefaultValue: 0},
 	{Key: "public_standard_egress", ValueType: schema.Float64, DefaultValue: 0},
+	{Key: "aspera_ingress", ValueType: schema.Float64, DefaultValue: 0},
 	{Key: "class_a_request_count", ValueType: schema.Int64, DefaultValue: 0},
 	{Key: "class_b_request_count", ValueType: schema.Int64, DefaultValue: 0},
 	{Key: "monthly_data_retrieval", ValueType: schema.Int64, DefaultValue: 0},
@@ -178,6 +180,30 @@ func (r *IbmCosBucket) PublicStandardEgressCostComponent() *schema.CostComponent
 	}
 }
 
+func (r *IbmCosBucket) AsperaIngressCostComponent() *schema.CostComponent {
+
+	q := decimalPtr(decimal.NewFromInt(int64(*r.AsperaIngress)))
+
+	u := "ASPERA_INGRESS"
+
+	return &schema.CostComponent{
+		Name:            "Asepra Ingress",
+		Unit:            "GB",
+		UnitMultiplier:  decimal.NewFromInt(1),
+		MonthlyQuantity: q,
+		ProductFilter: &schema.ProductFilter{
+			VendorName:       strPtr("ibm"),
+			Region:           strPtr(r.Region),
+			Service:          strPtr(("cloud-object-storage")),
+			ProductFamily:    strPtr("iaas"),
+			AttributeFilters: []*schema.AttributeFilter{},
+		},
+		PriceFilter: &schema.PriceFilter{
+			Unit: strPtr(u),
+		},
+	}
+}
+
 func (r *IbmCosBucket) MonthlyDataRetrievalCostComponent() *schema.CostComponent {
 
 	q := decimalPtr(decimal.NewFromInt(int64(*r.MonthlyDataRetrieval)))
@@ -236,6 +262,12 @@ func (r *IbmCosBucket) BuildResource() *schema.Resource {
 	if r.StorageClass == "vault" || r.StorageClass == "cold" || r.StorageClass == "smart" {
 		if r.MonthlyDataRetrieval != nil {
 			costComponents = append(costComponents, r.MonthlyDataRetrievalCostComponent())
+		}
+	}
+
+	if r.StorageClass == "aspera" {
+		if r.AsperaIngress != nil {
+			costComponents = append(costComponents, r.AsperaIngressCostComponent())
 		}
 	}
 
