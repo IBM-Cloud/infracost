@@ -30,10 +30,6 @@ func getLocation(d *schema.ResourceData) string {
 func newIbmCosBucket(d *schema.ResourceData, u *schema.UsageData) *schema.Resource {
 	l := getLocation(d)
 
-	// refs := d.References("resource_instance_id")
-
-	// i := refs[0]
-
 	r := &ibm.IbmCosBucket{
 		Address:      d.Address,
 		Region:       d.Get("region").String(),
