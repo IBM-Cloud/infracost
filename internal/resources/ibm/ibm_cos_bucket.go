@@ -87,7 +87,7 @@ func (r *IbmCosBucket) ClassARequestCountCostComponent() *schema.CostComponent {
 		Name:            "Class A requests",
 		Unit:            "1k API calls",
 		UnitMultiplier:  decimal.NewFromInt(1),
-		MonthlyQuantity: decimalPtr(q.Div(decimal.NewFromInt(1000))),
+		MonthlyQuantity: q,
 		ProductFilter: &schema.ProductFilter{
 			VendorName:       strPtr("ibm"),
 			Region:           strPtr(r.Region),
@@ -124,7 +124,7 @@ func (r *IbmCosBucket) ClassBRequestCountCostComponent() *schema.CostComponent {
 		Name:            "Class B requests",
 		Unit:            "10k API calls",
 		UnitMultiplier:  decimal.NewFromInt(1),
-		MonthlyQuantity: decimalPtr(q.Div(decimal.NewFromInt(10000))),
+		MonthlyQuantity: q,
 		ProductFilter: &schema.ProductFilter{
 			VendorName:       strPtr("ibm"),
 			Region:           strPtr(r.Region),
@@ -140,8 +140,7 @@ func (r *IbmCosBucket) ClassBRequestCountCostComponent() *schema.CostComponent {
 
 func (r *IbmCosBucket) PublicStandardEgressCostComponent() *schema.CostComponent {
 
-	quantity := int64(*r.PublicStandardEgress)
-	quantityPtr := decimalPtr(decimal.NewFromInt(quantity))
+	q := decimalPtr(decimal.NewFromInt(int64(*r.PublicStandardEgress)))
 
 	// using bandwith for egress
 	// https://github.ibm.com/ibmcloud/estimator/blob/f9dfa477c27bbf7570d296816bdc07b706646572/__tests__/client/fixtures/callback-estimate.json#L41
@@ -171,7 +170,7 @@ func (r *IbmCosBucket) PublicStandardEgressCostComponent() *schema.CostComponent
 		Name:            "Public Standard Egress",
 		Unit:            "GB",
 		UnitMultiplier:  decimal.NewFromInt(1),
-		MonthlyQuantity: quantityPtr,
+		MonthlyQuantity: q,
 		ProductFilter: &schema.ProductFilter{
 			VendorName:       strPtr("ibm"),
 			Region:           strPtr(r.Region),
@@ -180,8 +179,7 @@ func (r *IbmCosBucket) PublicStandardEgressCostComponent() *schema.CostComponent
 			AttributeFilters: []*schema.AttributeFilter{},
 		},
 		PriceFilter: &schema.PriceFilter{
-			Unit:           strPtr(u),
-			EndUsageAmount: strPtr(endUsageAmount),
+			Unit: strPtr(u),
 		},
 	}
 }
