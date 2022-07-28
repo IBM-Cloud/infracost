@@ -142,7 +142,7 @@ func (r *IbmCosBucket) PublicStandardEgressCostComponent() *schema.CostComponent
 
 	q := decimalPtr(decimal.NewFromInt(int64(*r.PublicStandardEgress)))
 
-	// using bandwith for egress
+	// using bandwidth for egress
 	// https://github.ibm.com/ibmcloud/estimator/blob/f9dfa477c27bbf7570d296816bdc07b706646572/__tests__/client/fixtures/callback-estimate.json#L41
 	s := r.StorageClass
 	u := "FLEX_BANDWIDTH"
