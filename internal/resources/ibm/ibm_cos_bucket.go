@@ -156,14 +156,8 @@ func (r *IbmCosBucket) PublicStandardEgressCostComponent() *schema.CostComponent
 		u = "COLD_VAULT_BANDWIDTH"
 	case "smart":
 		u = "SMART_TIER_BANDWIDTH"
-	}
-
-	endUsageAmount := "50000"
-
-	if quantity > 50000 && quantity <= 150000 {
-		endUsageAmount = "150000"
-	} else if quantity > 150000 {
-		endUsageAmount = "999999999"
+	case "aspera":
+		u = "ASPERA_EGRESS"
 	}
 
 	return &schema.CostComponent{
