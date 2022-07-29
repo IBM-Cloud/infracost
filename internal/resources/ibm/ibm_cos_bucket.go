@@ -20,6 +20,7 @@ type IbmCosBucket struct {
 	MonthlyAverageCapacity *float64 `infracost_usage:"monthly_average_capacity"`
 	PublicStandardEgress   *float64 `infracost_usage:"public_standard_egress"`
 	AsperaIngress          *float64 `infracost_usage:"aspera_ingress"`
+	AsperaEgress           *float64 `infracost_usage:"aspera_egress"`
 	ClassARequestCount     *int64   `infracost_usage:"class_a_request_count"`
 	ClassBRequestCount     *int64   `infracost_usage:"class_b_request_count"`
 	MonthlyDataRetrieval   *float64 `infracost_usage:"monthly_data_retrieval"`
@@ -30,6 +31,7 @@ var IbmCosBucketUsageSchema = []*schema.UsageItem{
 	{Key: "monthly_average_capacity", ValueType: schema.Float64, DefaultValue: 0},
 	{Key: "public_standard_egress", ValueType: schema.Float64, DefaultValue: 0},
 	{Key: "aspera_ingress", ValueType: schema.Float64, DefaultValue: 0},
+	{Key: "aspera_egress", ValueType: schema.Float64, DefaultValue: 0},
 	{Key: "class_a_request_count", ValueType: schema.Int64, DefaultValue: 0},
 	{Key: "class_b_request_count", ValueType: schema.Int64, DefaultValue: 0},
 	{Key: "monthly_data_retrieval", ValueType: schema.Int64, DefaultValue: 0},
@@ -158,18 +160,10 @@ func (r *IbmCosBucket) PublicStandardEgressCostComponent() *schema.CostComponent
 		u = "COLD_VAULT_BANDWIDTH"
 	case "smart":
 		u = "SMART_TIER_BANDWIDTH"
-	case "aspera":
-		u = "ASPERA_EGRESS"
-	}
-
-	name := "Public Standard Egress"
-
-	if u == "ASPERA_EGRESS" {
-		name = "Aspera Egress"
 	}
 
 	return &schema.CostComponent{
-		Name:            name,
+		Name:            "Public Standard Egress",
 		Unit:            "GB",
 		UnitMultiplier:  decimal.NewFromInt(1),
 		MonthlyQuantity: q,
@@ -212,6 +206,30 @@ func (r *IbmCosBucket) AsperaIngressCostComponent() *schema.CostComponent {
 	costComponent.SetCustomPrice(decimalPtr(decimal.NewFromInt(0)))
 
 	return &costComponent
+}
+
+func (r *IbmCosBucket) AsperaEgressCostComponent() *schema.CostComponent {
+
+	q := decimalPtr(decimal.NewFromInt(int64(*r.AsperaEgress)))
+
+	u := "ASPERA_EGRESS"
+
+	return &schema.CostComponent{
+		Name:            "Aspera Egress",
+		Unit:            "GB",
+		UnitMultiplier:  decimal.NewFromInt(1),
+		MonthlyQuantity: q,
+		ProductFilter: &schema.ProductFilter{
+			VendorName:       strPtr("ibm"),
+			Region:           strPtr(r.Region),
+			Service:          strPtr(("cloud-object-storage")),
+			ProductFamily:    strPtr("iaas"),
+			AttributeFilters: []*schema.AttributeFilter{},
+		},
+		PriceFilter: &schema.PriceFilter{
+			Unit: strPtr(u),
+		},
+	}
 }
 
 func (r *IbmCosBucket) MonthlyDataRetrievalCostComponent() *schema.CostComponent {
@@ -276,6 +294,9 @@ func (r *IbmCosBucket) BuildResource() *schema.Resource {
 	}
 
 	if r.StorageClass == "aspera" {
+		if r.AsperaEgress != nil {
+			costComponents = append(costComponents, r.AsperaEgressCostComponent())
+		}
 		if r.AsperaIngress != nil {
 			costComponents = append(costComponents, r.AsperaIngressCostComponent())
 		}
