@@ -201,6 +201,7 @@ func (r *IbmCosBucket) AsperaIngressCostComponent() *schema.CostComponent {
 		},
 	}
 
+	// regardless the quantity, egress is free
 	costComponent.SetCustomPrice(decimalPtr(decimal.NewFromInt(0)))
 
 	return &costComponent
