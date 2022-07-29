@@ -316,14 +316,14 @@ func (r *IbmCosBucket) BuildResource() *schema.Resource {
 
 	costComponents := []*schema.CostComponent{}
 
-	if r.StorageClass == "archive" {
+	if r.StorageClass == "archive" && r.Location == "region_location" {
 		if r.ArchiveCapacity != nil {
 			costComponents = append(costComponents, r.ArchiveCapacityCostComponent())
 		}
 		if r.ArchiveRestore != nil {
 			costComponents = append(costComponents, r.ArchiveRestoreCostComponent())
 		}
-	} else if r.StorageClass == "aspera" {
+	} else if r.StorageClass == "aspera" && r.Location == "region_location" || r.Location == "cross_region_location" {
 		if r.AsperaEgress != nil {
 			costComponents = append(costComponents, r.AsperaEgressCostComponent())
 		}
