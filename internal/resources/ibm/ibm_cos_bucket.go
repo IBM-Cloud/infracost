@@ -316,28 +316,6 @@ func (r *IbmCosBucket) BuildResource() *schema.Resource {
 
 	costComponents := []*schema.CostComponent{}
 
-	if r.StorageClass != "aspera" && r.StorageClass != "archive" && r.MonthlyAverageCapacity != nil {
-		costComponents = append(costComponents, r.MonthlyAverageCapacityCostComponent())
-	}
-
-	if r.StorageClass != "aspera" && r.StorageClass != "archive" && r.ClassARequestCount != nil {
-		costComponents = append(costComponents, r.ClassARequestCountCostComponent())
-	}
-
-	if r.StorageClass != "aspera" && r.StorageClass != "archive" && r.ClassBRequestCount != nil {
-		costComponents = append(costComponents, r.ClassBRequestCountCostComponent())
-	}
-
-	if r.StorageClass != "aspera" && r.StorageClass != "archive" && r.PublicStandardEgress != nil {
-		costComponents = append(costComponents, r.PublicStandardEgressCostComponent())
-	}
-
-	if r.StorageClass == "vault" || r.StorageClass == "cold" || r.StorageClass == "smart" {
-		if r.MonthlyDataRetrieval != nil {
-			costComponents = append(costComponents, r.MonthlyDataRetrievalCostComponent())
-		}
-	}
-
 	if r.StorageClass == "archive" {
 		if r.ArchiveCapacity != nil {
 			costComponents = append(costComponents, r.ArchiveCapacityCostComponent())
@@ -345,14 +323,34 @@ func (r *IbmCosBucket) BuildResource() *schema.Resource {
 		if r.ArchiveRestore != nil {
 			costComponents = append(costComponents, r.ArchiveRestoreCostComponent())
 		}
-	}
-
-	if r.StorageClass == "aspera" {
+	} else if r.StorageClass == "aspera" {
 		if r.AsperaEgress != nil {
 			costComponents = append(costComponents, r.AsperaEgressCostComponent())
 		}
 		if r.AsperaIngress != nil {
 			costComponents = append(costComponents, r.AsperaIngressCostComponent())
+		}
+	} else {
+		if r.MonthlyAverageCapacity != nil {
+			costComponents = append(costComponents, r.MonthlyAverageCapacityCostComponent())
+		}
+
+		if r.ClassARequestCount != nil {
+			costComponents = append(costComponents, r.ClassARequestCountCostComponent())
+		}
+
+		if r.ClassBRequestCount != nil {
+			costComponents = append(costComponents, r.ClassBRequestCountCostComponent())
+		}
+
+		if r.PublicStandardEgress != nil {
+			costComponents = append(costComponents, r.PublicStandardEgressCostComponent())
+		}
+
+		if r.StorageClass == "vault" || r.StorageClass == "cold" || r.StorageClass == "smart" {
+			if r.MonthlyDataRetrieval != nil {
+				costComponents = append(costComponents, r.MonthlyDataRetrievalCostComponent())
+			}
 		}
 	}
 
