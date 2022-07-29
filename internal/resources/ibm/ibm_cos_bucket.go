@@ -260,7 +260,7 @@ func (r *IbmCosBucket) ArchiveRestoreCostComponent() *schema.CostComponent {
 	q := decimalPtr(decimal.NewFromInt(int64(*r.ArchiveRestore)))
 
 	return &schema.CostComponent{
-		Name:            "Archive Capacity",
+		Name:            "Archive Restore",
 		Unit:            "GB",
 		UnitMultiplier:  decimal.NewFromInt(1),
 		MonthlyQuantity: q,
