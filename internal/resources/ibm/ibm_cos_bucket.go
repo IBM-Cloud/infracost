@@ -21,6 +21,8 @@ type IbmCosBucket struct {
 	PublicStandardEgress   *float64 `infracost_usage:"public_standard_egress"`
 	AsperaIngress          *float64 `infracost_usage:"aspera_ingress"`
 	AsperaEgress           *float64 `infracost_usage:"aspera_egress"`
+	ArchiveCapacity        *float64 `infracost_usage:"archive_capacity"`
+	ArchiveRestore         *float64 `infracost_usage:"archive_restore"`
 	ClassARequestCount     *int64   `infracost_usage:"class_a_request_count"`
 	ClassBRequestCount     *int64   `infracost_usage:"class_b_request_count"`
 	MonthlyDataRetrieval   *float64 `infracost_usage:"monthly_data_retrieval"`
@@ -32,6 +34,8 @@ var IbmCosBucketUsageSchema = []*schema.UsageItem{
 	{Key: "public_standard_egress", ValueType: schema.Float64, DefaultValue: 0},
 	{Key: "aspera_ingress", ValueType: schema.Float64, DefaultValue: 0},
 	{Key: "aspera_egress", ValueType: schema.Float64, DefaultValue: 0},
+	{Key: "archive_capacity", ValueType: schema.Float64, DefaultValue: 0},
+	{Key: "archive_restore", ValueType: schema.Float64, DefaultValue: 0},
 	{Key: "class_a_request_count", ValueType: schema.Int64, DefaultValue: 0},
 	{Key: "class_b_request_count", ValueType: schema.Int64, DefaultValue: 0},
 	{Key: "monthly_data_retrieval", ValueType: schema.Int64, DefaultValue: 0},
@@ -229,6 +233,50 @@ func (r *IbmCosBucket) AsperaEgressCostComponent() *schema.CostComponent {
 	}
 }
 
+func (r *IbmCosBucket) ArchiveCapacityCostComponent() *schema.CostComponent {
+
+	q := decimalPtr(decimal.NewFromInt(int64(*r.ArchiveCapacity)))
+
+	return &schema.CostComponent{
+		Name:            "Archive Capacity",
+		Unit:            "GB",
+		UnitMultiplier:  decimal.NewFromInt(1),
+		MonthlyQuantity: q,
+		ProductFilter: &schema.ProductFilter{
+			VendorName:       strPtr("ibm"),
+			Region:           strPtr(r.Region),
+			Service:          strPtr(("cloud-object-storage")),
+			ProductFamily:    strPtr("iaas"),
+			AttributeFilters: []*schema.AttributeFilter{},
+		},
+		PriceFilter: &schema.PriceFilter{
+			Unit: strPtr("ARCHIVE_STORAGE"),
+		},
+	}
+}
+
+func (r *IbmCosBucket) ArchiveRestoreCostComponent() *schema.CostComponent {
+
+	q := decimalPtr(decimal.NewFromInt(int64(*r.ArchiveRestore)))
+
+	return &schema.CostComponent{
+		Name:            "Archive Capacity",
+		Unit:            "GB",
+		UnitMultiplier:  decimal.NewFromInt(1),
+		MonthlyQuantity: q,
+		ProductFilter: &schema.ProductFilter{
+			VendorName:       strPtr("ibm"),
+			Region:           strPtr(r.Region),
+			Service:          strPtr(("cloud-object-storage")),
+			ProductFamily:    strPtr("iaas"),
+			AttributeFilters: []*schema.AttributeFilter{},
+		},
+		PriceFilter: &schema.PriceFilter{
+			Unit: strPtr("ARCHIVE_RESTORE"),
+		},
+	}
+}
+
 func (r *IbmCosBucket) MonthlyDataRetrievalCostComponent() *schema.CostComponent {
 
 	q := decimalPtr(decimal.NewFromInt(int64(*r.MonthlyDataRetrieval)))
@@ -268,25 +316,34 @@ func (r *IbmCosBucket) BuildResource() *schema.Resource {
 
 	costComponents := []*schema.CostComponent{}
 
-	if r.StorageClass != "aspera" && r.MonthlyAverageCapacity != nil {
+	if r.StorageClass != "aspera" && r.StorageClass != "archive" && r.MonthlyAverageCapacity != nil {
 		costComponents = append(costComponents, r.MonthlyAverageCapacityCostComponent())
 	}
 
-	if r.StorageClass != "aspera" && r.ClassARequestCount != nil {
+	if r.StorageClass != "aspera" && r.StorageClass != "archive" && r.ClassARequestCount != nil {
 		costComponents = append(costComponents, r.ClassARequestCountCostComponent())
 	}
 
-	if r.StorageClass != "aspera" && r.ClassBRequestCount != nil {
+	if r.StorageClass != "aspera" && r.StorageClass != "archive" && r.ClassBRequestCount != nil {
 		costComponents = append(costComponents, r.ClassBRequestCountCostComponent())
 	}
 
-	if r.StorageClass != "aspera" && r.PublicStandardEgress != nil {
+	if r.StorageClass != "aspera" && r.StorageClass != "archive" && r.PublicStandardEgress != nil {
 		costComponents = append(costComponents, r.PublicStandardEgressCostComponent())
 	}
 
 	if r.StorageClass == "vault" || r.StorageClass == "cold" || r.StorageClass == "smart" {
 		if r.MonthlyDataRetrieval != nil {
 			costComponents = append(costComponents, r.MonthlyDataRetrievalCostComponent())
+		}
+	}
+
+	if r.StorageClass == "archive" {
+		if r.ArchiveCapacity != nil {
+			costComponents = append(costComponents, r.ArchiveCapacityCostComponent())
+		}
+		if r.ArchiveRestore != nil {
+			costComponents = append(costComponents, r.ArchiveRestoreCostComponent())
 		}
 	}
 
