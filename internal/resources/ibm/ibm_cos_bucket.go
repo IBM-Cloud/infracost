@@ -184,8 +184,6 @@ func (r *IbmCosBucket) AsperaIngressCostComponent() *schema.CostComponent {
 
 	q := decimalPtr(decimal.NewFromInt(int64(*r.AsperaIngress)))
 
-	u := "ASPERA_INGRESS"
-
 	costComponent := schema.CostComponent{
 		Name:            "Aspera Ingress Free",
 		Unit:            "GB",
@@ -199,7 +197,7 @@ func (r *IbmCosBucket) AsperaIngressCostComponent() *schema.CostComponent {
 			AttributeFilters: []*schema.AttributeFilter{},
 		},
 		PriceFilter: &schema.PriceFilter{
-			Unit: strPtr(u),
+			Unit: strPtr("ASPERA_INGRESS"),
 		},
 	}
 
@@ -211,8 +209,6 @@ func (r *IbmCosBucket) AsperaIngressCostComponent() *schema.CostComponent {
 func (r *IbmCosBucket) AsperaEgressCostComponent() *schema.CostComponent {
 
 	q := decimalPtr(decimal.NewFromInt(int64(*r.AsperaEgress)))
-
-	u := "ASPERA_EGRESS"
 
 	return &schema.CostComponent{
 		Name:            "Aspera Egress",
@@ -227,7 +223,7 @@ func (r *IbmCosBucket) AsperaEgressCostComponent() *schema.CostComponent {
 			AttributeFilters: []*schema.AttributeFilter{},
 		},
 		PriceFilter: &schema.PriceFilter{
-			Unit: strPtr(u),
+			Unit: strPtr("ASPERA_EGRESS"),
 		},
 	}
 }
