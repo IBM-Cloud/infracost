@@ -162,8 +162,14 @@ func (r *IbmCosBucket) PublicStandardEgressCostComponent() *schema.CostComponent
 		u = "ASPERA_EGRESS"
 	}
 
+	name := "Public Standard Egress"
+
+	if u == "ASPERA_EGRESS" {
+		name = "Aspera Egress"
+	}
+
 	return &schema.CostComponent{
-		Name:            "Public Standard Egress",
+		Name:            name,
 		Unit:            "GB",
 		UnitMultiplier:  decimal.NewFromInt(1),
 		MonthlyQuantity: q,
