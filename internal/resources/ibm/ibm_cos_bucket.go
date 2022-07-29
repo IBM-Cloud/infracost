@@ -268,19 +268,19 @@ func (r *IbmCosBucket) BuildResource() *schema.Resource {
 
 	costComponents := []*schema.CostComponent{}
 
-	if r.MonthlyAverageCapacity != nil {
+	if r.StorageClass != "aspera" && r.MonthlyAverageCapacity != nil {
 		costComponents = append(costComponents, r.MonthlyAverageCapacityCostComponent())
 	}
 
-	if r.ClassARequestCount != nil {
+	if r.StorageClass != "aspera" && r.ClassARequestCount != nil {
 		costComponents = append(costComponents, r.ClassARequestCountCostComponent())
 	}
 
-	if r.ClassBRequestCount != nil {
+	if r.StorageClass != "aspera" && r.ClassBRequestCount != nil {
 		costComponents = append(costComponents, r.ClassBRequestCountCostComponent())
 	}
 
-	if r.PublicStandardEgress != nil {
+	if r.StorageClass != "aspera" && r.PublicStandardEgress != nil {
 		costComponents = append(costComponents, r.PublicStandardEgressCostComponent())
 	}
 
