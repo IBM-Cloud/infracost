@@ -1,0 +1,26 @@
+
+ Name                                                Monthly Qty  Unit              Monthly Cost 
+                                                                                                 
+ ibm_is_floating_ip.testFloatingIp                                                               
+ └─ Floating Ip us-south                                       1  Instance                 $1.00 
+                                                                                                 
+ ibm_is_instance.testInstance                                                                    
+ └─ Instance usage (bx2.2x8, public, us-south-1)  Monthly cost depends on usage: $0.12 per hours 
+                                                                                                 
+ ibm_is_vpc.testVpc                                                                              
+ ├─ VPC instance                                               1  Instance                 $0.00 
+ ├─ VPC egress free allowance (first 5GB)         Monthly cost depends on usage: $0.00 per GB    
+ └─ VPC egress us-south (first 9995 GB)                        -  GB                           - 
+ └─ VPC egress us-south (next 40000 GB)                        -  GB                           - 
+ └─ VPC egress us-south (next 100000 GB)                       -  GB                           - 
+ └─ VPC egress us-south (over 149995 GB)                       -  GB                           - 
+                                                                                                 
+ OVERALL TOTAL                                                                             $1.00 
+──────────────────────────────────
+6 cloud resources were detected:
+∙ 3 were estimated, 2 of which include usage-based costs, see https://infracost.io/usage-file
+∙ 2 were free:
+  ∙ 1 x ibm_is_ssh_key
+  ∙ 1 x ibm_is_subnet
+∙ 1 is not supported yet, see https://infracost.io/requested-resources:
+  ∙ 1 x ibm_is_image
