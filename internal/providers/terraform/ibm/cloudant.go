@@ -1,0 +1,24 @@
+package ibm
+
+import (
+	"github.com/infracost/infracost/internal/resources/ibm"
+	"github.com/infracost/infracost/internal/schema"
+)
+
+func getCloudantRegistryItem() *schema.RegistryItem {
+	return &schema.RegistryItem{
+		Name:  "ibm_cloudant",
+		RFunc: newCloudant,
+	}
+}
+
+func newCloudant(d *schema.ResourceData, u *schema.UsageData) *schema.Resource {
+	region := d.Get("region").String()
+	r := &ibm.Cloudant{
+		Address: d.Address,
+		Region:  region,
+	}
+	r.PopulateUsage(u)
+
+	return r.BuildResource()
+}
