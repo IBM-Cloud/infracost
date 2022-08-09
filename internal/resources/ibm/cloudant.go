@@ -109,7 +109,7 @@ func (r *Cloudant) cloudantReadsCostComponent() *schema.CostComponent {
 
 	return &schema.CostComponent{
 		Name:            "Monthly Reads",
-		Unit:            "second",
+		Unit:            "reads/second",
 		MonthlyQuantity: decimalPtr(decimal.NewFromInt(int64(monthlyReads))),
 		UnitMultiplier:  decimal.NewFromInt(1),
 		ProductFilter: &schema.ProductFilter{
@@ -131,7 +131,7 @@ func (r *Cloudant) cloudantWritesCostComponent() *schema.CostComponent {
 
 	return &schema.CostComponent{
 		Name:            "Monthly Writes",
-		Unit:            "second",
+		Unit:            "writes/second",
 		MonthlyQuantity: decimalPtr(decimal.NewFromInt(int64(monthlyWrites))),
 		UnitMultiplier:  decimal.NewFromInt(1),
 		ProductFilter: &schema.ProductFilter{
@@ -153,7 +153,7 @@ func (r *Cloudant) cloudantGlobalQueriesCostComponent() *schema.CostComponent {
 
 	return &schema.CostComponent{
 		Name:            "Monthly Global Queries",
-		Unit:            "second",
+		Unit:            "queries/second",
 		MonthlyQuantity: decimalPtr(decimal.NewFromInt(int64(monthlyGlobalQueries))),
 		UnitMultiplier:  decimal.NewFromInt(1),
 		ProductFilter: &schema.ProductFilter{
