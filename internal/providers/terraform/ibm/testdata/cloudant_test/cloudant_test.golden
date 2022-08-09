@@ -1,5 +1,7 @@
-# Run:
-#
-# ARGS="--run TestCloudant -v -update" make test_ibm
-#
-# to update this file with golden file outputs.
+
+ Name  Monthly Qty  Unit  Monthly Cost 
+                                       
+ OVERALL TOTAL                   $0.00 
+──────────────────────────────────
+1 cloud resource was detected:
+∙ 1 was estimated
