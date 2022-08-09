@@ -37,7 +37,7 @@ func convertCapacity(capacity string) int {
 	c, err := strconv.Atoi(capacity)
 
 	if err != nil {
-		fmt.Printf("Unable to convert capacity: %s. Using capacity: 1", capacity)
+		fmt.Printf("Unable to convert capacity: %s. Using capacity: 1\n", capacity)
 		c = 1
 	}
 	return c
