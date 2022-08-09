@@ -14,9 +14,15 @@ func getCloudantRegistryItem() *schema.RegistryItem {
 
 func newCloudant(d *schema.ResourceData, u *schema.UsageData) *schema.Resource {
 	region := d.Get("region").String()
+
+	p := d.Get("plan").String()
+	c := d.Get("capacity").String()
+
 	r := &ibm.Cloudant{
-		Address: d.Address,
-		Region:  region,
+		Address:  d.Address,
+		Region:   region,
+		Plan:     p,
+		Capacity: c,
 	}
 	r.PopulateUsage(u)
 
