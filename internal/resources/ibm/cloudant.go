@@ -82,13 +82,49 @@ func (r *Cloudant) cloudantInstanceCostComponent() *schema.CostComponent {
 	}
 }
 
-func (r *Cloudant) cloudantStorageCostComponent() *schema.CostComponent {
+func (r *Cloudant) cloudantFreeStorageCostComponent() *schema.CostComponent {
 	var q *decimal.Decimal
 	if r.Storage != nil {
-		q = decimalPtr(decimal.NewFromInt(int64(*r.Storage)))
+		q = decimalPtr(decimal.NewFromInt(*r.Storage))
+		if q.GreaterThan(decimal.NewFromInt(20)) {
+			q = decimalPtr(decimal.NewFromInt(20))
+		}
 	}
 
-	return &schema.CostComponent{
+	costComponent := schema.CostComponent{
+		Name:            "Free Estimated storage",
+		Unit:            "GB",
+		MonthlyQuantity: q,
+		UnitMultiplier:  decimal.NewFromInt(1),
+		ProductFilter: &schema.ProductFilter{
+			VendorName:    strPtr("ibm"),
+			Region:        strPtr(r.Region),
+			Service:       strPtr("cloudantnosqldb"),
+			ProductFamily: strPtr("service"),
+		},
+		PriceFilter: &schema.PriceFilter{
+			Unit: strPtr("GB_STORAGE_ACCRUED_PER_MONTH"),
+		},
+	}
+
+	costComponent.SetCustomPrice(decimalPtr(decimal.NewFromInt(0)))
+
+	return &costComponent
+}
+
+func (r *Cloudant) cloudantStorageCostComponent() *schema.CostComponent {
+
+	var q *decimal.Decimal
+	if r.Storage != nil {
+		q = decimalPtr(decimal.NewFromInt(*r.Storage))
+		if q.LessThanOrEqual(decimal.NewFromInt(20)) {
+			q = decimalPtr(decimal.NewFromInt(0))
+		} else {
+			q = decimalPtr(q.Sub(decimal.NewFromInt(20)))
+		}
+	}
+
+	costComponent := schema.CostComponent{
 		Name:            "Estimated storage",
 		Unit:            "GB",
 		MonthlyQuantity: q,
@@ -103,6 +139,8 @@ func (r *Cloudant) cloudantStorageCostComponent() *schema.CostComponent {
 			Unit: strPtr("GB_STORAGE_ACCRUED_PER_MONTH"),
 		},
 	}
+
+	return &costComponent
 }
 
 // BuildResource builds a schema.Resource from a valid Cloudant struct.
@@ -111,6 +149,7 @@ func (r *Cloudant) cloudantStorageCostComponent() *schema.CostComponent {
 func (r *Cloudant) BuildResource() *schema.Resource {
 	costComponents := []*schema.CostComponent{
 		r.cloudantInstanceCostComponent(),
+		r.cloudantFreeStorageCostComponent(),
 		r.cloudantStorageCostComponent(),
 	}
 
