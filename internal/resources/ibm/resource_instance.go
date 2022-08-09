@@ -62,7 +62,7 @@ func KMSKeyVersionsFreeCostComponent(r *ResourceInstance) *schema.CostComponent 
 		}
 	}
 	costComponent := schema.CostComponent{
-		Name:            fmt.Sprintf("Key versions free allowance (first 5 Items)"),
+		Name:            fmt.Sprintf("Key versions free allowance (first 5 Key Versions)"),
 		Unit:            "Key Versions",
 		UnitMultiplier:  decimal.NewFromInt(1),
 		MonthlyQuantity: q,
