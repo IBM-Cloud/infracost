@@ -5,7 +5,7 @@
  └─ Dedicated Hardware                             1  instance           $5,000.00 
                                                                                    
  Cloudant - Lite                                                                   
- └─ Cloudant                                       1  instance               $0.00 
+ └─ Lite Cloudant                                  1  instance               $0.00 
                                                                                    
  Cloudant - Standard                                                               
  ├─ Monthly Reads                                100  reads/second          $25.00 
