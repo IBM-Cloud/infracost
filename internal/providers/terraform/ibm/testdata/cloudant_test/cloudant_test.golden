@@ -1,13 +1,19 @@
 
- Name                       Monthly Qty  Unit    Monthly Cost 
-                                                              
- Cloudant - standard                                          
- ├─ Monthly Reads                   100  second        $25.00 
- ├─ Monthly Writes                   50  second        $25.00 
- ├─ Monthly Global Queries            5  second        $25.00 
- └─ Free Estimated Storage           20  GB             $0.00 
-                                                              
- OVERALL TOTAL                                         $75.00 
+ Name                       Monthly Qty  Unit            Monthly Cost 
+                                                                      
+ Cloudant - Lite                                                      
+ ├─ Monthly Reads                    20  reads/second           $0.00 
+ ├─ Monthly Writes                   10  writes/second          $0.00 
+ ├─ Monthly Global Queries            5  queries/second         $0.00 
+ └─ Free Estimated Storage            1  GB                     $0.00 
+                                                                      
+ Cloudant - Standard                                                  
+ ├─ Monthly Reads                   100  reads/second          $25.00 
+ ├─ Monthly Writes                   50  writes/second         $25.00 
+ ├─ Monthly Global Queries            5  queries/second        $25.00 
+ └─ Free Estimated Storage           20  GB                     $0.00 
+                                                                      
+ OVERALL TOTAL                                                 $75.00 
 ──────────────────────────────────
-1 cloud resource was detected:
-∙ 1 was estimated
+2 cloud resources were detected:
+∙ 2 were estimated
