@@ -106,7 +106,7 @@ func (r *Cloudant) cloudantStandardStorageCostComponent() *schema.CostComponent 
 
 func (r *Cloudant) cloudantLiteStorageCostComponent() *schema.CostComponent {
 	costComponent := schema.CostComponent{
-		Name:            "Free Estimated Storage",
+		Name:            "Estimated Storage",
 		Unit:            "GB",
 		MonthlyQuantity: decimalPtr(decimal.NewFromInt(1)),
 		UnitMultiplier:  decimal.NewFromInt(1),
