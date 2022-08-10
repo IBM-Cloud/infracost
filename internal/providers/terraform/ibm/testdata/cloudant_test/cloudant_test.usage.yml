@@ -1,4 +1,4 @@
 version: 0.1
 resource_usage:
-  ibm_cloudant.cloudant:
+  ibm_cloudant.standard_cloudant:
     storage: 20
