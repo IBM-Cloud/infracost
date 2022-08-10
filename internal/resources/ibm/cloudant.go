@@ -45,7 +45,7 @@ func convertCapacity(capacity string) int {
 	return c
 }
 
-func (r *Cloudant) cloudantStandardFreeStorageCostComponent() *schema.CostComponent {
+func (r *Cloudant) cloudantFreeStorageCostComponent() *schema.CostComponent {
 	var q *decimal.Decimal
 	if r.Storage != nil {
 		q = decimalPtr(decimal.NewFromInt(*r.Storage))
@@ -75,7 +75,7 @@ func (r *Cloudant) cloudantStandardFreeStorageCostComponent() *schema.CostCompon
 	return &costComponent
 }
 
-func (r *Cloudant) cloudantStandardStorageCostComponent() *schema.CostComponent {
+func (r *Cloudant) cloudantStorageCostComponent() *schema.CostComponent {
 
 	var q *decimal.Decimal
 	if r.Storage != nil {
@@ -104,10 +104,10 @@ func (r *Cloudant) cloudantStandardStorageCostComponent() *schema.CostComponent 
 	}
 }
 
-func (r *Cloudant) cloudantLiteStorageCostComponent() *schema.CostComponent {
+func (r *Cloudant) cloudantLiteCostComponent() *schema.CostComponent {
 	costComponent := schema.CostComponent{
-		Name:            "Estimated Storage",
-		Unit:            "GB",
+		Name:            "Lite Cloudant",
+		Unit:            "instance",
 		MonthlyQuantity: decimalPtr(decimal.NewFromInt(1)),
 		UnitMultiplier:  decimal.NewFromInt(1),
 		ProductFilter: &schema.ProductFilter{
@@ -116,9 +116,7 @@ func (r *Cloudant) cloudantLiteStorageCostComponent() *schema.CostComponent {
 			Service:       strPtr("cloudantnosqldb"),
 			ProductFamily: strPtr("service"),
 		},
-		PriceFilter: &schema.PriceFilter{
-			Unit: strPtr("GB_STORAGE_ACCRUED_PER_MONTH"),
-		},
+		PriceFilter: &schema.PriceFilter{},
 	}
 
 	costComponent.SetCustomPrice(decimalPtr(decimal.NewFromInt(0)))
@@ -126,7 +124,7 @@ func (r *Cloudant) cloudantLiteStorageCostComponent() *schema.CostComponent {
 	return &costComponent
 }
 
-func (r *Cloudant) cloudantStandardReadsCostComponent() *schema.CostComponent {
+func (r *Cloudant) cloudantReadsCostComponent() *schema.CostComponent {
 	c := convertCapacity(r.Capacity)
 
 	monthlyReads := c * 100
@@ -148,29 +146,7 @@ func (r *Cloudant) cloudantStandardReadsCostComponent() *schema.CostComponent {
 	}
 }
 
-func (r *Cloudant) cloudantLiteReadsCostComponent() *schema.CostComponent {
-	costComponent := schema.CostComponent{
-		Name:            "Monthly Reads",
-		Unit:            "reads/second",
-		MonthlyQuantity: decimalPtr(decimal.NewFromInt(int64(20))),
-		UnitMultiplier:  decimal.NewFromInt(1),
-		ProductFilter: &schema.ProductFilter{
-			VendorName:    strPtr("ibm"),
-			Region:        strPtr(r.Region),
-			Service:       strPtr("cloudantnosqldb"),
-			ProductFamily: strPtr("service"),
-		},
-		PriceFilter: &schema.PriceFilter{
-			Unit: strPtr("READ_CAPACITY_ACCRUED_PER_MONTH"),
-		},
-	}
-
-	costComponent.SetCustomPrice(decimalPtr(decimal.NewFromInt(0)))
-
-	return &costComponent
-}
-
-func (r *Cloudant) cloudantStandardWritesCostComponent() *schema.CostComponent {
+func (r *Cloudant) cloudantWritesCostComponent() *schema.CostComponent {
 	c := convertCapacity(r.Capacity)
 
 	monthlyWrites := c * 50
@@ -192,30 +168,7 @@ func (r *Cloudant) cloudantStandardWritesCostComponent() *schema.CostComponent {
 	}
 }
 
-func (r *Cloudant) cloudantLiteWritesCostComponent() *schema.CostComponent {
-
-	costComponent := schema.CostComponent{
-		Name:            "Monthly Writes",
-		Unit:            "writes/second",
-		MonthlyQuantity: decimalPtr(decimal.NewFromInt(int64(10))),
-		UnitMultiplier:  decimal.NewFromInt(1),
-		ProductFilter: &schema.ProductFilter{
-			VendorName:    strPtr("ibm"),
-			Region:        strPtr(r.Region),
-			Service:       strPtr("cloudantnosqldb"),
-			ProductFamily: strPtr("service"),
-		},
-		PriceFilter: &schema.PriceFilter{
-			Unit: strPtr("WRITE_CAPACITY_ACCRUED_PER_MONTH"),
-		},
-	}
-
-	costComponent.SetCustomPrice(decimalPtr(decimal.NewFromInt(0)))
-
-	return &costComponent
-}
-
-func (r *Cloudant) cloudantStandardGlobalQueriesCostComponent() *schema.CostComponent {
+func (r *Cloudant) cloudantGlobalQueriesCostComponent() *schema.CostComponent {
 	c := convertCapacity(r.Capacity)
 
 	monthlyGlobalQueries := c * 5
@@ -235,27 +188,6 @@ func (r *Cloudant) cloudantStandardGlobalQueriesCostComponent() *schema.CostComp
 			Unit: strPtr("GLOBAL_QUERY_CAPACITY_ACCRUED_PER_MONTH"),
 		},
 	}
-}
-
-func (r *Cloudant) cloudantLiteGlobalQueriesCostComponent() *schema.CostComponent {
-	costComponent := schema.CostComponent{
-		Name:            "Monthly Global Queries",
-		Unit:            "queries/second",
-		MonthlyQuantity: decimalPtr(decimal.NewFromInt(int64(5))),
-		UnitMultiplier:  decimal.NewFromInt(1),
-		ProductFilter: &schema.ProductFilter{
-			VendorName:    strPtr("ibm"),
-			Region:        strPtr(r.Region),
-			Service:       strPtr("cloudantnosqldb"),
-			ProductFamily: strPtr("service"),
-		},
-		PriceFilter: &schema.PriceFilter{
-			Unit: strPtr("GLOBAL_QUERY_CAPACITY_ACCRUED_PER_MONTH"),
-		},
-	}
-
-	costComponent.SetCustomPrice(decimalPtr(decimal.NewFromInt(0)))
-	return &costComponent
 }
 
 func (r *Cloudant) cloudantDedicatedHardwareCostComponent() *schema.CostComponent {
@@ -286,18 +218,15 @@ func (r *Cloudant) BuildResource() *schema.Resource {
 	if r.Plan == "lite" {
 		costComponents = append(
 			costComponents,
-			r.cloudantLiteReadsCostComponent(),
-			r.cloudantLiteWritesCostComponent(),
-			r.cloudantLiteGlobalQueriesCostComponent(),
-			r.cloudantLiteStorageCostComponent(),
+			r.cloudantLiteCostComponent(),
 		)
 	} else if r.Plan == "standard" {
 		costComponents = append(costComponents,
-			r.cloudantStandardReadsCostComponent(),
-			r.cloudantStandardWritesCostComponent(),
-			r.cloudantStandardGlobalQueriesCostComponent(),
-			r.cloudantStandardFreeStorageCostComponent(),
-			r.cloudantStandardStorageCostComponent())
+			r.cloudantReadsCostComponent(),
+			r.cloudantWritesCostComponent(),
+			r.cloudantGlobalQueriesCostComponent(),
+			r.cloudantFreeStorageCostComponent(),
+			r.cloudantStorageCostComponent())
 	} else if r.Plan == "dedicated-hardware" {
 		costComponents = append(costComponents, r.cloudantDedicatedHardwareCostComponent())
 	}
