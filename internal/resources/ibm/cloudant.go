@@ -7,6 +7,8 @@ import (
 	"github.com/infracost/infracost/internal/resources"
 	"github.com/infracost/infracost/internal/schema"
 	"github.com/shopspring/decimal"
+	"golang.org/x/text/cases"
+	"golang.org/x/text/language"
 )
 
 // Cloudant struct represents a Cloudant Instance
@@ -180,8 +182,10 @@ func (r *Cloudant) BuildResource() *schema.Resource {
 		r.cloudantStorageCostComponent(),
 	}
 
+	planName := cases.Title(language.Und).String(r.Plan)
+
 	return &schema.Resource{
-		Name:           fmt.Sprintf("Cloudant - %s", r.Plan),
+		Name:           fmt.Sprintf("Cloudant - %s", planName),
 		UsageSchema:    CloudantUsageSchema,
 		CostComponents: costComponents,
 	}
