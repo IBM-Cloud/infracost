@@ -258,6 +258,24 @@ func (r *Cloudant) cloudantLiteGlobalQueriesCostComponent() *schema.CostComponen
 	return &costComponent
 }
 
+func (r *Cloudant) cloudantDedicatedHardwareCostComponent() *schema.CostComponent {
+	return &schema.CostComponent{
+		Name:            "Dedicated Hardware",
+		Unit:            "instance",
+		MonthlyQuantity: decimalPtr(decimal.NewFromInt(int64(1))),
+		UnitMultiplier:  decimal.NewFromInt(1),
+		ProductFilter: &schema.ProductFilter{
+			VendorName:    strPtr("ibm"),
+			Region:        strPtr(r.Region),
+			Service:       strPtr("cloudantnosqldb"),
+			ProductFamily: strPtr("service"),
+		},
+		PriceFilter: &schema.PriceFilter{
+			Unit: strPtr("INSTANCES_PER_MONTH"),
+		},
+	}
+}
+
 // BuildResource builds a schema.Resource from a valid Cloudant struct.
 // This method is called after the resource is initialised by an IaC provider.
 // See providers folder for more information.
@@ -280,6 +298,8 @@ func (r *Cloudant) BuildResource() *schema.Resource {
 			r.cloudantStandardGlobalQueriesCostComponent(),
 			r.cloudantStandardFreeStorageCostComponent(),
 			r.cloudantStandardStorageCostComponent())
+	} else if r.Plan == "dedicated-hardware" {
+		costComponents = append(costComponents, r.cloudantDedicatedHardwareCostComponent())
 	}
 
 	planName := cases.Title(language.Und).String(r.Plan)

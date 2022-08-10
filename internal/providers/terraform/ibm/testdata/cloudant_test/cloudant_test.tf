@@ -54,3 +54,25 @@ resource "ibm_cloudant" "lite_cloudant" {
     delete = "15m"
   }
 }
+
+resource "ibm_cloudant" "dedicated_cloudant" {
+  name     = "dedicated-cloudant"
+  location = "us-south"
+  plan     = "dedicated-hardware"
+
+  legacy_credentials  = true
+  include_data_events = false
+  capacity            = 1
+  enable_cors         = true
+
+  cors_config {
+    allow_credentials = false
+    origins           = ["https://example.com"]
+  }
+
+  timeouts {
+    create = "15m"
+    update = "15m"
+    delete = "15m"
+  }
+}
