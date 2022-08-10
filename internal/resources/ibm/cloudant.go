@@ -55,7 +55,7 @@ func (r *Cloudant) cloudantStandardFreeStorageCostComponent() *schema.CostCompon
 	}
 
 	costComponent := schema.CostComponent{
-		Name:            "Free Estimated Storage",
+		Name:            "Free Estimated Storage (first 20GB)",
 		Unit:            "GB",
 		MonthlyQuantity: q,
 		UnitMultiplier:  decimal.NewFromInt(1),
