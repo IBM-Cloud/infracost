@@ -76,11 +76,11 @@ func parseProfile(profile string) instanceInformation {
 		var err error
 		instanceInfo.Cores, err = strconv.ParseInt(cpuAndMemory[0], 10, 64)
 		if err != nil {
-			log.Warnf("Parse error at is.instance profile parsing", profile)
+			log.Warnf("Parse error at is.instance profile parsing: %s", profile)
 		}
 		instanceInfo.Memory, err = strconv.ParseInt(cpuAndMemory[1], 10, 64)
 		if err != nil {
-			log.Warnf("Parse error at is.instance profile parsing", profile)
+			log.Warnf("Parse error at is.instance profile parsing: %s", profile)
 		}
 	}
 	return instanceInfo
