@@ -51,7 +51,7 @@ func (c *CostComponent) CalculateCosts() {
 				tier.HourlyCost = decimalPtr(decimal.NewFromInt(0))
 				if tier.EndUsageAmount.GreaterThanOrEqual(*c.HourlyQuantity) && tier.StartUsageAmount.LessThan(*c.HourlyQuantity) {
 					tier.HourlyQuantity = decimalPtr(c.HourlyQuantity.Sub(tier.StartUsageAmount))
-				} else if tier.EndUsageAmount.LessThan(*c.HourlyQuantity) {
+				} else if tier.EndUsageAmount.GreaterThan(decimal.NewFromInt(0)) && tier.EndUsageAmount.LessThan(*c.HourlyQuantity) {
 					tier.HourlyQuantity = decimalPtr(tier.EndUsageAmount.Sub(tier.StartUsageAmount))
 				}
 
@@ -64,7 +64,7 @@ func (c *CostComponent) CalculateCosts() {
 				tier.MonthlyCost = decimalPtr(decimal.NewFromInt(0))
 				if tier.EndUsageAmount.GreaterThanOrEqual(*c.MonthlyQuantity) && tier.StartUsageAmount.LessThan(*c.MonthlyQuantity) {
 					tier.MonthlyQuantity = decimalPtr(c.MonthlyQuantity.Sub(tier.StartUsageAmount))
-				} else if tier.EndUsageAmount.LessThan(*c.MonthlyQuantity) {
+				} else if tier.EndUsageAmount.GreaterThan(decimal.NewFromInt(0)) && tier.EndUsageAmount.LessThan(*c.MonthlyQuantity) {
 					tier.MonthlyQuantity = decimalPtr(tier.EndUsageAmount.Sub(tier.StartUsageAmount))
 				}
 
@@ -153,7 +153,15 @@ func (c *CostComponent) UnitMultiplierHourlyQuantity() *decimal.Decimal {
 	if c.HourlyQuantity == nil {
 		return nil
 	}
-	m := c.HourlyQuantity.Div(c.UnitMultiplier)
+
+	var m decimal.Decimal
+
+	if c.UnitMultiplier.IsZero() {
+		m = decimal.Zero
+	} else {
+		m = c.HourlyQuantity.Div(c.UnitMultiplier)
+	}
+
 	return &m
 }
 
@@ -161,6 +169,14 @@ func (c *CostComponent) UnitMultiplierMonthlyQuantity() *decimal.Decimal {
 	if c.MonthlyQuantity == nil {
 		return nil
 	}
-	m := c.MonthlyQuantity.Div(c.UnitMultiplier)
+
+	var m decimal.Decimal
+
+	if c.UnitMultiplier.IsZero() {
+		m = decimal.Zero
+	} else {
+		m = c.MonthlyQuantity.Div(c.UnitMultiplier)
+	}
+
 	return &m
 }
