@@ -157,15 +157,41 @@ func (r *IsInstance) cpuCostComponent(arch ArchType, cpu int64) *schema.CostComp
 	}
 }
 
+func (r *IsInstance) onDedicatedHostCostComponent(cores int64, memory int64) *schema.CostComponent {
+	var quantity *decimal.Decimal
+
+	if r.MonthlyInstanceHours != nil {
+		quantity = decimalPtr(decimal.NewFromInt(*r.MonthlyInstanceHours))
+	}
+	costCompoment := &schema.CostComponent{
+		Name:            fmt.Sprintf("Host Hours (%d vCPUs, %d GB, %s)", cores, memory, r.Zone),
+		Unit:            "hours",
+		UnitMultiplier:  decimal.NewFromInt(1),
+		MonthlyQuantity: quantity,
+		ProductFilter: &schema.ProductFilter{
+			VendorName: strPtr("ibm"),
+			Region:     strPtr(r.Region),
+			Service:    strPtr("is.instance"),
+		},
+	}
+	costCompoment.SetCustomPrice(decimalPtr(decimal.NewFromInt(0)))
+	return costCompoment
+}
+
 // BuildResource builds a schema.Resource from a valid IsInstance struct.
 // This method is called after the resource is initialised by an IaC provider.
 // See providers folder for more information.
 func (r *IsInstance) BuildResource() *schema.Resource {
 	profileInfo := parseProfile(r.Profile)
 
-	costComponents := []*schema.CostComponent{
-		r.cpuCostComponent(profileInfo.Arch, profileInfo.Cores),
-		r.memoryCostComponent(profileInfo.Arch, profileInfo.Memory),
+	var costComponents []*schema.CostComponent
+
+	// If the VSI instance runs on a dedicated host, the customer is charged for the dedicated host usages
+	if r.IsDedicated {
+		costComponents = append(costComponents, r.onDedicatedHostCostComponent(profileInfo.Cores, profileInfo.Memory))
+	} else {
+		costComponents = append(costComponents, r.cpuCostComponent(profileInfo.Arch, profileInfo.Cores))
+		costComponents = append(costComponents, r.memoryCostComponent(profileInfo.Arch, profileInfo.Memory))
 	}
 
 	return &schema.Resource{

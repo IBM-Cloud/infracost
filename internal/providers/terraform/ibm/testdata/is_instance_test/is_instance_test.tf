@@ -2,14 +2,14 @@
 terraform {
   required_providers {
     ibm = {
-      source = "IBM-Cloud/ibm"
+      source  = "IBM-Cloud/ibm"
       version = "~> 1.40.0"
     }
   }
 }
 
 provider "ibm" {
-    region = "us-south"
+  region = "us-south"
 }
 
 resource "ibm_is_vpc" "testVpc" {
@@ -27,7 +27,6 @@ resource "ibm_is_ssh_key" "testSshKey" {
   name       = "test-ssh"
   public_key = file("~/.ssh/id_rsa.pub")
 }
-
 
 resource "ibm_is_instance" "testInstance" {
   name    = "test-instance-1"
@@ -49,7 +48,7 @@ resource "ibm_is_instance" "testInstance" {
 }
 
 resource "ibm_is_instance" "testInstanceWithoutUsage" {
-  name    = "test-instance-1"
+  name    = "test-instance-2"
   image   = "r006-f137ea64-0d27-4d81-afe0-353fd0557e81"
   profile = "cx2-2x4"
 
