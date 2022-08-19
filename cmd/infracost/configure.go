@@ -14,6 +14,7 @@ import (
 
 var supportedConfigureKeys = map[string]struct{}{
 	"api_key":                  {},
+	"ibm_cloud_api_key":        {},
 	"currency":                 {},
 	"pricing_api_endpoint":     {},
 	"enable_dashboard":         {},
@@ -84,6 +85,9 @@ func configureSetCmd(ctx *config.RunContext) *cobra.Command {
 				saveCredentials = true
 			case "api_key":
 				ctx.Config.Credentials.APIKey = value
+				saveCredentials = true
+			case "ibm_cloud_api_key":
+				ctx.Config.Credentials.IBMCloudApiKey = value
 				saveCredentials = true
 			case "tls_insecure_skip_verify":
 				if value == "" {
@@ -218,6 +222,16 @@ func configureGetCmd(ctx *config.RunContext) *cobra.Command {
 					)
 					ui.PrintWarning(cmd.ErrOrStderr(), msg)
 				}
+			case "ibm_cloud_api_key":
+				value = ctx.Config.Credentials.IBMCloudApiKey
+
+				if value == "" {
+					msg := fmt.Sprintf("No IBM Cloud API key in your saved config (%s).\nSet an API key using %s.",
+						config.CredentialsFilePath(),
+						ui.PrimaryString("infracost configure set ibm_cloud_api_key MY_API_KEY"),
+					)
+					ui.PrintWarning(cmd.ErrOrStderr(), msg)
+				}
 			case "currency":
 				value = ctx.Config.Configuration.Currency
 
@@ -287,6 +301,7 @@ func supportedConfigureSettingsOutput(description string) string {
 	settings := `
 Supported settings:
   - api_key: Infracost API key
+  - ibm_cloud_api_key: IBM Cloud Api Key
   - pricing_api_endpoint: endpoint of the Cloud Pricing API
   - currency: convert output from USD to your preferred currency
   - tls_insecure_skip_verify: skip TLS certificate checks for a self-hosted Cloud Pricing API

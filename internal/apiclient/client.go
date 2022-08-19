@@ -8,19 +8,20 @@ import (
 	"io"
 	"net/http"
 
+	"github.com/IBM/go-sdk-core/v5/core"
 	"github.com/google/uuid"
+	"github.com/infracost/infracost/internal/version"
 	"github.com/pkg/errors"
 	log "github.com/sirupsen/logrus"
 	"github.com/tidwall/gjson"
-
-	"github.com/infracost/infracost/internal/version"
 )
 
 type APIClient struct {
-	endpoint  string
-	apiKey    string
-	tlsConfig *tls.Config
-	uuid      uuid.UUID
+	endpoint         string
+	apiKey           string
+	ibmAuthenticator *core.IamAuthenticator
+	tlsConfig        *tls.Config
+	uuid             uuid.UUID
 }
 
 type GraphQLQuery struct {
@@ -110,6 +111,13 @@ func (c *APIClient) AddAuthHeaders(req *http.Request) {
 	req.Header.Set("X-Api-Key", c.apiKey)
 	if c.uuid != uuid.Nil {
 		req.Header.Set("X-Infracost-Trace-Id", fmt.Sprintf("cli=%s", c.uuid.String()))
+	}
+	if c.ibmAuthenticator != nil {
+		token, err := c.ibmAuthenticator.GetToken()
+		if err != nil {
+			log.Error(err)
+		}
+		req.Header.Set("Authorization", fmt.Sprintf("Bearer %s", token))
 	}
 }
 

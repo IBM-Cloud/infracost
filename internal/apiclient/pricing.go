@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"io/ioutil"
 
+	"github.com/IBM/go-sdk-core/v5/core"
 	"github.com/infracost/infracost/internal/config"
 	"github.com/infracost/infracost/internal/schema"
 
@@ -63,12 +64,17 @@ func NewPricingAPIClient(ctx *config.RunContext) *PricingAPIClient {
 		tlsConfig.InsecureSkipVerify = *ctx.Config.TLSInsecureSkipVerify
 	}
 
+	authenticator, err := core.NewIamAuthenticatorBuilder().SetApiKey(ctx.Config.IBMCloudApiKey).Build()
+	if err != nil {
+		log.Error("Unable to init authenticator", err)
+	}
 	return &PricingAPIClient{
 		APIClient: APIClient{
-			endpoint:  ctx.Config.PricingAPIEndpoint,
-			apiKey:    ctx.Config.APIKey,
-			tlsConfig: &tlsConfig,
-			uuid:      ctx.UUID(),
+			endpoint:         ctx.Config.PricingAPIEndpoint,
+			apiKey:           ctx.Config.APIKey,
+			ibmAuthenticator: authenticator,
+			tlsConfig:        &tlsConfig,
+			uuid:             ctx.UUID(),
 		},
 		Currency:       currency,
 		EventsDisabled: ctx.Config.EventsDisabled,

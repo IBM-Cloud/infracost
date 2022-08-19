@@ -67,6 +67,7 @@ type Config struct {
 	Parallelism     *int   `envconfig:"PARALLELISM"`
 
 	APIKey                    string `envconfig:"API_KEY"`
+	IBMCloudApiKey            string `envconfig:"IBM_CLOUD_API_KEY"`
 	PricingAPIEndpoint        string `yaml:"pricing_api_endpoint,omitempty" envconfig:"PRICING_API_ENDPOINT"`
 	DefaultPricingAPIEndpoint string `yaml:"default_pricing_api_endpoint,omitempty" envconfig:"DEFAULT_PRICING_API_ENDPOINT"`
 	DashboardAPIEndpoint      string `yaml:"dashboard_api_endpoint,omitempty" envconfig:"DASHBOARD_API_ENDPOINT"`
@@ -117,6 +118,7 @@ func DefaultConfig() *Config {
 
 		DefaultPricingAPIEndpoint: "https://pricing.api.infracost.io",
 		PricingAPIEndpoint:        "",
+		IBMCloudApiKey:            "",
 		DashboardAPIEndpoint:      "https://dashboard.api.infracost.io",
 		DashboardEndpoint:         "https://dashboard.infracost.io",
 		EnableDashboard:           false,
