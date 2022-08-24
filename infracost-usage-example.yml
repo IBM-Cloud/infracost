@@ -3,6 +3,10 @@
 # `infracost breakdown --usage-file infracost-usage.yml [other flags]`
 # See https://infracost.io/usage-file/ for docs
 version: 0.1
+resource_type_usage:
+  aws_lambda_function:
+    monthly_requests: 100000 # Monthly requests to the Lambda function.
+    request_duration_ms: 500 # Average duration of each request in milliseconds.
 resource_usage:
   #
   # Terraform AWS resources
@@ -1160,7 +1164,7 @@ resource_usage:
   # Key Protect
   #
   ibm_resource_instance.resource_instance_kms: 
-    kms_items_per_month: 300 # Number of managed keys
+    kms_key_versions: 300 # Number of key versions managed per month
 
   #
   # Secrets Manager
@@ -1185,3 +1189,15 @@ resource_usage:
   ibm_is_vpn_gateway.testVpcVpn:
     connection_hours: 730 # Monthly number of connection hours
     instance_hours: 730 # Monthly number of instance hours
+  #
+  # Cloud Object Storage
+  #
+  ibm_cos_bucket:
+    public_standard_egress: 1000 # Amount of data downloaded in GB
+    class_a_request_count: 10000 # Monthly number of Class A requests
+    class_b_request_count: 10000 # Monthly number of Class B requests
+    monthly_data_retrieval: 1000 # Amount of data retrieved in GB
+    aspera_ingress: 1000 # Amount of data uploaded with Aspera in GB
+    aspera_egress: 1000 # Amount of data downloaded with Aspera in GB
+    archive_capacity: 1000 # Amount of your estimated storage in GB
+    archive_restore: 1000 # Amount of data restored from its archived state in GB
