@@ -9,7 +9,7 @@ terraform {
 }
 
 provider "ibm" {
-  region = "us-south"
+  region = "us-east"
 }
 
 resource "ibm_is_vpc" "testVpc" {
@@ -48,7 +48,7 @@ resource "ibm_is_instance" "testBalancedInstance" {
 }
 
 resource "ibm_is_instance" "testComputeInstance" {
-  name    = "test-instance-1"
+  name    = "test-instance-2"
   image   = "r006-f137ea64-0d27-4d81-afe0-353fd0557e81"
   profile = "cx2-2x4"
 
@@ -67,7 +67,7 @@ resource "ibm_is_instance" "testComputeInstance" {
 }
 
 resource "ibm_is_instance" "testGpuInstance" {
-  name    = "test-instance-1"
+  name    = "test-instance-3"
   image   = "r006-f137ea64-0d27-4d81-afe0-353fd0557e81"
   profile = "gx2-16x128x2v100"
 
@@ -85,8 +85,27 @@ resource "ibm_is_instance" "testGpuInstance" {
   keys = [ibm_is_ssh_key.testSshKey.id]
 }
 
+resource "ibm_is_instance" "testIbmZInstance" {
+  name    = "test-instance-4"
+  image   = "r006-f137ea64-0d27-4d81-afe0-353fd0557e81"
+  profile = "bz2-16x64"
+
+  primary_network_interface {
+    subnet = ibm_is_subnet.testSubnet.id
+  }
+
+  network_interfaces {
+    name   = "eth1"
+    subnet = ibm_is_subnet.testSubnet.id
+  }
+
+  vpc  = ibm_is_vpc.testVpc.id
+  zone = "us-south-1"
+  keys = [ibm_is_ssh_key.testSshKey.id]
+}
+
 resource "ibm_is_instance" "testInstanceWithoutUsage" {
-  name    = "test-instance-2"
+  name    = "test-instance-5"
   image   = "r006-f137ea64-0d27-4d81-afe0-353fd0557e81"
   profile = "cx2-2x4"
 

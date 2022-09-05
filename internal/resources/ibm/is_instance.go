@@ -102,7 +102,7 @@ func getProfileFromCatalog(profile string) (CatalogInstance, error) {
 	var catalogProfile CatalogInstance
 	resp, err := http.Get(fmt.Sprintf("https://globalcatalog.cloud.ibm.com/api/v1/%s?include=metadata", profile))
 	if err != nil {
-		log.Warn("Request to get instance profiel failed", err)
+		log.Warn("Request to get instance profile failed", err)
 		return catalogProfile, err
 	}
 	decoder := json.NewDecoder(resp.Body)
@@ -140,7 +140,7 @@ func (r *IsInstance) storageCostComponent(arch ArchType, size int64, count int64
 	}
 
 	return &schema.CostComponent{
-		Name:            fmt.Sprintf("Storage GB hours (%d GB * %d)", size, count),
+		Name:            fmt.Sprintf("Storage GB hours (%d GB * %d, %s)", size, count, r.Zone),
 		Unit:            "Storage GB hours",
 		UnitMultiplier:  decimal.NewFromInt(1),
 		MonthlyQuantity: quantity,
@@ -174,7 +174,7 @@ func (r *IsInstance) gpuCostComponent(arch ArchType, gpuType string, gpuCount in
 	}
 
 	return &schema.CostComponent{
-		Name:            fmt.Sprintf("Gpu hours (%d gpu, %s)", gpuCount, gpuType),
+		Name:            fmt.Sprintf("Gpu hours (%d GPUs, %s, %s)", gpuCount, gpuType, r.Zone),
 		Unit:            "Gpu hours",
 		UnitMultiplier:  decimal.NewFromInt(1),
 		MonthlyQuantity: quantity,
@@ -202,7 +202,7 @@ func (r *IsInstance) memoryCostComponent(arch ArchType, memory int64) *schema.Co
 
 	var unit string
 	if arch == s390x {
-		unit = "GIGABYTE_HOURS_POWER"
+		unit = "MEMORY_HOURS"
 	} else {
 		unit = "MEMORY_HOURS"
 	}
@@ -236,7 +236,7 @@ func (r *IsInstance) cpuCostComponent(arch ArchType, cpu int64) *schema.CostComp
 
 	var unit string
 	if arch == s390x {
-		unit = "VCPU_HOURS_POWER"
+		unit = "VCPU_HOURS"
 	} else {
 		unit = "VCPU_HOURS"
 	}
