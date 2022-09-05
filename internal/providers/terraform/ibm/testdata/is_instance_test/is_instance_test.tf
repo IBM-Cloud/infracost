@@ -19,7 +19,7 @@ resource "ibm_is_vpc" "testVpc" {
 resource "ibm_is_subnet" "testSubnet" {
   name            = "test-subnet"
   vpc             = ibm_is_vpc.testVpc.id
-  zone            = "us-south-1"
+  zone            = "us-east-1"
   ipv4_cidr_block = "10.240.0.0/24"
 }
 
@@ -43,7 +43,7 @@ resource "ibm_is_instance" "testBalancedInstance" {
   }
 
   vpc  = ibm_is_vpc.testVpc.id
-  zone = "us-south-1"
+  zone = "us-east-1"
   keys = [ibm_is_ssh_key.testSshKey.id]
 }
 
@@ -62,7 +62,7 @@ resource "ibm_is_instance" "testComputeInstance" {
   }
 
   vpc  = ibm_is_vpc.testVpc.id
-  zone = "us-south-1"
+  zone = "us-east-1"
   keys = [ibm_is_ssh_key.testSshKey.id]
 }
 
@@ -81,7 +81,7 @@ resource "ibm_is_instance" "testGpuInstance" {
   }
 
   vpc  = ibm_is_vpc.testVpc.id
-  zone = "us-south-1"
+  zone = "us-east-1"
   keys = [ibm_is_ssh_key.testSshKey.id]
 }
 
@@ -100,7 +100,7 @@ resource "ibm_is_instance" "testIbmZInstance" {
   }
 
   vpc  = ibm_is_vpc.testVpc.id
-  zone = "us-south-1"
+  zone = "us-east-1"
   keys = [ibm_is_ssh_key.testSshKey.id]
 }
 
@@ -119,6 +119,6 @@ resource "ibm_is_instance" "testInstanceWithoutUsage" {
   }
 
   vpc  = ibm_is_vpc.testVpc.id
-  zone = "us-south-1"
+  zone = "us-east-1"
   keys = [ibm_is_ssh_key.testSshKey.id]
 }
