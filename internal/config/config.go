@@ -68,6 +68,8 @@ type Config struct {
 
 	APIKey                    string `envconfig:"API_KEY"`
 	IBMCloudApiKey            string `envconfig:"IBM_CLOUD_API_KEY"`
+	IBMUsageDefault           string `yaml:"ibm_default_usage,omitempty" envconfig:"IBM_DEFAULT_USAGE"`
+	IBMUsage                  string `yaml:"ibm_usage,omitempty" envconfig:"IBM_USAGE"`
 	PricingAPIEndpoint        string `yaml:"pricing_api_endpoint,omitempty" envconfig:"PRICING_API_ENDPOINT"`
 	DefaultPricingAPIEndpoint string `yaml:"default_pricing_api_endpoint,omitempty" envconfig:"DEFAULT_PRICING_API_ENDPOINT"`
 	DashboardAPIEndpoint      string `yaml:"dashboard_api_endpoint,omitempty" envconfig:"DASHBOARD_API_ENDPOINT"`
@@ -118,7 +120,8 @@ func DefaultConfig() *Config {
 
 		DefaultPricingAPIEndpoint: "https://pricing.api.infracost.io",
 		PricingAPIEndpoint:        "https://cost-estimation-devops-us-south.api.test.cloud.ibm.com/pricing",
-		IBMCloudApiKey:            "",
+		IBMUsageDefault:           "https://globalcatalog.cloud.ibm.com/api/v1/infracost-default-usage?include=metadata",
+		IBMUsage:                  "",
 		DashboardAPIEndpoint:      "https://dashboard.api.infracost.io",
 		DashboardEndpoint:         "https://dashboard.infracost.io",
 		EnableDashboard:           false,

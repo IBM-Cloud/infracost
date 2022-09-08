@@ -2,7 +2,10 @@ package usage
 
 import (
 	"bytes"
+	"encoding/json"
 	"fmt"
+	"io"
+	"net/http"
 	"os"
 	"sort"
 	"strings"
@@ -29,6 +32,18 @@ type UsageFile struct { // nolint:revive
 	ResourceUsages []*ResourceUsage `yaml:"-"`
 }
 
+type Other struct {
+	DefaultUsage interface{} `json:"default_usage"`
+}
+type Metadata struct {
+	Other Other `json:"other"`
+}
+type GlobalCatalogObject struct {
+	Id       string   `json:"id"`
+	Kind     string   `json:"kind"`
+	Metadata Metadata `json:"metadata"`
+}
+
 // CreateUsageFile creates a blank usage file if it does not exists
 func CreateUsageFile(path string) error {
 	if _, err := os.Stat(path); os.IsNotExist(err) {
@@ -44,6 +59,32 @@ func CreateUsageFile(path string) error {
 	}
 
 	return nil
+}
+
+func LoadUsageFromGlobalCatalog(globalCatalogPath string) (*UsageFile, error) {
+	blankUsage := NewBlankUsageFile()
+	var catalogInstance GlobalCatalogObject
+	resp, err := http.Get(globalCatalogPath)
+	if err != nil {
+		return blankUsage, errors.Wrapf(err, "Request to usage failed")
+	}
+	data, err := io.ReadAll(resp.Body)
+	if err != nil {
+		return blankUsage, errors.Wrapf(err, "Reading fetched usage failed")
+	}
+	err = json.Unmarshal(data, &catalogInstance)
+	if err != nil {
+		return blankUsage, errors.Wrapf(err, "Unmarshaling fetched usage failed")
+	}
+	out, err := yamlv3.Marshal(catalogInstance.Metadata.Other.DefaultUsage)
+	if err != nil {
+		return blankUsage, errors.Wrapf(err, "Marshaling fetched usage to yaml failed")
+	}
+	usageFile, err := LoadUsageFileFromString(string(out))
+	if err != nil {
+		return blankUsage, errors.Wrapf(err, "Loading yaml to usage failed")
+	}
+	return usageFile, err
 }
 
 func LoadUsageFile(path string) (*UsageFile, error) {
