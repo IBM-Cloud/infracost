@@ -68,6 +68,7 @@ type Config struct {
 
 	APIKey                    string `envconfig:"API_KEY"`
 	IBMCloudApiKey            string `envconfig:"IBM_CLOUD_API_KEY"`
+	IBMCloudIAMUrl            string `envconfig:"IBM_CLOUD_IAM_URL"`
 	IBMUsageDefault           string `yaml:"ibm_default_usage,omitempty" envconfig:"IBM_DEFAULT_USAGE"`
 	IBMUsage                  string `yaml:"ibm_usage,omitempty" envconfig:"IBM_USAGE"`
 	PricingAPIEndpoint        string `yaml:"pricing_api_endpoint,omitempty" envconfig:"PRICING_API_ENDPOINT"`

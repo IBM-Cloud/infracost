@@ -15,6 +15,7 @@ import (
 var supportedConfigureKeys = map[string]struct{}{
 	"api_key":                  {},
 	"ibm_cloud_api_key":        {},
+	"ibm_cloud_iam_url":        {},
 	"ibm_usage":                {},
 	"currency":                 {},
 	"pricing_api_endpoint":     {},
@@ -89,6 +90,9 @@ func configureSetCmd(ctx *config.RunContext) *cobra.Command {
 				saveCredentials = true
 			case "ibm_cloud_api_key":
 				ctx.Config.Credentials.IBMCloudApiKey = value
+				saveCredentials = true
+			case "ibm_cloud_iam_url":
+				ctx.Config.Credentials.IBMCloudIAMUrl = value
 				saveCredentials = true
 			case "ibm_usage":
 				ctx.Config.Configuration.IBMUsage = value
@@ -236,6 +240,16 @@ func configureGetCmd(ctx *config.RunContext) *cobra.Command {
 					)
 					ui.PrintWarning(cmd.ErrOrStderr(), msg)
 				}
+			case "ibm_cloud_iam_url":
+				value = ctx.Config.Credentials.IBMCloudIAMUrl
+
+				if value == "" {
+					msg := fmt.Sprintf("No IBM Cloud IAM Url in your saved config (%s).\nSet an IAM Url using %s.",
+						config.CredentialsFilePath(),
+						ui.PrimaryString("infracost configure set ibm_cloud_iam_url URL"),
+					)
+					ui.PrintWarning(cmd.ErrOrStderr(), msg)
+				}
 			case "ibm_usage":
 				value = ctx.Config.Configuration.IBMUsage
 
@@ -316,6 +330,7 @@ func supportedConfigureSettingsOutput(description string) string {
 Supported settings:
   - api_key: Infracost API key
   - ibm_cloud_api_key: IBM Cloud Api Key
+  - ibm_cloud_iam_url: IBM Cloud IAM Url
   - pricing_api_endpoint: endpoint of the Cloud Pricing API
   - currency: convert output from USD to your preferred currency
   - tls_insecure_skip_verify: skip TLS certificate checks for a self-hosted Cloud Pricing API

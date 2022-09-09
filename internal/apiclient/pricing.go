@@ -64,7 +64,11 @@ func NewPricingAPIClient(ctx *config.RunContext) *PricingAPIClient {
 		tlsConfig.InsecureSkipVerify = *ctx.Config.TLSInsecureSkipVerify
 	}
 
-	authenticator, err := core.NewIamAuthenticatorBuilder().SetApiKey(ctx.Config.IBMCloudApiKey).Build()
+	authenticatorBuilder := core.NewIamAuthenticatorBuilder().SetApiKey(ctx.Config.IBMCloudApiKey)
+	if ctx.Config.IBMCloudIAMUrl != "" {
+		authenticatorBuilder.SetURL(ctx.Config.IBMCloudIAMUrl)
+	}
+	authenticator, err := authenticatorBuilder.Build()
 	if err != nil {
 		log.Error("Unable to init authenticator", err)
 	}
