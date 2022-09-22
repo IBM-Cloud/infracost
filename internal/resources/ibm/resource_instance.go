@@ -45,7 +45,7 @@ var ResourceInstanceUsageSchema = []*schema.UsageItem{
 	{Key: "appid_advanced_authentications", DefaultValue: 0, ValueType: schema.Int64},
 }
 
-var ResourceCostMap map[string]ResourceCostComponentsFunc = map[string]ResourceCostComponentsFunc{
+var ResourceInstanceCostMap map[string]ResourceCostComponentsFunc = map[string]ResourceCostComponentsFunc{
 	"kms":             GetKMSCostComponents,
 	"secrets-manager": GetSecretsManagerCostComponents,
 	"appid":           GetAppIDCostComponents,
@@ -280,7 +280,7 @@ func GetAppIDCostComponents(r *ResourceInstance) []*schema.CostComponent {
 // This method is called after the resource is initialised by an IaC provider.
 // See providers folder for more information.
 func (r *ResourceInstance) BuildResource() *schema.Resource {
-	costComponentsFunc, ok := ResourceCostMap[r.Service]
+	costComponentsFunc, ok := ResourceInstanceCostMap[r.Service]
 
 	if !ok {
 		return &schema.Resource{
