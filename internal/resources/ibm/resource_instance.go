@@ -185,8 +185,13 @@ func GetSecretsManagerCostComponents(r *ResourceInstance) []*schema.CostComponen
 }
 
 func GetPowerCostComponents(r *ResourceInstance) []*schema.CostComponent {
+	q := decimalPtr(decimal.NewFromInt(1))
+
 	costComponent := schema.CostComponent{
-		Name: fmt.Sprintf("Plan: %s", r.Plan),
+		Name:            "Instance",
+		Unit:            "Instance",
+		UnitMultiplier:  decimal.NewFromInt(1),
+		MonthlyQuantity: q,
 	}
 	costComponent.SetCustomPrice(decimalPtr(decimal.NewFromInt(0)))
 	return []*schema.CostComponent{
