@@ -49,7 +49,7 @@ var ResourceInstanceCostMap map[string]ResourceCostComponentsFunc = map[string]R
 	"kms":             GetKMSCostComponents,
 	"secrets-manager": GetSecretsManagerCostComponents,
 	"appid":           GetAppIDCostComponents,
-	"powervs_service": GetPowerCostComponents,
+	"power-iaas":      GetPowerCostComponents,
 }
 
 // PopulateUsage parses the u schema.UsageData into the ResourceInstance.
