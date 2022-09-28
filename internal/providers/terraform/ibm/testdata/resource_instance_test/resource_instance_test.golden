@@ -22,7 +22,7 @@
  └─ Key versions                                                  295  Key Versions          $295.00 
                                                                                                      
  ibm_resource_instance.resource_instance_power_iaas                                                  
- └─ Instance                                                        1  Instance                $0.00 
+ └─ test                                                            1  Instance                $0.00 
                                                                                                      
  ibm_resource_instance.resource_instance_secrets_manager                                             
  ├─ Instance                                                        1  Instance              $299.00 

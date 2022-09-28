@@ -13,6 +13,7 @@ import (
 //
 // This terraform resource is opaque and can handle a number of services, provided with the right parameters
 type ResourceInstance struct {
+	Name       string
 	Address    string
 	Service    string
 	Plan       string
@@ -188,7 +189,7 @@ func GetPowerCostComponents(r *ResourceInstance) []*schema.CostComponent {
 	q := decimalPtr(decimal.NewFromInt(1))
 
 	costComponent := schema.CostComponent{
-		Name:            "Instance",
+		Name:            r.Name,
 		Unit:            "Instance",
 		UnitMultiplier:  decimal.NewFromInt(1),
 		MonthlyQuantity: q,
