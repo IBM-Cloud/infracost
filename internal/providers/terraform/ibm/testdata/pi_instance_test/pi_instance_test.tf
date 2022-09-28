@@ -14,7 +14,6 @@ provider "ibm" {
 
 locals {
   service_type = "power-iaas"
-  location = "us-south"
 }
 
 resource "ibm_resource_group" "resource_group" {
@@ -24,7 +23,7 @@ resource "ibm_resource_group" "resource_group" {
 resource "ibm_resource_instance" "powervs_service" {
   name              = "Power instance"
   service           = local.service_type
-  location          = local.location
+  location          = "us-south"
   resource_group_id = ibm_resource_group.resource_group.id
 }
 
