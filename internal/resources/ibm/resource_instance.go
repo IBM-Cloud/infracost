@@ -49,6 +49,7 @@ var ResourceInstanceCostMap map[string]ResourceCostComponentsFunc = map[string]R
 	"kms":             GetKMSCostComponents,
 	"secrets-manager": GetSecretsManagerCostComponents,
 	"appid":           GetAppIDCostComponents,
+	"powervs_service": GetPowerCostComponents,
 }
 
 // PopulateUsage parses the u schema.UsageData into the ResourceInstance.
@@ -180,6 +181,16 @@ func GetSecretsManagerCostComponents(r *ResourceInstance) []*schema.CostComponen
 		return []*schema.CostComponent{
 			&costComponent,
 		}
+	}
+}
+
+func GetPowerCostComponents(r *ResourceInstance) []*schema.CostComponent {
+	costComponent := schema.CostComponent{
+		Name: fmt.Sprintf("Plan: %s", r.Plan),
+	}
+	costComponent.SetCustomPrice(decimalPtr(decimal.NewFromInt(0)))
+	return []*schema.CostComponent{
+		&costComponent,
 	}
 }
 
