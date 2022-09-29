@@ -17,12 +17,13 @@ locals {
 }
 
 resource "ibm_resource_group" "resource_group" {
-  name     = "default"
+  name = "default"
 }
 
 resource "ibm_resource_instance" "powervs_service" {
   name              = "Power instance"
   service           = local.service_type
+  plan              = "power-virtual-server-group"
   location          = "us-south"
   resource_group_id = ibm_resource_group.resource_group.id
 }
