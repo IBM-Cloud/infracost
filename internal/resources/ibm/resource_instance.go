@@ -13,6 +13,7 @@ import (
 //
 // This terraform resource is opaque and can handle a number of services, provided with the right parameters
 type ResourceInstance struct {
+	Name       string
 	Address    string
 	Service    string
 	Plan       string
@@ -49,6 +50,7 @@ var ResourceInstanceCostMap map[string]ResourceCostComponentsFunc = map[string]R
 	"kms":             GetKMSCostComponents,
 	"secrets-manager": GetSecretsManagerCostComponents,
 	"appid":           GetAppIDCostComponents,
+	"power-iaas":      GetPowerCostComponents,
 }
 
 // PopulateUsage parses the u schema.UsageData into the ResourceInstance.
@@ -68,7 +70,7 @@ func KMSKeyVersionsFreeCostComponent(r *ResourceInstance) *schema.CostComponent 
 		}
 	}
 	costComponent := schema.CostComponent{
-		Name:            fmt.Sprintf("Key versions free allowance (first 5 Key Versions)"),
+		Name:            "Key versions free allowance (first 5 Key Versions)",
 		Unit:            "Key Versions",
 		UnitMultiplier:  decimal.NewFromInt(1),
 		MonthlyQuantity: q,
@@ -93,7 +95,7 @@ func KMSKeyVersionCostComponents(r *ResourceInstance) *schema.CostComponent {
 		}
 	}
 	costComponent := schema.CostComponent{
-		Name:            fmt.Sprintf("Key versions"),
+		Name:            "Key versions",
 		Unit:            "Key Versions",
 		UnitMultiplier:  decimal.NewFromInt(1),
 		MonthlyQuantity: q,
@@ -122,7 +124,7 @@ func SecretsManagerInstanceCostComponent(r *ResourceInstance) *schema.CostCompon
 		q = decimalPtr(decimal.NewFromInt(*r.SecretsManager_Instance))
 	}
 	costComponent := schema.CostComponent{
-		Name:            fmt.Sprintf("Instance"),
+		Name:            "Instance",
 		Unit:            "Instance",
 		UnitMultiplier:  decimal.NewFromInt(1),
 		MonthlyQuantity: q,
@@ -147,7 +149,7 @@ func SecretsManagerActiveSecretsCostComponent(r *ResourceInstance) *schema.CostC
 		q = decimalPtr(decimal.NewFromInt(*r.SecretsManager_ActiveSecrets))
 	}
 	costComponent := schema.CostComponent{
-		Name:            fmt.Sprintf("Active Secrets"),
+		Name:            "Active Secrets",
 		Unit:            "Secrets",
 		UnitMultiplier:  decimal.NewFromInt(1),
 		MonthlyQuantity: q,
@@ -173,7 +175,7 @@ func GetSecretsManagerCostComponents(r *ResourceInstance) []*schema.CostComponen
 			SecretsManagerActiveSecretsCostComponent(r),
 		}
 	} else {
-		costComponent := *&schema.CostComponent{
+		costComponent := schema.CostComponent{
 			Name: fmt.Sprintf("Plan: %s", r.Plan),
 		}
 		costComponent.SetCustomPrice(decimalPtr(decimal.NewFromInt(0)))
@@ -183,13 +185,28 @@ func GetSecretsManagerCostComponents(r *ResourceInstance) []*schema.CostComponen
 	}
 }
 
+func GetPowerCostComponents(r *ResourceInstance) []*schema.CostComponent {
+	q := decimalPtr(decimal.NewFromInt(1))
+
+	costComponent := schema.CostComponent{
+		Name:            r.Name,
+		Unit:            "Instance",
+		UnitMultiplier:  decimal.NewFromInt(1),
+		MonthlyQuantity: q,
+	}
+	costComponent.SetCustomPrice(decimalPtr(decimal.NewFromInt(0)))
+	return []*schema.CostComponent{
+		&costComponent,
+	}
+}
+
 func AppIDUserCostComponent(r *ResourceInstance) *schema.CostComponent {
 	var q *decimal.Decimal
 	if r.AppID_Users != nil {
 		q = decimalPtr(decimal.NewFromInt(*r.AppID_Users))
 	}
 	costComponent := schema.CostComponent{
-		Name:            fmt.Sprintf("Users"),
+		Name:            "Users",
 		Unit:            "Users",
 		UnitMultiplier:  decimal.NewFromInt(1),
 		MonthlyQuantity: q,
@@ -214,7 +231,7 @@ func AppIDAuthenticationCostComponent(r *ResourceInstance) *schema.CostComponent
 		q = decimalPtr(decimal.NewFromInt(*r.AppID_Authentications))
 	}
 	costComponent := schema.CostComponent{
-		Name:            fmt.Sprintf("Authentications"),
+		Name:            "Authentications",
 		Unit:            "Authentications",
 		UnitMultiplier:  decimal.NewFromInt(1),
 		MonthlyQuantity: q,
@@ -239,7 +256,7 @@ func AppIDAdvancedAuthenticationCostComponent(r *ResourceInstance) *schema.CostC
 		q = decimalPtr(decimal.NewFromInt(*r.AppID_AdvancedAuthentications))
 	}
 	costComponent := schema.CostComponent{
-		Name:            fmt.Sprintf("Advanced Authentications"),
+		Name:            "Advanced Authentications",
 		Unit:            "Authentications",
 		UnitMultiplier:  decimal.NewFromInt(1),
 		MonthlyQuantity: q,
@@ -266,7 +283,7 @@ func GetAppIDCostComponents(r *ResourceInstance) []*schema.CostComponent {
 			AppIDAdvancedAuthenticationCostComponent(r),
 		}
 	} else {
-		costComponent := *&schema.CostComponent{
+		costComponent := schema.CostComponent{
 			Name: fmt.Sprintf("Plan: %s", r.Plan),
 		}
 		costComponent.SetCustomPrice(decimalPtr(decimal.NewFromInt(0)))
