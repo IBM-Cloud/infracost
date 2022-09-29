@@ -110,10 +110,7 @@ resource "ibm_pi_instance" "ibmi-dedicated-e980-instance" {
 }
 
 resource "ibm_pi_instance" "hana-dedicated-e980-instance" {
-  pi_memory            = "1"
-  pi_processors        = "1"
   pi_instance_name     = "hana-dedicated-e980"
-  pi_proc_type         = "dedicated"
   pi_image_id          = ibm_pi_image.hana_image.id
   pi_key_pair_name     = ibm_pi_key.key.key_id
   pi_sys_type          = "e980"
