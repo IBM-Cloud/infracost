@@ -31,12 +31,15 @@ func (r *PiNetwork) PopulateUsage(u *schema.UsageData) {
 func (r *PiNetwork) NetworkCostComponent() *schema.CostComponent {
 	q := decimalPtr(decimal.NewFromInt(1))
 
-	return &schema.CostComponent{
+	costComponent := schema.CostComponent{
 		Name:            r.Name,
 		Unit:            "Instance",
 		UnitMultiplier:  decimal.NewFromInt(1),
 		MonthlyQuantity: q,
 	}
+
+	costComponent.SetCustomPrice(decimalPtr(decimal.NewFromInt(0)))
+	return &costComponent
 }
 
 // BuildResource builds a schema.Resource from a valid PiNetwork struct.
