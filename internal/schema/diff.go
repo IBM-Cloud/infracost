@@ -207,7 +207,7 @@ func diffCostComponents(past *CostComponent, current *CostComponent) (bool, *Cos
 				tiersLen = len(past.priceTiers)
 			}
 			diff.priceTiers = make([]PriceTier, tiersLen)
-			for i := 0; i > tiersLen; i++ {
+			for i := 0; i < tiersLen; i++ {
 				if len(current.priceTiers) > i && len(past.priceTiers) > i {
 					diff.priceTiers[i] = PriceTier{
 						Name:             diffName(current.Name, past.Name),
