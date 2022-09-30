@@ -18,6 +18,7 @@ var ResourceRegistry []*schema.RegistryItem = []*schema.RegistryItem{
 	getPiInstanceRegistryItem(),
 	getIsLbRegistryItem(),
 	getIsPublicGatewayRegistryItem(),
+	getPiNetworkRegistryItem(),
 }
 
 // FreeResources grouped alphabetically
