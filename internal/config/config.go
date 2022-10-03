@@ -119,8 +119,8 @@ func DefaultConfig() *Config {
 		LogLevel: "",
 		NoColor:  false,
 
-		DefaultPricingAPIEndpoint: "https://pricing.api.infracost.io",
-		PricingAPIEndpoint:        "https://cost-estimation.api.test.cloud.ibm.com/pricing",
+		DefaultPricingAPIEndpoint: "https://cost-estimation.api.test.cloud.ibm.com/iam-proxy",
+		PricingAPIEndpoint:        "",
 		IBMUsageDefault:           "https://globalcatalog.cloud.ibm.com/api/v1/infracost-default-usage?include=metadata",
 		IBMUsage:                  "",
 		DashboardAPIEndpoint:      "https://dashboard.api.infracost.io",
