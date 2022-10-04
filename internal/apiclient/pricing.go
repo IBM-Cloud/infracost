@@ -14,6 +14,12 @@ import (
 	"github.com/tidwall/gjson"
 )
 
+var (
+	excludedEnv = map[string]struct{}{
+		"repoMetadata": {},
+	}
+)
+
 type PricingAPIClient struct {
 	APIClient
 	Currency       string
@@ -90,9 +96,18 @@ func (c *PricingAPIClient) AddEvent(name string, env map[string]interface{}) err
 		return nil
 	}
 
+	filtered := make(map[string]interface{})
+	for k, v := range env {
+		if _, ok := excludedEnv[k]; ok {
+			continue
+		}
+
+		filtered[k] = v
+	}
+
 	d := map[string]interface{}{
 		"event": name,
-		"env":   env,
+		"env":   filtered,
 	}
 
 	_, err := c.doRequest("POST", "/event", d)
