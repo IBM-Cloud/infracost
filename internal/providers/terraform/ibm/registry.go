@@ -60,6 +60,7 @@ var FreeResources = []string{
 	"ibm_pi_network_port_attach",
 	"ibm_pi_placement_group",
 	"ibm_pi_shared_processor_pool",
+	"ibm_pi_spp_placement_group",
 	"ibm_pi_vpn_connection",
 	"ibm_resource_group",
 	"ibm_resource_key",
