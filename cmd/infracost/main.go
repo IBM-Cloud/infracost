@@ -253,17 +253,6 @@ func loadCloudSettings(ctx *config.RunContext) {
 	ctx.Config.EnableCloudForOrganization = result.CloudEnabled
 }
 
-func checkAPIKey(apiKey string, apiEndpoint string, defaultEndpoint string) error {
-	if apiEndpoint == defaultEndpoint && apiKey == "" {
-		return fmt.Errorf(
-			"No INFRACOST_API_KEY environment variable is set.\nWe run a free Cloud Pricing API, to get an API key run %s",
-			ui.PrimaryString("infracost auth login"),
-		)
-	}
-
-	return nil
-}
-
 func handleCLIError(ctx *config.RunContext, cliErr error) {
 	if cliErr.Error() != "" {
 		ui.PrintError(ctx.ErrWriter, cliErr.Error())
