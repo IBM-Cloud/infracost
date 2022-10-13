@@ -70,19 +70,37 @@ func NewPricingAPIClient(ctx *config.RunContext) *PricingAPIClient {
 		tlsConfig.InsecureSkipVerify = *ctx.Config.TLSInsecureSkipVerify
 	}
 
-	authenticatorBuilder := core.NewIamAuthenticatorBuilder().SetApiKey(ctx.Config.IBMCloudApiKey)
+	var iamAuthenticator *core.IamAuthenticator = nil
+	authenticatorBuilder := core.NewIamAuthenticatorBuilder()
 	if ctx.Config.IBMCloudIAMUrl != "" {
+		fmt.Println("Configured IAM URL", ctx.Config.IBMCloudIAMUrl)
 		authenticatorBuilder.SetURL(ctx.Config.IBMCloudIAMUrl)
+	} else {
+		fmt.Println("No IBM_CLOUD_IAM_URL credential set, defaults to production.")
 	}
-	authenticator, err := authenticatorBuilder.Build()
-	if err != nil {
-		log.Error("Unable to init authenticator", err)
+	if ctx.Config.IBMCloudApiKey != "" {
+		if len(ctx.Config.IBMCloudApiKey) != 44 {
+			fmt.Println("IBM_CLOUD_API_KEY's length is not 44... Is this a proper IAM api key?")
+		}
+		authenticatorBuilder.SetApiKey(ctx.Config.IBMCloudApiKey)
+		authenticator, err := authenticatorBuilder.Build()
+		if err != nil {
+			log.Error("Unable to init authenticator", err)
+		}
+		iamAuthenticator = authenticator
+	} else {
+		fmt.Println("No IBM_CLOUD_API_KEY credential set")
 	}
+
+	if ctx.Config.APIKey == "" && iamAuthenticator == nil {
+		fmt.Println("No authentication method specified")
+	}
+
 	return &PricingAPIClient{
 		APIClient: APIClient{
 			endpoint:         ctx.Config.PricingAPIEndpoint,
 			apiKey:           ctx.Config.APIKey,
-			ibmAuthenticator: authenticator,
+			ibmAuthenticator: iamAuthenticator,
 			tlsConfig:        &tlsConfig,
 			uuid:             ctx.UUID(),
 		},
