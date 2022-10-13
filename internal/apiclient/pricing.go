@@ -71,6 +71,18 @@ func NewPricingAPIClient(ctx *config.RunContext) *PricingAPIClient {
 	}
 
 	authenticatorBuilder := core.NewIamAuthenticatorBuilder().SetApiKey(ctx.Config.IBMCloudApiKey)
+	if ctx.Config.IBMCloudApiKey != "" {
+		if len(ctx.Config.IBMCloudApiKey) != 44 {
+			fmt.Println("IBM_CLOUD_API_KEY's length is not 44... Is this a proper IAM api key?")
+		}
+	} else {
+		fmt.Println("No IBM_CLOUD_API_KEY credential set")
+	}
+	if ctx.Config.IBMCloudIAMUrl != "" {
+		fmt.Println("Configured IAM URL", ctx.Config.IBMCloudIAMUrl)
+	} else {
+		fmt.Println("No IBM_CLOUD_IAM_URL credential set, defaults to production.")
+	}
 	if ctx.Config.IBMCloudIAMUrl != "" {
 		authenticatorBuilder.SetURL(ctx.Config.IBMCloudIAMUrl)
 	}
