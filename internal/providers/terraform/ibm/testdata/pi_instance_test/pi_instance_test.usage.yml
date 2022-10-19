@@ -34,3 +34,10 @@ resource_usage:
       high_availability: 0
       db2_web_query: 0
       rational_dev_studio_licenses: 0
+  ibm_pi_instance.sap_instance:
+      monthly_instance_hours: 730
+      storage: 20
+      cloud_storage_solution: 0
+      high_availability: 0
+      db2_web_query: 0
+      rational_dev_studio_licenses: 0
