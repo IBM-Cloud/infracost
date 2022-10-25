@@ -253,12 +253,12 @@ func (r *IsInstance) memoryCostComponent(arch ArchType, memory int64, multiplier
 
 	if r.MonthlyInstanceHours != nil {
 		quantity = decimalPtr(decimal.NewFromInt(*r.MonthlyInstanceHours))
-		quantity = decimalPtr(quantity.Mul(decimal.NewFromInt(memory)).Mul(multiplier))
+		quantity = decimalPtr(quantity.Mul(decimal.NewFromInt(memory)))
 	}
 
 	var unit = "MEMORY_HOURS"
 
-	return &schema.CostComponent{
+	component := &schema.CostComponent{
 		Name:            fmt.Sprintf("Memory hours (%d GB, %s)", memory, r.Zone),
 		Unit:            "Memory hours",
 		UnitMultiplier:  decimal.NewFromInt(1),
@@ -275,6 +275,8 @@ func (r *IsInstance) memoryCostComponent(arch ArchType, memory int64, multiplier
 			Unit: strPtr(unit),
 		},
 	}
+	component.SetCustomPriceMultiplier(decimalPtr(multiplier))
+	return component
 }
 
 func (r *IsInstance) cpuCostComponent(arch ArchType, cpu int64, multiplier decimal.Decimal) *schema.CostComponent {
@@ -282,12 +284,12 @@ func (r *IsInstance) cpuCostComponent(arch ArchType, cpu int64, multiplier decim
 
 	if r.MonthlyInstanceHours != nil {
 		quantity = decimalPtr(decimal.NewFromInt(*r.MonthlyInstanceHours))
-		quantity = decimalPtr(quantity.Mul(decimal.NewFromInt(cpu)).Mul(multiplier))
+		quantity = decimalPtr(quantity.Mul(decimal.NewFromInt(cpu)))
 	}
 
 	var unit string = "VCPU_HOURS"
 
-	return &schema.CostComponent{
+	component := &schema.CostComponent{
 		Name:            fmt.Sprintf("CPU hours (%d CPUs, %s)", cpu, r.Zone),
 		Unit:            "CPU hours",
 		UnitMultiplier:  decimal.NewFromInt(1),
@@ -304,6 +306,8 @@ func (r *IsInstance) cpuCostComponent(arch ArchType, cpu int64, multiplier decim
 			Unit: strPtr(unit),
 		},
 	}
+	component.SetCustomPriceMultiplier(decimalPtr(multiplier))
+	return component
 }
 
 func (r *IsInstance) onDedicatedHostCostComponent(cores int64, memory int64) *schema.CostComponent {
