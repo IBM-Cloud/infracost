@@ -5,8 +5,6 @@ import (
 	"errors"
 	"flag"
 	"fmt"
-	"go/parser"
-	"go/token"
 	"io/fs"
 	"os"
 	"path"
@@ -14,9 +12,6 @@ import (
 	"sort"
 	"strings"
 	"text/template"
-
-	"github.com/dave/dst"
-	"github.com/dave/dst/decorator"
 )
 
 var (
@@ -193,6 +188,7 @@ func writeOutput(c config, written []string) {
 }
 
 func addResourceToRegistry(c config) error {
+	/* Disabled to remove dependency on dave/dst module to fix CVE's reported by Mend
 	f, err := decorator.ParseFile(token.NewFileSet(), c.registryLocation(), nil, parser.ParseComments)
 	if err != nil {
 		return fmt.Errorf("Could not parse registry file %s for decorating %w", c.registryLocation(), err)
@@ -226,7 +222,7 @@ func addResourceToRegistry(c config) error {
 	if err != nil {
 		return fmt.Errorf("Could not write function %s to registry file %s %w", c.RegistryFuncName(), c.registryLocation(), err)
 	}
-
+	*/
 	return nil
 }
 
