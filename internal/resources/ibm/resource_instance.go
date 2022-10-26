@@ -374,7 +374,7 @@ func AppConnectCpuCostComponent(r *ResourceInstance) *schema.CostComponent {
 			},
 		},
 		PriceFilter: &schema.PriceFilter{
-			Unit: strPtr("GIGABYTE_TRANSMITTED_OUTBOUND"),
+			Unit: strPtr("VIRTUAL_PROCESSOR_CORE_HOURS"),
 		},
 	}
 }
