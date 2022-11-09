@@ -57,11 +57,11 @@ var globalCatalogServiceId = map[string]catalogMetadata{
 	"ibm_is_flow_log":               {"is.flow-log-collector", []string{}, nil},
 	"ibm_cloudant":                  {"cloudant", []string{}, nil},
 	"ibm_pi_instance":               {"abd259f0-9990-11e8-acc8-b9f54a8f1661", []string{}, nil},
-	// Huh...
-	"ibm_cos_bucket":        {"dff97f5c-bc5e-4455-b470-411c3edbe49c", []string{}, nil},
-	"ibm_is_lb":             {"is.load-balancer", []string{}, nil},
-	"ibm_is_public_gateway": {"is.public-gateway", []string{"ibm_is_floating_ip"}, nil},
-	"kms":                   {"ee41347f-b18e-4ca6-bf80-b5467c63f9a6", []string{}, nil},
+	"ibm_cos_bucket":                {"Cloud Object Storage Bucket", []string{}, nil},
+	"ibm_is_lb":                     {"is.load-balancer", []string{}, nil},
+	"ibm_is_public_gateway":         {"is.public-gateway", []string{"ibm_is_floating_ip"}, nil},
+	"kms":                           {"ee41347f-b18e-4ca6-bf80-b5467c63f9a6", []string{}, nil},
+	"cloud-object-storage":          {"dff97f5c-bc5e-4455-b470-411c3edbe49c", []string{}, nil},
 }
 
 func SetCatalogMetadata(d *schema.ResourceData, resourceType string, config map[string]any) {
