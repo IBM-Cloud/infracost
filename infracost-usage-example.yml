@@ -1154,13 +1154,13 @@ resource_usage:
     accelerated_archive_restore: 1000 # Amount of data restored from its archived state in GB
     aspera_ingress: 1000 # Amount of data uploaded with Aspera in GB
     aspera_egress: 1000 # Amount of data downloaded with Aspera in GB
-    class_a_request_count: 10000 # Monthly number of Class A requests
-    class_b_request_count: 10000 # Monthly number of Class B requests
+    class_a_request_count: 10 # Monthly number of Class A requests, 1k
+    class_b_request_count: 10 # Monthly number of Class B requests 10k
     monthly_average_capacity: 1000 # Average amount of data stored in GB
     monthly_data_retrieval: 1000 # Amount of data retrieved in GB
     public_standard_egress: 1000 # Amount of data downloaded in GB
 
-  bm_container_vpc_cluster.cluster:
+  ibm_container_vpc_cluster.cluster:
     monthly_instance_hours: 730 # Monthly number of hours an instance runs
 
   ibm_container_vpc_worker_pool.cluster_pool:
@@ -1169,7 +1169,7 @@ resource_usage:
   ibm_is_flow_log.flow_log_instance:
     transmitted_gb: 30000 # Data transmitted to the instance
 
-  ibm_is_lb:
+  ibm_is_lb.lb:
     monthly_instance_hours: 730 # Monthly number of hours an instance runs
     gigabyte_processed: 1000 # Monthly gigabytes of data processed by the load balancer 
 
