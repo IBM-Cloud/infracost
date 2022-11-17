@@ -7,10 +7,10 @@ require (
 	github.com/Masterminds/semver v1.5.0 // indirect
 	github.com/Masterminds/sprig v2.22.0+incompatible
 	github.com/Rhymond/go-money v1.0.9
-	github.com/aws/aws-sdk-go-v2 v1.16.14
+	github.com/aws/aws-sdk-go-v2 v1.17.1
 	github.com/aws/aws-sdk-go-v2/config v1.15.14
 	github.com/aws/aws-sdk-go-v2/service/autoscaling v1.23.14
-	github.com/aws/aws-sdk-go-v2/service/cloudwatch v1.21.4
+	github.com/aws/aws-sdk-go-v2/service/cloudwatch v1.21.10
 	github.com/aws/aws-sdk-go-v2/service/dynamodb v1.16.4
 	github.com/aws/aws-sdk-go-v2/service/ec2 v1.54.4
 	github.com/aws/aws-sdk-go-v2/service/s3 v1.27.9
@@ -55,7 +55,7 @@ require (
 	github.com/agext/levenshtein v1.2.3 // indirect
 	github.com/aws/aws-sdk-go-v2/credentials v1.12.9 // indirect
 	github.com/aws/aws-sdk-go-v2/feature/ec2/imds v1.12.8 // indirect
-	github.com/aws/aws-sdk-go-v2/internal/configsources v1.1.21 // indirect
+	github.com/aws/aws-sdk-go-v2/internal/configsources v1.1.25 // indirect
 	github.com/aws/aws-sdk-go-v2/internal/ini v1.3.15 // indirect
 	github.com/aws/aws-sdk-go-v2/service/internal/accept-encoding v1.9.8 // indirect
 	github.com/aws/aws-sdk-go-v2/service/internal/endpoint-discovery v1.7.15 // indirect
@@ -63,7 +63,7 @@ require (
 	github.com/aws/aws-sdk-go-v2/service/internal/s3shared v1.13.15 // indirect
 	github.com/aws/aws-sdk-go-v2/service/sso v1.11.12 // indirect
 	github.com/aws/aws-sdk-go-v2/service/sts v1.16.9 // indirect
-	github.com/aws/smithy-go v1.13.2 // indirect
+	github.com/aws/smithy-go v1.13.4 // indirect
 	github.com/davecgh/go-spew v1.1.1 // indirect
 	github.com/hashicorp/hcl v1.0.1-vault // indirect
 	github.com/hashicorp/hcl/v2 v2.14.0
@@ -88,7 +88,7 @@ require (
 
 require (
 	github.com/aws/aws-sdk-go-v2/aws/protocol/eventstream v1.4.7 // indirect
-	github.com/aws/aws-sdk-go-v2/internal/endpoints/v2 v2.4.15 // indirect
+	github.com/aws/aws-sdk-go-v2/internal/endpoints/v2 v2.4.19 // indirect
 	github.com/gorilla/websocket v1.4.2 // indirect
 	golang.org/x/sync v0.0.0-20220722155255-886fb9371eb4
 )
