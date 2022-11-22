@@ -129,7 +129,7 @@ func newRootCmd(ctx *config.RunContext) *cobra.Command {
 				var err error
 
 				if _, serr := os.Stat(debugFile); serr != nil {
-					f, err = os.OpenFile(debugFile, os.O_RDWR|os.O_CREATE|os.O_TRUNC, 0755)
+					f, err = os.OpenFile(debugFile, os.O_RDWR|os.O_CREATE|os.O_TRUNC, 0600)
 				} else {
 					f, err = os.Create(debugFile)
 				}
@@ -334,7 +334,7 @@ func saveOutFile(ctx *config.RunContext, cmd *cobra.Command, outFile string, b [
 
 // saveOutFile saves the output of the command to the file path past in the `--out-file` flag
 func saveOutFileWithMsg(ctx *config.RunContext, cmd *cobra.Command, outFile, successMsg string, b []byte) error {
-	err := ioutil.WriteFile(outFile, b, 0644) // nolint:gosec
+	err := ioutil.WriteFile(outFile, b, 0600) // nolint:gosec
 	if err != nil {
 		return errors.Wrap(err, "Unable to save output")
 	}

@@ -146,7 +146,10 @@ func processStack(rawStack []byte) ([]byte, error) {
 		return []byte{}, err
 	}
 
-	w.Flush()
+	err = w.Flush()
+	if err != nil {
+		log.Println(err)
+	}
 
 	return buf.Bytes(), nil
 }

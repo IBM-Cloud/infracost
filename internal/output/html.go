@@ -72,6 +72,9 @@ func ToHTML(out Root, opts Options) ([]byte, error) {
 		return []byte{}, err
 	}
 
-	bufw.Flush()
+	err = bufw.Flush()
+	if err != nil {
+		log.Println(err)
+	}
 	return buf.Bytes(), nil
 }

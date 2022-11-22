@@ -4,8 +4,9 @@ import (
 	"crypto/tls"
 	"crypto/x509"
 	"encoding/json"
-	"github.com/tidwall/gjson"
 	"io/ioutil"
+
+	"github.com/tidwall/gjson"
 
 	"github.com/infracost/infracost/internal/config"
 	"github.com/infracost/infracost/internal/logging"
@@ -35,7 +36,9 @@ func NewUsageAPIClient(ctx *config.RunContext) *UsageAPIClient {
 		currency = "USD"
 	}
 
-	tlsConfig := tls.Config{} // nolint: gosec
+	tlsConfig := tls.Config{
+		MinVersion: tls.TLS_AES_128_GCM_SHA256,
+	} // nolint: gosec
 
 	if ctx.Config.TLSCACertFile != "" {
 		rootCAs, _ := x509.SystemCertPool()

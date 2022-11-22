@@ -129,7 +129,10 @@ func installPlugins() error {
 	if err != nil {
 		log.Errorf("Error creating plugin cache directory: %s", err.Error())
 	} else {
-		os.Setenv("TF_PLUGIN_CACHE_DIR", pluginCache)
+		err := os.Setenv("TF_PLUGIN_CACHE_DIR", pluginCache)
+		if err != nil {
+			log.Println(err)
+		}
 	}
 
 	opts := &terraform.CmdOptions{

@@ -169,7 +169,7 @@ func AssertGoldenFile(t *testing.T, goldenFilePath string, actual []byte) {
 			goldenFileDir := filepath.Dir(goldenFilePath)
 			if _, err := os.Stat(goldenFileDir); err != nil {
 				if os.IsNotExist(err) {
-					_ = os.MkdirAll(goldenFileDir, 0755)
+					_ = os.MkdirAll(goldenFileDir, 0600)
 				}
 			}
 

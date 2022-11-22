@@ -10,6 +10,7 @@ import (
 	"path/filepath"
 	"sync"
 
+	"github.com/pkg/errors"
 	log "github.com/sirupsen/logrus"
 )
 
@@ -76,9 +77,17 @@ func Cmd(opts *CmdOptions, args ...string) ([]byte, error) {
 	cmd.Stdout = io.MultiWriter(outw, terraformLogWriter)
 	cmd.Stderr = io.MultiWriter(errw, logWriter)
 	err := cmd.Run()
-
-	outw.Flush()
-	errw.Flush()
+	if err != nil {
+		log.Println(err)
+	}
+	err = outw.Flush()
+	if err != nil {
+		log.Println(err)
+	}
+	err = errw.Flush()
+	if err != nil {
+		log.Println(err)
+	}
 	terraformLogWriter.Flush()
 	logWriter.Flush()
 
@@ -167,9 +176,12 @@ func CreateConfigFile(dir string, terraformCloudHost string, terraformCloudToken
 		}
 	}
 
-	f, err := os.OpenFile(tmpFile.Name(), os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
+	f, err := os.OpenFile(tmpFile.Name(), os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0600)
 	if err != nil {
 		return tmpFile.Name(), err
+	}
+	if f == nil {
+		return "", errors.New("No file found")
 	}
 	defer f.Close()
 
@@ -192,15 +204,21 @@ func CreateConfigFile(dir string, terraformCloudHost string, terraformCloudToken
 }
 
 func copyFile(srcPath string, dstPath string) error {
-	src, err := os.Open(srcPath)
+	src, err := os.Open(filepath.Clean(srcPath))
 	if err != nil {
 		return err
+	}
+	if src == nil {
+		return errors.New("No source file")
 	}
 	defer src.Close()
 
 	dst, err := os.Create(dstPath)
 	if err != nil {
 		return err
+	}
+	if dst == nil {
+		return errors.New("No destination file")
 	}
 	defer dst.Close()
 
