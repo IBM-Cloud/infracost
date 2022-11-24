@@ -189,7 +189,7 @@ func (tfrGetter *TerraformRegistryGetter) getSubdir(ctx context.Context, dstPath
 	}
 
 	// Make the final destination
-	if err := os.MkdirAll(dstPath, 0755); err != nil {
+	if err := os.MkdirAll(dstPath, 0600); err != nil {
 		return errors.WithStackTrace(err)
 	}
 

@@ -69,7 +69,10 @@ func (a AuthClient) startCallbackServer(listener net.Listener, generatedState st
 			select {
 			case <-time.After(time.Minute * 5):
 				shutdown <- callbackServerResp{err: fmt.Errorf("timeout")}
-				listener.Close()
+				err := listener.Close()
+				if err != nil {
+					log.Println(err)
+				}
 				return
 			}
 		}

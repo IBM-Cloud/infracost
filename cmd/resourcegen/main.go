@@ -6,6 +6,7 @@ import (
 	"flag"
 	"fmt"
 	"io/fs"
+	"log"
 	"os"
 	"path"
 	"regexp"
@@ -257,7 +258,10 @@ func writeFiles(assetMap map[string]*template.Template, c config) ([]string, err
 			return made, fmt.Errorf("Could not execute template for file %s %w", fileLoc, err)
 		}
 
-		file.Close()
+		err = file.Close()
+		if err != nil {
+			log.Println(err)
+		}
 	}
 
 	sort.Strings(made)

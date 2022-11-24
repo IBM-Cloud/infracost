@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"io"
 	"net/http"
+	"net/url"
 	"os"
 	"sort"
 	"strings"
@@ -64,7 +65,11 @@ func CreateUsageFile(path string) error {
 func LoadUsageFromGlobalCatalog(globalCatalogPath string) (*UsageFile, error) {
 	blankUsage := NewBlankUsageFile()
 	var catalogInstance GlobalCatalogObject
-	resp, err := http.Get(globalCatalogPath)
+	url, err := url.Parse(globalCatalogPath)
+	if err != nil {
+		return blankUsage, errors.Wrapf(err, "Request to usage failed")
+	}
+	resp, err := http.Get(url.String())
 	if err != nil {
 		return blankUsage, errors.Wrapf(err, "Request to usage failed")
 	}
