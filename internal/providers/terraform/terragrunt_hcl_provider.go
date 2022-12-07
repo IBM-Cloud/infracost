@@ -528,14 +528,11 @@ func (p *TerragruntHCLProvider) downloadTerraformSourceIfNecessary(terraformSour
 	// https://github.com/gruntwork-io/terragrunt/issues/1921
 	if previousVersion != currentVersion {
 		initFile := util.JoinPath(terraformSource.WorkingDir, ".terragrunt-init-required")
-		f, createErr := os.Create(initFile)
+		f, createErr := os.Create(filepath.Clean(initFile))
 		if createErr != nil {
 			return createErr
 		}
-		if f == nil {
-			return nil
-		}
-		defer f.Close()
+		defer f.Close() // #nosec G307
 	}
 
 	return nil

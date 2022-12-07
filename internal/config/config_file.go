@@ -3,6 +3,7 @@ package config
 import (
 	"fmt"
 	"os"
+	"path/filepath"
 	"reflect"
 	"sort"
 	"strings"
@@ -54,25 +55,25 @@ func (y *YamlError) isValid() bool {
 // YamlError.Error supports multiple nesting and can construct heavily indented output if needed.
 // e.g.
 //
-// 		&YamlError{
-//			base: "top message",
-//			errors: []error{
-//				errors.New("top error 1"),
-//				&YamlError{
-//					base: "child message",
-//					errors: []error{
-//						errors.New("child error 1"),
-//					},
+//	&YamlError{
+//		base: "top message",
+//		errors: []error{
+//			errors.New("top error 1"),
+//			&YamlError{
+//				base: "child message",
+//				errors: []error{
+//					errors.New("child error 1"),
 //				},
 //			},
-//		}
+//		},
+//	}
 //
 // would output a string like so:
 //
-//		top message:
-//			top error 1
-//			child message:
-//				child error 1
+//	top message:
+//		top error 1
+//		child message:
+//			child error 1
 //
 // This can be useful for ui error messages where you need to highlight issues
 // with specific fields/entries.
@@ -213,7 +214,7 @@ func loadConfigFile(path string) (fileSpec, error) {
 		return cfgFile, fmt.Errorf("config file does not exist at %s", path)
 	}
 
-	content, err := os.ReadFile(path)
+	content, err := os.ReadFile(filepath.Clean(path))
 	if err != nil {
 		return cfgFile, fmt.Errorf("%w: %s", ErrorInvalidConfigFile, err)
 	}

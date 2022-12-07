@@ -365,7 +365,7 @@ func openFile(baseDir, path string) (*os.File, error) {
 	// Ensure that the path is canonical for the host OS
 	path = filepath.Clean(path)
 
-	return os.Open(path)
+	return os.Open(path) // #nosec G304 The path is cleared above
 }
 
 func readFileBytes(baseDir, path string) ([]byte, error) {
