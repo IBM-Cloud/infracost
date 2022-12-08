@@ -9,6 +9,7 @@ import (
 	"log"
 	"os"
 	"path"
+	"path/filepath"
 	"regexp"
 	"sort"
 	"strings"
@@ -247,7 +248,7 @@ func writeFiles(assetMap map[string]*template.Template, c config) ([]string, err
 		}
 
 		sanitised := tmplSuffixExp.ReplaceAllString(fileLoc, "")
-		file, err := os.Create(sanitised)
+		file, err := os.Create(filepath.Clean(sanitised))
 		if err != nil {
 			return made, fmt.Errorf("Could not create file %s %w", fileLoc, err)
 		}

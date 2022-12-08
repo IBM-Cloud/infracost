@@ -8,6 +8,7 @@ import (
 	"net/http"
 	"net/url"
 	"os"
+	"path/filepath"
 	"sort"
 	"strings"
 
@@ -100,7 +101,7 @@ func LoadUsageFile(path string) (*UsageFile, error) {
 		return blankUsage, nil
 	}
 
-	contents, err := os.ReadFile(path)
+	contents, err := os.ReadFile(filepath.Clean(path))
 	if err != nil {
 		return blankUsage, errors.Wrapf(err, "Error reading usage file")
 	}

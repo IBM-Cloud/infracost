@@ -40,7 +40,7 @@ func Cmd(opts *CmdOptions, args ...string) ([]byte, error) {
 		exe = defaultTerraformBinary
 	}
 
-	cmd := exec.Command(exe, append(args, opts.Flags...)...)
+	cmd := exec.Command(exe, append(args, opts.Flags...)...) // #nosec G204 The variable takes value of an outside configuration param or falls back to the environments terraform binary
 	log.Debugf("Running command: %s", cmd.String())
 	cmd.Dir = opts.Dir
 	cmd.Env = os.Environ()
@@ -183,7 +183,7 @@ func CreateConfigFile(dir string, terraformCloudHost string, terraformCloudToken
 	if f == nil {
 		return "", errors.New("No file found")
 	}
-	defer f.Close()
+	defer f.Close() // #nosec G307
 
 	host := terraformCloudHost
 	if host == "" {
@@ -211,16 +211,16 @@ func copyFile(srcPath string, dstPath string) error {
 	if src == nil {
 		return errors.New("No source file")
 	}
-	defer src.Close()
+	defer src.Close() // #nosec G307
 
-	dst, err := os.Create(dstPath)
+	dst, err := os.Create(filepath.Clean(dstPath))
 	if err != nil {
 		return err
 	}
 	if dst == nil {
 		return errors.New("No destination file")
 	}
-	defer dst.Close()
+	defer dst.Close() // #nosec G307
 
 	_, err = io.Copy(dst, src)
 	if err != nil {

@@ -29,7 +29,7 @@ const (
 	defaultRegistryDomain = "registry.terraform.io"
 	serviceDiscoveryPath  = "/.well-known/terraform.json"
 	versionQueryKey       = "version"
-	authTokenEnvVarName   = "TG_TF_REGISTRY_TOKEN" //nolint
+	authTokenEnvVarName   = "TG_TF_REGISTRY_TOKEN" // #nosec G101 This is not a secret
 )
 
 // TerraformRegistryServicePath is a struct for extracting the modules service path in the Registry.

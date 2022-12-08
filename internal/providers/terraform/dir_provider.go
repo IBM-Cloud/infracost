@@ -96,7 +96,7 @@ func (p *DirProvider) checks() error {
 		return clierror.NewCLIError(errors.Errorf(msg), "Terraform binary could not be found")
 	}
 
-	out, err := exec.Command(binary, "-version").Output()
+	out, err := exec.Command(binary, "-version").Output() // #nosec G204 The variable takes value of an outside configuration param or falls back to the environments terraform binary
 	if err != nil {
 		msg := fmt.Sprintf("Could not get version of Terraform binary '%s'", binary)
 		return clierror.NewCLIError(errors.Errorf(msg), "Could not get version of Terraform binary")
@@ -127,7 +127,7 @@ func (p *DirProvider) AddMetadata(metadata *schema.ProjectMetadata) {
 
 	if terraformWorkspace == "" {
 		binary := p.TerraformBinary
-		cmd := exec.Command(binary, "workspace", "show")
+		cmd := exec.Command(binary, "workspace", "show") // #nosec G204 The variable takes value of an outside configuration param or falls back to the environments terraform binary
 		cmd.Dir = p.Path
 
 		out, err := cmd.Output()
