@@ -21,6 +21,7 @@ type Configuration struct {
 	TLSCACertFile         string `yaml:"tls_ca_cert_file,omitempty"`
 	EnableCloud           *bool  `yaml:"enable_cloud"`
 	IBMUsage              string `yaml:"ibm_usage"`
+	EnableCloudUpload     *bool  `yaml:"enable_cloud_upload"`
 }
 
 func loadConfiguration(cfg *Config) error {
@@ -50,6 +51,10 @@ func loadConfiguration(cfg *Config) error {
 
 	if cfg.Configuration.EnableCloud != nil {
 		cfg.EnableCloud = cfg.Configuration.EnableCloud
+	}
+
+	if cfg.Configuration.EnableCloudUpload != nil {
+		cfg.EnableCloudUpload = cfg.Configuration.EnableCloudUpload
 	}
 
 	if cfg.Configuration.DisableHCLParsing != nil {
