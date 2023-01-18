@@ -101,27 +101,27 @@ func (r *IbmPiVolume) BuildResource() *schema.Resource {
 		}
 		costComponent.SetCustomPrice(decimalPtr(decimal.NewFromInt(0.0)))
 		costComponents = append(costComponents, costComponent)
-	} else {
-		if r.Type == "tier1" || r.Type == "tier3" || r.Type == "standard" || r.Type == "ssd" {
-			costComponent := &schema.CostComponent{
-				Name:            "Price dependent upon affinity settings",
-				Unit:            "Gigabyte Instance Hours",
-				UnitMultiplier:  decimal.NewFromInt(1),
-				MonthlyQuantity: q,
-				ProductFilter: &schema.ProductFilter{
-					VendorName: strPtr("ibm"),
-					Region:     strPtr(r.Region),
-					Service:    strPtr("power-iaas"),
-					AttributeFilters: []*schema.AttributeFilter{
-						{Key: "planName", Value: strPtr("power-virtual-server-group")},
-					},
+	} else if r.Type == "tier1" || r.Type == "tier3" || r.Type == "standard" || r.Type == "ssd" {
+
+		costComponent := &schema.CostComponent{
+			Name:            "Price dependent upon affinity settings",
+			Unit:            "Gigabyte Instance Hours",
+			UnitMultiplier:  decimal.NewFromInt(1),
+			MonthlyQuantity: q,
+			ProductFilter: &schema.ProductFilter{
+				VendorName: strPtr("ibm"),
+				Region:     strPtr(r.Region),
+				Service:    strPtr("power-iaas"),
+				AttributeFilters: []*schema.AttributeFilter{
+					{Key: "planName", Value: strPtr("power-virtual-server-group")},
 				},
-				PriceFilter: &schema.PriceFilter{
-					Unit: strPtr(tierMapping[r.Type]),
-				},
-			}
-			costComponents = append(costComponents, costComponent)
+			},
+			PriceFilter: &schema.PriceFilter{
+				Unit: strPtr(tierMapping[r.Type]),
+			},
 		}
+		costComponents = append(costComponents, costComponent)
+
 	}
 
 	return &schema.Resource{
