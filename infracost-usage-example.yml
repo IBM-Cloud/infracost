@@ -1199,6 +1199,9 @@ resource_usage:
     rational_dev_studio_licenses: 0 # Number IBM Rational Dev Studio Licenses, only valid for IBM i
     epic: 0 # Epic workload configuration
 
+  ibm_pi_volume.pi_volume:
+    monthly_instance_hours: 730 # Monthly number of instance hours
+
   ibm_resource_instance.resource_instance_kms: 
     kms_key_versions: 300 # Number of key versions managed per month
     secretsmanager_active_secrets: 400 # Number of active secrets
@@ -1209,6 +1212,13 @@ resource_usage:
     appconnect_gigabyte_transmitted_outbounds: 10 # Gigabytes transmitted outbounds
     appconnect_thousand_runs: 10 # The number of flow runs, in thousands
     appconnect_vcpu_hours: 10 # The number of VCPU hours used in a month
+    logdna_gigabyte_months: 10 # The amount of logs in a month in GB
+    activitytracker_gigabyte_months: 10 # The amount of logs in a month in GB
+    monitoring_node_hour: 730 # The amount of hours monitoring runs on a host in a month  
+    monitoring_container_hour: 1460 # Additional containers on a host above the base 50
+    monitoring_api_call: 100000 # Additional API calls above the base 1M/instance
+    monitoring_timeseries_hour: 100 # Additional time-series cost above the base 1000/host
+    continuousdelivery_authorized_users: 10 # Number of authorized users to the CD instance and its managed toolchains
     
   ibm_tg_gateway.tg_gateway:
     connection: 25 # Monthly number of connections to the gateway
