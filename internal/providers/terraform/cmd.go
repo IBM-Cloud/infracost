@@ -77,16 +77,14 @@ func Cmd(opts *CmdOptions, args ...string) ([]byte, error) {
 	cmd.Stdout = io.MultiWriter(outw, terraformLogWriter)
 	cmd.Stderr = io.MultiWriter(errw, logWriter)
 	err := cmd.Run()
-	if err != nil {
-		log.Println(err)
+
+	outw_err := outw.Flush()
+	if outw_err != nil {
+		log.Println(outw_err)
 	}
-	err = outw.Flush()
-	if err != nil {
-		log.Println(err)
-	}
-	err = errw.Flush()
-	if err != nil {
-		log.Println(err)
+	errw_err := errw.Flush()
+	if errw_err != nil {
+		log.Println(errw_err)
 	}
 	terraformLogWriter.Flush()
 	logWriter.Flush()
