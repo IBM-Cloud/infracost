@@ -81,7 +81,7 @@ require (
 	github.com/slack-go/slack v0.11.3
 	github.com/tidwall/match v1.1.1 // indirect
 	github.com/tidwall/pretty v1.2.1 // indirect
-	golang.org/x/text v0.4.0
+	golang.org/x/text v0.6.0
 	golang.org/x/tools v0.1.12 // indirect
 	golang.org/x/xerrors v0.0.0-20200804184101-5ec99f83aff1 // indirect
 )
@@ -104,7 +104,7 @@ require (
 	github.com/hashicorp/terraform-svchost v0.0.0-20200729002733-f050f53b9734
 	github.com/maruel/panicparse/v2 v2.3.1
 	github.com/pkg/browser v0.0.0-20201207095918-0426ae3fba23
-	github.com/pterm/pterm v0.12.50
+	github.com/pterm/pterm v0.12.54
 	github.com/shurcooL/githubv4 v0.0.0-20220115235240-a14260e6f8a2
 	github.com/shurcooL/graphql v0.0.0-20200928012149-18c5c3165e3a
 	github.com/withfig/autocomplete-tools/packages/cobra v1.2.0
@@ -113,7 +113,7 @@ require (
 
 require (
 	atomicgo.dev/cursor v0.1.1 // indirect
-	atomicgo.dev/keyboard v0.2.8 // indirect
+	atomicgo.dev/keyboard v0.2.9 // indirect
 	filippo.io/age v1.0.0-beta7 // indirect
 	github.com/Azure/azure-sdk-for-go v56.3.0+incompatible // indirect
 	github.com/Azure/go-autorest v14.2.0+incompatible // indirect
