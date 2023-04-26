@@ -103,6 +103,23 @@ func (r *ContainerVpcCluster) BuildResource() *schema.Resource {
 		costComponents = append(costComponents, zoneCostComponent)
 	}
 
+	// Multi-zone clusters will also have a multi-zone load balancer which has a cost. This is detected if there
+	// more than 1 zones defined
+	// see https://cloud.ibm.com/docs/openshift?topic=openshift-costs#mzlb_pricing
+	if len(r.Zones) > 1 {
+		lbCostComponent := &schema.CostComponent{
+			Name:            "Multizone load balancer",
+			Unit:            "hours",
+			UnitMultiplier:  decimal.NewFromInt(1),
+			MonthlyQuantity: instanceHours,
+			ProductFilter: &schema.ProductFilter{
+				VendorName: strPtr("ibm"),
+				Sku:        strPtr("containers.kubernetes.multizone.load.balancer-undefined-USD-undefined-undefined-noocp"),
+			},
+		}
+		costComponents = append(costComponents, lbCostComponent)
+	}
+
 	return &schema.Resource{
 		Name:           r.Name,
 		UsageSchema:    ContainerVpcClusterUsageSchema,
