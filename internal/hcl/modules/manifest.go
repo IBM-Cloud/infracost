@@ -67,7 +67,7 @@ func writeManifest(manifest *Manifest, path string) error {
 		return fmt.Errorf("failed to create directories for manifest: %w", err)
 	}
 
-	err = os.WriteFile(path, b, 0644) // nolint:gosec
+	err = os.WriteFile(path, b, 0600) // nolint:gosec
 	if err != nil {
 		return fmt.Errorf("failed to write manifest: %w", err)
 	}
