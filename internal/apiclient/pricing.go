@@ -68,9 +68,10 @@ func NewPricingAPIClient(ctx *config.RunContext) *PricingAPIClient {
 		tlsConfig.RootCAs = rootCAs
 	}
 
-	if ctx.Config.TLSInsecureSkipVerify != nil {
-		tlsConfig.InsecureSkipVerify = *ctx.Config.TLSInsecureSkipVerify
-	}
+	// disallow this setting
+	// if ctx.Config.TLSInsecureSkipVerify != nil {
+	//	tlsConfig.InsecureSkipVerify = *ctx.Config.TLSInsecureSkipVerify
+	//}
 
 	var iamAuthenticator *core.IamAuthenticator = nil
 	authenticatorBuilder := core.NewIamAuthenticatorBuilder()

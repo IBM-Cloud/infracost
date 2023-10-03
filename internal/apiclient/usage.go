@@ -75,9 +75,10 @@ func NewUsageAPIClient(ctx *config.RunContext) *UsageAPIClient {
 		tlsConfig.RootCAs = rootCAs
 	}
 
-	if ctx.Config.TLSInsecureSkipVerify != nil {
-		tlsConfig.InsecureSkipVerify = *ctx.Config.TLSInsecureSkipVerify
-	}
+	// disallow this setting
+	// if ctx.Config.TLSInsecureSkipVerify != nil {
+	//	tlsConfig.InsecureSkipVerify = *ctx.Config.TLSInsecureSkipVerify
+	// }
 
 	return &UsageAPIClient{
 		APIClient: APIClient{
