@@ -155,7 +155,7 @@ func ReadPlanCache(p *DirProvider) ([]byte, error) {
 		return nil, fmt.Errorf("expired")
 	}
 
-	data, err := os.ReadFile(cache)
+	data, err := os.ReadFile(filepath.Clean(cache))
 	if err != nil {
 		log.Debugf("Skipping plan cache: Error reading cache file: %v", err)
 		p.ctx.CacheErr = "unreadable"

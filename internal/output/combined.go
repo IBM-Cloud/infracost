@@ -41,7 +41,7 @@ func Load(p string) (Root, error) {
 		return out, errors.New("Infracost JSON file does not exist, generate it by running the following command then try again:\ninfracost breakdown --path /code --format json --out-file infracost-base.json")
 	}
 
-	data, err := os.ReadFile(p)
+	data, err := os.ReadFile(filepath.Clean(p))
 	if err != nil {
 		return out, fmt.Errorf("error reading Infracost JSON file %w", err)
 	}

@@ -3,7 +3,7 @@ package schema
 import (
 	// nolint:gosec
 
-	"crypto/md5" // nolint:gosec
+	"crypto/md5" // #nosec G501 See comment about usage in the file
 	"encoding/base32"
 	"fmt"
 	"path/filepath"
@@ -138,7 +138,7 @@ func AllProjectResources(projects []*Project) []*Resource {
 
 // Returns a lowercase truncated hash of length l
 func shortHash(s string, l int) string {
-	sum := md5.Sum([]byte(s)) //nolint:gosec
+	sum := md5.Sum([]byte(s)) // #nosec G401 This is not a cryptographic hash function, but a simple fallback hash to differentiate projects
 	var b = sum[:]
 	h := base32.StdEncoding.EncodeToString(b)
 

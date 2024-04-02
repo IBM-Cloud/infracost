@@ -10,6 +10,7 @@ import (
 	"path/filepath"
 	"sync"
 
+	"github.com/pkg/errors"
 	log "github.com/sirupsen/logrus"
 )
 
@@ -39,7 +40,7 @@ func Cmd(opts *CmdOptions, args ...string) ([]byte, error) {
 		exe = defaultTerraformBinary
 	}
 
-	cmd := exec.Command(exe, append(args, opts.Flags...)...)
+	cmd := exec.Command(exe, append(args, opts.Flags...)...) // #nosec G204 The variable takes value of an outside configuration param or falls back to the environments terraform binary
 	log.Debugf("Running command: %s", cmd.String())
 	cmd.Dir = opts.Dir
 	cmd.Env = os.Environ()
@@ -77,8 +78,14 @@ func Cmd(opts *CmdOptions, args ...string) ([]byte, error) {
 	cmd.Stderr = io.MultiWriter(errw, logWriter)
 	err := cmd.Run()
 
-	outw.Flush()
-	errw.Flush()
+	outw_err := outw.Flush()
+	if outw_err != nil {
+		log.Println(outw_err)
+	}
+	errw_err := errw.Flush()
+	if errw_err != nil {
+		log.Println(errw_err)
+	}
 	terraformLogWriter.Flush()
 	logWriter.Flush()
 
@@ -167,11 +174,14 @@ func CreateConfigFile(dir string, terraformCloudHost string, terraformCloudToken
 		}
 	}
 
-	f, err := os.OpenFile(tmpFile.Name(), os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
+	f, err := os.OpenFile(tmpFile.Name(), os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0600)
 	if err != nil {
 		return tmpFile.Name(), err
 	}
-	defer f.Close()
+	if f == nil {
+		return "", errors.New("No file found")
+	}
+	defer f.Close() // #nosec G307
 
 	host := terraformCloudHost
 	if host == "" {
@@ -192,17 +202,23 @@ func CreateConfigFile(dir string, terraformCloudHost string, terraformCloudToken
 }
 
 func copyFile(srcPath string, dstPath string) error {
-	src, err := os.Open(srcPath)
+	src, err := os.Open(filepath.Clean(srcPath))
 	if err != nil {
 		return err
 	}
-	defer src.Close()
+	if src == nil {
+		return errors.New("No source file")
+	}
+	defer src.Close() // #nosec G307
 
-	dst, err := os.Create(dstPath)
+	dst, err := os.Create(filepath.Clean(dstPath))
 	if err != nil {
 		return err
 	}
-	defer dst.Close()
+	if dst == nil {
+		return errors.New("No destination file")
+	}
+	defer dst.Close() // #nosec G307
 
 	_, err = io.Copy(dst, src)
 	if err != nil {

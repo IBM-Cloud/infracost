@@ -129,7 +129,10 @@ func installPlugins() error {
 	if err != nil {
 		log.Errorf("Error creating plugin cache directory: %s", err.Error())
 	} else {
-		os.Setenv("TF_PLUGIN_CACHE_DIR", pluginCache)
+		err := os.Setenv("TF_PLUGIN_CACHE_DIR", pluginCache)
+		if err != nil {
+			log.Println(err)
+		}
 	}
 
 	opts := &terraform.CmdOptions{
@@ -231,7 +234,7 @@ func goldenFileResourceTestWithOpts(t *testing.T, pName string, testName string,
 	require.NoError(t, err)
 
 	// Load the terraform projects
-	tfProjectData, err := os.ReadFile(filepath.Join("testdata", testName, testName+".tf"))
+	tfProjectData, err := os.ReadFile(filepath.Join("testdata", filepath.Clean(testName), filepath.Clean(testName)+".tf"))
 	require.NoError(t, err)
 	tfProject := TerraformProject{
 		Files: []File{
@@ -349,7 +352,7 @@ func goldenFileSyncTest(t *testing.T, pName, testName string) {
 	runCtx, err := config.NewRunContextFromEnv(context.Background())
 	require.NoError(t, err)
 
-	tfProjectData, err := os.ReadFile(filepath.Join("testdata", testName, testName+".tf"))
+	tfProjectData, err := os.ReadFile(filepath.Join("testdata", filepath.Clean(testName), filepath.Clean(testName)+".tf"))
 	require.NoError(t, err)
 	tfProject := TerraformProject{
 		Files: []File{
@@ -384,7 +387,7 @@ func RunSyncUsage(t *testing.T, projectCtx *config.ProjectContext, projects []*s
 	err = usageFile.WriteToPath(out)
 	require.NoError(t, err)
 
-	b, err := os.ReadFile(out)
+	b, err := os.ReadFile(filepath.Clean(out))
 	require.NoError(t, err)
 
 	return b
@@ -453,7 +456,7 @@ func copyInitCacheToPath(source, destination string) error {
 				}
 			} else {
 				if file.Name() != "init.tf" { // don't copy init.tf since the provider block will conflict with main.tf
-					srcData, err := os.ReadFile(srcPath)
+					srcData, err := os.ReadFile(filepath.Clean(srcPath))
 					if err != nil {
 						return err
 					}

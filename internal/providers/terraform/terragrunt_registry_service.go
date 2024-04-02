@@ -29,7 +29,7 @@ const (
 	defaultRegistryDomain = "registry.terraform.io"
 	serviceDiscoveryPath  = "/.well-known/terraform.json"
 	versionQueryKey       = "version"
-	authTokenEnvVarName   = "TG_TF_REGISTRY_TOKEN" //nolint
+	authTokenEnvVarName   = "TG_TF_REGISTRY_TOKEN" // #nosec G101 This is not a secret
 )
 
 // TerraformRegistryServicePath is a struct for extracting the modules service path in the Registry.
@@ -189,7 +189,7 @@ func (tfrGetter *TerraformRegistryGetter) getSubdir(ctx context.Context, dstPath
 	}
 
 	// Make the final destination
-	if err := os.MkdirAll(dstPath, 0755); err != nil {
+	if err := os.MkdirAll(dstPath, 0600); err != nil {
 		return errors.WithStackTrace(err)
 	}
 

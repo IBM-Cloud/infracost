@@ -1,9 +1,9 @@
 package funcs
 
 import (
-	"crypto/md5"  //nolint
+	"crypto/md5"  // #nosec G501
 	"crypto/rsa"  //nolint
-	"crypto/sha1" //nolint
+	"crypto/sha1" // #nosec G505
 	"crypto/sha256"
 	"crypto/sha512"
 	"encoding/asn1"

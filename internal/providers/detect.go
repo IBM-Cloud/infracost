@@ -147,7 +147,7 @@ func DetectProjectType(path string, forceCLI bool) string {
 }
 
 func isTerraformPlanJSON(path string) bool {
-	b, err := os.ReadFile(path)
+	b, err := os.ReadFile(filepath.Clean(path))
 	if err != nil {
 		return false
 	}
@@ -171,7 +171,7 @@ func isTerraformPlanJSON(path string) bool {
 }
 
 func isTerraformStateJSON(path string) bool {
-	b, err := os.ReadFile(path)
+	b, err := os.ReadFile(filepath.Clean(path))
 	if err != nil {
 		return false
 	}
