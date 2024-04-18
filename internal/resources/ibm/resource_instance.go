@@ -64,6 +64,12 @@ type ResourceInstance struct {
 	WML_Class1RU *float64 `infracost_usage:"wml_class1_ru"`
 	WML_Class2RU *float64 `infracost_usage:"wml_class2_ru"`
 	WML_Class3RU *float64 `infracost_usage:"wml_class3_ru"`
+	// watsonx.gov
+	// https://dataplatform.cloud.ibm.com/docs/content/svc-welcome/aiopenscale.html?context=cpdaas&audience=wdp
+	WGOV_PredictiveModelEvals   *float64 `infracost_usage:"wgov_predictive_model_evaluation"`
+	WGOV_FoundationalModelEvals *float64 `infracost_usage:"wgov_foundational_model_evaluation"`
+	WGOV_GlobalExplanations     *float64 `infracost_usage:"wgov_global_explanation"`
+	WGOV_LocalExplanations      *float64 `infracost_usage:"wgov_local_explanation"`
 }
 
 type ResourceCostComponentsFunc func(*ResourceInstance) []*schema.CostComponent
@@ -111,6 +117,7 @@ var ResourceInstanceCostMap map[string]ResourceCostComponentsFunc = map[string]R
 	"sysdig-monitor":      GetSysdigCostComponenets,
 	"continuous-delivery": GetContinuousDeliveryCostComponenets,
 	"pm-20":               GetWMLCostComponents,
+	"aiopenscale":         GetWGOVCostComponents,
 }
 
 func KMSKeyVersionsFreeCostComponent(r *ResourceInstance) *schema.CostComponent {
