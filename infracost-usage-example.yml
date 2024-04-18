@@ -69,6 +69,10 @@ resource_type_default_usage:
     wml_class1_ru: 20
     wml_class2_ru: 20
     wml_class3_ru: 20
+    wgov_predictive_model_evaluation: 1
+    wgov_foundational_model_evaluation: 1
+    wgov_global_explanation: 1
+    wgov_local_explanation: 1
   ibm_tg_gateway: 
     connection: 3
     data_transfer_global: 1000
@@ -1296,6 +1300,10 @@ resource_usage:
     wml_class1_ru: 20 # The number of resource units used for inferencing with class 1 type models where each ru is 1000 tokens
     wml_class2_ru: 20 # The number of resource units used for inferencing with class 2 type models where each ru is 1000 tokens
     wml_class3_ru: 20 # The number of resource units used for inferencing with class 3 type models where each ru is 1000 tokens
+    wgov_predictive_model_evaluation: 1 # The number of Predictive Model Evaluations
+    wgov_foundational_model_evaluation: 1 # The number of Foundational Model Evaluations
+    wgov_global_explanation: 1 # The number of Global Explanations
+    wgov_local_explanation: 1 # The number of Local Explanations (1 Ru )
 
   ibm_tg_gateway.tg_gateway:
     connection: 25 # Monthly number of connections to the gateway
