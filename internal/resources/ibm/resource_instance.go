@@ -104,6 +104,10 @@ var ResourceInstanceUsageSchema = []*schema.UsageItem{
 	{Key: "wml_class1_ru", DefaultValue: 0, ValueType: schema.Float64},
 	{Key: "wml_class2_ru", DefaultValue: 0, ValueType: schema.Float64},
 	{Key: "wml_class3_ru", DefaultValue: 0, ValueType: schema.Float64},
+	{Key: "wgov_predictive_model_evaluation", DefaultValue: 0, ValueType: schema.Float64},
+	{Key: "wgov_foundational_model_evaluation", DefaultValue: 0, ValueType: schema.Float64},
+	{Key: "wgov_global_explanation", DefaultValue: 0, ValueType: schema.Float64},
+	{Key: "wgov_local_explanation", DefaultValue: 0, ValueType: schema.Float64},
 }
 
 var ResourceInstanceCostMap map[string]ResourceCostComponentsFunc = map[string]ResourceCostComponentsFunc{
@@ -117,7 +121,7 @@ var ResourceInstanceCostMap map[string]ResourceCostComponentsFunc = map[string]R
 	"sysdig-monitor":      GetSysdigCostComponenets,
 	"continuous-delivery": GetContinuousDeliveryCostComponenets,
 	"pm-20":               GetWMLCostComponents,
-	"aiopenscale":         GetWGOVCostComponents,
+	"aiopenscale":         GetWGOVCostComponents, // watsonx.governance
 }
 
 func KMSKeyVersionsFreeCostComponent(r *ResourceInstance) *schema.CostComponent {
