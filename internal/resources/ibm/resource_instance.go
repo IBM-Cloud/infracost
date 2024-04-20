@@ -70,7 +70,7 @@ type ResourceInstance struct {
 	WA_vu       *float64 `infracost_usage:"wa_voice_users"`
 	// Watson Discovery
 	WD_Instance     *float64 `infracost_usage:"wd_instance"`
-	WD_Document     *float64 `infracost_usage:"wd_documents"`
+	WD_Documents    *float64 `infracost_usage:"wd_documents"`
 	WD_Queries      *float64 `infracost_usage:"wd_queries"`
 	WD_CustomModels *float64 `infracost_usage:"wd_custom_models"`
 	WD_Collections  *float64 `infracost_usage:"wd_collections"`

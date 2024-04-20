@@ -93,9 +93,9 @@ func WDInstanceCostComponent(r *ResourceInstance) *schema.CostComponent {
 func WDMonthlyDocumentsCostComponent(r *ResourceInstance) *schema.CostComponent {
 
 	var documents_additional_range int = 1000 // Additional cost for every 1000 over the included amount of documents
-	var documents_included int
-	var documents_unit_name string
-	var quantity *decimal.Decimal
+	var documents_included int                // Base number of documents that are included with an instance and do not have a cost
+	var documents_unit_name string            // Unit to display
+	var quantity *decimal.Decimal             // Quantity of current cost component (e.g. number of additional 1000 "blocks" over the base number of documents included)
 
 	if r.Plan == PLUS_PLAN_PROGRAMMATIC_NAME {
 		documents_unit_name = "PLUS_DOCUMENTS_TOTAL"
@@ -105,18 +105,21 @@ func WDMonthlyDocumentsCostComponent(r *ResourceInstance) *schema.CostComponent 
 		documents_included = 100000
 	}
 
-	if r.WD_Document != nil {
+	// Determine number of 1000 "blocks" of documents go over the base number of queries included
+	if r.WD_Documents != nil {
 
-		additional_documents := *r.WD_Document - float64(documents_included)
+		additional_documents := *r.WD_Documents - float64(documents_included)
 
 		if additional_documents > 0 {
 			quantity = decimalPtr(decimal.NewFromFloat(math.Ceil(additional_documents / float64(documents_additional_range))))
 		}
+	} else {
+		quantity = decimalPtr(decimal.NewFromInt(0))
 	}
 
 	return &schema.CostComponent{
 		Name:            "Additional Monthly Documents",
-		Unit:            "1K documents",
+		Unit:            "documents",
 		UnitMultiplier:  decimal.NewFromInt(1),
 		MonthlyQuantity: quantity,
 		ProductFilter: &schema.ProductFilter{
@@ -139,10 +142,46 @@ func WDMonthlyDocumentsCostComponent(r *ResourceInstance) *schema.CostComponent 
  * - Enterprise: $USD/queries/month. Includes 100,000 queries per month; $USD for every additional 1,000 queries.
  */
 func WDMonthlyQueriesCostComponent(r *ResourceInstance) *schema.CostComponent {
-	var quantity *decimal.Decimal
 
-	// TODO: Determine quantity
-	// Unit name: "GRADUATED_PRICE_QUERIES_PER_MONTH"
+	var quantity *decimal.Decimal
+	var queries_additional_range int = 1000 // Additional cost for every 1000 over the included amount of queries
+	var queries_included int                // Base number of queries that are included with an instance and do not have a cost
+
+	if r.Plan == PLUS_PLAN_PROGRAMMATIC_NAME {
+		queries_included = 10000
+	} else {
+		queries_included = 100000
+	}
+
+	// Determine number of 1000 "blocks" of queries go over the base number of queries included
+	if r.WD_Queries != nil {
+
+		additional_queries := *r.WD_Queries - float64(queries_included)
+
+		if additional_queries > 0 {
+			quantity = decimalPtr(decimal.NewFromFloat(math.Ceil(additional_queries / float64(queries_additional_range))))
+		}
+	} else {
+		quantity = decimalPtr(decimal.NewFromInt(0))
+	}
+
+	return &schema.CostComponent{
+		Name:            "Additional Monthly Queries",
+		Unit:            "queries",
+		UnitMultiplier:  decimal.NewFromInt(1),
+		MonthlyQuantity: quantity,
+		ProductFilter: &schema.ProductFilter{
+			VendorName: strPtr("ibm"),
+			Region:     strPtr(r.Location),
+			Service:    &r.Service,
+			AttributeFilters: []*schema.AttributeFilter{
+				{Key: "planName", Value: &r.Plan},
+			},
+		},
+		PriceFilter: &schema.PriceFilter{
+			Unit: strPtr("GRADUATED_PRICE_QUERIES_PER_MONTH"),
+		},
+	}
 }
 
 /*
@@ -150,9 +189,34 @@ func WDMonthlyQueriesCostComponent(r *ResourceInstance) *schema.CostComponent {
  * - Enterprise: $USD/additional custom models/month. Includes 3 custom models per month.
  */
 func WDMonthlyCustomModelsCostComponent(r *ResourceInstance) *schema.CostComponent {
-	var quantity *decimal.Decimal
 
-	// Unit name: "CUSTOM_MODELS_PER_MONTH"
+	var quantity *decimal.Decimal
+	var custom_models_included int = 3 // Base number of queries that are included with an instance and do not have a cost
+
+	// Determine number of custom models that go over the base number of queries included
+	if r.WD_Queries != nil {
+		quantity = decimalPtr(decimal.NewFromFloat(*r.WD_Queries - float64(custom_models_included)))
+	} else {
+		quantity = decimalPtr(decimal.NewFromInt(0))
+	}
+
+	return &schema.CostComponent{
+		Name:            "Additional Monthly Queries",
+		Unit:            "custom models",
+		UnitMultiplier:  decimal.NewFromInt(1),
+		MonthlyQuantity: quantity,
+		ProductFilter: &schema.ProductFilter{
+			VendorName: strPtr("ibm"),
+			Region:     strPtr(r.Location),
+			Service:    &r.Service,
+			AttributeFilters: []*schema.AttributeFilter{
+				{Key: "planName", Value: &r.Plan},
+			},
+		},
+		PriceFilter: &schema.PriceFilter{
+			Unit: strPtr("CUSTOM_MODELS_PER_MONTH"),
+		},
+	}
 }
 
 /*
