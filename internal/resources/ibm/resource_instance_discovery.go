@@ -105,7 +105,7 @@ func WDMonthlyDocumentsCostComponent(r *ResourceInstance) *schema.CostComponent 
 		documents_included = 100000
 	}
 
-	// Determine number of 1000 "blocks" of documents go over the base number of queries included
+	// Determine number of 1000 "blocks" of documents go over the base number of documents included
 	if r.WD_Documents != nil {
 
 		additional_documents := *r.WD_Documents - float64(documents_included)
@@ -191,17 +191,17 @@ func WDMonthlyQueriesCostComponent(r *ResourceInstance) *schema.CostComponent {
 func WDMonthlyCustomModelsCostComponent(r *ResourceInstance) *schema.CostComponent {
 
 	var quantity *decimal.Decimal
-	var custom_models_included int = 3 // Base number of queries that are included with an instance and do not have a cost
+	var custom_models_included int = 3 // Base number of custom models that are included with an instance and do not have a cost
 
-	// Determine number of custom models that go over the base number of queries included
-	if r.WD_Queries != nil {
-		quantity = decimalPtr(decimal.NewFromFloat(*r.WD_Queries - float64(custom_models_included)))
+	// Determine number of custom models that go over the base number of custom models included
+	if r.WD_CustomModels != nil {
+		quantity = decimalPtr(decimal.NewFromFloat(*r.WD_CustomModels - float64(custom_models_included)))
 	} else {
 		quantity = decimalPtr(decimal.NewFromInt(0))
 	}
 
 	return &schema.CostComponent{
-		Name:            "Additional Monthly Queries",
+		Name:            "Additional Monthly Custom Models",
 		Unit:            "custom models",
 		UnitMultiplier:  decimal.NewFromInt(1),
 		MonthlyQuantity: quantity,
@@ -224,7 +224,39 @@ func WDMonthlyCustomModelsCostComponent(r *ResourceInstance) *schema.CostCompone
  * - Enterprise: $USD/additional collections/month. Includes 300 collections per month; $USD for every additional 100 collections.
  */
 func WDMonthlyCollectionsCostComponent(r *ResourceInstance) *schema.CostComponent {
-	var quantity *decimal.Decimal
 
-	// Unit name: "ENTERPRISE_COLLECTIONS_TOTAL"
+	var quantity *decimal.Decimal
+	var collections_additional_range int = 100 // Additional cost for every 1000 over the included amount of collections
+	var collections_included int = 300         // Base number of collections that are included with an instance and do not have a cost
+
+	// Determine number of 1000 "blocks" of collections go over the base number of collections included
+	if r.WD_Collections != nil {
+
+		additional_collections := *r.WD_Queries - float64(collections_included)
+
+		if additional_collections > 0 {
+			quantity = decimalPtr(decimal.NewFromFloat(math.Ceil(additional_collections / float64(collections_additional_range))))
+		}
+
+	} else {
+		quantity = decimalPtr(decimal.NewFromInt(0))
+	}
+
+	return &schema.CostComponent{
+		Name:            "Additional Monthly Collections",
+		Unit:            "collections",
+		UnitMultiplier:  decimal.NewFromInt(1),
+		MonthlyQuantity: quantity,
+		ProductFilter: &schema.ProductFilter{
+			VendorName: strPtr("ibm"),
+			Region:     strPtr(r.Location),
+			Service:    &r.Service,
+			AttributeFilters: []*schema.AttributeFilter{
+				{Key: "planName", Value: &r.Plan},
+			},
+		},
+		PriceFilter: &schema.PriceFilter{
+			Unit: strPtr("ENTERPRISE_COLLECTIONS_TOTAL"),
+		},
+	}
 }
