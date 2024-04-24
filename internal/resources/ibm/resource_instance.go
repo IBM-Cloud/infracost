@@ -74,6 +74,8 @@ type ResourceInstance struct {
 	WD_Queries      *float64 `infracost_usage:"wd_queries"`
 	WD_CustomModels *float64 `infracost_usage:"wd_custom_models"`
 	WD_Collections  *float64 `infracost_usage:"wd_collections"`
+	// Security and Compliance Center (SCC)
+	SCC_Evaluations *float64 `infracost_usage:"scc_evaluations"`
 }
 
 type ResourceCostComponentsFunc func(*ResourceInstance) []*schema.CostComponent
@@ -116,6 +118,7 @@ var ResourceInstanceUsageSchema = []*schema.UsageItem{
 	{Key: "wd_queries", DefaultValue: 0, ValueType: schema.Float64},
 	{Key: "wd_custom_models", DefaultValue: 0, ValueType: schema.Float64},
 	{Key: "wd_collections", DefaultValue: 0, ValueType: schema.Float64},
+	{Key: "scc_evaluations", DefaultValue: 0, ValueType: schema.Float64},
 }
 
 var ResourceInstanceCostMap map[string]ResourceCostComponentsFunc = map[string]ResourceCostComponentsFunc{
@@ -131,6 +134,7 @@ var ResourceInstanceCostMap map[string]ResourceCostComponentsFunc = map[string]R
 	"pm-20":               GetWMLCostComponents,
 	"conversation":        GetWACostComponents,
 	"discovery":           GetWDCostComponents,
+	"compliance":          GetSCCCostComponents,
 }
 
 func KMSKeyVersionsFreeCostComponent(r *ResourceInstance) *schema.CostComponent {
