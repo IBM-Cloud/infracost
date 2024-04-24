@@ -200,3 +200,20 @@ resource "ibm_resource_instance" "watson_discovery_enterprise" {
   location          = "us-south"
   resource_group_id = "default"
 }
+
+resource "ibm_resource_instance" "watson_studio_professional" {
+  name              = "ws_professional"
+  service           = "data-science-experience"
+  plan              = "professional-v1"
+  location          = "us-south"
+  resource_group_id = "default"
+}
+
+resource "ibm_resource_instance" "watson_studio_lite" {
+  name              = "ws_lie"
+  service           = "data-science-experience"
+  plan              = "free-v1"
+  location          = "us-south"
+  resource_group_id = "default"
+}
+
