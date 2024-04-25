@@ -63,6 +63,26 @@ resource "ibm_resource_instance" "resource_instance_logdna_7day_no_usage" {
   plan              = "7-day"
   location          = "us-south"
 }
+resource "ibm_resource_instance" "resource_instance_logdna_14day" {
+  name              = "logdna-14day"
+  service           = "logdna"
+  plan              = "14-day"
+  location          = "us-south"
+}
+
+resource "ibm_resource_instance" "resource_instance_logdna_30day" {
+  name              = "logdna-30day"
+  service           = "logdna"
+  plan              = "30-day"
+  location          = "us-south"
+}
+
+resource "ibm_resource_instance" "resource_instance_logdna_hipaa30day" {
+  name              = "logdna-hipaa30day"
+  service           = "logdna"
+  plan              = "hipaa-30-day"
+  location          = "us-south"
+}
 
 resource "ibm_resource_instance" "resource_instance_activity_tracker_lite" {
   name              = "activity-tracker-lite"
@@ -149,6 +169,112 @@ resource "ibm_resource_instance" "wml_instance_standard" {
   name              = "wml_standard"
   service           = "pm-20"
   plan              = "v2-professional"
+  location          = "us-south"
+  resource_group_id = "default"
+}
+
+resource "ibm_resource_instance" "wa_instance_lite" {
+  name              = "wa_lite"
+  service           = "conversation"
+  plan              = "lite"
+  location          = "us-south"
+  resource_group_id = "default"
+}
+
+resource "ibm_resource_instance" "wa_instance_trial" {
+  name              = "wa_trial"
+  service           = "conversation"
+  plan              = "plus-trial"
+  location          = "us-south"
+  resource_group_id = "default"
+}
+
+resource "ibm_resource_instance" "wa_instance_plus" {
+  name              = "wa_plus"
+  service           = "conversation"
+  plan              = "plus"
+  location          = "us-south"
+  resource_group_id = "default"
+}
+
+resource "ibm_resource_instance" "wa_instance_enterprise" {
+  name              = "wa_enterprise"
+  service           = "conversation"
+  plan              = "enterprise"
+  location          = "us-south"
+  resource_group_id = "default"
+}
+
+# Watson Discovery
+resource "ibm_resource_instance" "watson_discovery_plus" {
+  name              = "wd_plus"
+  service           = "discovery"
+  plan              = "plus"
+  location          = "us-south"
+  resource_group_id = "default"
+}
+
+resource "ibm_resource_instance" "watson_discovery_enterprise" {
+  name              = "wd_enterprise"
+  service           = "discovery"
+  plan              = "enterprise"
+  location          = "us-south"
+  resource_group_id = "default"
+}
+
+# Security and Compliance Center (SCC)
+resource "ibm_resource_instance" "scc_standard" {
+  name              = "scc_standard"
+  service           = "compliance"
+  plan              = "security-compliance-center-standard-plan"
+  location          = "us-south"
+  resource_group_id = "default"
+}
+
+resource "ibm_resource_instance" "scc_trial" {
+  name              = "scc_trial"
+  service           = "compliance"
+  plan              = "security-compliance-center-trial-plan"
+  location          = "us-south"
+  resource_group_id = "default"
+}
+
+resource "ibm_resource_instance" "watson_studio_professional" {
+  name              = "ws_professional"
+  service           = "data-science-experience"
+  plan              = "professional-v1"
+  location          = "us-south"
+  resource_group_id = "default"
+}
+
+resource "ibm_resource_instance" "watson_studio_lite" {
+  name              = "ws_lite"
+  service           = "data-science-experience"
+  plan              = "free-v1"
+  location          = "us-south"
+  resource_group_id = "default"
+}
+
+resource "ibm_resource_instance" "watson_governance_lite" {
+  name              = "wgov_lite"
+  service           = "aiopenscale"
+  plan              = "lite"
+  location          = "us-south"
+  resource_group_id = "default"
+}
+
+resource "ibm_resource_instance" "watson_governance_essentials" {
+  name              = "wgov_essentials"
+  service           = "aiopenscale"
+  plan              = "essentials"
+  location          = "us-south"
+  resource_group_id = "default"
+}
+
+resource "ibm_resource_instance" "watson_governance_standard_v2" {
+  name              = "wgov_standard_v2"
+  service           = "aiopenscale"
+  plan              = "standard-v2"
   location          = "us-south"
   resource_group_id = "default"
 }

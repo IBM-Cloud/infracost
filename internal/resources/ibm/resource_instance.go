@@ -64,12 +64,23 @@ type ResourceInstance struct {
 	WML_Class1RU *float64 `infracost_usage:"wml_class1_ru"`
 	WML_Class2RU *float64 `infracost_usage:"wml_class2_ru"`
 	WML_Class3RU *float64 `infracost_usage:"wml_class3_ru"`
-	// watsonx.gov
-	// https://dataplatform.cloud.ibm.com/docs/content/svc-welcome/aiopenscale.html?context=cpdaas&audience=wdp
-	WGOV_PredictiveModelEvals   *float64 `infracost_usage:"wgov_predictive_model_evaluation"`
-	WGOV_FoundationalModelEvals *float64 `infracost_usage:"wgov_foundational_model_evaluation"`
-	WGOV_GlobalExplanations     *float64 `infracost_usage:"wgov_global_explanation"`
-	WGOV_LocalExplanations      *float64 `infracost_usage:"wgov_local_explanation"`
+	// Watson Assistant
+	WA_Instance *float64 `infracost_usage:"wa_instance"`
+	WA_mau      *float64 `infracost_usage:"wa_monthly_active_users"`
+	WA_vu       *float64 `infracost_usage:"wa_monthly_voice_users"`
+	// Watson Discovery
+	WD_Instance     *float64 `infracost_usage:"wd_instance"`
+	WD_Documents    *float64 `infracost_usage:"wd_documents"`
+	WD_Queries      *float64 `infracost_usage:"wd_queries"`
+	WD_CustomModels *float64 `infracost_usage:"wd_custom_models"`
+	WD_Collections  *float64 `infracost_usage:"wd_collections"`
+	// Security and Compliance Center (SCC)
+	SCC_Evaluations *float64 `infracost_usage:"scc_evaluations"`
+	// Watson Studio
+	WS_CUH *float64 `infracost_usage:"data-science-experience_CAPACITY_UNIT_HOURS"`
+	// Watson.governance
+	WGOV_ru     *float64 `infracost_usage:"aiopenscale_RESOURCE_UNITS"`
+	WGOV_Models *float64 `infracost_usage:"aiopenscale_MODELS_PER_MONTH"`
 }
 
 type ResourceCostComponentsFunc func(*ResourceInstance) []*schema.CostComponent
@@ -104,24 +115,36 @@ var ResourceInstanceUsageSchema = []*schema.UsageItem{
 	{Key: "wml_class1_ru", DefaultValue: 0, ValueType: schema.Float64},
 	{Key: "wml_class2_ru", DefaultValue: 0, ValueType: schema.Float64},
 	{Key: "wml_class3_ru", DefaultValue: 0, ValueType: schema.Float64},
-	{Key: "wgov_predictive_model_evaluation", DefaultValue: 0, ValueType: schema.Float64},
-	{Key: "wgov_foundational_model_evaluation", DefaultValue: 0, ValueType: schema.Float64},
-	{Key: "wgov_global_explanation", DefaultValue: 0, ValueType: schema.Float64},
-	{Key: "wgov_local_explanation", DefaultValue: 0, ValueType: schema.Float64},
+	{Key: "wa_instance", DefaultValue: 0, ValueType: schema.Float64},
+	{Key: "wa_monthly_active_users", DefaultValue: 0, ValueType: schema.Float64},
+	{Key: "wa_monthly_voice_users", DefaultValue: 0, ValueType: schema.Float64},
+	{Key: "wd_instance", DefaultValue: 0, ValueType: schema.Float64},
+	{Key: "wd_documents", DefaultValue: 0, ValueType: schema.Float64},
+	{Key: "wd_queries", DefaultValue: 0, ValueType: schema.Float64},
+	{Key: "wd_custom_models", DefaultValue: 0, ValueType: schema.Float64},
+	{Key: "wd_collections", DefaultValue: 0, ValueType: schema.Float64},
+	{Key: "scc_evaluations", DefaultValue: 0, ValueType: schema.Float64},
+	{Key: "data-science-experience_CAPACITY_UNIT_HOURS", DefaultValue: 1, ValueType: schema.Float64},
+	{Key: "aiopenscale_RESOURCE_UNITS", DefaultValue: 1, ValueType: schema.Float64},
+	{Key: "aiopenscale_MODELS_PER_MONTH", DefaultValue: 1, ValueType: schema.Float64},
 }
 
 var ResourceInstanceCostMap map[string]ResourceCostComponentsFunc = map[string]ResourceCostComponentsFunc{
-	"kms":                 GetKMSCostComponents,
-	"secrets-manager":     GetSecretsManagerCostComponents,
-	"appid":               GetAppIDCostComponents,
-	"appconnect":          GetAppConnectCostComponents,
-	"power-iaas":          GetPowerCostComponents,
-	"logdna":              GetLogDNACostComponents,
-	"logdnaat":            GetActivityTrackerCostComponents,
-	"sysdig-monitor":      GetSysdigCostComponenets,
-	"continuous-delivery": GetContinuousDeliveryCostComponenets,
-	"pm-20":               GetWMLCostComponents,
-	"aiopenscale":         GetWGOVCostComponents, // watsonx.governance
+	"kms":                     GetKMSCostComponents,
+	"secrets-manager":         GetSecretsManagerCostComponents,
+	"appid":                   GetAppIDCostComponents,
+	"appconnect":              GetAppConnectCostComponents,
+	"power-iaas":              GetPowerCostComponents,
+	"logdna":                  GetLogDNACostComponents,
+	"logdnaat":                GetActivityTrackerCostComponents,
+	"sysdig-monitor":          GetSysdigCostComponenets,
+	"continuous-delivery":     GetContinuousDeliveryCostComponenets,
+	"pm-20":                   GetWMLCostComponents,
+	"conversation":            GetWACostComponents,
+	"discovery":               GetWDCostComponents,
+	"compliance":              GetSCCCostComponents,
+	"data-science-experience": GetWSCostComponents,
+	"aiopenscale":             GetWGOVCostComponents,
 }
 
 func KMSKeyVersionsFreeCostComponent(r *ResourceInstance) *schema.CostComponent {
@@ -484,7 +507,7 @@ func GetLogDNACostComponents(r *ResourceInstance) []*schema.CostComponent {
 		}
 	} else {
 		return []*schema.CostComponent{{
-			Name:            "Gigabyte Months",
+			Name:            fmt.Sprintf("Gigabyte Months (%s)", r.Plan),
 			Unit:            "Gigabyte Months",
 			UnitMultiplier:  decimal.NewFromInt(1),
 			MonthlyQuantity: q,
