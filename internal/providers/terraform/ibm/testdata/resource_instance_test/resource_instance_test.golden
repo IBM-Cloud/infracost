@@ -43,12 +43,6 @@
  ibm_resource_instance.resource_instance_logdna_30day                                                                                        
  └─ Gigabyte Months (30-day)                                                                 1  Gigabyte Months                        $3.23 
                                                                                                                                              
- ibm_resource_instance.resource_instance_logdna_14day                                                                                        
- └─ Gigabyte Months (14-day)                                                                 1  Gigabyte Months                        $2.15 
-                                                                                                                                             
- ibm_resource_instance.resource_instance_logdna_30day                                                                                        
- └─ Gigabyte Months (30-day)                                                                 1  Gigabyte Months                        $3.23 
-                                                                                                                                             
  ibm_resource_instance.resource_instance_logdna_7day                                                                                         
  └─ Gigabyte Months (7-day)                                                                  1  Gigabyte Months                        $1.50 
                                                                                                                                              
