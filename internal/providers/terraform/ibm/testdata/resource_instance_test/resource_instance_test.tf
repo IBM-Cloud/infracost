@@ -264,3 +264,28 @@ resource "ibm_resource_instance" "sccwp_graduated_tier" {
   location          = "us-south"
   resource_group_id = "default"
 }
+
+# Watsonx.governance
+resource "ibm_resource_instance" "watson_governance_lite" {
+  name              = "wgov_lite"
+  service           = "aiopenscale"
+  plan              = "lite"
+  location          = "us-south"
+  resource_group_id = "default"
+}
+
+resource "ibm_resource_instance" "watson_governance_essentials" {
+  name              = "wgov_essentials"
+  service           = "aiopenscale"
+  plan              = "essentials"
+  location          = "us-south"
+  resource_group_id = "default"
+}
+
+resource "ibm_resource_instance" "watson_governance_standard_v2" {
+  name              = "wgov_standard_v2"
+  service           = "aiopenscale"
+  plan              = "standard-v2"
+  location          = "us-south"
+  resource_group_id = "default"
+}
