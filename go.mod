@@ -95,7 +95,7 @@ require (
 
 require (
 	github.com/alecthomas/jsonschema v0.0.0-20211209230136-e2b41affa5c1
-	github.com/awslabs/goformation/v7 v7.0.5
+	github.com/awslabs/goformation/v7 v7.2.5
 	github.com/go-git/go-billy/v5 v5.5.0
 	github.com/go-git/go-git/v5 v5.11.0
 	github.com/google/go-github/v41 v41.0.0
@@ -114,6 +114,8 @@ require (
 require (
 	atomicgo.dev/cursor v0.1.1 // indirect
 	atomicgo.dev/keyboard v0.2.8 // indirect
+	cloud.google.com/go/compute v1.10.0 // indirect
+	cloud.google.com/go/iam v0.5.0 // indirect
 	dario.cat/mergo v1.0.0 // indirect
 	filippo.io/age v1.0.0-beta7 // indirect
 	github.com/Azure/azure-sdk-for-go v56.3.0+incompatible // indirect
@@ -129,6 +131,7 @@ require (
 	github.com/Azure/go-autorest/tracing v0.6.0 // indirect
 	github.com/Microsoft/go-winio v0.6.1 // indirect
 	github.com/ProtonMail/go-crypto v0.0.0-20230828082145-3c4c8a2d2371 // indirect
+	github.com/acomagu/bufpipe v1.0.3 // indirect
 	github.com/agnivade/levenshtein v1.1.1 // indirect
 	github.com/aws/aws-sdk-go-v2/internal/v4a v1.0.17 // indirect
 	github.com/aws/aws-sdk-go-v2/service/internal/checksum v1.1.21 // indirect
@@ -145,6 +148,10 @@ require (
 	github.com/frankban/quicktest v1.11.3 // indirect
 	github.com/go-errors/errors v1.0.2-0.20180813162953-d98b870cc4e0 // indirect
 	github.com/go-git/gcfg v1.5.1-0.20230307220236-3a3c6141e376 // indirect
+	github.com/go-openapi/errors v0.20.2 // indirect
+	github.com/go-openapi/strfmt v0.21.3 // indirect
+	github.com/go-playground/locales v0.14.0 // indirect
+	github.com/go-playground/universal-translator v0.18.0 // indirect
 	github.com/golang-jwt/jwt/v4 v4.2.0 // indirect
 	github.com/golang/groupcache v0.0.0-20210331224755-41bb18bfe9da // indirect
 	github.com/golang/snappy v0.0.4 // indirect
@@ -162,6 +169,7 @@ require (
 	github.com/howeyc/gopass v0.0.0-20170109162249-bf9dde6d0d2c // indirect
 	github.com/jbenet/go-context v0.0.0-20150711004518-d14ea06fba99 // indirect
 	github.com/kevinburke/ssh_config v1.2.0 // indirect
+	github.com/leodido/go-urn v1.2.1 // indirect
 	github.com/lib/pq v1.8.0 // indirect
 	github.com/lithammer/fuzzysearch v1.1.5 // indirect
 	github.com/mattn/go-zglob v0.0.2-0.20190814121620-e3c945676326 // indirect
@@ -182,6 +190,8 @@ require (
 	go.mozilla.org/sops/v3 v3.7.2 // indirect
 	golang.org/x/term v0.15.0 // indirect
 	golang.org/x/time v0.0.0-20210723032227-1f47c861a9ac // indirect
+	golang.org/x/tools v0.13.0 // indirect
+	gopkg.in/go-playground/validator.v9 v9.31.0 // indirect
 	gopkg.in/ini.v1 v1.44.0 // indirect
 	gopkg.in/square/go-jose.v2 v2.5.1 // indirect
 	gopkg.in/urfave/cli.v1 v1.20.0 // indirect
@@ -220,7 +230,7 @@ require (
 	github.com/zclconf/go-cty-yaml v1.0.3
 	go.opencensus.io v0.23.0 // indirect
 	golang.org/x/net v0.19.0 // indirect
-	google.golang.org/api v0.62.0 // indirect
+	google.golang.org/api v0.100.0 // indirect
 	google.golang.org/appengine v1.6.7 // indirect
 	google.golang.org/genproto v0.0.0-20220502173005-c8bf987b8c21 // indirect
 	google.golang.org/grpc v1.50.1 // indirect
