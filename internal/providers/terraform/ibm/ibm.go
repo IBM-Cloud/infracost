@@ -84,7 +84,7 @@ var globalCatalogServiceId = map[string]catalogMetadata{
 	"appconnect":                    {"96a0ebf2-2a02-4e32-815f-7c09a1268c78", []string{}, nil, "https://www.ibm.com/products/app-connect/pricing"},
 	"power-iaas":                    {"abd259f0-9990-11e8-acc8-b9f54a8f1661", []string{}, nil, "https://cloud.ibm.com/docs/power-iaas?topic=power-iaas-pricing-virtual-server"},
 	"logdnaat":                      {"dcc46a60-e13b-11e8-a015-757410dab16b", []string{}, nil, "https://cloud.ibm.com/catalog/services/logdnaat"},
-	"continuous-delivery":           {"59b735ee-5938-4ebd-a6b2-541aef2d1f68", []string{}, nil, "https://cloud.ibm.com/catalog/services/logdnaat"},
+	"continuous-delivery":           {"59b735ee-5938-4ebd-a6b2-541aef2d1f68", []string{}, nil, "https://cloud.ibm.com/catalog/services/continuous-delivery"},
 	"compliance":                    {"compliance", []string{}, nil, "https://cloud.ibm.com/catalog/services/security-and-compliance-center"},
 }
 
