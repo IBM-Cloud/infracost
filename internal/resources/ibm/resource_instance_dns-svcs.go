@@ -13,13 +13,13 @@ const DNS_SERVICES_PROGRAMMATIC_PLAN_NAME string = "standard-dns"
 func GetDNSServicesCostComponents(r *ResourceInstance) []*schema.CostComponent {
 	if r.Plan == DNS_SERVICES_PROGRAMMATIC_PLAN_NAME {
 		return []*schema.CostComponent{
-			// DNSServicesZonesCostComponents(r),
-			// DNSServicesPoolsPerHourCostComponents(r),
-			// DNSServicesGLBInstancesPerHourCostComponents(r),
-			// DNSServicesHealthChecksCostComponents(r),
-			// DNSServicesCustomResolverLocationsPerHourCostComponents(r),
-			// DNSServicesMillionCustomResolverExternalQueriesCostComponents(r),
-			// DNSServicesMillionDNSQueriesCostComponents(r)
+			DNSServicesZonesCostComponents(r),
+			DNSServicesPoolsPerHourCostComponents(r),
+			DNSServicesGLBInstancesPerHourCostComponents(r),
+			DNSServicesHealthChecksCostComponents(r),
+			DNSServicesCustomResolverLocationsPerHourCostComponents(r),
+			DNSServicesMillionCustomResolverExternalQueriesCostComponents(r),
+			DNSServicesMillionDNSQueriesCostComponents(r),
 		}
 	} else {
 		costComponent := schema.CostComponent{
@@ -37,10 +37,18 @@ func GetDNSServicesCostComponents(r *ResourceInstance) []*schema.CostComponent {
 // Unit: ITEMS (Linear Tier)
 func DNSServicesZonesCostComponents(r *ResourceInstance) *schema.CostComponent {
 
-	var quantity *decimal.Decimal = decimalPtr(decimal.NewFromFloat(*r.DNSServices_Zones)) // Quantity of current cost component (i.e. Number of zones)
+	var zones_included int = 1
+	var quantity *decimal.Decimal
 
-	return &schema.CostComponent{
-		Name:            "Zones",
+	additional_zones := *r.DNSServices_Zones - int64(zones_included)
+	if additional_zones > 0 {
+		quantity = decimalPtr(decimal.NewFromInt(additional_zones))
+	} else {
+		quantity = decimalPtr(decimal.NewFromInt(0))
+	}
+
+	costComponent := schema.CostComponent{
+		Name:            "Additional Zones",
 		Unit:            "Zones",
 		UnitMultiplier:  decimal.NewFromFloat(1), // Final quantity for this cost component will be divided by this amount
 		MonthlyQuantity: quantity,
@@ -56,40 +64,17 @@ func DNSServicesZonesCostComponents(r *ResourceInstance) *schema.CostComponent {
 			Unit: strPtr("ITEMS"),
 		},
 	}
-}
-
-// Unit: NUMBERGLB (Linear Tier)
-func DNSServicesPoolsPerHourCostComponents(r *ResourceInstance) *schema.CostComponent {
-
-	var quantity *decimal.Decimal = decimalPtr(decimal.NewFromFloat(*r.DNSServices_PoolsPerHour)) // Quantity of current cost component (i.e. Number of zones)
-
-	return &schema.CostComponent{
-		Name:            "Pools Per Hour",
-		Unit:            "Pools Per Hour",
-		UnitMultiplier:  decimal.NewFromFloat(1), // Final quantity for this cost component will be divided by this amount
-		MonthlyQuantity: quantity,
-		ProductFilter: &schema.ProductFilter{
-			VendorName: strPtr("ibm"),
-			Region:     strPtr(r.Location),
-			Service:    &r.Service,
-			AttributeFilters: []*schema.AttributeFilter{
-				{Key: "planName", Value: &r.Plan},
-			},
-		},
-		PriceFilter: &schema.PriceFilter{
-			Unit: strPtr("NUMBERGLB"),
-		},
-	}
+	return &costComponent
 }
 
 // Unit: NUMBERPOOLS (Linear Tier)
-func DNSServicesGLBInstancesPerHourCostComponents(r *ResourceInstance) *schema.CostComponent {
+func DNSServicesPoolsPerHourCostComponents(r *ResourceInstance) *schema.CostComponent {
 
-	var quantity *decimal.Decimal = decimalPtr(decimal.NewFromFloat(*r.DNSServices_GLBInstancesPerHour)) // Quantity of current cost component (i.e. Number of zones)
+	var quantity *decimal.Decimal = decimalPtr(decimal.NewFromInt(*r.DNSServices_PoolsPerHour))
 
-	return &schema.CostComponent{
-		Name:            "GLB Instances Per Hour",
-		Unit:            "GLB Instances Per Hour",
+	costComponent := schema.CostComponent{
+		Name:            "Pools per Hour",
+		Unit:            "Pools",
 		UnitMultiplier:  decimal.NewFromFloat(1), // Final quantity for this cost component will be divided by this amount
 		MonthlyQuantity: quantity,
 		ProductFilter: &schema.ProductFilter{
@@ -104,14 +89,40 @@ func DNSServicesGLBInstancesPerHourCostComponents(r *ResourceInstance) *schema.C
 			Unit: strPtr("NUMBERPOOLS"),
 		},
 	}
+	return &costComponent
+}
+
+// Unit: NUMBERGLB (Linear Tier)
+func DNSServicesGLBInstancesPerHourCostComponents(r *ResourceInstance) *schema.CostComponent {
+
+	var quantity *decimal.Decimal = decimalPtr(decimal.NewFromInt(*r.DNSServices_GLBInstancesPerHour))
+
+	costComponent := schema.CostComponent{
+		Name:            "GLB Instances per Hour",
+		Unit:            "GLB Instances",
+		UnitMultiplier:  decimal.NewFromFloat(1), // Final quantity for this cost component will be divided by this amount
+		MonthlyQuantity: quantity,
+		ProductFilter: &schema.ProductFilter{
+			VendorName: strPtr("ibm"),
+			Region:     strPtr(r.Location),
+			Service:    &r.Service,
+			AttributeFilters: []*schema.AttributeFilter{
+				{Key: "planName", Value: &r.Plan},
+			},
+		},
+		PriceFilter: &schema.PriceFilter{
+			Unit: strPtr("NUMBERGLB"),
+		},
+	}
+	return &costComponent
 }
 
 // Unit: NUMBERHEALTHCHECK (Linear Tier)
 func DNSServicesHealthChecksCostComponents(r *ResourceInstance) *schema.CostComponent {
 
-	var quantity *decimal.Decimal = decimalPtr(decimal.NewFromFloat(*r.DNSServices_HealthChecks)) // Quantity of current cost component (i.e. Number of zones)
+	var quantity *decimal.Decimal = decimalPtr(decimal.NewFromInt(*r.DNSServices_HealthChecks))
 
-	return &schema.CostComponent{
+	costComponent := schema.CostComponent{
 		Name:            "Health Checks",
 		Unit:            "Health Checks",
 		UnitMultiplier:  decimal.NewFromFloat(1), // Final quantity for this cost component will be divided by this amount
@@ -128,16 +139,17 @@ func DNSServicesHealthChecksCostComponents(r *ResourceInstance) *schema.CostComp
 			Unit: strPtr("NUMBERHEALTHCHECK"),
 		},
 	}
+	return &costComponent
 }
 
 // Unit: RESOLVERLOCATIONS (Linear Tier)
 func DNSServicesCustomResolverLocationsPerHourCostComponents(r *ResourceInstance) *schema.CostComponent {
 
-	var quantity *decimal.Decimal = decimalPtr(decimal.NewFromFloat(*r.DNSServices_CustomResolverLocationsPerHour)) // Quantity of current cost component (i.e. Number of zones)
+	var quantity *decimal.Decimal = decimalPtr(decimal.NewFromInt(*r.DNSServices_CustomResolverLocationsPerHour))
 
-	return &schema.CostComponent{
-		Name:            "Custom Resolver Locations Per Hour",
-		Unit:            "Custom Resolver Locations Per Hour",
+	costComponent := schema.CostComponent{
+		Name:            "Custom Resolver Locations per Hour",
+		Unit:            "Custom Resolver Locations",
 		UnitMultiplier:  decimal.NewFromFloat(1), // Final quantity for this cost component will be divided by this amount
 		MonthlyQuantity: quantity,
 		ProductFilter: &schema.ProductFilter{
@@ -152,12 +164,63 @@ func DNSServicesCustomResolverLocationsPerHourCostComponents(r *ResourceInstance
 			Unit: strPtr("RESOLVERLOCATIONS"),
 		},
 	}
+	return &costComponent
 }
 
-// // Unit: MILLION_ITEMS_CREXTERNALQUERIES (Graduated Tier)
-// func DNSServicesMillionCustomResolverExternalQueriesCostComponents(r *ResourceInstance) *schema.CostComponent {
-// }
+// Unit: MILLION_ITEMS_CREXTERNALQUERIES (Graduated Tier)
+func DNSServicesMillionCustomResolverExternalQueriesCostComponents(r *ResourceInstance) *schema.CostComponent {
 
-// // Unit: MILLION_ITEMS (Graduated Tier)
-// func DNSServicesMillionDNSQueriesCostComponents(r *ResourceInstance) *schema.CostComponent {
-// }
+	var quantity *decimal.Decimal = decimalPtr(decimal.NewFromInt(*r.DNSServices_CustomResolverExternalQueries))
+
+	costComponent := schema.CostComponent{
+		Name:            "Million Custom Resolver External Queries",
+		Unit:            "Million Queries",
+		UnitMultiplier:  decimal.NewFromInt(1),
+		MonthlyQuantity: quantity,
+		ProductFilter: &schema.ProductFilter{
+			VendorName: strPtr("ibm"),
+			Region:     strPtr(r.Location),
+			Service:    &r.Service,
+			AttributeFilters: []*schema.AttributeFilter{
+				{Key: "planName", Value: &r.Plan},
+			},
+		},
+		PriceFilter: &schema.PriceFilter{
+			Unit: strPtr("MILLION_ITEMS_CREXTERNALQUERIES"),
+		},
+	}
+	return &costComponent
+}
+
+// Unit: MILLION_ITEMS (Graduated Tier)
+func DNSServicesMillionDNSQueriesCostComponents(r *ResourceInstance) *schema.CostComponent {
+
+	var million_dns_queries_included float32 = 1
+	var quantity *decimal.Decimal
+
+	additional_million_dns_queries := *r.DNSServices_DNSQueries - int64(million_dns_queries_included)
+	if additional_million_dns_queries > 0 {
+		quantity = decimalPtr(decimal.NewFromInt(additional_million_dns_queries))
+	} else {
+		quantity = decimalPtr(decimal.NewFromInt(0))
+	}
+
+	costComponent := schema.CostComponent{
+		Name:            "Additional Million DNS Queries",
+		Unit:            "Million Queries",
+		UnitMultiplier:  decimal.NewFromInt(1),
+		MonthlyQuantity: quantity,
+		ProductFilter: &schema.ProductFilter{
+			VendorName: strPtr("ibm"),
+			Region:     strPtr(r.Location),
+			Service:    &r.Service,
+			AttributeFilters: []*schema.AttributeFilter{
+				{Key: "planName", Value: &r.Plan},
+			},
+		},
+		PriceFilter: &schema.PriceFilter{
+			Unit: strPtr("MILLION_ITEMS"),
+		},
+	}
+	return &costComponent
+}
