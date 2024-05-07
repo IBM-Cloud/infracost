@@ -1361,3 +1361,9 @@ resource_usage:
     database_disk_mb: 131072 # Allocated disk in MB per-member
     database_core: 3 # Allocated dedicated CPU per-member
     database_members: 4 # Allocated number of members in the cluster
+
+  ibm_database.elasticsearch:
+    database_ram_mb: 12288 # Allocated memory in MB per-member
+    database_disk_mb: 131072 # Allocated disk in MB per-member
+    database_core: 3 # Allocated dedicated CPU per-member
+    database_members: 4 # Allocated number of members in the cluster
