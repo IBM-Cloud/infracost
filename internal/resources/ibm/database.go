@@ -23,12 +23,12 @@ type Database struct {
 	// Pricing Link: https://cloud.ibm.com/docs/databases-for-postgresql?topic=databases-for-postgresql-pricing
 	postgresql_RAM     *int64 `infracost_usage:"postgresql_database_ram_mb"`
 	postgresql_Disk    *int64 `infracost_usage:"postgresql_database_disk_mb"`
-	postgresql_Core    *int64 `infracost_usage:"postgresql_database_core"`
+	Core_postgresql    *int64 `infracost_usage:"postgresql_database_core"`
 	postgresql_Members *int64 `infracost_usage:"postgresql_database_members"`
 
 	elasticsearch_RAM     *int64 `infracost_usage:"elasticsearch_database_ram_mb"`
 	elasticsearch_Disk    *int64 `infracost_usage:"elasticsearch_database_disk_mb"`
-	elasticsearch_Core    *int64 `infracost_usage:"elasticsearch_database_core"`
+	Core_elasticsearch    *int64 `infracost_usage:"elasticsearch_database_core"`
 	elasticsearch_Members *int64 `infracost_usage:"elasticsearch_database_members"`
 }
 
@@ -138,8 +138,8 @@ func PostgresDiskCostComponent(r *Database) *schema.CostComponent {
 
 func PostgresCoreCostComponent(r *Database) *schema.CostComponent {
 	var c decimal.Decimal
-	if r.postgresql_Core != nil {
-		c = decimal.NewFromInt(*r.postgresql_Core)
+	if r.Core_postgresql != nil {
+		c = decimal.NewFromInt(*r.Core_postgresql)
 	} else { // set the default
 		c = decimal.NewFromInt(0)
 	}
@@ -297,8 +297,8 @@ func ElasticSearchDiskCostComponent(r *Database) *schema.CostComponent {
 
 func ElasticSearchCoreCostComponent(r *Database) *schema.CostComponent {
 	var c decimal.Decimal
-	if r.elasticsearch_Core != nil {
-		c = decimal.NewFromInt(*r.elasticsearch_Core)
+	if r.Core_elasticsearch != nil {
+		c = decimal.NewFromInt(*r.Core_elasticsearch)
 	} else { // set the default
 		c = decimal.NewFromInt(0)
 	}
