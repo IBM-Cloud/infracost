@@ -84,6 +84,8 @@ resource_type_default_usage:
     sysdig-secure_VM_NODE_HOUR: 501
     aiopenscale_RESOURCE_UNITS: 1
     aiopenscale_MODELS_PER_MONTH: 1
+    dns-svcs_glb_instance_hours: 1
+    dns-svcs_pool_hours: 1
     dns-svcs_ITEMS: 2 # Linear; 1 zone included
     dns-svcs_MILLION_ITEMS: 1001 # Tiered; 1-999, 999+, 1 included
     dns-svcs_MILLION_ITEMS_CREXTERNALQUERIES: 11 # Tiered; 1-10, 10+
@@ -91,6 +93,8 @@ resource_type_default_usage:
     dns-svcs_NUMBERHEALTHCHECK: 1 # Linear
     dns-svcs_NUMBERPOOLS: 1 # Linear
     dns-svcs_RESOLVERLOCATIONS: 1 # Linear
+    dns-svcs_custom_resolver_location_hours: 1
+
   ibm_tg_gateway: 
     connection: 3
     data_transfer_global: 1000
@@ -1366,6 +1370,9 @@ resource_usage:
     dns-svcs_NUMBERHEALTHCHECK: 1
     dns-svcs_NUMBERPOOLS: 1
     dns-svcs_RESOLVERLOCATIONS: 1
+    dns-svcs_custom_resolver_location_hours: 1
+    dns-svcs_glb_instance_hours: 1
+    dns-svcs_pool_hours: 1
 
   ibm_tg_gateway.tg_gateway:
     connection: 25 # Monthly number of connections to the gateway

@@ -70,7 +70,7 @@ func DNSServicesZonesCostComponents(r *ResourceInstance) *schema.CostComponent {
 // Unit: NUMBERPOOLS (Linear Tier)
 func DNSServicesPoolsPerHourCostComponents(r *ResourceInstance) *schema.CostComponent {
 
-	var quantity *decimal.Decimal = decimalPtr(decimal.NewFromInt(*r.DNSServices_PoolsPerHour))
+	var quantity *decimal.Decimal = decimalPtr(decimal.NewFromFloat(float64(*r.DNSServices_PoolsPerHour) * *r.DNSServices_PoolHours))
 
 	costComponent := schema.CostComponent{
 		Name:            "Pools per Hour",
@@ -95,7 +95,7 @@ func DNSServicesPoolsPerHourCostComponents(r *ResourceInstance) *schema.CostComp
 // Unit: NUMBERGLB (Linear Tier)
 func DNSServicesGLBInstancesPerHourCostComponents(r *ResourceInstance) *schema.CostComponent {
 
-	var quantity *decimal.Decimal = decimalPtr(decimal.NewFromInt(*r.DNSServices_GLBInstancesPerHour))
+	var quantity *decimal.Decimal = decimalPtr(decimal.NewFromFloat(float64(*r.DNSServices_GLBInstancesPerHour) * *r.DNSServices_GLBInstanceHours))
 
 	costComponent := schema.CostComponent{
 		Name:            "GLB Instances per Hour",
@@ -145,7 +145,7 @@ func DNSServicesHealthChecksCostComponents(r *ResourceInstance) *schema.CostComp
 // Unit: RESOLVERLOCATIONS (Linear Tier)
 func DNSServicesCustomResolverLocationsPerHourCostComponents(r *ResourceInstance) *schema.CostComponent {
 
-	var quantity *decimal.Decimal = decimalPtr(decimal.NewFromInt(*r.DNSServices_CustomResolverLocationsPerHour))
+	var quantity *decimal.Decimal = decimalPtr(decimal.NewFromFloat(float64(*r.DNSServices_CustomResolverLocationsPerHour) * *r.DNSServices_CustomResolverLocationHours))
 
 	costComponent := schema.CostComponent{
 		Name:            "Custom Resolver Locations per Hour",

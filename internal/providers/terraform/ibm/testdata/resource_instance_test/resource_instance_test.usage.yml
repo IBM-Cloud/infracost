@@ -106,3 +106,6 @@ resource_usage:
     dns-svcs_NUMBERHEALTHCHECK: 1 # Linear
     dns-svcs_NUMBERPOOLS: 1 # Linear
     dns-svcs_RESOLVERLOCATIONS: 1 # Linear
+    dns-svcs_custom_resolver_location_hours: 1
+    dns-svcs_glb_instance_hours: 1
+    dns-svcs_pool_hours: 1
