@@ -21,15 +21,18 @@ type Database struct {
 	// Databases For PostgreSQL
 	// Catalog Link: https://cloud.ibm.com/catalog/services/databases-for-postgresql
 	// Pricing Link: https://cloud.ibm.com/docs/databases-for-postgresql?topic=databases-for-postgresql-pricing
-	Postgresql_RAM     *int64 `infracost_usage:"postgresql_database_ram_mb"`
-	Postgresql_Disk    *int64 `infracost_usage:"postgresql_database_disk_mb"`
-	Postgresql_Core    *int64 `infracost_usage:"postgresql_database_core"`
-	Postgresql_Members *int64 `infracost_usage:"postgresql_database_members"`
+	PostgreSQL_Ram     *int64 `infracost_usage:"postgresql_database_ram_mb"`
+	PostgreSQL_Disk    *int64 `infracost_usage:"postgresql_database_disk_mb"`
+	PostgreSQL_Core    *int64 `infracost_usage:"postgresql_database_core"`
+	PostgreSQL_Members *int64 `infracost_usage:"postgresql_database_members"`
 
-	Elasticsearch_RAM     *int64 `infracost_usage:"elasticsearch_database_ram_mb"`
-	Elasticsearch_Disk    *int64 `infracost_usage:"elasticsearch_database_disk_mb"`
-	Elasticsearch_Core    *int64 `infracost_usage:"elasticsearch_database_core"`
-	Elasticsearch_Members *int64 `infracost_usage:"elasticsearch_database_members"`
+	// Databases For ElasticSearch
+	// Catalog Link: https://cloud.ibm.com/catalog/services/databases-for-elasticsearch
+	// Pricing Link: https://cloud.ibm.com/docs/databases-for-elasticsearch?topic=databases-for-elasticsearch-pricing
+	ElasticSearch_Ram     *int64 `infracost_usage:"elasticsearch_database_ram_mb"`
+	ElasticSearch_Disk    *int64 `infracost_usage:"elasticsearch_database_disk_mb"`
+	ElasticSearch_Core    *int64 `infracost_usage:"elasticsearch_database_core"`
+	ElasticSearch_Members *int64 `infracost_usage:"elasticsearch_database_members"`
 }
 
 type DatabaseCostComponentsFunc func(*Database) []*schema.CostComponent
@@ -70,14 +73,14 @@ func ConvertMBtoGB(d decimal.Decimal) decimal.Decimal {
 
 func PostgresRAMCostComponent(r *Database) *schema.CostComponent {
 	var R decimal.Decimal
-	if r.Postgresql_RAM != nil {
-		R = ConvertMBtoGB(decimal.NewFromInt(*r.Postgresql_RAM))
+	if r.PostgreSQL_Ram != nil {
+		R = ConvertMBtoGB(decimal.NewFromInt(*r.PostgreSQL_Ram))
 	} else { // set the default
 		R = decimal.NewFromInt(1)
 	}
 	var m decimal.Decimal
-	if r.Postgresql_Members != nil {
-		m = decimal.NewFromInt(*r.Postgresql_Members)
+	if r.PostgreSQL_Members != nil {
+		m = decimal.NewFromInt(*r.PostgreSQL_Members)
 	} else { // set the default
 		m = decimal.NewFromInt(2)
 	}
@@ -104,14 +107,14 @@ func PostgresRAMCostComponent(r *Database) *schema.CostComponent {
 
 func PostgresDiskCostComponent(r *Database) *schema.CostComponent {
 	var d decimal.Decimal
-	if r.Postgresql_Disk != nil {
-		d = ConvertMBtoGB(decimal.NewFromInt(*r.Postgresql_Disk))
+	if r.PostgreSQL_Disk != nil {
+		d = ConvertMBtoGB(decimal.NewFromInt(*r.PostgreSQL_Disk))
 	} else { // set the default
 		d = decimal.NewFromInt(5)
 	}
 	var m decimal.Decimal
-	if r.Postgresql_Members != nil {
-		m = decimal.NewFromInt(*r.Postgresql_Members)
+	if r.PostgreSQL_Members != nil {
+		m = decimal.NewFromInt(*r.PostgreSQL_Members)
 	} else { // set the default
 		m = decimal.NewFromInt(2)
 	}
@@ -138,14 +141,14 @@ func PostgresDiskCostComponent(r *Database) *schema.CostComponent {
 
 func PostgresCoreCostComponent(r *Database) *schema.CostComponent {
 	var c decimal.Decimal
-	if r.Postgresql_Core != nil {
-		c = decimal.NewFromInt(*r.Postgresql_Core)
+	if r.PostgreSQL_Core != nil {
+		c = decimal.NewFromInt(*r.PostgreSQL_Core)
 	} else { // set the default
 		c = decimal.NewFromInt(0)
 	}
 	var m decimal.Decimal
-	if r.Postgresql_Members != nil {
-		m = decimal.NewFromInt(*r.Postgresql_Members)
+	if r.PostgreSQL_Members != nil {
+		m = decimal.NewFromInt(*r.PostgreSQL_Members)
 	} else { // set the default
 		m = decimal.NewFromInt(2)
 	}
@@ -180,178 +183,110 @@ func GetPostgresCostComponents(r *Database) []*schema.CostComponent {
 
 func ElasticSearchRAMCostComponent(r *Database) *schema.CostComponent {
 	var R decimal.Decimal
-	if r.Elasticsearch_RAM != nil {
-		R = ConvertMBtoGB(decimal.NewFromInt(*r.Elasticsearch_RAM))
+	if r.ElasticSearch_Ram != nil {
+		R = ConvertMBtoGB(decimal.NewFromInt(*r.ElasticSearch_Ram))
 	} else { // set the default
 		R = decimal.NewFromInt(1)
 	}
 	var m decimal.Decimal
-	if r.Elasticsearch_Members != nil {
-		m = decimal.NewFromInt(*r.Elasticsearch_Members)
+	if r.ElasticSearch_Members != nil {
+		m = decimal.NewFromInt(*r.ElasticSearch_Members)
 	} else { // set the default
 		m = decimal.NewFromInt(3)
 	}
 
 	cost := R.Mul(m)
-	
-	if r.Plan == "platinum" {
-		costComponent := schema.CostComponent{
-			Name:            "RAM",
-			Unit:            "GB-RAM",
-			MonthlyQuantity: &cost,
-			UnitMultiplier:  decimal.NewFromInt(1),
-			ProductFilter: &schema.ProductFilter{
-				VendorName:    strPtr("ibm"),
-				Region:        strPtr(r.Location),
-				Service:       strPtr("databases-for-elasticsearch"),
-				ProductFamily: strPtr("service"),
-				AttributeFilters: []*schema.AttributeFilter{
-					{Key: "planName", Value: &r.Plan},
-				},
+	costComponent := schema.CostComponent{
+		Name:            "RAM",
+		Unit:            "GB-RAM",
+		MonthlyQuantity: &cost,
+		UnitMultiplier:  decimal.NewFromInt(1),
+		ProductFilter: &schema.ProductFilter{
+			VendorName:    strPtr("ibm"),
+			Region:        strPtr(r.Location),
+			Service:       strPtr("databases-for-elasticsearch"),
+			ProductFamily: strPtr("service"),
+			AttributeFilters: []*schema.AttributeFilter{
+				{Key: "planName", Value: &r.Plan},
 			},
-			PriceFilter: &schema.PriceFilter{
-				Unit: strPtr("GIGABYTE_MONTHS_RAM"),
-			},
-		}
-		return &costComponent
-	} else {
-		costComponent := schema.CostComponent{
-			Name:            "RAM",
-			Unit:            "GB-RAM",
-			MonthlyQuantity: &cost,
-			UnitMultiplier:  decimal.NewFromInt(1),
-			ProductFilter: &schema.ProductFilter{
-				VendorName:    strPtr("ibm"),
-				Region:        strPtr(r.Location),
-				Service:       strPtr("databases-for-elasticsearch"),
-				ProductFamily: strPtr("service"),
-				AttributeFilters: []*schema.AttributeFilter{
-					{Key: "planName", Value: &r.Plan},
-				},
-			},
-			PriceFilter: &schema.PriceFilter{
-				Unit: strPtr("GIGABYTE_MONTHS_RAM"),
-			},
-		}
-		return &costComponent
+		},
+		PriceFilter: &schema.PriceFilter{
+			Unit: strPtr("GIGABYTE_MONTHS_RAM"),
+		},
 	}
+	return &costComponent
 }
 
 func ElasticSearchDiskCostComponent(r *Database) *schema.CostComponent {
 	var d decimal.Decimal
-	if r.Elasticsearch_Disk != nil {
-		d = ConvertMBtoGB(decimal.NewFromInt(*r.Elasticsearch_Disk))
+	if r.ElasticSearch_Disk != nil {
+		d = ConvertMBtoGB(decimal.NewFromInt(*r.ElasticSearch_Disk))
 	} else { // set the default
 		d = decimal.NewFromInt(5)
 	}
 	var m decimal.Decimal
-	if r.Elasticsearch_Members != nil {
-		m = decimal.NewFromInt(*r.Elasticsearch_Members)
+	if r.ElasticSearch_Members != nil {
+		m = decimal.NewFromInt(*r.ElasticSearch_Members)
 	} else { // set the default
 		m = decimal.NewFromInt(3)
 	}
 
 	cost := d.Mul(m)
-	if r.Plan == "enterprise" {
-		costComponent := schema.CostComponent{
-			Name:            "Disk",
-			Unit:            "GB-DISK",
-			MonthlyQuantity: &cost,
-			UnitMultiplier:  decimal.NewFromInt(1),
-			ProductFilter: &schema.ProductFilter{
-				VendorName:    strPtr("ibm"),
-				Region:        strPtr(r.Location),
-				Service:       strPtr("databases-for-elasticsearch"),
-				ProductFamily: strPtr("service"),
-				AttributeFilters: []*schema.AttributeFilter{
-					{Key: "planName", Value: &r.Plan},
-				},
+	costComponent := schema.CostComponent{
+		Name:            "Disk",
+		Unit:            "GB-DISK",
+		MonthlyQuantity: &cost,
+		UnitMultiplier:  decimal.NewFromInt(1),
+		ProductFilter: &schema.ProductFilter{
+			VendorName:    strPtr("ibm"),
+			Region:        strPtr(r.Location),
+			Service:       strPtr("databases-for-elasticsearch"),
+			ProductFamily: strPtr("service"),
+			AttributeFilters: []*schema.AttributeFilter{
+				{Key: "planName", Value: &r.Plan},
 			},
-			PriceFilter: &schema.PriceFilter{
-				Unit: strPtr("GIGABYTE_MONTHS_DISK"),
-			},
-		}
-		return &costComponent
-	} else {
-		costComponent := schema.CostComponent{
-			Name:            "Disk",
-			Unit:            "GB-DISK",
-			MonthlyQuantity: &cost,
-			UnitMultiplier:  decimal.NewFromInt(1),
-			ProductFilter: &schema.ProductFilter{
-				VendorName:    strPtr("ibm"),
-				Region:        strPtr(r.Location),
-				Service:       strPtr("databases-for-elasticsearch"),
-				ProductFamily: strPtr("service"),
-				AttributeFilters: []*schema.AttributeFilter{
-					{Key: "planName", Value: &r.Plan},
-				},
-			},
-			PriceFilter: &schema.PriceFilter{
-				Unit: strPtr("GIGABYTE_MONTHS_DISK"),
-			},
-		}
-		return &costComponent
+		},
+		PriceFilter: &schema.PriceFilter{
+			Unit: strPtr("GIGABYTE_MONTHS_DISK"),
+		},
 	}
+	return &costComponent
 }
 
 func ElasticSearchCoreCostComponent(r *Database) *schema.CostComponent {
 	var c decimal.Decimal
-	if r.Elasticsearch_Core != nil {
-		c = decimal.NewFromInt(*r.Elasticsearch_Core)
+	if r.ElasticSearch_Core != nil {
+		c = decimal.NewFromInt(*r.ElasticSearch_Core)
 	} else { // set the default
 		c = decimal.NewFromInt(0)
 	}
 	var m decimal.Decimal
-	if r.Elasticsearch_Members != nil {
-		m = decimal.NewFromInt(*r.Elasticsearch_Members)
+	if r.ElasticSearch_Members != nil {
+		m = decimal.NewFromInt(*r.ElasticSearch_Members)
 	} else { // set the default
 		m = decimal.NewFromInt(3)
 	}
 
 	cost := c.Mul(m)
-
-	if r.Plan == "enterprise" {
-		costComponent := schema.CostComponent{
-			Name:            "Core",
-			Unit:            "Virtual Processor Core",
-			MonthlyQuantity: &cost,
-			UnitMultiplier:  decimal.NewFromInt(1),
-			ProductFilter: &schema.ProductFilter{
-				VendorName:    strPtr("ibm"),
-				Region:        strPtr(r.Location),
-				Service:       strPtr("databases-for-elasticsearch"),
-				ProductFamily: strPtr("service"),
-				AttributeFilters: []*schema.AttributeFilter{
-					{Key: "planName", Value: &r.Plan},
-				},
+	costComponent := schema.CostComponent{
+		Name:            "Core",
+		Unit:            "Virtual Processor Core",
+		MonthlyQuantity: &cost,
+		UnitMultiplier:  decimal.NewFromInt(1),
+		ProductFilter: &schema.ProductFilter{
+			VendorName:    strPtr("ibm"),
+			Region:        strPtr(r.Location),
+			Service:       strPtr("databases-for-elasticsearch"),
+			ProductFamily: strPtr("service"),
+			AttributeFilters: []*schema.AttributeFilter{
+				{Key: "planName", Value: &r.Plan},
 			},
-			PriceFilter: &schema.PriceFilter{
-				Unit: strPtr("VIRTUAL_PROCESSOR_CORES"),
-			},
-		}
-		return &costComponent
-	} else {
-		costComponent := schema.CostComponent{
-			Name:            "Core",
-			Unit:            "Virtual Processor Core",
-			MonthlyQuantity: &cost,
-			UnitMultiplier:  decimal.NewFromInt(1),
-			ProductFilter: &schema.ProductFilter{
-				VendorName:    strPtr("ibm"),
-				Region:        strPtr(r.Location),
-				Service:       strPtr("databases-for-elasticsearch"),
-				ProductFamily: strPtr("service"),
-				AttributeFilters: []*schema.AttributeFilter{
-					{Key: "planName", Value: &r.Plan},
-				},
-			},
-			PriceFilter: &schema.PriceFilter{
-				Unit: strPtr("VIRTUAL_PROCESSOR_CORES"),
-			},
-		}
-		return &costComponent
+		},
+		PriceFilter: &schema.PriceFilter{
+			Unit: strPtr("VIRTUAL_PROCESSOR_CORES"),
+		},
 	}
+	return &costComponent
 }
 
 func GetElasticSearchCostComponents(r *Database) []*schema.CostComponent {
