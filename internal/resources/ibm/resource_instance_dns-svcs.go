@@ -13,13 +13,13 @@ const DNS_SERVICES_PROGRAMMATIC_PLAN_NAME string = "standard-dns"
 func GetDNSServicesCostComponents(r *ResourceInstance) []*schema.CostComponent {
 	if r.Plan == DNS_SERVICES_PROGRAMMATIC_PLAN_NAME {
 		return []*schema.CostComponent{
-			DNSServicesZonesCostComponents(r),
-			DNSServicesPoolsPerHourCostComponents(r),
-			DNSServicesGLBInstancesPerHourCostComponents(r),
-			DNSServicesHealthChecksCostComponents(r),
-			DNSServicesCustomResolverLocationsPerHourCostComponents(r),
-			DNSServicesMillionCustomResolverExternalQueriesCostComponents(r),
-			DNSServicesMillionDNSQueriesCostComponents(r),
+			DNSServicesZonesCostComponent(r),
+			DNSServicesPoolsPerHourCostComponent(r),
+			DNSServicesGLBInstancesPerHourCostComponent(r),
+			DNSServicesHealthChecksCostComponent(r),
+			DNSServicesCustomResolverLocationsPerHourCostComponent(r),
+			DNSServicesMillionCustomResolverExternalQueriesCostComponent(r),
+			DNSServicesMillionDNSQueriesCostComponent(r),
 		}
 	} else {
 		costComponent := schema.CostComponent{
@@ -35,7 +35,7 @@ func GetDNSServicesCostComponents(r *ResourceInstance) []*schema.CostComponent {
 }
 
 // Unit: ITEMS (Linear Tier)
-func DNSServicesZonesCostComponents(r *ResourceInstance) *schema.CostComponent {
+func DNSServicesZonesCostComponent(r *ResourceInstance) *schema.CostComponent {
 
 	var zones_included int = 1
 	var quantity *decimal.Decimal
@@ -68,7 +68,7 @@ func DNSServicesZonesCostComponents(r *ResourceInstance) *schema.CostComponent {
 }
 
 // Unit: NUMBERPOOLS (Linear Tier)
-func DNSServicesPoolsPerHourCostComponents(r *ResourceInstance) *schema.CostComponent {
+func DNSServicesPoolsPerHourCostComponent(r *ResourceInstance) *schema.CostComponent {
 
 	var quantity *decimal.Decimal = decimalPtr(decimal.NewFromFloat(float64(*r.DNSServices_PoolsPerHour) * *r.DNSServices_PoolHours))
 
@@ -93,7 +93,7 @@ func DNSServicesPoolsPerHourCostComponents(r *ResourceInstance) *schema.CostComp
 }
 
 // Unit: NUMBERGLB (Linear Tier)
-func DNSServicesGLBInstancesPerHourCostComponents(r *ResourceInstance) *schema.CostComponent {
+func DNSServicesGLBInstancesPerHourCostComponent(r *ResourceInstance) *schema.CostComponent {
 
 	var quantity *decimal.Decimal = decimalPtr(decimal.NewFromFloat(float64(*r.DNSServices_GLBInstancesPerHour) * *r.DNSServices_GLBInstanceHours))
 
@@ -118,7 +118,7 @@ func DNSServicesGLBInstancesPerHourCostComponents(r *ResourceInstance) *schema.C
 }
 
 // Unit: NUMBERHEALTHCHECK (Linear Tier)
-func DNSServicesHealthChecksCostComponents(r *ResourceInstance) *schema.CostComponent {
+func DNSServicesHealthChecksCostComponent(r *ResourceInstance) *schema.CostComponent {
 
 	var quantity *decimal.Decimal = decimalPtr(decimal.NewFromInt(*r.DNSServices_HealthChecks))
 
@@ -143,7 +143,7 @@ func DNSServicesHealthChecksCostComponents(r *ResourceInstance) *schema.CostComp
 }
 
 // Unit: RESOLVERLOCATIONS (Linear Tier)
-func DNSServicesCustomResolverLocationsPerHourCostComponents(r *ResourceInstance) *schema.CostComponent {
+func DNSServicesCustomResolverLocationsPerHourCostComponent(r *ResourceInstance) *schema.CostComponent {
 
 	var quantity *decimal.Decimal = decimalPtr(decimal.NewFromFloat(float64(*r.DNSServices_CustomResolverLocationsPerHour) * *r.DNSServices_CustomResolverLocationHours))
 
@@ -168,7 +168,7 @@ func DNSServicesCustomResolverLocationsPerHourCostComponents(r *ResourceInstance
 }
 
 // Unit: MILLION_ITEMS_CREXTERNALQUERIES (Graduated Tier)
-func DNSServicesMillionCustomResolverExternalQueriesCostComponents(r *ResourceInstance) *schema.CostComponent {
+func DNSServicesMillionCustomResolverExternalQueriesCostComponent(r *ResourceInstance) *schema.CostComponent {
 
 	var quantity *decimal.Decimal = decimalPtr(decimal.NewFromInt(*r.DNSServices_CustomResolverExternalQueries))
 
@@ -193,7 +193,7 @@ func DNSServicesMillionCustomResolverExternalQueriesCostComponents(r *ResourceIn
 }
 
 // Unit: MILLION_ITEMS (Graduated Tier)
-func DNSServicesMillionDNSQueriesCostComponents(r *ResourceInstance) *schema.CostComponent {
+func DNSServicesMillionDNSQueriesCostComponent(r *ResourceInstance) *schema.CostComponent {
 
 	var million_dns_queries_included float32 = 1
 	var quantity *decimal.Decimal
