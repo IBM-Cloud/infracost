@@ -74,7 +74,7 @@ func DNSServicesPoolsPerHourCostComponent(r *ResourceInstance) *schema.CostCompo
 
 	var quantity *decimal.Decimal
 
-	if r.DNSServices_PoolHours != nil {
+	if (r.DNSServices_PoolHours != nil) && (r.DNSServices_Pools != nil) {
 		quantity = decimalPtr(decimal.NewFromFloat(float64(*r.DNSServices_PoolHours) * *r.DNSServices_Pools))
 	}
 
@@ -103,7 +103,7 @@ func DNSServicesGLBInstancesPerHourCostComponent(r *ResourceInstance) *schema.Co
 
 	var quantity *decimal.Decimal
 
-	if r.DNSServices_GLBInstanceHours != nil {
+	if (r.DNSServices_GLBInstanceHours != nil) && (r.DNSServices_GLBInstances != nil) {
 		quantity = decimalPtr(decimal.NewFromFloat(float64(*r.DNSServices_GLBInstanceHours) * *r.DNSServices_GLBInstances))
 	}
 
@@ -160,7 +160,8 @@ func DNSServicesHealthChecksCostComponent(r *ResourceInstance) *schema.CostCompo
 func DNSServicesCustomResolverLocationsPerHourCostComponent(r *ResourceInstance) *schema.CostComponent {
 
 	var quantity *decimal.Decimal
-	if r.DNSServices_CustomResolverLocationHours != nil {
+
+	if (r.DNSServices_CustomResolverLocationHours != nil) && (r.DNSServices_CustomResolverLocations != nil) {
 		quantity = decimalPtr(decimal.NewFromFloat(float64(*r.DNSServices_CustomResolverLocationHours) * *r.DNSServices_CustomResolverLocations))
 	}
 
