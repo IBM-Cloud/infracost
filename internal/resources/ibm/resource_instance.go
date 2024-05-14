@@ -87,14 +87,14 @@ type ResourceInstance struct {
 	WGOV_Models *float64 `infracost_usage:"aiopenscale_MODELS_PER_MONTH"`
 	// DNS Services
 	DNSServices_CustomResolverExternalQueries *int64   `infracost_usage:"dns-svcs_MILLION_ITEMS_CREXTERNALQUERIES"`
-	DNSServices_CustomResolverLocationHours   *int64   `infracost_usage:"dns-svcs_RESOLVERLOCATIONS"`
-	DNSServices_CustomResolverLocations       *float64 `infracost_usage:"dns-svcs_qty_custom_resolver_locations"`
+	DNSServices_CustomResolverLocationHours   *float64 `infracost_usage:"dns-svcs_RESOLVERLOCATIONS"`
+	DNSServices_CustomResolverLocations       *int64   `infracost_usage:"dns-svcs_qty_custom_resolver_locations"`
 	DNSServices_DNSQueries                    *int64   `infracost_usage:"dns-svcs_MILLION_ITEMS"`
-	DNSServices_GLBInstanceHours              *int64   `infracost_usage:"dns-svcs_NUMBERGLB"`
-	DNSServices_GLBInstances                  *float64 `infracost_usage:"dns-svcs_qty_glb_instances"`
+	DNSServices_GLBInstanceHours              *float64 `infracost_usage:"dns-svcs_NUMBERGLB"`
+	DNSServices_GLBInstances                  *int64   `infracost_usage:"dns-svcs_qty_glb_instances"`
 	DNSServices_HealthChecks                  *int64   `infracost_usage:"dns-svcs_NUMBERHEALTHCHECK"`
-	DNSServices_PoolHours                     *int64   `infracost_usage:"dns-svcs_NUMBERPOOLS"`
-	DNSServices_Pools                         *float64 `infracost_usage:"dns-svcs_qty_pools"`
+	DNSServices_PoolHours                     *float64 `infracost_usage:"dns-svcs_NUMBERPOOLS"`
+	DNSServices_Pools                         *int64   `infracost_usage:"dns-svcs_qty_pools"`
 	DNSServices_Zones                         *int64   `infracost_usage:"dns-svcs_ITEMS"`
 }
 
