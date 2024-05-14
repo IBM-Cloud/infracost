@@ -87,15 +87,15 @@ type ResourceInstance struct {
 	WGOV_Models *float64 `infracost_usage:"aiopenscale_MODELS_PER_MONTH"`
 	// DNS Services
 	DNSServices_CustomResolverExternalQueries  *int64   `infracost_usage:"dns-svcs_MILLION_ITEMS_CREXTERNALQUERIES"`
-	DNSServices_CustomResolverLocationHours    *float64 `infracost_usage:"dns-svcs_custom_resolver_location_hours"`
 	DNSServices_CustomResolverLocationsPerHour *int64   `infracost_usage:"dns-svcs_RESOLVERLOCATIONS"`
 	DNSServices_DNSQueries                     *int64   `infracost_usage:"dns-svcs_MILLION_ITEMS"`
-	DNSServices_GLBInstanceHours               *float64 `infracost_usage:"dns-svcs_glb_instance_hours"`
 	DNSServices_GLBInstancesPerHour            *int64   `infracost_usage:"dns-svcs_NUMBERGLB"`
 	DNSServices_HealthChecks                   *int64   `infracost_usage:"dns-svcs_NUMBERHEALTHCHECK"`
-	DNSServices_PoolHours                      *float64 `infracost_usage:"dns-svcs_pool_hours"`
 	DNSServices_PoolsPerHour                   *int64   `infracost_usage:"dns-svcs_NUMBERPOOLS"`
 	DNSServices_Zones                          *int64   `infracost_usage:"dns-svcs_ITEMS"`
+	DNSServices_CustomResolverLocationHours    *float64 `infracost_usage:"dns-svcs_qty_custom_resolver_locations"`
+	DNSServices_GLBInstanceHours               *float64 `infracost_usage:"dns-svcs_qty_glb_instances"`
+	DNSServices_PoolHours                      *float64 `infracost_usage:"dns-svcs_qty_pools"`
 }
 
 type ResourceCostComponentsFunc func(*ResourceInstance) []*schema.CostComponent
@@ -145,15 +145,15 @@ var ResourceInstanceUsageSchema = []*schema.UsageItem{
 	{Key: "aiopenscale_RESOURCE_UNITS", DefaultValue: 1, ValueType: schema.Float64},
 	{Key: "aiopenscale_MODELS_PER_MONTH", DefaultValue: 1, ValueType: schema.Float64},
 	{Key: "dns-svcs_ITEMS", DefaultValue: 1, ValueType: schema.Int64},
-	{Key: "dns-svcs_MILLION_ITEMS", DefaultValue: 1, ValueType: schema.Int64},
 	{Key: "dns-svcs_MILLION_ITEMS_CREXTERNALQUERIES", DefaultValue: 1, ValueType: schema.Int64},
+	{Key: "dns-svcs_MILLION_ITEMS", DefaultValue: 1, ValueType: schema.Int64},
 	{Key: "dns-svcs_NUMBERGLB", DefaultValue: 1, ValueType: schema.Int64},
 	{Key: "dns-svcs_NUMBERHEALTHCHECK", DefaultValue: 1, ValueType: schema.Int64},
 	{Key: "dns-svcs_NUMBERPOOLS", DefaultValue: 1, ValueType: schema.Int64},
 	{Key: "dns-svcs_RESOLVERLOCATIONS", DefaultValue: 1, ValueType: schema.Int64},
-	{Key: "dns-svcs_custom_resolver_location_hours", DefaultValue: 1, ValueType: schema.Int64},
-	{Key: "dns-svcs_glb_instance_hours", DefaultValue: 1, ValueType: schema.Int64},
-	{Key: "dns-svcs_pool_hours", DefaultValue: 1, ValueType: schema.Int64},
+	{Key: "dns-svcs_qty_custom_resolver_locations", DefaultValue: 1, ValueType: schema.Int64},
+	{Key: "dns-svcs_qty_glb_instances", DefaultValue: 1, ValueType: schema.Int64},
+	{Key: "dns-svcs_qty_pools", DefaultValue: 1, ValueType: schema.Int64},
 }
 
 var ResourceInstanceCostMap map[string]ResourceCostComponentsFunc = map[string]ResourceCostComponentsFunc{
