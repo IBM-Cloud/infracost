@@ -57,168 +57,168 @@ func GetEventStreamsCostComponents(r *ResourceInstance) []*schema.CostComponent 
 // Charged by Standard plan only
 func EventStreamsInstanceHoursCostComponent(r *ResourceInstance) *schema.CostComponent {
 
-	// var quantity *decimal.Decimal
+	var quantity *decimal.Decimal
 
-	// if r.<VAR> != nil {
-	// 	quantity = ???
-	// }
+	if (r.EventStreams_Instances) != nil && (r.EventStreams_InstanceHours != nil) {
+		quantity = decimalPtr(decimal.NewFromFloat(*r.EventStreams_Instances * *r.EventStreams_InstanceHours))
+	}
 
-	// costComponent := schema.CostComponent{
-	// 	Name:            "",
-	// 	Unit:            "",
-	// 	UnitMultiplier:  decimal.NewFromFloat(1), // Final quantity for this cost component will be divided by this amount
-	// 	MonthlyQuantity: quantity,
-	// 	ProductFilter: &schema.ProductFilter{
-	// 		VendorName: strPtr("ibm"),
-	// 		Region:     strPtr(r.Location),
-	// 		Service:    &r.Service,
-	// 		AttributeFilters: []*schema.AttributeFilter{
-	// 			{Key: "planName", Value: &r.Plan},
-	// 		},
-	// 	},
-	// 	PriceFilter: &schema.PriceFilter{
-	// 		Unit: strPtr("INSTANCE_HOURS"),
-	// 	},
-	// }
-	// return &costComponent
+	costComponent := schema.CostComponent{
+		Name:            "Partition Hours",
+		Unit:            "Hours",
+		UnitMultiplier:  decimal.NewFromFloat(1), // Final quantity for this cost component will be divided by this amount
+		MonthlyQuantity: quantity,
+		ProductFilter: &schema.ProductFilter{
+			VendorName: strPtr("ibm"),
+			Region:     strPtr(r.Location),
+			Service:    &r.Service,
+			AttributeFilters: []*schema.AttributeFilter{
+				{Key: "planName", Value: &r.Plan},
+			},
+		},
+		PriceFilter: &schema.PriceFilter{
+			Unit: strPtr("INSTANCE_HOURS"), // Instance-Hour, Granular Tier
+		},
+	}
+	return &costComponent
 }
 
 func EventStreamsGBTransmittedOutboundsCostComponent(r *ResourceInstance) *schema.CostComponent {
 
-	// var quantity *decimal.Decimal
+	var quantity *decimal.Decimal
 
-	// if r.<VAR> != nil {
-	// 	quantity = ???
-	// }
+	if r.EventStreams_GigabyteTransmittedOutbounds != nil {
+		quantity = decimalPtr(decimal.NewFromFloat(*r.EventStreams_GigabyteTransmittedOutbounds))
+	}
 
-	// costComponent := schema.CostComponent{
-	// 	Name:            "",
-	// 	Unit:            "",
-	// 	UnitMultiplier:  decimal.NewFromFloat(1), // Final quantity for this cost component will be divided by this amount
-	// 	MonthlyQuantity: quantity,
-	// 	ProductFilter: &schema.ProductFilter{
-	// 		VendorName: strPtr("ibm"),
-	// 		Region:     strPtr(r.Location),
-	// 		Service:    &r.Service,
-	// 		AttributeFilters: []*schema.AttributeFilter{
-	// 			{Key: "planName", Value: &r.Plan},
-	// 		},
-	// 	},
-	// 	PriceFilter: &schema.PriceFilter{
-	// 		Unit: strPtr("GIGABYTE_TRANSMITTED_OUTBOUNDS"),
-	// 	},
-	// }
-	// return &costComponent
+	costComponent := schema.CostComponent{
+		Name:            "Gigabyte Transmitted Outbound",
+		Unit:            "GB",
+		UnitMultiplier:  decimal.NewFromFloat(1), // Final quantity for this cost component will be divided by this amount
+		MonthlyQuantity: quantity,
+		ProductFilter: &schema.ProductFilter{
+			VendorName: strPtr("ibm"),
+			Region:     strPtr(r.Location),
+			Service:    &r.Service,
+			AttributeFilters: []*schema.AttributeFilter{
+				{Key: "planName", Value: &r.Plan},
+			},
+		},
+		PriceFilter: &schema.PriceFilter{
+			Unit: strPtr("GIGABYTE_TRANSMITTED_OUTBOUNDS"), // Gigabyte Transmitted Outbound, Granular Tier
+		},
+	}
+	return &costComponent
 }
 
 func EventStreamsCapacityUnitHoursCostComponent(r *ResourceInstance) *schema.CostComponent {
 
-	// var quantity *decimal.Decimal
+	var quantity *decimal.Decimal
 
-	// if r.<VAR> != nil {
-	// 	quantity = ???
-	// }
+	if (r.EventStreams_CapacityUnits != nil) && (r.EventStreams_CapacityUnitHours != nil) {
+		quantity = decimalPtr(decimal.NewFromFloat(*r.EventStreams_CapacityUnits * *r.EventStreams_CapacityUnitHours))
+	}
 
-	// costComponent := schema.CostComponent{
-	// 	Name:            "",
-	// 	Unit:            "",
-	// 	UnitMultiplier:  decimal.NewFromFloat(1), // Final quantity for this cost component will be divided by this amount
-	// 	MonthlyQuantity: quantity,
-	// 	ProductFilter: &schema.ProductFilter{
-	// 		VendorName: strPtr("ibm"),
-	// 		Region:     strPtr(r.Location),
-	// 		Service:    &r.Service,
-	// 		AttributeFilters: []*schema.AttributeFilter{
-	// 			{Key: "planName", Value: &r.Plan},
-	// 		},
-	// 	},
-	// 	PriceFilter: &schema.PriceFilter{
-	// 		Unit: strPtr("CAPACITY_UNIT_HOURS"),
-	// 	},
-	// }
-	// return &costComponent
+	costComponent := schema.CostComponent{
+		Name:            "Base Capacity Unit-Hour",
+		Unit:            "Hours",
+		UnitMultiplier:  decimal.NewFromFloat(1), // Final quantity for this cost component will be divided by this amount
+		MonthlyQuantity: quantity,
+		ProductFilter: &schema.ProductFilter{
+			VendorName: strPtr("ibm"),
+			Region:     strPtr(r.Location),
+			Service:    &r.Service,
+			AttributeFilters: []*schema.AttributeFilter{
+				{Key: "planName", Value: &r.Plan},
+			},
+		},
+		PriceFilter: &schema.PriceFilter{
+			Unit: strPtr("CAPACITY_UNIT_HOURS"), // Capacity Unit-Hour, Granular Tier
+		},
+	}
+	return &costComponent
 }
 
 func EventStreamsCapacityUnitHoursAdditionalCostComponent(r *ResourceInstance) *schema.CostComponent {
 
-	// var quantity *decimal.Decimal
+	var quantity *decimal.Decimal
 
-	// if r.<VAR> != nil {
-	// 	quantity = ???
-	// }
+	if (r.EventStreams_CapacityUnitsAdditional != nil) && (r.EventStreams_CapacityUnitHoursAdditional != nil) {
+		quantity = decimalPtr(decimal.NewFromFloat(*r.EventStreams_CapacityUnitsAdditional * *r.EventStreams_CapacityUnitHoursAdditional))
+	}
 
-	// costComponent := schema.CostComponent{
-	// 	Name:            "",
-	// 	Unit:            "",
-	// 	UnitMultiplier:  decimal.NewFromFloat(1), // Final quantity for this cost component will be divided by this amount
-	// 	MonthlyQuantity: quantity,
-	// 	ProductFilter: &schema.ProductFilter{
-	// 		VendorName: strPtr("ibm"),
-	// 		Region:     strPtr(r.Location),
-	// 		Service:    &r.Service,
-	// 		AttributeFilters: []*schema.AttributeFilter{
-	// 			{Key: "planName", Value: &r.Plan},
-	// 		},
-	// 	},
-	// 	PriceFilter: &schema.PriceFilter{
-	// 		Unit: strPtr("CAPACITY_UNIT_HOURS_ADDITIONAL"),
-	// 	},
-	// }
-	// return &costComponent
+	costComponent := schema.CostComponent{
+		Name:            "Additional Capacity Unit-Hour",
+		Unit:            "Hours",
+		UnitMultiplier:  decimal.NewFromFloat(1), // Final quantity for this cost component will be divided by this amount
+		MonthlyQuantity: quantity,
+		ProductFilter: &schema.ProductFilter{
+			VendorName: strPtr("ibm"),
+			Region:     strPtr(r.Location),
+			Service:    &r.Service,
+			AttributeFilters: []*schema.AttributeFilter{
+				{Key: "planName", Value: &r.Plan},
+			},
+		},
+		PriceFilter: &schema.PriceFilter{
+			Unit: strPtr("CAPACITY_UNIT_HOURS_ADDITIONAL"), // Capacity Unit-Hour, Granular Tier
+		},
+	}
+	return &costComponent
 }
 
 func EventStreamsTerabyteHoursCostComponent(r *ResourceInstance) *schema.CostComponent {
 
-	// var quantity *decimal.Decimal
+	var quantity *decimal.Decimal
 
-	// if r.<VAR> != nil {
-	// 	quantity = ???
-	// }
+	if (r.EventStreams_Terabytes != nil) && (r.EventStreams_TerabyteHours != nil) {
+		quantity = decimalPtr(decimal.NewFromFloat(*r.EventStreams_Terabytes * *r.EventStreams_TerabyteHours))
+	}
 
-	// costComponent := schema.CostComponent{
-	// 	Name:            "",
-	// 	Unit:            "",
-	// 	UnitMultiplier:  decimal.NewFromFloat(1), // Final quantity for this cost component will be divided by this amount
-	// 	MonthlyQuantity: quantity,
-	// 	ProductFilter: &schema.ProductFilter{
-	// 		VendorName: strPtr("ibm"),
-	// 		Region:     strPtr(r.Location),
-	// 		Service:    &r.Service,
-	// 		AttributeFilters: []*schema.AttributeFilter{
-	// 			{Key: "planName", Value: &r.Plan},
-	// 		},
-	// 	},
-	// 	PriceFilter: &schema.PriceFilter{
-	// 		Unit: strPtr("TERABYTE_HOURS"),
-	// 	},
-	// }
-	// return &costComponent
+	costComponent := schema.CostComponent{
+		Name:            "Additional Storage Terabyte per Hour",
+		Unit:            "Hours",
+		UnitMultiplier:  decimal.NewFromFloat(1), // Final quantity for this cost component will be divided by this amount
+		MonthlyQuantity: quantity,
+		ProductFilter: &schema.ProductFilter{
+			VendorName: strPtr("ibm"),
+			Region:     strPtr(r.Location),
+			Service:    &r.Service,
+			AttributeFilters: []*schema.AttributeFilter{
+				{Key: "planName", Value: &r.Plan},
+			},
+		},
+		PriceFilter: &schema.PriceFilter{
+			Unit: strPtr("TERABYTE_HOURS"), // Terabyte-Hour, Granular Tier
+		},
+	}
+	return &costComponent
 }
 
 func EventStreamsCapacityUnitHoursMirroringCostComponent(r *ResourceInstance) *schema.CostComponent {
 
-	// var quantity *decimal.Decimal
+	var quantity *decimal.Decimal
 
-	// if r.<VAR> != nil {
-	// 	quantity = ???
-	// }
+	if (r.EventStreams_CapacityUnitsMirroring != nil) && (r.EventStreams_CapacityUnitHoursMirroring != nil) {
+		quantity = decimalPtr(decimal.NewFromFloat(*r.EventStreams_CapacityUnitsMirroring * *r.EventStreams_CapacityUnitHoursMirroring))
+	}
 
-	// costComponent := schema.CostComponent{
-	// 	Name:            "",
-	// 	Unit:            "",
-	// 	UnitMultiplier:  decimal.NewFromFloat(1), // Final quantity for this cost component will be divided by this amount
-	// 	MonthlyQuantity: quantity,
-	// 	ProductFilter: &schema.ProductFilter{
-	// 		VendorName: strPtr("ibm"),
-	// 		Region:     strPtr(r.Location),
-	// 		Service:    &r.Service,
-	// 		AttributeFilters: []*schema.AttributeFilter{
-	// 			{Key: "planName", Value: &r.Plan},
-	// 		},
-	// 	},
-	// 	PriceFilter: &schema.PriceFilter{
-	// 		Unit: strPtr("CAPACITY_UNIT_HOURS_MIRRORING"),
-	// 	},
-	// }
-	// return &costComponent
+	costComponent := schema.CostComponent{
+		Name:            "Mirroring Capacity Unit-Hour",
+		Unit:            "Hours",
+		UnitMultiplier:  decimal.NewFromFloat(1), // Final quantity for this cost component will be divided by this amount
+		MonthlyQuantity: quantity,
+		ProductFilter: &schema.ProductFilter{
+			VendorName: strPtr("ibm"),
+			Region:     strPtr(r.Location),
+			Service:    &r.Service,
+			AttributeFilters: []*schema.AttributeFilter{
+				{Key: "planName", Value: &r.Plan},
+			},
+		},
+		PriceFilter: &schema.PriceFilter{
+			Unit: strPtr("CAPACITY_UNIT_HOURS_MIRRORING"), // Capacity Unit-Hour, Granular Tier
+		},
+	}
+	return &costComponent
 }
