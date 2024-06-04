@@ -29,7 +29,16 @@
  └─ Disk (first 1 GB-DISK)                           1  GB-DISK                        $0.61 
  └─ Disk (over 0 GB-DISK)                            1  GB-DISK                        $0.63 
                                                                                              
- OVERALL TOTAL                                                                       $217.41 
+ ibm_database.test_es_platinum_db1                                                           
+ ├─ RAM                                             36  GB-RAM                       $939.60 
+ ├─ Disk                                           384  GB-DISK                      $234.24 
+ └─ Core                                             9  Virtual Processor Core       $282.60 
+                                                                                             
+ ibm_database.test_es_platinum_db2                                                           
+ ├─ RAM                                              4  GB-RAM                       $104.40 
+ └─ Disk                                            20  GB-DISK                       $12.20 
+                                                                                            
+ OVERALL TOTAL                                                                     $1,790.45 
 ──────────────────────────────────
 4 cloud resources were detected:
 ∙ 4 were estimated, all of which include usage-based costs, see https://infracost.io/usage-file
