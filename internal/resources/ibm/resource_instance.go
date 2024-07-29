@@ -85,6 +85,29 @@ type ResourceInstance struct {
 	// Watsonx.governance
 	WGOV_ru     *float64 `infracost_usage:"aiopenscale_RESOURCE_UNITS"`
 	WGOV_Models *float64 `infracost_usage:"aiopenscale_MODELS_PER_MONTH"`
+	// DNS Services
+	DNSServices_CustomResolverExternalQueries *int64   `infracost_usage:"dns-svcs_MILLION_ITEMS_CREXTERNALQUERIES"`
+	DNSServices_CustomResolverLocationHours   *float64 `infracost_usage:"dns-svcs_RESOLVERLOCATIONS"`
+	DNSServices_CustomResolverLocations       *int64   `infracost_usage:"dns-svcs_qty_custom_resolver_locations"`
+	DNSServices_DNSQueries                    *int64   `infracost_usage:"dns-svcs_MILLION_ITEMS"`
+	DNSServices_GLBInstanceHours              *float64 `infracost_usage:"dns-svcs_NUMBERGLB"`
+	DNSServices_GLBInstances                  *int64   `infracost_usage:"dns-svcs_qty_glb_instances"`
+	DNSServices_HealthChecks                  *int64   `infracost_usage:"dns-svcs_NUMBERHEALTHCHECK"`
+	DNSServices_PoolHours                     *float64 `infracost_usage:"dns-svcs_NUMBERPOOLS"`
+	DNSServices_Pools                         *int64   `infracost_usage:"dns-svcs_qty_pools"`
+	DNSServices_Zones                         *int64   `infracost_usage:"dns-svcs_ITEMS"`
+	// Event Streams
+	EventStreams_CapacityUnitHours            *float64 `infracost_usage:"messagehub_CAPACITY_UNIT_HOURS"`
+	EventStreams_CapacityUnitHoursAdditional  *float64 `infracost_usage:"messagehub_CAPACITY_UNIT_HOURS_ADDITIONAL"`
+	EventStreams_CapacityUnitHoursMirroring   *float64 `infracost_usage:"messagehub_CAPACITY_UNIT_HOURS_MIRRORING"`
+	EventStreams_CapacityUnits                *float64 `infracost_usage:"messagehub_qty_capacity_units"`
+	EventStreams_CapacityUnitsAdditional      *float64 `infracost_usage:"messagehub_qty_capacity_units_additional"`
+	EventStreams_CapacityUnitsMirroring       *float64 `infracost_usage:"messagehub_qty_capacity_units_mirroring"`
+	EventStreams_GigabyteTransmittedOutbounds *float64 `infracost_usage:"messagehub_GIGABYTE_TRANSMITTED_OUTBOUNDS"`
+	EventStreams_InstanceHours                *float64 `infracost_usage:"messagehub_INSTANCE_HOURS"`
+	EventStreams_Instances                    *float64 `infracost_usage:"messagehub_qty_instances"`
+	EventStreams_TerabyteHours                *float64 `infracost_usage:"messagehub_TERABYTE_HOURS"`
+	EventStreams_Terabytes                    *float64 `infracost_usage:"messagehub_qty_terabytes"`
 }
 
 type ResourceCostComponentsFunc func(*ResourceInstance) []*schema.CostComponent
@@ -133,6 +156,27 @@ var ResourceInstanceUsageSchema = []*schema.UsageItem{
 	{Key: "sysdig-secure_VM_NODE_HOUR", DefaultValue: 0, ValueType: schema.Float64},
 	{Key: "aiopenscale_RESOURCE_UNITS", DefaultValue: 1, ValueType: schema.Float64},
 	{Key: "aiopenscale_MODELS_PER_MONTH", DefaultValue: 1, ValueType: schema.Float64},
+	{Key: "dns-svcs_ITEMS", DefaultValue: 1, ValueType: schema.Int64},
+	{Key: "dns-svcs_MILLION_ITEMS_CREXTERNALQUERIES", DefaultValue: 1, ValueType: schema.Int64},
+	{Key: "dns-svcs_MILLION_ITEMS", DefaultValue: 1, ValueType: schema.Int64},
+	{Key: "dns-svcs_NUMBERGLB", DefaultValue: 1, ValueType: schema.Float64},
+	{Key: "dns-svcs_NUMBERHEALTHCHECK", DefaultValue: 1, ValueType: schema.Int64},
+	{Key: "dns-svcs_NUMBERPOOLS", DefaultValue: 1, ValueType: schema.Float64},
+	{Key: "dns-svcs_RESOLVERLOCATIONS", DefaultValue: 1, ValueType: schema.Float64},
+	{Key: "dns-svcs_qty_custom_resolver_locations", DefaultValue: 1, ValueType: schema.Int64},
+	{Key: "dns-svcs_qty_glb_instances", DefaultValue: 1, ValueType: schema.Int64},
+	{Key: "dns-svcs_qty_pools", DefaultValue: 1, ValueType: schema.Int64},
+	{Key: "messagehub_CAPACITY_UNIT_HOURS", DefaultValue: 1, ValueType: schema.Float64},
+	{Key: "messagehub_CAPACITY_UNIT_HOURS_ADDITIONAL", DefaultValue: 1, ValueType: schema.Float64},
+	{Key: "messagehub_CAPACITY_UNIT_HOURS_MIRRORING", DefaultValue: 1, ValueType: schema.Float64},
+	{Key: "messagehub_qty_capacity_units", DefaultValue: 1, ValueType: schema.Float64},
+	{Key: "messagehub_qty_capacity_units_additional", DefaultValue: 1, ValueType: schema.Float64},
+	{Key: "messagehub_qty_capacity_units_mirroring", DefaultValue: 1, ValueType: schema.Float64},
+	{Key: "messagehub_GIGABYTE_TRANSMITTED_OUTBOUNDS", DefaultValue: 1, ValueType: schema.Float64},
+	{Key: "messagehub_INSTANCE_HOURS", DefaultValue: 1, ValueType: schema.Float64},
+	{Key: "messagehub_qty_instances", DefaultValue: 1, ValueType: schema.Float64},
+	{Key: "messagehub_TERABYTE_HOURS", DefaultValue: 1, ValueType: schema.Float64},
+	{Key: "messagehub_qty_terabytes", DefaultValue: 1, ValueType: schema.Float64},
 }
 
 var ResourceInstanceCostMap map[string]ResourceCostComponentsFunc = map[string]ResourceCostComponentsFunc{
@@ -152,6 +196,8 @@ var ResourceInstanceCostMap map[string]ResourceCostComponentsFunc = map[string]R
 	"data-science-experience": GetWSCostComponents,
 	"sysdig-secure":           GetSCCWPCostComponents,
 	"aiopenscale":             GetWGOVCostComponents,
+	"dns-svcs":                GetDNSServicesCostComponents,
+	"messagehub":              GetEventStreamsCostComponents,
 }
 
 func KMSKeyVersionsFreeCostComponent(r *ResourceInstance) *schema.CostComponent {

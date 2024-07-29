@@ -2,7 +2,7 @@ terraform {
   required_providers {
     ibm = {
       source = "IBM-Cloud/ibm"
-      version = "1.63.0"
+      version = "1.64.0"
     }
   }
 }
@@ -287,5 +287,45 @@ resource "ibm_resource_instance" "watson_governance_standard_v2" {
   service           = "aiopenscale"
   plan              = "standard-v2"
   location          = "us-south"
+  resource_group_id = "default"
+}
+
+resource "ibm_resource_instance" "dns_svcs_standard" {
+  name              = "dns_svcs_standard"
+  service           = "dns-svcs"
+  plan              = "standard-dns"
+  location          = "global"
+  resource_group_id = "default"
+}
+
+resource "ibm_resource_instance" "messagehub_lite" {
+  name              = "messagehub_lite"
+  service           = "messagehub"
+  plan              = "lite"
+  location          = "us-south"
+  resource_group_id = "default"
+}
+
+resource "ibm_resource_instance" "messagehub_standard" {
+  name              = "messagehub_standard"
+  service           = "messagehub"
+  plan              = "standard"
+  location          = "us-south"
+  resource_group_id = "default"
+}
+
+resource "ibm_resource_instance" "messagehub_enterprise" {
+  name              = "messagehub_enterprise"
+  service           = "messagehub"
+  plan              = "enterprise-3nodes-2tb"
+  location          = "us-south"
+  resource_group_id = "default"
+}
+
+resource "ibm_resource_instance" "messagehub_satellite" {
+  name              = "messagehub_satellite"
+  service           = "messagehub"
+  plan              = "satellite"
+  location          = "satcon_dal"
   resource_group_id = "default"
 }
