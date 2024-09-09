@@ -20,5 +20,10 @@ func newIsVpnServer(d *schema.ResourceData, u *schema.UsageData) *schema.Resourc
 	}
 	r.PopulateUsage(u)
 
+	configuration := make(map[string]any)
+	configuration["region"] = region
+
+	SetCatalogMetadata(d, d.Type, configuration)
+
 	return r.BuildResource()
 }
