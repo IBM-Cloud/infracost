@@ -16,14 +16,14 @@ import (
 type IsVpnServer struct {
 	Address                string
 	Region                 string
-	MonthlyConnectionHours *float64 `infracost_usage:"monthly_connection_hours"`
-	MonthlyInstanceHours   *float64 `infracost_usage:"monthly_instance_hours"`
+	MonthlyConnectionHours *float64 `infracost_usage:"is.vpn-server_CONNECTION_HOURS"`
+	MonthlyInstanceHours   *float64 `infracost_usage:"is.vpn-server_INSTANCE_HOURS"`
 }
 
 // IsVpnServerUsageSchema defines a list which represents the usage schema of IsVpnServer.
 var IsVpnServerUsageSchema = []*schema.UsageItem{
-	{Key: "monthly_connection_hours", DefaultValue: 0, ValueType: schema.Float64},
-	{Key: "monthly_instance_hours", DefaultValue: 0, ValueType: schema.Float64},
+	{Key: "is.vpn-server_CONNECTION_HOURS", DefaultValue: 0, ValueType: schema.Float64},
+	{Key: "is.vpn-server_INSTANCE_HOURS", DefaultValue: 0, ValueType: schema.Float64},
 }
 
 // PopulateUsage parses the u schema.UsageData into the IsVpnServer.
