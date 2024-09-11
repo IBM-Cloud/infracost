@@ -109,6 +109,9 @@ var FreeResources = []string{
 	"ibm_is_security_group",
 	"ibm_is_security_group_rule",
 	"ibm_is_security_group_target",
+	"ibm_is_share_delete_accessor_binding",
+	"ibm_is_share_mount_target",
+	"ibm_is_share_replica_operations",
 	"ibm_is_ssh_key",
 	"ibm_is_subnet",
 	"ibm_is_subnet_public_gateway_attachment",
@@ -173,8 +176,6 @@ var FreeResources = []string{
 	"ibm_sm_service_credentials_secret",
 	"ibm_sm_username_password_secret",
 	"ibm_tg_connection",
-	"ibm_is_share_mount_target",
-	"ibm_is_share_replica_operations",
 }
 
 var UsageOnlyResources = []string{
