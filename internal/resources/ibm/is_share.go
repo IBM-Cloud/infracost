@@ -28,8 +28,8 @@ type IsShare struct {
 
 // IsShareUsageSchema defines a list which represents the usage schema of IsShare.
 var IsShareUsageSchema = []*schema.UsageItem{
-	{Key: "monthly_instance_hours", DefaultValue: 730, ValueType: schema.Float64},
-	{Key: "monthly_transmitted_gb", DefaultValue: 0, ValueType: schema.Int64},
+	{Key: "is-share_monthly_instance_hours", DefaultValue: 730, ValueType: schema.Float64},
+	{Key: "is-share_monthly_transmitted_gb", DefaultValue: 0, ValueType: schema.Int64},
 }
 
 // PopulateUsage parses the u schema.UsageData into the IsShare.
