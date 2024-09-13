@@ -40,7 +40,8 @@ func (r *IsShare) PopulateUsage(u *schema.UsageData) {
 
 func (r *IsShare) isShareCostComponent(isReplica bool) []*schema.CostComponent {
 	maxIops := r.IOPS
-	if maxIops != 0 {
+	// maxIops defaults to 100 if not specified
+	if maxIops == 0 {
 		maxIops = 100
 	}
 	var gigabyteHoursQ *decimal.Decimal
