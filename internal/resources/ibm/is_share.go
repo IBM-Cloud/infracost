@@ -40,7 +40,6 @@ func (r *IsShare) PopulateUsage(u *schema.UsageData) {
 
 func (r *IsShare) isShareCostComponent(isReplica bool) []*schema.CostComponent {
 	maxIops := r.IOPS
-	// maxIops defaults to 100 if not specified
 	if maxIops == 0 {
 		maxIops = 100
 	}
@@ -50,7 +49,7 @@ func (r *IsShare) isShareCostComponent(isReplica bool) []*schema.CostComponent {
 		gigabyteHoursQ = decimalPtr(gigabyteHoursQ.Mul(decimal.NewFromInt(r.Size)))
 	}
 	var iopsHoursQ *decimal.Decimal
-	if r.IOPS != 0 && r.MonthlyInstanceHours != nil {
+	if r.MonthlyInstanceHours != nil {
 		iopsHoursQ = decimalPtr(decimal.NewFromFloat(*r.MonthlyInstanceHours))
 		iopsHoursQ = decimalPtr(iopsHoursQ.Mul(decimal.NewFromInt(maxIops)))
 	}
