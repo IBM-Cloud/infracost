@@ -17,10 +17,10 @@ var ResourceRegistry []*schema.RegistryItem = []*schema.RegistryItem{
 	getCloudantRegistryItem(),
 	getPiInstanceRegistryItem(),
 	getIsLbRegistryItem(),
-	getIsPublicGatewayRegistryItem(),
 	getIbmPiVolumeRegistryItem(),
 	getDatabaseRegistryItem(),
 	getIsShareRegistryItem(),
+	getIsVpnServerRegistryItem(),
 }
 
 // FreeResources grouped alphabetically
@@ -106,6 +106,7 @@ var FreeResources = []string{
 	"ibm_is_network_acl",
 	"ibm_is_network_acl_rule",
 	"ibm_is_placement_group",
+	"ibm_is_public_gateway",
 	"ibm_is_security_group",
 	"ibm_is_security_group_rule",
 	"ibm_is_security_group_target",
@@ -176,6 +177,8 @@ var FreeResources = []string{
 	"ibm_sm_service_credentials_secret",
 	"ibm_sm_username_password_secret",
 	"ibm_tg_connection",
+	"ibm_is_vpn_server_client",
+	"ibm_is_vpn_server_route",
 }
 
 var UsageOnlyResources = []string{

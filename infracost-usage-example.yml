@@ -121,6 +121,9 @@ resource_type_default_usage:
     elasticsearch_database_members: 4
   ibm_is_share:
     is-share_monthly_instance_hours: 730
+  ibm_is_vpc_server:
+    is.vpn-server_CONNECTION_HOURS: 730
+    is.vpn-server_INSTANCE_HOURS: 730
 
 resource_usage:
   #
@@ -1398,3 +1401,7 @@ resource_usage:
   ibm_is_share.nfs:
     is-share_monthly_instance_hours: 730 # Monthly number of instance hours
     is-share_monthly_transmitted_gb: 1   # Data transmitted between two file shares for replication
+ 
+  ibm_is_vpc_server:
+    is.vpn-server_CONNECTION_HOURS: 730
+    is.vpn-server_INSTANCE_HOURS: 730

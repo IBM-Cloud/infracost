@@ -65,7 +65,6 @@ var globalCatalogServiceId = map[string]catalogMetadata{
 	"ibm_pi_volume":                 {"Power Systems Storage Volume", []string{}, nil, "https://cloud.ibm.com/docs/power-iaas?topic=power-iaas-pricing-virtual-server#storage-type"},
 	"ibm_cos_bucket":                {"Object Storage Bucket", []string{}, nil, "https://cloud.ibm.com/objectstorage/create#pricing"},
 	"ibm_is_lb":                     {"is.load-balancer", []string{}, nil, "https://cloud.ibm.com/vpc-ext/provision/loadBalancer"},
-	"ibm_is_public_gateway":         {"is.public-gateway", []string{"ibm_is_floating_ip"}, nil, "https://cloud.ibm.com/vpc-ext/provision/vpc"},
 	"kms":                           {"ee41347f-b18e-4ca6-bf80-b5467c63f9a6", []string{}, nil, "https://cloud.ibm.com/catalog/services/key-protect"},
 	"cloud-object-storage":          {"dff97f5c-bc5e-4455-b470-411c3edbe49c", []string{}, nil, "https://cloud.ibm.com/objectstorage/create#pricing"},
 	"roks":                          {"containers.kubernetes.cluster.roks", []string{}, nil, "https://cloud.ibm.com/kubernetes/catalog/about?platformType=openshift"},
@@ -90,6 +89,7 @@ var globalCatalogServiceId = map[string]catalogMetadata{
 	"dns-svcs":                      {"b4ed8a30-936f-11e9-b289-1d079699cbe5", []string{}, nil, "https://cloud.ibm.com/catalog/services/dns-services"},
 	"messagehub":                    {"6a7f4e38-f218-48ef-9dd2-df408747568e", []string{}, nil, "https://cloud.ibm.com/eventstreams-provisioning/6a7f4e38-f218-48ef-9dd2-df408747568e/create"},
 	"ibm_is_share":                  {"is.share", []string{}, nil, "https://cloud.ibm.com/docs/vpc?topic=vpc-file-storage-vpc-faqs&interface=ui#faq-fs-billing"},
+	"ibm_is_vpn_server":             {"is.vpn-server", []string{}, nil, "https://cloud.ibm.com/vpc-ext/provision/vpnserver"},
 }
 
 func SetCatalogMetadata(d *schema.ResourceData, resourceType string, config map[string]any) {
