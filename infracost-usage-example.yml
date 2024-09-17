@@ -7,6 +7,124 @@ resource_type_default_usage:
   aws_lambda_function:
     monthly_requests: 100000 # Monthly requests to the Lambda function.
     request_duration_ms: 500 # Average duration of each request in milliseconds.
+  ibm_container_vpc_cluster: 
+    monthly_instance_hours: 730
+  ibm_container_vpc_worker_pool: 
+    monthly_instance_hours: 730
+  ibm_cos_bucket: 
+    accelerated_archive_capacity: 1000
+    accelerated_archive_restore: 0
+    archive_capacity: 1000
+    archive_restore: 0
+    aspera_egress: 0
+    aspera_ingress: 0
+    class_a_request_count: 10
+    class_b_request_count: 1
+    monthly_average_capacity: 1000
+    monthly_data_retrieval: 1000
+    public_standard_egress: 1
+  ibm_is_flow_log: 
+    transmitted_gb: 100
+  ibm_is_instance: 
+    monthly_instance_hours: 730
+  ibm_is_lb:
+    gigabyte_processed: 5
+    monthly_instance_hours: 730
+  ibm_is_volume: 
+    monthly_instance_hours: 730
+  ibm_is_vpc: 
+    gigabyte_transmitted_outbounds: 5
+  ibm_is_vpn_gateway: 
+    monthly_connection_hours: 730
+    monthly_instance_hours: 730
+  ibm_pi_instance: 
+    cloud_storage_solution: 0
+    db2_web_query: 0
+    epic: 0
+    high_availability: 0
+    monthly_instance_hours: 730
+    rational_dev_studio_licenses: 0
+    storage: 20
+  ibm_pi_volume: 
+    monthly_instance_hours: 730
+  ibm_resource_instance: 
+    appconnect_gigabyte_transmitted_outbounds: 1
+    appconnect_thousand_runs: 1
+    appconnect_vcpu_hours: 730
+    appid_advanced_authentications: 20000
+    appid_authentications: 15000
+    appid_users: 1000
+    kms_key_versions: 10
+    secretsmanager_active_secrets: 400
+    secretsmanager_instance: 1
+    logdna_gigabyte_months: 1
+    activitytracker_gigabyte_months: 1
+    sysdig-monitor_NODE_HOURS: 700
+    sysdig-monitor_CONTAINER_HOURS: 700
+    sysdig-monitor_API_CALL_HOURS: 1000
+    sysdig-monitor_TIME_SERIES_HOURS: 1000
+    continuousdelivery_authorized_users: 1
+    wml_capacity_unit_hour: 20
+    wml_instance: 1
+    wml_class1_ru: 20
+    wml_class2_ru: 20
+    wml_class3_ru: 20
+    wa_instance: 1
+    wa_monthly_active_users: 1001
+    wa_monthly_voice_users: 101
+    wd_instance: 1
+    wd_documents: 11000
+    wd_queries: 11000
+    wd_custom_models: 4
+    wd_collections: 301
+    scc_evaluations: 1
+    data-science-experience_CAPACITY_UNIT_HOURS: 1
+    sysdig-secure_MULTI_CLOUD_CSPM_COMPUTE_INSTANCES: 0
+    sysdig-secure_NODE_HOURS: 0
+    sysdig-secure_VM_NODE_HOUR: 501
+    aiopenscale_RESOURCE_UNITS: 1
+    aiopenscale_MODELS_PER_MONTH: 1
+    dns-svcs_ITEMS: 2 # 1 zone included
+    dns-svcs_MILLION_ITEMS_CREXTERNALQUERIES: 11 # Tiered; 1-10, 10+
+    dns-svcs_MILLION_ITEMS: 1001 # Tiered; 1-999, 999+, 1 included
+    dns-svcs_NUMBERGLB: 1 # Number of GLB HOURS
+    dns-svcs_NUMBERHEALTHCHECK: 1
+    dns-svcs_NUMBERPOOLS: 1 # Number of pool HOURS
+    dns-svcs_RESOLVERLOCATIONS: 1 # Number of resolver location HOURS
+    dns-svcs_qty_custom_resolver_locations: 1 # Number of resolver locations
+    dns-svcs_qty_glb_instances: 1 # Number of GLBs
+    dns-svcs_qty_pools: 1 # Number of pools
+    messagehub_CAPACITY_UNIT_HOURS: 1
+    messagehub_qty_capacity_units: 1
+    messagehub_CAPACITY_UNIT_HOURS_ADDITIONAL: 1
+    messagehub_qty_capacity_units_additional: 1 
+    messagehub_CAPACITY_UNIT_HOURS_MIRRORING: 1
+    messagehub_qty_capacity_units_mirroring: 1
+    messagehub_INSTANCE_HOURS: 1
+    messagehub_qty_instances: 1
+    messagehub_TERABYTE_HOURS: 1
+    messagehub_qty_terabytes: 1
+    messagehub_GIGABYTE_TRANSMITTED_OUTBOUNDS: 1
+
+  ibm_tg_gateway: 
+    connection: 3
+    data_transfer_global: 1000
+    data_transfer_local: 1000
+  ibm_database:
+    postgresql_database_ram_mb: 12288
+    postgresql_database_disk_mb: 131072
+    postgresql_database_core: 3
+    postgresql_database_members: 4
+    elasticsearch_database_ram_mb: 12288
+    elasticsearch_database_disk_mb: 131072
+    elasticsearch_database_core: 3
+    elasticsearch_database_members: 4
+  ibm_is_share:
+    is-share_monthly_instance_hours: 730
+  ibm_is_vpc_server:
+    is.vpn-server_CONNECTION_HOURS: 730
+    is.vpn-server_INSTANCE_HOURS: 730
+
 resource_usage:
   #
   # Terraform AWS resources
@@ -1203,8 +1321,8 @@ resource_usage:
     monthly_instance_hours: 730 # Monthly number of instance hours
 
   ibm_resource_instance.resource_instance_kms: 
-    kms_key_versions: 300 # Number of key versions managed per month
-    secretsmanager_active_secrets: 400 # Number of active secrets
+    kms_key_versions: 6 # Number of key versions managed per month
+    secretsmanager_active_secrets: 1 # Number of active secrets
     secretsmanager_instance: 1 # Number of instances of secrets manager
     appid_advanced_authentications: 20000 # Number of advanced authentications in a month
     appid_authentications: 15000 # Number of simple authentications in a month
@@ -1214,13 +1332,76 @@ resource_usage:
     appconnect_vcpu_hours: 10 # The number of VCPU hours used in a month
     logdna_gigabyte_months: 10 # The amount of logs in a month in GB
     activitytracker_gigabyte_months: 10 # The amount of logs in a month in GB
-    monitoring_node_hour: 730 # The amount of hours monitoring runs on a host in a month  
-    monitoring_container_hour: 1460 # Additional containers on a host above the base 50
-    monitoring_api_call: 100000 # Additional API calls above the base 1M/instance
-    monitoring_timeseries_hour: 100 # Additional time-series cost above the base 1000/host
+    sysdig-monitor_NODE_HOURS: 700 # The amount of hours monitoring runs on a host in a month  
+    sysdig-monitor_CONTAINER_HOURS: 700 # Additional containers on a host above the base 50
+    sysdig-monitor_API_CALL_HOURS: 1000 # Additional API calls above the base 1M/instance
+    sysdig-monitor_TIME_SERIES_HOURS: 1000 # Additional time-series cost above the base 1000/host
     continuousdelivery_authorized_users: 10 # Number of authorized users to the CD instance and its managed toolchains
-    
+    wml_capacity_unit_hour: 20 # Amount of Capacity Unit-Hours used in a month
+    wml_instance: 1 # The number of instances per month where each instance includes 2500 CUHs
+    wml_class1_ru: 20 # The number of resource units used for inferencing with class 1 type models where each ru is 1000 tokens
+    wml_class2_ru: 20 # The number of resource units used for inferencing with class 2 type models where each ru is 1000 tokens
+    wml_class3_ru: 20 # The number of resource units used for inferencing with class 3 type models where each ru is 1000 tokens
+    wa_instance: 1 # The number of instances used per month where each instance includes 1000 monthly active users
+    wa_monthly_active_users: 1100 # The number of monthly active users
+    wa_monthly_voice_users: 100 # The number of monthly active voice users
+    wd_instance: 1 # Number of instances used per month
+    wd_documents: 101000 # Number of monthly documents created; 100,000 included in the Enterprise plan; $5 for every additional 1,000 documents.
+    wd_queries: 101000 # Number of queries documents created; 100,000 included in the Enterprise plan; $5 for every additional 1,000 queries.
+    wd_custom_models: 4 # Number of monthly custom models created; 3 included in the Enterprise plan; $500 for every additional custom model.
+    wd_collections: 301 # Number of monthly collections created; 300 included in the Enterprise plan. $500 for every additional 100 collections.
+    scc_evaluations: 1
+    data-science-experience_CAPACITY_UNIT_HOURS: 1 # Amount of Capacity Unit-Hours used in a month
+    sysdig-secure_MULTI_CLOUD_CSPM_COMPUTE_INSTANCES: 0
+    sysdig-secure_NODE_HOURS: 0
+    sysdig-secure_VM_NODE_HOUR: 501
+    aiopenscale_RESOURCE_UNITS: 1
+    aiopenscale_MODELS_PER_MONTH: 1
+    dns-svcs_MILLION_ITEMS_CREXTERNALQUERIES: 11 # Tiered; 1-10, 10+
+    dns-svcs_MILLION_ITEMS: 1001 # Tiered; 1-999, 999+, 1 included
+    dns-svcs_NUMBERGLB: 1 # Number of GLB HOURS
+    dns-svcs_NUMBERHEALTHCHECK: 1
+    dns-svcs_NUMBERPOOLS: 1 # Number of pool HOURS
+    dns-svcs_RESOLVERLOCATIONS: 1 # Number of resolver location HOURS
+    dns-svcs_qty_custom_resolver_locations: 1 # Number of resolver locations
+    dns-svcs_qty_glb_instances: 1 # Number of GLBs
+    dns-svcs_qty_pools: 1 # Number of pools
+  
+  ibm_resource_instance.event_streams:
+    messagehub_CAPACITY_UNIT_HOURS: 1
+    messagehub_qty_capacity_units: 1
+    messagehub_CAPACITY_UNIT_HOURS_ADDITIONAL: 1
+    messagehub_qty_capacity_units_additional: 1
+    messagehub_CAPACITY_UNIT_HOURS_MIRRORING: 1
+    messagehub_qty_capacity_units_mirroring: 1
+    messagehub_INSTANCE_HOURS: 1
+    messagehub_qty_instances: 1
+    messagehub_TERABYTE_HOURS: 1
+    messagehub_qty_terabytes: 1
+    messagehub_GIGABYTE_TRANSMITTED_OUTBOUNDS: 1
+
+
   ibm_tg_gateway.tg_gateway:
     connection: 25 # Monthly number of connections to the gateway
     data_transfer_local: 2500 # Monthly local traffic through the gateway in GB
     data_transfer_global: 2500 # Monthly global traffic through the gateway in GB
+
+  ibm_database.postgres:
+    postgresql_database_ram_mb: 12288 # Allocated memory in MB per-member
+    postgresql_database_disk_mb: 131072 # Allocated disk in MB per-member
+    postgresql_database_core: 3 # Allocated dedicated CPU per-member
+    postgresql_database_members: 4 # Allocated number of members in the cluster
+
+  ibm_database.elasticsearch:
+    elasticsearch_database_ram_mb: 12288 # Allocated memory in MB per-member
+    elasticsearch_database_disk_mb: 131072 # Allocated disk in MB per-member
+    elasticsearch_database_core: 3 # Allocated dedicated CPU per-member
+    elasticsearch_database_members: 4 # Allocated number of members in the cluster
+
+  ibm_is_share.nfs:
+    is-share_monthly_instance_hours: 730 # Monthly number of instance hours
+    is-share_monthly_transmitted_gb: 1   # Data transmitted between two file shares for replication
+ 
+  ibm_is_vpc_server:
+    is.vpn-server_CONNECTION_HOURS: 730
+    is.vpn-server_INSTANCE_HOURS: 730

@@ -49,14 +49,65 @@ type ResourceInstance struct {
 	// Monitoring (Sysdig)
 	// Catalog https://cloud.ibm.com/catalog/services/ibm-cloud-monitoring
 	// Pricing https://cloud.ibm.com/docs/monitoring?topic=monitoring-pricing_plans
-	Monitoring_NodeHour       *float64 `infracost_usage:"monitoring_node_hour"`
-	Monitoring_ContainerHour  *float64 `infracost_usage:"monitoring_container_hour"`
-	Monitoring_APICall        *float64 `infracost_usage:"monitoring_api_call"`
-	Monitoring_TimeSeriesHour *float64 `infracost_usage:"monitoring_timeseries_hour"`
+	Monitoring_NodeHour       *float64 `infracost_usage:"sysdig-monitor_NODE_HOURS"`
+	Monitoring_ContainerHour  *float64 `infracost_usage:"sysdig-monitor_CONTAINER_HOURS"`
+	Monitoring_APICall        *float64 `infracost_usage:"sysdig-monitor_API_CALL_HOURS"`
+	Monitoring_TimeSeriesHour *float64 `infracost_usage:"sysdig-monitor_TIME_SERIES_HOURS"`
 	// Continuous Delivery
 	// Catalog https://cloud.ibm.com/catalog/services/continuous-delivery
 	// Pricing https://cloud.ibm.com/docs/ContinuousDelivery?topic=ContinuousDelivery-limitations_usage&interface=ui
 	ContinuousDelivery_AuthorizedUsers *int64 `infracost_usage:"continuousdelivery_authorized_users"`
+	// Watson Machine Learning
+	// https://dataplatform.cloud.ibm.com/docs/content/wsj/getting-started/wml-plans.html?context=cpdaas
+	WML_CUH      *float64 `infracost_usage:"wml_capacity_unit_hour"`
+	WML_Instance *float64 `infracost_usage:"wml_instance"`
+	WML_Class1RU *float64 `infracost_usage:"wml_class1_ru"`
+	WML_Class2RU *float64 `infracost_usage:"wml_class2_ru"`
+	WML_Class3RU *float64 `infracost_usage:"wml_class3_ru"`
+	// Watson Assistant
+	WA_Instance *float64 `infracost_usage:"wa_instance"`
+	WA_mau      *float64 `infracost_usage:"wa_monthly_active_users"`
+	WA_vu       *float64 `infracost_usage:"wa_monthly_voice_users"`
+	// Watson Discovery
+	WD_Instance     *float64 `infracost_usage:"wd_instance"`
+	WD_Documents    *float64 `infracost_usage:"wd_documents"`
+	WD_Queries      *float64 `infracost_usage:"wd_queries"`
+	WD_CustomModels *float64 `infracost_usage:"wd_custom_models"`
+	WD_Collections  *float64 `infracost_usage:"wd_collections"`
+	// Security and Compliance Center (SCC)
+	SCC_Evaluations *float64 `infracost_usage:"scc_evaluations"`
+	// Watson Studio
+	WS_CUH *float64 `infracost_usage:"data-science-experience_CAPACITY_UNIT_HOURS"`
+	// SCC Workload Protection (Sysdig Secure)
+	SCCWP_MulticloudCSPMComputeInstances *float64 `infracost_usage:"sysdig-secure_MULTI_CLOUD_CSPM_COMPUTE_INSTANCES"`
+	SCCWP_NodeHours                      *float64 `infracost_usage:"sysdig-secure_NODE_HOURS"`
+	SCCWP_VMNodeHours                    *float64 `infracost_usage:"sysdig-secure_VM_NODE_HOUR"`
+	// Watsonx.governance
+	WGOV_ru     *float64 `infracost_usage:"aiopenscale_RESOURCE_UNITS"`
+	WGOV_Models *float64 `infracost_usage:"aiopenscale_MODELS_PER_MONTH"`
+	// DNS Services
+	DNSServices_CustomResolverExternalQueries *int64   `infracost_usage:"dns-svcs_MILLION_ITEMS_CREXTERNALQUERIES"`
+	DNSServices_CustomResolverLocationHours   *float64 `infracost_usage:"dns-svcs_RESOLVERLOCATIONS"`
+	DNSServices_CustomResolverLocations       *int64   `infracost_usage:"dns-svcs_qty_custom_resolver_locations"`
+	DNSServices_DNSQueries                    *int64   `infracost_usage:"dns-svcs_MILLION_ITEMS"`
+	DNSServices_GLBInstanceHours              *float64 `infracost_usage:"dns-svcs_NUMBERGLB"`
+	DNSServices_GLBInstances                  *int64   `infracost_usage:"dns-svcs_qty_glb_instances"`
+	DNSServices_HealthChecks                  *int64   `infracost_usage:"dns-svcs_NUMBERHEALTHCHECK"`
+	DNSServices_PoolHours                     *float64 `infracost_usage:"dns-svcs_NUMBERPOOLS"`
+	DNSServices_Pools                         *int64   `infracost_usage:"dns-svcs_qty_pools"`
+	DNSServices_Zones                         *int64   `infracost_usage:"dns-svcs_ITEMS"`
+	// Event Streams
+	EventStreams_CapacityUnitHours            *float64 `infracost_usage:"messagehub_CAPACITY_UNIT_HOURS"`
+	EventStreams_CapacityUnitHoursAdditional  *float64 `infracost_usage:"messagehub_CAPACITY_UNIT_HOURS_ADDITIONAL"`
+	EventStreams_CapacityUnitHoursMirroring   *float64 `infracost_usage:"messagehub_CAPACITY_UNIT_HOURS_MIRRORING"`
+	EventStreams_CapacityUnits                *float64 `infracost_usage:"messagehub_qty_capacity_units"`
+	EventStreams_CapacityUnitsAdditional      *float64 `infracost_usage:"messagehub_qty_capacity_units_additional"`
+	EventStreams_CapacityUnitsMirroring       *float64 `infracost_usage:"messagehub_qty_capacity_units_mirroring"`
+	EventStreams_GigabyteTransmittedOutbounds *float64 `infracost_usage:"messagehub_GIGABYTE_TRANSMITTED_OUTBOUNDS"`
+	EventStreams_InstanceHours                *float64 `infracost_usage:"messagehub_INSTANCE_HOURS"`
+	EventStreams_Instances                    *float64 `infracost_usage:"messagehub_qty_instances"`
+	EventStreams_TerabyteHours                *float64 `infracost_usage:"messagehub_TERABYTE_HOURS"`
+	EventStreams_Terabytes                    *float64 `infracost_usage:"messagehub_qty_terabytes"`
 }
 
 type ResourceCostComponentsFunc func(*ResourceInstance) []*schema.CostComponent
@@ -80,23 +131,73 @@ var ResourceInstanceUsageSchema = []*schema.UsageItem{
 	{Key: "appconnect_vcpu_hours", DefaultValue: 0, ValueType: schema.Float64},
 	{Key: "logdna_gigabyte_months", DefaultValue: 0, ValueType: schema.Float64},
 	{Key: "activitytracker_gigabyte_months", DefaultValue: 0, ValueType: schema.Float64},
-	{Key: "monitoring_node_hour", DefaultValue: 0, ValueType: schema.Float64},
-	{Key: "monitoring_node_hour_lite", DefaultValue: 0, ValueType: schema.Float64},
-	{Key: "monitoring_container_hour", DefaultValue: 0, ValueType: schema.Float64},
-	{Key: "monitoring_api_call", DefaultValue: 0, ValueType: schema.Float64},
-	{Key: "monitoring_timeseries_hour", DefaultValue: 0, ValueType: schema.Float64},
+	{Key: "sysdig-monitor_NODE_HOURS", DefaultValue: 0, ValueType: schema.Float64},
+	{Key: "sysdig-monitor_CONTAINER_HOURS", DefaultValue: 0, ValueType: schema.Float64},
+	{Key: "sysdig-monitor_API_CALL_HOURS", DefaultValue: 0, ValueType: schema.Float64},
+	{Key: "sysdig-monitor_TIME_SERIES_HOURS", DefaultValue: 0, ValueType: schema.Float64},
+	{Key: "continuousdelivery_authorized_users", DefaultValue: 0, ValueType: schema.Int64},
+	{Key: "wml_capacity_unit_hour", DefaultValue: 0, ValueType: schema.Float64},
+	{Key: "wml_instance", DefaultValue: 0, ValueType: schema.Float64},
+	{Key: "wml_class1_ru", DefaultValue: 0, ValueType: schema.Float64},
+	{Key: "wml_class2_ru", DefaultValue: 0, ValueType: schema.Float64},
+	{Key: "wml_class3_ru", DefaultValue: 0, ValueType: schema.Float64},
+	{Key: "wa_instance", DefaultValue: 0, ValueType: schema.Float64},
+	{Key: "wa_monthly_active_users", DefaultValue: 0, ValueType: schema.Float64},
+	{Key: "wa_monthly_voice_users", DefaultValue: 0, ValueType: schema.Float64},
+	{Key: "wd_instance", DefaultValue: 0, ValueType: schema.Float64},
+	{Key: "wd_documents", DefaultValue: 0, ValueType: schema.Float64},
+	{Key: "wd_queries", DefaultValue: 0, ValueType: schema.Float64},
+	{Key: "wd_custom_models", DefaultValue: 0, ValueType: schema.Float64},
+	{Key: "wd_collections", DefaultValue: 0, ValueType: schema.Float64},
+	{Key: "scc_evaluations", DefaultValue: 0, ValueType: schema.Float64},
+	{Key: "data-science-experience_CAPACITY_UNIT_HOURS", DefaultValue: 1, ValueType: schema.Float64},
+	{Key: "sysdig-secure_MULTI_CLOUD_CSPM_COMPUTE_INSTANCES", DefaultValue: 0, ValueType: schema.Float64},
+	{Key: "sysdig-secure_NODE_HOURS", DefaultValue: 0, ValueType: schema.Float64},
+	{Key: "sysdig-secure_VM_NODE_HOUR", DefaultValue: 0, ValueType: schema.Float64},
+	{Key: "aiopenscale_RESOURCE_UNITS", DefaultValue: 1, ValueType: schema.Float64},
+	{Key: "aiopenscale_MODELS_PER_MONTH", DefaultValue: 1, ValueType: schema.Float64},
+	{Key: "dns-svcs_ITEMS", DefaultValue: 1, ValueType: schema.Int64},
+	{Key: "dns-svcs_MILLION_ITEMS_CREXTERNALQUERIES", DefaultValue: 1, ValueType: schema.Int64},
+	{Key: "dns-svcs_MILLION_ITEMS", DefaultValue: 1, ValueType: schema.Int64},
+	{Key: "dns-svcs_NUMBERGLB", DefaultValue: 1, ValueType: schema.Float64},
+	{Key: "dns-svcs_NUMBERHEALTHCHECK", DefaultValue: 1, ValueType: schema.Int64},
+	{Key: "dns-svcs_NUMBERPOOLS", DefaultValue: 1, ValueType: schema.Float64},
+	{Key: "dns-svcs_RESOLVERLOCATIONS", DefaultValue: 1, ValueType: schema.Float64},
+	{Key: "dns-svcs_qty_custom_resolver_locations", DefaultValue: 1, ValueType: schema.Int64},
+	{Key: "dns-svcs_qty_glb_instances", DefaultValue: 1, ValueType: schema.Int64},
+	{Key: "dns-svcs_qty_pools", DefaultValue: 1, ValueType: schema.Int64},
+	{Key: "messagehub_CAPACITY_UNIT_HOURS", DefaultValue: 1, ValueType: schema.Float64},
+	{Key: "messagehub_CAPACITY_UNIT_HOURS_ADDITIONAL", DefaultValue: 1, ValueType: schema.Float64},
+	{Key: "messagehub_CAPACITY_UNIT_HOURS_MIRRORING", DefaultValue: 1, ValueType: schema.Float64},
+	{Key: "messagehub_qty_capacity_units", DefaultValue: 1, ValueType: schema.Float64},
+	{Key: "messagehub_qty_capacity_units_additional", DefaultValue: 1, ValueType: schema.Float64},
+	{Key: "messagehub_qty_capacity_units_mirroring", DefaultValue: 1, ValueType: schema.Float64},
+	{Key: "messagehub_GIGABYTE_TRANSMITTED_OUTBOUNDS", DefaultValue: 1, ValueType: schema.Float64},
+	{Key: "messagehub_INSTANCE_HOURS", DefaultValue: 1, ValueType: schema.Float64},
+	{Key: "messagehub_qty_instances", DefaultValue: 1, ValueType: schema.Float64},
+	{Key: "messagehub_TERABYTE_HOURS", DefaultValue: 1, ValueType: schema.Float64},
+	{Key: "messagehub_qty_terabytes", DefaultValue: 1, ValueType: schema.Float64},
 }
 
 var ResourceInstanceCostMap map[string]ResourceCostComponentsFunc = map[string]ResourceCostComponentsFunc{
-	"kms":                 GetKMSCostComponents,
-	"secrets-manager":     GetSecretsManagerCostComponents,
-	"appid":               GetAppIDCostComponents,
-	"appconnect":          GetAppConnectCostComponents,
-	"power-iaas":          GetPowerCostComponents,
-	"logdna":              GetLogDNACostComponents,
-	"logdnaat":            GetActivityTrackerCostComponents,
-	"sysdig-monitor":      GetSysdigCostComponenets,
-	"continuous-delivery": GetContinuousDeliveryCostComponenets,
+	"kms":                     GetKMSCostComponents,
+	"secrets-manager":         GetSecretsManagerCostComponents,
+	"appid":                   GetAppIDCostComponents,
+	"appconnect":              GetAppConnectCostComponents,
+	"power-iaas":              GetPowerCostComponents,
+	"logdna":                  GetLogDNACostComponents,
+	"logdnaat":                GetActivityTrackerCostComponents,
+	"sysdig-monitor":          GetSysdigCostComponenets,
+	"continuous-delivery":     GetContinuousDeliveryCostComponenets,
+	"pm-20":                   GetWMLCostComponents,
+	"conversation":            GetWACostComponents,
+	"discovery":               GetWDCostComponents,
+	"compliance":              GetSCCCostComponents,
+	"data-science-experience": GetWSCostComponents,
+	"sysdig-secure":           GetSCCWPCostComponents,
+	"aiopenscale":             GetWGOVCostComponents,
+	"dns-svcs":                GetDNSServicesCostComponents,
+	"messagehub":              GetEventStreamsCostComponents,
 }
 
 func KMSKeyVersionsFreeCostComponent(r *ResourceInstance) *schema.CostComponent {
@@ -459,7 +560,7 @@ func GetLogDNACostComponents(r *ResourceInstance) []*schema.CostComponent {
 		}
 	} else {
 		return []*schema.CostComponent{{
-			Name:            "Gigabyte Months",
+			Name:            fmt.Sprintf("Gigabyte Months (%s)", r.Plan),
 			Unit:            "Gigabyte Months",
 			UnitMultiplier:  decimal.NewFromInt(1),
 			MonthlyQuantity: q,
@@ -475,122 +576,6 @@ func GetLogDNACostComponents(r *ResourceInstance) []*schema.CostComponent {
 				Unit: strPtr("GIGABYTE_MONTHS"),
 			},
 		}}
-	}
-}
-
-func GetSysdigTimeseriesCostComponent(r *ResourceInstance) *schema.CostComponent {
-	var q *decimal.Decimal
-	if r.Monitoring_TimeSeriesHour != nil {
-		q = decimalPtr(decimal.NewFromFloat(*r.Monitoring_TimeSeriesHour))
-	}
-	return &schema.CostComponent{
-		Name:            "Additional Time series",
-		Unit:            "Time series hour",
-		UnitMultiplier:  decimal.NewFromInt(1),
-		MonthlyQuantity: q,
-		ProductFilter: &schema.ProductFilter{
-			VendorName: strPtr("ibm"),
-			Region:     strPtr(r.Location),
-			Service:    &r.Service,
-			AttributeFilters: []*schema.AttributeFilter{
-				{Key: "planName", Value: &r.Plan},
-			},
-		},
-		PriceFilter: &schema.PriceFilter{
-			Unit: strPtr("TIME_SERIES_HOURS"),
-		},
-	}
-}
-
-func GetSysdigContainerCostComponent(r *ResourceInstance) *schema.CostComponent {
-	var q *decimal.Decimal
-	if r.Monitoring_ContainerHour != nil {
-		q = decimalPtr(decimal.NewFromFloat(*r.Monitoring_ContainerHour))
-	}
-	return &schema.CostComponent{
-		Name:            "Additional Containers",
-		Unit:            "Container Hours",
-		UnitMultiplier:  decimal.NewFromInt(1),
-		MonthlyQuantity: q,
-		ProductFilter: &schema.ProductFilter{
-			VendorName: strPtr("ibm"),
-			Region:     strPtr(r.Location),
-			Service:    &r.Service,
-			AttributeFilters: []*schema.AttributeFilter{
-				{Key: "planName", Value: &r.Plan},
-			},
-		},
-		PriceFilter: &schema.PriceFilter{
-			Unit: strPtr("CONTAINER_HOURS"),
-		},
-	}
-}
-
-func GetSysdigApiCallCostComponent(r *ResourceInstance) *schema.CostComponent {
-	var q *decimal.Decimal
-	if r.Monitoring_APICall != nil {
-		q = decimalPtr(decimal.NewFromFloat(*r.Monitoring_APICall))
-	}
-	return &schema.CostComponent{
-		Name:            "Additional API Calls",
-		Unit:            "API Calls",
-		UnitMultiplier:  decimal.NewFromInt(1),
-		MonthlyQuantity: q,
-		ProductFilter: &schema.ProductFilter{
-			VendorName: strPtr("ibm"),
-			Region:     strPtr(r.Location),
-			Service:    &r.Service,
-			AttributeFilters: []*schema.AttributeFilter{
-				{Key: "planName", Value: &r.Plan},
-			},
-		},
-		PriceFilter: &schema.PriceFilter{
-			Unit: strPtr("API_CALL_HOURS"),
-		},
-	}
-}
-
-func GetSysdigNodeHourCostComponent(r *ResourceInstance) *schema.CostComponent {
-	var q *decimal.Decimal
-	if r.Monitoring_NodeHour != nil {
-		q = decimalPtr(decimal.NewFromFloat(*r.Monitoring_NodeHour))
-	}
-	return &schema.CostComponent{
-		Name:            "Base Node Hour",
-		Unit:            "Node Hours",
-		UnitMultiplier:  decimal.NewFromInt(1),
-		MonthlyQuantity: q,
-		ProductFilter: &schema.ProductFilter{
-			VendorName: strPtr("ibm"),
-			Region:     strPtr(r.Location),
-			Service:    &r.Service,
-			AttributeFilters: []*schema.AttributeFilter{
-				{Key: "planName", Value: &r.Plan},
-			},
-		},
-		PriceFilter: &schema.PriceFilter{
-			Unit: strPtr("NODE_HOURS"),
-		},
-	}
-}
-
-func GetSysdigCostComponenets(r *ResourceInstance) []*schema.CostComponent {
-
-	if r.Plan == "lite" {
-		costComponent := &schema.CostComponent{
-			Name:            "Lite plan",
-			UnitMultiplier:  decimal.NewFromInt(1),
-			MonthlyQuantity: decimalPtr(decimal.NewFromInt(1)),
-		}
-		costComponent.SetCustomPrice(decimalPtr(decimal.NewFromInt(0)))
-		return []*schema.CostComponent{costComponent}
-	} else {
-		return []*schema.CostComponent{
-			GetSysdigTimeseriesCostComponent(r),
-			GetSysdigContainerCostComponent(r),
-			GetSysdigApiCallCostComponent(r),
-			GetSysdigNodeHourCostComponent(r),
-		}
 	}
 }
 
