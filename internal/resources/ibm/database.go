@@ -17,6 +17,11 @@ type Database struct {
 	Plan     string
 	Location string
 	Group    gjson.Result
+	Flavor   string
+	Disk     int64
+	Memory   int64
+	CPU      int64
+	Members  int64
 }
 
 type DatabaseCostComponentsFunc func(*Database) []*schema.CostComponent
