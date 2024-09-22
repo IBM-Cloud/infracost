@@ -17,22 +17,6 @@ type Database struct {
 	Plan     string
 	Location string
 	Group    gjson.Result
-
-	// Databases For PostgreSQL
-	// Catalog Link: https://cloud.ibm.com/catalog/services/databases-for-postgresql
-	// Pricing Link: https://cloud.ibm.com/docs/databases-for-postgresql?topic=databases-for-postgresql-pricing
-	PostgreSQL_Ram     *int64 `infracost_usage:"postgresql_database_ram_mb"`
-	PostgreSQL_Disk    *int64 `infracost_usage:"postgresql_database_disk_mb"`
-	PostgreSQL_Core    *int64 `infracost_usage:"postgresql_database_core"`
-	PostgreSQL_Members *int64 `infracost_usage:"postgresql_database_members"`
-
-	// Databases For ElasticSearch
-	// Catalog Link: https://cloud.ibm.com/catalog/services/databases-for-elasticsearch
-	// Pricing Link: https://cloud.ibm.com/docs/databases-for-elasticsearch?topic=databases-for-elasticsearch-pricing
-	ElasticSearch_Ram     *int64 `infracost_usage:"elasticsearch_database_ram_mb"`
-	ElasticSearch_Disk    *int64 `infracost_usage:"elasticsearch_database_disk_mb"`
-	ElasticSearch_Core    *int64 `infracost_usage:"elasticsearch_database_core"`
-	ElasticSearch_Members *int64 `infracost_usage:"elasticsearch_database_members"`
 }
 
 type DatabaseCostComponentsFunc func(*Database) []*schema.CostComponent
@@ -44,16 +28,7 @@ func (r *Database) PopulateUsage(u *schema.UsageData) {
 }
 
 // DatabaseUsageSchema defines a list which represents the usage schema of Database.
-var DatabaseUsageSchema = []*schema.UsageItem{
-	{Key: "postgresql_database_ram_mb", DefaultValue: 0, ValueType: schema.Int64},
-	{Key: "postgresql_database_disk_mb", DefaultValue: 0, ValueType: schema.Int64},
-	{Key: "postgresql_database_core", DefaultValue: 0, ValueType: schema.Int64},
-	{Key: "postgresql_database_members", DefaultValue: 0, ValueType: schema.Int64},
-	{Key: "elasticsearch_database_ram_mb", DefaultValue: 0, ValueType: schema.Int64},
-	{Key: "elasticsearch_database_disk_mb", DefaultValue: 0, ValueType: schema.Int64},
-	{Key: "elasticsearch_database_core", DefaultValue: 0, ValueType: schema.Int64},
-	{Key: "elasticsearch_database_members", DefaultValue: 0, ValueType: schema.Int64},
-}
+var DatabaseUsageSchema = []*schema.UsageItem{}
 
 var DatabaseCostMap map[string]DatabaseCostComponentsFunc = map[string]DatabaseCostComponentsFunc{
 	"databases-for-postgresql": GetPostgresCostComponents,

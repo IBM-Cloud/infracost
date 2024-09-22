@@ -1,0 +1,49 @@
+
+ Name                                         Monthly Qty  Unit     Monthly Cost 
+                                                                                 
+ ibm_database.elasticsearch_enterprise                                           
+ ├─ RAM (first 1 GB-RAM)                                1  GB-RAM         $15.70 
+ ├─ RAM (over 0 GB-RAM)                                 1  GB-RAM         $16.17 
+ └─ Disk (first 1 GB-DISK)                              1  GB-DISK         $0.61 
+ └─ Disk (over 0 GB-DISK)                               1  GB-DISK         $0.63 
+                                                                                 
+ ibm_database.elasticsearch_platinum                                             
+ ├─ RAM                                                 3  GB-RAM         $80.65 
+ └─ Disk                                               15  GB-DISK         $9.42 
+                                                                                 
+ ibm_database.elasticsearch_standard                                             
+ ├─ RAM                                                 3  GB-RAM         $47.10 
+ └─ Disk                                               15  GB-DISK         $9.15 
+                                                                                 
+ ibm_database.elasticsearch_standard_flavour                                     
+ ├─ RAM                                                 3  GB-RAM         $47.10 
+ └─ Disk                                               15  GB-DISK         $9.15 
+                                                                                 
+ ibm_database.postgresql_enterprise                                              
+ ├─ RAM (first 1 GB-RAM)                                1  GB-RAM          $5.23 
+ ├─ RAM (over 0 GB-RAM)                                 1  GB-RAM          $5.39 
+ └─ Disk (first 1 GB-DISK)                              1  GB-DISK         $0.61 
+ └─ Disk (over 0 GB-DISK)                               1  GB-DISK         $0.63 
+                                                                                 
+ ibm_database.postgresql_platinum                                                
+ ├─ RAM (first 1 GB-RAM)                                1  GB-RAM          $5.23 
+ ├─ RAM (over 0 GB-RAM)                                 1  GB-RAM          $5.39 
+ └─ Disk (first 1 GB-DISK)                              1  GB-DISK         $0.61 
+ └─ Disk (over 0 GB-DISK)                               1  GB-DISK         $0.63 
+                                                                                 
+ ibm_database.postgresql_standard                                                
+ ├─ RAM (first 1 GB-RAM)                                1  GB-RAM          $5.23 
+ ├─ RAM (over 0 GB-RAM)                                 1  GB-RAM          $5.39 
+ └─ Disk (first 1 GB-DISK)                              1  GB-DISK         $0.61 
+ └─ Disk (over 0 GB-DISK)                               1  GB-DISK         $0.63 
+                                                                                 
+ ibm_database.postgresql_standard_flavour                                        
+ ├─ RAM (first 1 GB-RAM)                                1  GB-RAM          $5.23 
+ ├─ RAM (over 0 GB-RAM)                                 1  GB-RAM          $5.39 
+ └─ Disk (first 1 GB-DISK)                              1  GB-DISK         $0.61 
+ └─ Disk (over 0 GB-DISK)                               1  GB-DISK         $0.63 
+                                                                                 
+ OVERALL TOTAL                                                           $283.10 
+──────────────────────────────────
+8 cloud resources were detected:
+∙ 8 were estimated, all of which include usage-based costs, see https://infracost.io/usage-file
