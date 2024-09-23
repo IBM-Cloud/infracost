@@ -3,7 +3,6 @@ package ibm
 import (
 	"github.com/infracost/infracost/internal/resources"
 	"github.com/infracost/infracost/internal/schema"
-	"github.com/shopspring/decimal"
 	"github.com/tidwall/gjson"
 )
 
@@ -45,10 +44,6 @@ var DatabaseCostMap map[string]DatabaseCostComponentsFunc = map[string]DatabaseC
 	// "databases-for-mysql":
 	// "databases-for-cassandra":
 	// "databases-for-enterprisedb"
-}
-
-func ConvertMBtoGB(d decimal.Decimal) decimal.Decimal {
-	return d.Div(decimal.NewFromInt(1024))
 }
 
 // BuildResource builds a schema.Resource from a valid Database struct.
