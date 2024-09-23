@@ -17,7 +17,14 @@ func newDatabase(d *schema.ResourceData, u *schema.UsageData) *schema.Resource {
 	location := d.Get("location").String()
 	service := d.Get("service").String()
 	name := d.Get("name").String()
-	var members int64 = 3 // Min & default is 3 for ElasticSearch
+
+	var members int64
+	if service == "databases-for-elasticsearch" {
+		members = 3
+	} else if service == "databases-for-postgresql" {
+		members = 2
+	}
+
 	var flavor string
 	var memory int64
 	var cpu int64
