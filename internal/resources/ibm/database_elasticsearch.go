@@ -101,7 +101,7 @@ func ElasticSearchDiskCostComponent(r *Database) *schema.CostComponent {
 
 func ElasticSearchHostFlavorComponent(r *Database) *schema.CostComponent {
 
-	cost_unit := map[string]string{
+	CostUnit := map[string]string{
 		"b3c.4x16.encrypted":   "HOST_FOUR_SIXTEEN",
 		"b3c.8x32.encrypted":   "HOST_EIGHT_THIRTYTWO",
 		"m3c.8x64.encrypted":   "HOST_EIGHT_SIXTYFOUR",
@@ -111,7 +111,7 @@ func ElasticSearchHostFlavorComponent(r *Database) *schema.CostComponent {
 	}
 
 	return &schema.CostComponent{
-		Name:            fmt.Sprintf("Host Flavor (%s, %s members)", strconv.FormatInt(r.Members, 10), r.Flavor),
+		Name:            fmt.Sprintf("Host Flavor (%s members, %s)", strconv.FormatInt(r.Members, 10), r.Flavor),
 		Unit:            "Flavor",
 		UnitMultiplier:  decimal.NewFromInt(1), // Final quantity for this cost component will be divided by this amount
 		MonthlyQuantity: decimalPtr(decimal.NewFromInt(r.Members)),
@@ -127,7 +127,7 @@ func ElasticSearchHostFlavorComponent(r *Database) *schema.CostComponent {
 			},
 		},
 		PriceFilter: &schema.PriceFilter{
-			Unit: strPtr(cost_unit[r.Flavor]),
+			Unit: strPtr(CostUnit[r.Flavor]),
 		},
 	}
 }
