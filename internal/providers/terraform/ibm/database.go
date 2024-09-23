@@ -17,8 +17,8 @@ func newDatabase(d *schema.ResourceData, u *schema.UsageData) *schema.Resource {
 	location := d.Get("location").String()
 	service := d.Get("service").String()
 	name := d.Get("name").String()
+	disk := d.Get("disk.allocation_mb").Int()
 	var flavor string
-	var disk int64
 	var memory int64
 	var cpu int64
 	var members int64
@@ -26,7 +26,6 @@ func newDatabase(d *schema.ResourceData, u *schema.UsageData) *schema.Resource {
 	for _, g := range d.Get("group").Array() {
 		if g.Get("group_id").String() == "member" {
 			flavor = d.Get("host_flavor.id").String()
-			disk = d.Get("disk.allocation_mb").Int()
 			memory = d.Get("memory.allocation_mb").Int()
 			cpu = d.Get("cpu.allocation_mb").Int()
 			members = d.Get("members.allocation_count").Int()
@@ -52,8 +51,15 @@ func newDatabase(d *schema.ResourceData, u *schema.UsageData) *schema.Resource {
 	configuration["service"] = service
 	configuration["plan"] = plan
 	configuration["location"] = location
+	configuration["disk"] = disk
+	configuration["members"] = members
 
-	// TODO:Add flavor, disk, memory, CPU and members to metadata
+	if flavor != "" {
+		configuration["flavor"] = flavor
+	} else {
+		configuration["memory"] = memory
+		configuration["cpu"] = cpu
+	}
 
 	SetCatalogMetadata(d, service, configuration)
 
