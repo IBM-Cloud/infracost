@@ -57,8 +57,8 @@ func ElasticSearchRAMCostComponent(r *Database) *schema.CostComponent {
 	return &schema.CostComponent{
 		Name:            fmt.Sprintf("RAM (%s members)", strconv.FormatInt(r.Members, 10)),
 		Unit:            "GB",
-		UnitMultiplier:  decimal.NewFromInt(1),                                         // Final quantity for this cost component will be divided by this amount
-		MonthlyQuantity: decimalPtr(decimal.NewFromInt((r.Memory * r.Members) / 1024)), // Convert to GB
+		UnitMultiplier:  decimal.NewFromInt(1),                                                         // Final quantity for this cost component will be divided by this amount
+		MonthlyQuantity: decimalPtr(decimal.NewFromFloat(float64(r.Memory*r.Members) / float64(1024))), // Convert to GB
 		ProductFilter: &schema.ProductFilter{
 			VendorName:    strPtr("ibm"),
 			Region:        strPtr(r.Location),
@@ -80,8 +80,8 @@ func ElasticSearchDiskCostComponent(r *Database) *schema.CostComponent {
 	return &schema.CostComponent{
 		Name:            fmt.Sprintf("Disk (%s members)", strconv.FormatInt(r.Members, 10)),
 		Unit:            "GB",
-		UnitMultiplier:  decimal.NewFromInt(1),                                       // Final quantity for this cost component will be divided by this amount
-		MonthlyQuantity: decimalPtr(decimal.NewFromInt((r.Disk * r.Members) / 1024)), // Convert to GB
+		UnitMultiplier:  decimal.NewFromInt(1),                                                       // Final quantity for this cost component will be divided by this amount
+		MonthlyQuantity: decimalPtr(decimal.NewFromFloat(float64(r.Disk*r.Members) / float64(1024))), // Convert to GB
 		ProductFilter: &schema.ProductFilter{
 			VendorName:    strPtr("ibm"),
 			Region:        strPtr(r.Location),
