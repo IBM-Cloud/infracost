@@ -1,122 +1,133 @@
 package ibm
 
 import (
+	"fmt"
+	"strconv"
+
 	"github.com/infracost/infracost/internal/schema"
 	"github.com/shopspring/decimal"
 )
 
-func ElasticSearchRAMCostComponent(r *Database) *schema.CostComponent {
-	var R decimal.Decimal
-	if r.ElasticSearch_Ram != nil {
-		R = ConvertMBtoGB(decimal.NewFromInt(*r.ElasticSearch_Ram))
-	} else { // set the default
-		R = decimal.NewFromInt(1)
-	}
-	var m decimal.Decimal
-	if r.ElasticSearch_Members != nil {
-		m = decimal.NewFromInt(*r.ElasticSearch_Members)
-	} else { // set the default
-		m = decimal.NewFromInt(3)
-	}
+func GetElasticSearchCostComponents(r *Database) []*schema.CostComponent {
 
-	cost := R.Mul(m)
-	costComponent := schema.CostComponent{
-		Name:            "RAM",
-		Unit:            "GB-RAM",
-		MonthlyQuantity: &cost,
-		UnitMultiplier:  decimal.NewFromInt(1),
-		ProductFilter: &schema.ProductFilter{
-			VendorName:    strPtr("ibm"),
-			Region:        strPtr(r.Location),
-			Service:       strPtr("databases-for-elasticsearch"),
-			ProductFamily: strPtr("service"),
-			AttributeFilters: []*schema.AttributeFilter{
-				{Key: "planName", Value: &r.Plan},
-			},
-		},
-		PriceFilter: &schema.PriceFilter{
-			Unit: strPtr("GIGABYTE_MONTHS_RAM"),
-		},
+	if r.Flavor != "" {
+		return []*schema.CostComponent{
+			ElasticSearchHostFlavorComponent(r),
+			ElasticSearchDiskCostComponent(r),
+		}
+	} else {
+		return []*schema.CostComponent{
+			ElasticSearchRAMCostComponent(r),
+			ElasticSearchDiskCostComponent(r),
+			ElasticSearchVirtualProcessorCoreCostComponent(r),
+		}
 	}
-	return &costComponent
 }
 
-func ElasticSearchDiskCostComponent(r *Database) *schema.CostComponent {
-	var d decimal.Decimal
-	if r.ElasticSearch_Disk != nil {
-		d = ConvertMBtoGB(decimal.NewFromInt(*r.ElasticSearch_Disk))
-	} else { // set the default
-		d = decimal.NewFromInt(5)
-	}
-	var m decimal.Decimal
-	if r.ElasticSearch_Members != nil {
-		m = decimal.NewFromInt(*r.ElasticSearch_Members)
-	} else { // set the default
-		m = decimal.NewFromInt(3)
-	}
-
-	cost := d.Mul(m)
-	costComponent := schema.CostComponent{
-		Name:            "Disk",
-		Unit:            "GB-DISK",
-		MonthlyQuantity: &cost,
-		UnitMultiplier:  decimal.NewFromInt(1),
+func ElasticSearchVirtualProcessorCoreCostComponent(r *Database) *schema.CostComponent {
+	return &schema.CostComponent{
+		Name:            fmt.Sprintf("Virtual Processor Cores (%s members)", strconv.FormatInt(r.Members, 10)),
+		Unit:            "CPU",
+		UnitMultiplier:  decimal.NewFromInt(1), // Final quantity for this cost component will be divided by this amount
+		MonthlyQuantity: decimalPtr(decimal.NewFromInt(r.CPU * r.Members)),
 		ProductFilter: &schema.ProductFilter{
 			VendorName:    strPtr("ibm"),
 			Region:        strPtr(r.Location),
 			Service:       strPtr("databases-for-elasticsearch"),
 			ProductFamily: strPtr("service"),
 			AttributeFilters: []*schema.AttributeFilter{
-				{Key: "planName", Value: &r.Plan},
-			},
-		},
-		PriceFilter: &schema.PriceFilter{
-			Unit: strPtr("GIGABYTE_MONTHS_DISK"),
-		},
-	}
-	return &costComponent
-}
-
-func ElasticSearchCoreCostComponent(r *Database) *schema.CostComponent {
-	var c decimal.Decimal
-	if r.ElasticSearch_Core != nil {
-		c = decimal.NewFromInt(*r.ElasticSearch_Core)
-	} else { // set the default
-		c = decimal.NewFromInt(0)
-	}
-	var m decimal.Decimal
-	if r.ElasticSearch_Members != nil {
-		m = decimal.NewFromInt(*r.ElasticSearch_Members)
-	} else { // set the default
-		m = decimal.NewFromInt(3)
-	}
-
-	cost := c.Mul(m)
-	costComponent := schema.CostComponent{
-		Name:            "Core",
-		Unit:            "Virtual Processor Core",
-		MonthlyQuantity: &cost,
-		UnitMultiplier:  decimal.NewFromInt(1),
-		ProductFilter: &schema.ProductFilter{
-			VendorName:    strPtr("ibm"),
-			Region:        strPtr(r.Location),
-			Service:       strPtr("databases-for-elasticsearch"),
-			ProductFamily: strPtr("service"),
-			AttributeFilters: []*schema.AttributeFilter{
-				{Key: "planName", Value: &r.Plan},
+				{
+					Key: "planName", Value: strPtr(r.Plan),
+				},
 			},
 		},
 		PriceFilter: &schema.PriceFilter{
 			Unit: strPtr("VIRTUAL_PROCESSOR_CORES"),
 		},
 	}
-	return &costComponent
 }
 
-func GetElasticSearchCostComponents(r *Database) []*schema.CostComponent {
-	return []*schema.CostComponent{
-		ElasticSearchRAMCostComponent(r),
-		ElasticSearchDiskCostComponent(r),
-		ElasticSearchCoreCostComponent(r),
+func ElasticSearchRAMCostComponent(r *Database) *schema.CostComponent {
+
+	unit := "GIGABYTE_MONTHS_RAM"
+	if r.Plan == "enterprise" {
+		unit = "GIGABYTE_MONTHS_RAM_NEW"
+	}
+
+	return &schema.CostComponent{
+		Name:            fmt.Sprintf("RAM (%s members)", strconv.FormatInt(r.Members, 10)),
+		Unit:            "GB",
+		UnitMultiplier:  decimal.NewFromInt(1),                                         // Final quantity for this cost component will be divided by this amount
+		MonthlyQuantity: decimalPtr(decimal.NewFromInt((r.Memory * r.Members) / 1024)), // Convert to GB
+		ProductFilter: &schema.ProductFilter{
+			VendorName:    strPtr("ibm"),
+			Region:        strPtr(r.Location),
+			Service:       strPtr("databases-for-elasticsearch"),
+			ProductFamily: strPtr("service"),
+			AttributeFilters: []*schema.AttributeFilter{
+				{
+					Key: "planName", Value: strPtr(r.Plan),
+				},
+			},
+		},
+		PriceFilter: &schema.PriceFilter{
+			Unit: strPtr(unit),
+		},
+	}
+}
+
+func ElasticSearchDiskCostComponent(r *Database) *schema.CostComponent {
+	return &schema.CostComponent{
+		Name:            fmt.Sprintf("Disk (%s members)", strconv.FormatInt(r.Members, 10)),
+		Unit:            "GB",
+		UnitMultiplier:  decimal.NewFromInt(1),                                       // Final quantity for this cost component will be divided by this amount
+		MonthlyQuantity: decimalPtr(decimal.NewFromInt((r.Disk * r.Members) / 1024)), // Convert to GB
+		ProductFilter: &schema.ProductFilter{
+			VendorName:    strPtr("ibm"),
+			Region:        strPtr(r.Location),
+			Service:       strPtr("databases-for-elasticsearch"),
+			ProductFamily: strPtr("service"),
+			AttributeFilters: []*schema.AttributeFilter{
+				{
+					Key: "planName", Value: strPtr(r.Plan),
+				},
+			},
+		},
+		PriceFilter: &schema.PriceFilter{
+			Unit: strPtr("GIGABYTE_MONTHS_DISK"),
+		},
+	}
+}
+
+func ElasticSearchHostFlavorComponent(r *Database) *schema.CostComponent {
+
+	cost_unit := map[string]string{
+		"b3c.4x16.encrypted":   "HOST_FOUR_SIXTEEN",
+		"b3c.8x32.encrypted":   "HOST_EIGHT_THIRTYTWO",
+		"m3c.8x64.encrypted":   "HOST_EIGHT_SIXTYFOUR",
+		"b3c.16x64.encrypted":  "HOST_SIXTEEN_SIXTYFOUR",
+		"b3c.32x128.encrypted": "HOST_THIRTYTWO_ONEHUNDREDTWENTYEIGHT",
+		"m3c.30x240.encrypted": "HOST_THIRTY_TWOHUNDREDFORTY",
+	}
+
+	return &schema.CostComponent{
+		Name:            fmt.Sprintf("Host Flavor (%s, %s members)", strconv.FormatInt(r.Members, 10), r.Flavor),
+		Unit:            "Flavor",
+		UnitMultiplier:  decimal.NewFromInt(1), // Final quantity for this cost component will be divided by this amount
+		MonthlyQuantity: decimalPtr(decimal.NewFromInt(r.Members)),
+		ProductFilter: &schema.ProductFilter{
+			VendorName:    strPtr("ibm"),
+			Region:        strPtr(r.Location),
+			Service:       strPtr("databases-for-elasticsearch"),
+			ProductFamily: strPtr("service"),
+			AttributeFilters: []*schema.AttributeFilter{
+				{
+					Key: "planName", Value: strPtr(r.Plan),
+				},
+			},
+		},
+		PriceFilter: &schema.PriceFilter{
+			Unit: strPtr(cost_unit[r.Flavor]),
+		},
 	}
 }
