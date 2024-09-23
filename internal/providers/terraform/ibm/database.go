@@ -17,18 +17,31 @@ func newDatabase(d *schema.ResourceData, u *schema.UsageData) *schema.Resource {
 	location := d.Get("location").String()
 	service := d.Get("service").String()
 	name := d.Get("name").String()
-	disk := d.Get("disk.allocation_mb").Int()
+	var members int64 = 3 // Min & default is 3 for ElasticSearch
 	var flavor string
 	var memory int64
 	var cpu int64
-	var members int64
+	var disk int64
 
 	for _, g := range d.Get("group").Array() {
+
 		if g.Get("group_id").String() == "member" {
-			flavor = d.Get("host_flavor.id").String()
-			memory = d.Get("memory.allocation_mb").Int()
-			cpu = d.Get("cpu.allocation_mb").Int()
-			members = d.Get("members.allocation_count").Int()
+
+			if len(g.Get("host_flavor").Array()) > 0 {
+				flavor = g.Get("host_flavor").Array()[0].Map()["id"].String()
+			}
+			if len(g.Get("memory").Array()) > 0 {
+				memory = g.Get("memory").Array()[0].Map()["allocation_mb"].Int()
+			}
+			if len(g.Get("cpu").Array()) > 0 {
+				cpu = g.Get("cpu").Array()[0].Map()["allocation_count"].Int()
+			}
+			if len(g.Get("members").Array()) > 0 {
+				members = g.Get("members").Array()[0].Map()["allocation_count"].Int()
+			}
+			if len(g.Get("disk").Array()) > 0 {
+				disk = g.Get("disk").Array()[0].Map()["allocation_mb"].Int()
+			}
 		}
 	}
 
