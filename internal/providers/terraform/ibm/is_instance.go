@@ -25,14 +25,14 @@ func newIsInstance(d *schema.ResourceData, u *schema.UsageData) *schema.Resource
 	isDedicated := !((dedicatedHost == "") && (dedicatedHostGroup == ""))
 	name := d.Get("name").String()
 
-	boot_volume := make([]struct {
+	bootVolume := make([]struct {
 		Name string
 		Size int64
 	}, 0)
 
-	boot_volume_parse := d.Get("boot_volume").Array()
-	if len(boot_volume_parse) > 0 {
-		for _, volume := range boot_volume_parse {
+	bootVolumeParse := d.Get("boot_volume").Array()
+	if len(bootVolumeParse) > 0 {
+		for _, volume := range bootVolumeParse {
 			name := volume.Get("name").String()
 			if name == "" {
 				name = "Unnamed boot volume"
@@ -41,7 +41,7 @@ func newIsInstance(d *schema.ResourceData, u *schema.UsageData) *schema.Resource
 			if size == 0 {
 				size = 100
 			}
-			boot_volume = append(boot_volume, struct {
+			bootVolume = append(bootVolume, struct {
 				Name string
 				Size int64
 			}{Name: name, Size: size})
@@ -54,7 +54,7 @@ func newIsInstance(d *schema.ResourceData, u *schema.UsageData) *schema.Resource
 		Profile:     profile,
 		Zone:        zone,
 		IsDedicated: isDedicated,
-		BootVolume:  boot_volume,
+		BootVolume:  bootVolume,
 	}
 
 	r.PopulateUsage(u)
