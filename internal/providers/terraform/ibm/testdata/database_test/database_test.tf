@@ -125,28 +125,6 @@ resource "ibm_database" "elasticsearch_platinum_flavor" {
   }
 }
 
-# resource "ibm_database" "elasticsearch_platinum_multitenant_flavor" {
-#   name     = "elasticsearch-platinum-multitenant-flavor"
-#   service  = "databases-for-elasticsearch"
-#   plan     = "platinum"
-#   location = "us-south"
-#   group {
-#     group_id = "member"
-#     host_flavor {
-#       id = "multitenant"
-#     }
-#     disk {
-#       allocation_mb = 4194304
-#     }
-#     memory {
-#       allocation_mb = 114688
-#     }
-#     cpu {
-#       allocation_count = 1
-#     }
-#   }
-# }
-
 resource "ibm_database" "elasticsearch_enterprise" {
   name     = "elasticsearch-enterprise"
   service  = "databases-for-elasticsearch"
@@ -182,7 +160,6 @@ resource "ibm_database" "elasticsearch_enterprise_flavor" {
     }
   }
 }
-
 
 resource "ibm_database" "elasticsearch_enterprise_multitenant_flavor" {
   name     = "elasticsearch-enterprise-multitenant-flavor"
