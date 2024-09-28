@@ -10,7 +10,7 @@ import (
 
 func GetElasticSearchCostComponents(r *Database) []*schema.CostComponent {
 
-	if r.Flavor != "" {
+	if r.Flavor != "" && r.Flavor != "multitenant" {
 		return []*schema.CostComponent{
 			ElasticSearchHostFlavorComponent(r),
 			ElasticSearchDiskCostComponent(r),
