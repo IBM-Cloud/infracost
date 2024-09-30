@@ -184,6 +184,7 @@ resource "ibm_database" "elasticsearch_enterprise_multitenant_flavor" {
   }
 }
 
+# Specifications used by Dev RAG stack
 resource "ibm_database" "elasticsearch_enterprise_multitenant_flavor_auto_cpu_scale" {
   name     = "elasticsearch-enterprise-multitenant-flavor-auto-cpu-scale"
   service  = "databases-for-elasticsearch"
@@ -195,10 +196,10 @@ resource "ibm_database" "elasticsearch_enterprise_multitenant_flavor_auto_cpu_sc
       id = "multitenant"
     }
     disk { # >= 5120 and <= 4194304 in increments of 1024
-      allocation_mb = 4194304
+      allocation_mb = 5120
     }
     memory { # >= 4096 and <= 114688 in increments of 128
-      allocation_mb = 114688
+      allocation_mb = 4096
     }
     cpu {                  # >= 0 and <= 28 in increments of 1
       allocation_count = 0 # Automatically allocate based on a 1:8 ration with RAM

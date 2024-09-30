@@ -16,9 +16,9 @@
  └─ Virtual Processor Cores (3 members)                                            84  CPU        $2,716.73 
                                                                                                             
  ibm_database.elasticsearch_enterprise_multitenant_flavor_auto_cpu_scale                                    
- ├─ RAM (3 members)                                                               336  GB         $5,433.46 
- ├─ Disk (3 members)                                                           12,288  GB         $7,720.55 
- └─ Virtual Processor Cores (3 members)                                             6  CPU          $194.05 
+ ├─ RAM (3 members)                                                                12  GB           $194.05 
+ ├─ Disk (3 members)                                                               15  GB             $9.42 
+ └─ Virtual Processor Cores (3 members)                                           1.5  CPU           $48.51 
                                                                                                             
  ibm_database.elasticsearch_platinum                                                                        
  ├─ RAM (3 members)                                                               336  GB         $9,032.69 
@@ -43,7 +43,7 @@
  ├─ Disk (2 members)                                                            8,192  GB         $5,147.03 
  └─ Virtual Processor Cores (2 members)                                            56  CPU        $1,811.15 
                                                                                                             
- OVERALL TOTAL                                                                                  $142,824.00 
+ OVERALL TOTAL                                                                                  $129,727.93 
 ──────────────────────────────────
 9 cloud resources were detected:
 ∙ 9 were estimated
