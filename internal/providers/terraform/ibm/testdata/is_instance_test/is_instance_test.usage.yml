@@ -1,4 +1,4 @@
 version: 0.1
 resource_usage:
-  ibm_is_instance.vsi:
+  ibm_is_instance:
     monthly_instance_hours: 730

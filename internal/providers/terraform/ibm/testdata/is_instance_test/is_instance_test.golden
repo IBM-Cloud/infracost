@@ -1,21 +1,34 @@
 
- Name                                          Monthly Qty  Unit                Monthly Cost 
-                                                                                             
- ibm_is_instance.vsi                                                                         
- └─ Instance Hours (cx3d-2x5)                          730  Hours                     $73.00 
-                                                                                             
- ibm_is_vpc.vpc                                                                              
- ├─ VPC instance                                         1  Instance                   $0.00 
- ├─ VPC egress free allowance (first 5GB)  Monthly cost depends on usage: $0.00 per GB       
- └─ VPC egress us-south (first 9995 GB)    Monthly cost depends on usage: $0.090915 per GB   
- └─ VPC egress us-south (next 40000 GB)    Monthly cost depends on usage: $0.086735 per GB   
- └─ VPC egress us-south (next 100000 GB)   Monthly cost depends on usage: $0.07315 per GB    
- └─ VPC egress us-south (over 149995 GB)   Monthly cost depends on usage: $0.05225 per GB    
-                                                                                             
- OVERALL TOTAL                                                                        $73.00 
+ Name                                              Monthly Qty  Unit                Monthly Cost 
+                                                                                                 
+ ibm_is_instance.vsi                                                                             
+ ├─ Instance Hours (cx2-2x4)                               730  Hours                     $64.97 
+ └─ Boot volume (Unnamed boot volume, 100 GB)           73,000  Hours                      $8.39 
+                                                                                                 
+ ibm_is_instance.vsi_boot_volume                                                                 
+ ├─ Instance Hours (cx2-2x4)                               730  Hours                     $64.97 
+ └─ Boot volume (boot-volume-label, 250 GB)            182,500  Hours                     $20.98 
+                                                                                                 
+ ibm_is_instance.vsi_dedicated_host                                                              
+ ├─ Instance Hours (cx2-2x4)                               730  Hours                     $64.97 
+ └─ Boot volume (Unnamed boot volume, 100 GB)           73,000  Hours                      $8.39 
+                                                                                                 
+ ibm_is_vpc.vpc                                                                                  
+ ├─ VPC instance                                             1  Instance                   $0.00 
+ ├─ VPC egress free allowance (first 5GB)      Monthly cost depends on usage: $0.00 per GB       
+ └─ VPC egress us-south (first 9995 GB)        Monthly cost depends on usage: $0.090915 per GB   
+ └─ VPC egress us-south (next 40000 GB)        Monthly cost depends on usage: $0.086735 per GB   
+ └─ VPC egress us-south (next 100000 GB)       Monthly cost depends on usage: $0.07315 per GB    
+ └─ VPC egress us-south (over 149995 GB)       Monthly cost depends on usage: $0.05225 per GB    
+                                                                                                 
+ OVERALL TOTAL                                                                           $232.67 
 ──────────────────────────────────
-4 cloud resources were detected:
-∙ 2 were estimated, all of which include usage-based costs, see https://infracost.io/usage-file
-∙ 2 were free:
+9 cloud resources were detected:
+∙ 4 were estimated, all of which include usage-based costs, see https://infracost.io/usage-file
+∙ 3 were free:
   ∙ 1 x ibm_is_ssh_key
   ∙ 1 x ibm_is_subnet
+  ∙ 1 x ibm_resource_group
+∙ 2 are not supported yet, see https://infracost.io/requested-resources:
+  ∙ 1 x ibm_is_dedicated_host
+  ∙ 1 x ibm_is_dedicated_host_group

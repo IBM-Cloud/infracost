@@ -18,7 +18,7 @@ type IsInstance struct {
 	Profile     string // should be values from CLI 'ibmcloud is instance-profiles'
 	Zone        string
 	IsDedicated bool // will be true if a dedicated_host or dedicated_host_group is specified
-	BootVolume  []struct {
+	BootVolume  struct {
 		Name string
 		Size int64
 	}
@@ -37,27 +37,61 @@ func (r *IsInstance) PopulateUsage(u *schema.UsageData) {
 
 func (r *IsInstance) instanceHoursCostComponent() *schema.CostComponent {
 
-	unit := "INSTANCE_HOURS_MULTI_TENANT"
+	unit := "RESERVATION_HOURS_HOURLY"
+	planName := fmt.Sprintf("instance-%s", r.Profile)
+	unitMultiplier := int64(1)
+	var q *decimal.Decimal
+	if r.MonthlyInstanceHours != nil {
+		q = decimalPtr(decimal.NewFromFloat(*r.MonthlyInstanceHours))
+	}
 	if r.IsDedicated {
-		unit = "INSTANCE_HOURS_DEDICATED_HOST"
+		q = decimalPtr(decimal.NewFromFloat(0))
+		unitMultiplier = 0
 	}
 
 	return &schema.CostComponent{
 		Name:            fmt.Sprintf("Instance Hours (%s)", r.Profile),
 		Unit:            "Hours",
-		UnitMultiplier:  decimal.NewFromInt(1),
-		MonthlyQuantity: decimalPtr(decimal.NewFromFloat(*r.MonthlyInstanceHours)),
+		UnitMultiplier:  decimal.NewFromInt(unitMultiplier),
+		MonthlyQuantity: q,
 		ProductFilter: &schema.ProductFilter{
 			VendorName:    strPtr("ibm"),
 			Region:        strPtr(r.Region),
-			Service:       strPtr("is.instance"),
+			Service:       strPtr("is.reservation"),
 			ProductFamily: strPtr("service"),
 			AttributeFilters: []*schema.AttributeFilter{
-				{Key: "planName", Value: &r.Profile},
+				{Key: "planName", Value: &planName},
 			},
 		},
 		PriceFilter: &schema.PriceFilter{
 			Unit: strPtr(unit),
+		},
+	}
+}
+
+func (r *IsInstance) bootVolumeCostComponent() *schema.CostComponent {
+
+	var q *decimal.Decimal
+	if r.MonthlyInstanceHours != nil {
+		q = decimalPtr(decimal.NewFromFloat(float64(r.BootVolume.Size) * (*r.MonthlyInstanceHours)))
+	}
+
+	return &schema.CostComponent{
+		Name:            fmt.Sprintf("Boot volume (%s, %d GB)", r.BootVolume.Name, r.BootVolume.Size),
+		Unit:            "Hours",
+		UnitMultiplier:  decimal.NewFromInt(1),
+		MonthlyQuantity: q,
+		ProductFilter: &schema.ProductFilter{
+			VendorName:    strPtr("ibm"),
+			ProductFamily: strPtr("service"),
+			Service:       strPtr("is.volume"),
+			Region:        strPtr(r.Region),
+			AttributeFilters: []*schema.AttributeFilter{
+				{Key: "planName", ValueRegex: regexPtr(("gen2-volume-general-purpose"))},
+			},
+		},
+		PriceFilter: &schema.PriceFilter{
+			Unit: strPtr("GIGABYTE_HOURS"),
 		},
 	}
 }
@@ -68,6 +102,7 @@ func (r *IsInstance) instanceHoursCostComponent() *schema.CostComponent {
 func (r *IsInstance) BuildResource() *schema.Resource {
 	costComponents := []*schema.CostComponent{
 		r.instanceHoursCostComponent(),
+		r.bootVolumeCostComponent(),
 	}
 
 	return &schema.Resource{
