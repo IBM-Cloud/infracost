@@ -48,10 +48,8 @@ resource "ibm_is_ssh_key" "ssh_key" {
 resource "ibm_is_instance" "vsi" {
   for_each = toset(local.profiles)
   name     = "vsi-instance-${random_string.unique_identifier.result}-${each.key}"
-  # name    = "vsi-instance-${random_string.unique_identifier.result}"
   image = "r006-f137ea64-0d27-4d81-afe0-353fd0557e81"
   keys  = [ibm_is_ssh_key.ssh_key.id]
-  # profile = "cx2-2x4"
   profile        = each.key
   resource_group = ibm_resource_group.resource_group.id
   vpc            = ibm_is_vpc.vpc.id
@@ -68,10 +66,8 @@ resource "ibm_is_instance" "vsi" {
 resource "ibm_is_instance" "vsi_boot_volume" {
   for_each = toset(local.profiles)
   name     = "vsi-instance-boot-volume-${random_string.unique_identifier.result}-${each.key}"
-  # name    = "vsi-instance-boot-volume-${random_string.unique_identifier.result}"
   image = "r006-f137ea64-0d27-4d81-afe0-353fd0557e81"
   keys  = [ibm_is_ssh_key.ssh_key.id]
-  # profile = "cx2-2x4"
   profile        = each.key
   resource_group = ibm_resource_group.resource_group.id
   vpc            = ibm_is_vpc.vpc.id
@@ -92,10 +88,8 @@ resource "ibm_is_instance" "vsi_boot_volume" {
 resource "ibm_is_instance" "vsi_dedicated_host" {
   for_each = toset(local.profiles)
   name     = "vsi-instance-dedicated-host-${random_string.unique_identifier.result}-${each.key}"
-  # name    = "vsi-instance-dedicated-host-${random_string.unique_identifier.result}"
   image = "r006-f137ea64-0d27-4d81-afe0-353fd0557e81"
   keys  = [ibm_is_ssh_key.ssh_key.id]
-  # profile = "cx2-2x4"
   profile        = each.key
   resource_group = ibm_resource_group.resource_group.id
   vpc            = ibm_is_vpc.vpc.id
@@ -182,7 +176,7 @@ locals {
 
     "cx2-128x256",
     # "cx2-16x32",
-    # "cx2-2x4",
+    "cx2-2x4",
     # "cx2-32x64",
     # "cx2-48x96",
     # "cx2-4x8",
