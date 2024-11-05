@@ -54,7 +54,7 @@ func GetEventStreamsCostComponents(r *ResourceInstance) []*schema.CostComponent 
 			UnitMultiplier:  decimal.NewFromInt(1),
 			MonthlyQuantity: decimalPtr(decimal.NewFromInt(1)),
 			ProductFilter: &schema.ProductFilter{
-				VendorName: strPtr(""),
+				VendorName: strPtr("ibm"),
 				Region:     strPtr(r.Location),
 				Service:    &r.Service,
 				AttributeFilters: []*schema.AttributeFilter{
