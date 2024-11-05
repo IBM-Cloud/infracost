@@ -335,13 +335,20 @@ func GetSecretsManagerCostComponents(r *ResourceInstance) []*schema.CostComponen
 }
 
 func GetPowerCostComponents(r *ResourceInstance) []*schema.CostComponent {
-	q := decimalPtr(decimal.NewFromInt(1))
 
 	costComponent := schema.CostComponent{
-		Name:            r.Name,
-		Unit:            "Instance",
+		Name:            "Workspace for Power Virtual Server",
+		Unit:            "Workspace",
 		UnitMultiplier:  decimal.NewFromInt(1),
-		MonthlyQuantity: q,
+		MonthlyQuantity: decimalPtr(decimal.NewFromInt(1)),
+		ProductFilter: &schema.ProductFilter{
+			VendorName: strPtr("ibm"),
+			Region:     strPtr(r.Location),
+			Service:    &r.Service,
+			AttributeFilters: []*schema.AttributeFilter{
+				{Key: "planName", Value: &r.Plan},
+			},
+		},
 	}
 	costComponent.SetCustomPrice(decimalPtr(decimal.NewFromInt(0)))
 	return []*schema.CostComponent{
