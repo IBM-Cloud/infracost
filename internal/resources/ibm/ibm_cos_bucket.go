@@ -733,6 +733,14 @@ func (r *IbmCosBucket) LitePlanCostComponent() *schema.CostComponent {
 		Unit:            "Instance",
 		UnitMultiplier:  decimal.NewFromInt(1),
 		MonthlyQuantity: decimalPtr(decimal.NewFromInt(1)),
+		ProductFilter: &schema.ProductFilter{
+			VendorName: strPtr(""),
+			Region:     strPtr(r.Location),
+			Service:    strPtr(("cloud-object-storage")),
+			AttributeFilters: []*schema.AttributeFilter{
+				{Key: "planName", Value: &r.Plan},
+			},
+		},
 	}
 	costComponent.SetCustomPrice(decimalPtr(decimal.NewFromInt(0)))
 	return &costComponent
