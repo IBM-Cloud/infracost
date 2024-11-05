@@ -20,6 +20,14 @@ func GetSCCCostComponents(r *ResourceInstance) []*schema.CostComponent {
 			Name:            "Trial",
 			UnitMultiplier:  decimal.NewFromInt(1),
 			MonthlyQuantity: decimalPtr(decimal.NewFromInt(1)),
+			ProductFilter: &schema.ProductFilter{
+				VendorName: strPtr("ibm"),
+				Region:     strPtr(r.Location),
+				Service:    &r.Service,
+				AttributeFilters: []*schema.AttributeFilter{
+					{Key: "planName", Value: &r.Plan},
+				},
+			},
 		}
 		costComponent.SetCustomPrice(decimalPtr(decimal.NewFromInt(0)))
 		return []*schema.CostComponent{
@@ -27,9 +35,17 @@ func GetSCCCostComponents(r *ResourceInstance) []*schema.CostComponent {
 		}
 	} else {
 		costComponent := schema.CostComponent{
-			Name:            fmt.Sprintf("Plan %s with customized pricing", r.Plan),
+			Name:            fmt.Sprintf("Plan %s not found", r.Plan),
 			UnitMultiplier:  decimal.NewFromInt(1), // Final quantity for this cost component will be divided by this amount
 			MonthlyQuantity: decimalPtr(decimal.NewFromInt(1)),
+			ProductFilter: &schema.ProductFilter{
+				VendorName: strPtr(""),
+				Region:     strPtr(r.Location),
+				Service:    &r.Service,
+				AttributeFilters: []*schema.AttributeFilter{
+					{Key: "planName", Value: &r.Plan},
+				},
+			},
 		}
 		costComponent.SetCustomPrice(decimalPtr(decimal.NewFromInt(0)))
 		return []*schema.CostComponent{
