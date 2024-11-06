@@ -2,50 +2,45 @@ package terraform
 
 import (
 	"bytes"
+	json2 "encoding/json"
+	"flag"
 	"fmt"
 	"io"
+	"os"
 	"path"
+	"reflect"
 	"strings"
 	"testing"
 	"text/template"
 
 	hcl2 "github.com/hashicorp/hcl/v2"
 	"github.com/hashicorp/hcl/v2/hclsyntax"
+	"github.com/rs/zerolog"
 	"github.com/sirupsen/logrus"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 	"github.com/zclconf/go-cty/cty"
 
 	"github.com/infracost/infracost/internal/config"
+	"github.com/infracost/infracost/internal/credentials"
 	"github.com/infracost/infracost/internal/hcl"
 	"github.com/infracost/infracost/internal/hcl/modules"
 	"github.com/infracost/infracost/internal/sync"
 )
 
+var update = flag.Bool("update", false, "update .golden files")
+
 func setMockAttributes(blockAtts map[string]map[string]string) hcl.SetAttributesFunc {
 	count := map[string]int{}
 
-	return func(moduleBlock *hcl.Block, block *hcl2.Block) {
-		if v, ok := block.Body.(*hclsyntax.Body); ok {
-			body := *v
-			nat := hclsyntax.Attributes{}
-			for k, a := range body.Attributes {
-				b := *a
-				nat[k] = &b
-			}
+	return func(b *hcl.Block) {
+		if _, ok := b.HCLBlock.Body.(*hclsyntax.Body); ok {
+			if b.Type() == "resource" || b.Type() == "data" {
+				b.UniqueAttrs = map[string]*hcl2.Attribute{}
 
-			body.Attributes = nat
-
-			if block.Type == "resource" || block.Type == "data" {
-				fullName := strings.Join(block.Labels, ".")
-				module := moduleBlock.FullName()
-				if module != "" {
-					fullName = module + "." + fullName
-				}
-
+				fullName := b.FullName()
 				if attrs, ok := blockAtts[fullName]; ok {
-					addAttrs(attrs, &body)
-					block.Body = &body
+					addAttrs(attrs, b)
 				}
 
 				withCount := fullName + "[0]"
@@ -57,17 +52,17 @@ func setMockAttributes(blockAtts map[string]map[string]string) hcl.SetAttributes
 				}
 
 				if attrs, ok := blockAtts[withCount]; ok {
-					addAttrs(attrs, &body)
-					block.Body = &body
+					addAttrs(attrs, b)
 				}
 			}
+
 		}
 	}
 }
 
-func addAttrs(attrs map[string]string, body *hclsyntax.Body) {
+func addAttrs(attrs map[string]string, b *hcl.Block) {
 	for k, v := range attrs {
-		body.Attributes[k] = &hclsyntax.Attribute{
+		b.UniqueAttrs[k] = &hcl2.Attribute{
 			Name: k,
 			Expr: &hclsyntax.LiteralValueExpr{
 				Val: cty.StringVal(v),
@@ -80,7 +75,8 @@ func TestHCLProvider_LoadPlanJSON(t *testing.T) {
 	tests := []struct {
 		name     string
 		attrs    map[string]map[string]string
-		warnings []hcl.WarningCode
+		chdir    bool
+		warnings []int
 	}{
 		{
 			name: "structures module expressions correctly with count",
@@ -174,7 +170,22 @@ func TestHCLProvider_LoadPlanJSON(t *testing.T) {
 					"arn": "eip-arn",
 				},
 			},
-			warnings: []hcl.WarningCode{hcl.WarningMissingVars},
+			warnings: []int{
+				105,
+			},
+		},
+		{
+			name: "shows correct duplicate variable warning",
+		},
+		{
+			name: "builds module configuration correctly with count",
+		},
+		{
+			name: "adds_source_url_from_remote_module",
+		},
+		{
+			name:  "adds_source_url_from_remote_module_chdir",
+			chdir: true,
 		},
 	}
 	for _, tt := range tests {
@@ -182,33 +193,63 @@ func TestHCLProvider_LoadPlanJSON(t *testing.T) {
 			pathName := strings.ReplaceAll(strings.ToLower(tt.name), " ", "_")
 			testPath := path.Join("testdata/hcl_provider_test", pathName)
 
-			logger := logrus.New()
-			logger.SetOutput(io.Discard)
-			entry := logrus.NewEntry(logger)
+			logger := zerolog.New(io.Discard)
 
-			parsers, err := hcl.LoadParsers(
-				testPath,
-				modules.NewModuleLoader(testPath, nil, entry, &sync.KeyMutex{}),
-				nil,
-				entry,
-				hcl.OptionWithBlockBuilder(
-					hcl.BlockBuilder{
-						MockFunc: func(a *hcl.Attribute) cty.Value {
-							return cty.StringVal(fmt.Sprintf("mocked-%s", a.Name()))
-						},
-						SetAttributes: []hcl.SetAttributesFunc{setMockAttributes(tt.attrs)},
-						Logger:        entry,
-					},
-				))
+			ctx := config.NewProjectContext(config.EmptyRunContext(), &config.Project{}, logrus.Fields{})
+			moduleParser := modules.NewSharedHCLParser()
+			pl := hcl.NewProjectLocator(logger, nil)
+			startingPath := testPath
+			initialPath, err := os.Getwd()
 			require.NoError(t, err)
+			if tt.chdir {
+				err := os.Chdir(testPath)
+				require.NoError(t, err)
+				startingPath = "."
+			}
+
+			mods := pl.FindRootModules(startingPath)
+			options := []hcl.Option{hcl.OptionWithBlockBuilder(
+				hcl.BlockBuilder{
+					MockFunc: func(a *hcl.Attribute) cty.Value {
+						return cty.StringVal(fmt.Sprintf("mocked-%s", a.Name()))
+					},
+					SetAttributes: []hcl.SetAttributesFunc{setMockAttributes(tt.attrs)},
+					Logger:        logger,
+					HCLParser:     moduleParser,
+				},
+			)}
+
+			if mods[0].TerraformVarFiles != nil {
+				options = append(options, hcl.OptionWithTFVarsPaths(mods[0].TerraformVarFiles.ToPaths(), true))
+			}
+
+			parser := hcl.NewParser(
+				mods[0],
+				hcl.CreateEnvFileMatcher([]string{}, nil),
+				modules.NewModuleLoader(startingPath, moduleParser, &modules.CredentialsSource{FetchToken: credentials.FindTerraformCloudToken}, config.TerraformSourceMap{}, logger, &sync.KeyMutex{}),
+				logger,
+				options...,
+			)
 
 			p := HCLProvider{
-				parsers: parsers,
-				logger:  entry,
-				ctx:     &config.ProjectContext{RunContext: &config.RunContext{Config: &config.Config{}}},
+				Parser: parser,
+				logger: logger,
+				ctx:    ctx,
 			}
-			got, err := p.LoadPlanJSONs()
-			require.NoError(t, err)
+			root := p.LoadPlanJSON()
+
+			require.NoError(t, root.Error)
+			if tt.chdir {
+				err = os.Chdir(initialPath)
+				require.NoError(t, err)
+			}
+
+			// uncomment and run `make test` to update the expectations
+			// var prettyJSON bytes.Buffer
+			// err = json2.Indent(&prettyJSON, root.JSON, "", "  ")
+			// assert.NoError(t, err)
+			// err = os.WriteFile(path.Join(testPath, "expected.json"), append(prettyJSON.Bytes(), "\n"...), 0600)
+			// assert.NoError(t, err)
 
 			tmpl, err := template.ParseFiles(path.Join(testPath, "expected.json"))
 			require.NoError(t, err)
@@ -218,11 +259,22 @@ func TestHCLProvider_LoadPlanJSON(t *testing.T) {
 			require.NoError(t, err)
 
 			expected := exp.String()
-			root := got[0]
 			actual := string(root.JSON)
-			assert.JSONEq(t, expected, actual)
+			if !assert.JSONEq(t, expected, actual) {
+				var prettyJSON bytes.Buffer
+				err = json2.Indent(&prettyJSON, root.JSON, "", "  ")
+				assert.NoError(t, err)
 
-			codes := make([]hcl.WarningCode, len(root.Module.Warnings))
+				if update != nil && *update {
+					err = os.WriteFile(path.Join(testPath, "expected.json"), append(prettyJSON.Bytes(), "\n"...), 0600)
+					assert.NoError(t, err)
+				} else {
+					err = os.WriteFile(path.Join(testPath, "actual.json"), append(prettyJSON.Bytes(), "\n"...), 0600)
+					assert.NoError(t, err)
+				}
+			}
+
+			codes := make([]int, len(root.Module.Warnings))
 			for i, w := range root.Module.Warnings {
 				codes[i] = w.Code
 			}
@@ -230,5 +282,33 @@ func TestHCLProvider_LoadPlanJSON(t *testing.T) {
 			assert.Len(t, codes, len(tt.warnings), "unexpected warning length")
 			assert.ElementsMatch(t, codes, tt.warnings)
 		})
+	}
+}
+
+func TestTransformSSHToHTTPS(t *testing.T) {
+	tests := []struct {
+		input    string
+		expected string
+	}{
+		{"git@github.com:user/repo.git", "https://github.com/user/repo.git"},
+		{"git@gitlab.com:group/project.git", "https://gitlab.com/group/project.git"},
+		{"git@bitbucket.org:team/repo.git", "https://bitbucket.org/team/repo.git"},
+		{"git@myserver.com:2222:user/repo.git", "https://myserver.com/user/repo.git"},                                    // with port
+		{"git@ssh.dev.azure.com:v3/organization/project/repo", "https://ssh.dev.azure.com/v3/organization/project/repo"}, // Azure Repos
+		{"invalid-url", "invalid-url"},                                     // invalid SSH URL
+		{"user@github.com:user/repo.git", "user@github.com:user/repo.git"}, // unexpected username
+	}
+
+	for _, test := range tests {
+		output, err := transformSSHToHTTPS(test.input)
+		if err != nil {
+			if test.expected != "" {
+				t.Errorf("transformSSHToHTTPS(%q) returned an error: %v", test.input, err)
+			}
+		} else {
+			if !reflect.DeepEqual(output, test.expected) {
+				t.Errorf("transformSSHToHTTPS(%q) = %q, want %q", test.input, output, test.expected)
+			}
+		}
 	}
 }

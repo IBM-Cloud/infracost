@@ -3,9 +3,8 @@ package terraform
 // Contents of this file were copied from github.com/gruntwork-io/terragrunt
 import (
 	"context"
-	"encoding/json"
 	"fmt"
-	"io/ioutil"
+	"io"
 	"net/http"
 	"net/url"
 	"os"
@@ -17,7 +16,7 @@ import (
 	"github.com/hashicorp/go-getter"
 	safetemp "github.com/hashicorp/go-safetemp"
 
-	"github.com/gruntwork-io/terragrunt/errors"
+	"github.com/gruntwork-io/go-commons/errors"
 	"github.com/gruntwork-io/terragrunt/util"
 )
 
@@ -284,7 +283,7 @@ func httpGETAndGetResponse(ctx context.Context, getURL url.URL) ([]byte, *http.H
 		return nil, nil, errors.WithStackTrace(RegistryAPIErr{url: getURL.String(), statusCode: resp.StatusCode})
 	}
 
-	bodyData, err := ioutil.ReadAll(resp.Body)
+	bodyData, err := io.ReadAll(resp.Body)
 	return bodyData, &resp.Header, errors.WithStackTrace(err)
 }
 
