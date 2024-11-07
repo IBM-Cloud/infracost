@@ -2,7 +2,7 @@
  Name                                                Monthly Qty  Unit                      Monthly Cost 
                                                                                                          
  ibm_cos_bucket.accelerated-archive-us-south                                                             
- ├─ Accelerated Archive Capacity              Monthly cost depends on usage: $0.00418 per GB             
+ ├─ Accelerated Archive Capacity              Monthly cost depends on usage: $0.005225 per GB            
  ├─ Accelerated Archive Restore               Monthly cost depends on usage: $0.0418 per GB              
  ├─ Storage Capacity (first 499999 GB)        Monthly cost depends on usage: $0.02299 per GB             
  ├─ Storage Capacity (over 499999 GB)         Monthly cost depends on usage: $0.0209 per GB              
@@ -13,7 +13,7 @@
  └─ Public Standard Egress (over 150000 GB)   Monthly cost depends on usage: $0.05 per GB                
                                                                                                          
  ibm_cos_bucket.archive-us-south                                                                         
- ├─ Archive Capacity                                       1,000  GB                               $1.03 
+ ├─ Archive Capacity                                       1,000  GB                               $1.30 
  ├─ Archive Restore                                        1,000  GB                              $20.90 
  ├─ Storage Capacity (first 499999 GB)        Monthly cost depends on usage: $0.02299 per GB             
  ├─ Storage Capacity (over 499999 GB)         Monthly cost depends on usage: $0.0209 per GB              
@@ -93,7 +93,7 @@
  └─ Public Standard Egress (next 100000 GB)                    0  GB                               $0.00 
  └─ Public Standard Egress (over 150000 GB)                    0  GB                               $0.00 
                                                                                                          
- OVERALL TOTAL                                                                                   $495.12 
+ OVERALL TOTAL                                                                                   $495.39 
 ──────────────────────────────────
 14 cloud resources were detected:
 ∙ 13 were estimated, all of which include usage-based costs, see https://infracost.io/usage-file
