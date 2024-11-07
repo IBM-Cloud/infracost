@@ -2,6 +2,7 @@ package ibm
 
 import (
 	"fmt"
+	"regexp"
 
 	"github.com/infracost/infracost/internal/resources"
 	"github.com/infracost/infracost/internal/schema"
@@ -37,10 +38,21 @@ func (r *IsInstance) PopulateUsage(u *schema.UsageData) {
 
 func (r *IsInstance) instanceHoursCostComponent() *schema.CostComponent {
 
+	service := "is.reservation"
+	planNamePrefix := "instance-"
 	unit := "RESERVATION_HOURS_HOURLY"
-	planName := fmt.Sprintf("instance-%s", r.Profile)
+
+	isConfidentialProfile, _ := regexp.MatchString("^.*c-.*$", r.Profile)
+	if isConfidentialProfile {
+		service = "is.instance"
+		planNamePrefix = ""
+		unit = "INSTANCE_HOURS_MULTI_TENANT"
+	}
+
+	planName := fmt.Sprintf("%s%s", planNamePrefix, r.Profile)
 	unitMultiplier := int64(1)
 	var q *decimal.Decimal
+
 	if r.MonthlyInstanceHours != nil {
 		q = decimalPtr(decimal.NewFromFloat(*r.MonthlyInstanceHours))
 	}
@@ -57,7 +69,7 @@ func (r *IsInstance) instanceHoursCostComponent() *schema.CostComponent {
 		ProductFilter: &schema.ProductFilter{
 			VendorName:    strPtr("ibm"),
 			Region:        strPtr(r.Region),
-			Service:       strPtr("is.reservation"),
+			Service:       strPtr(service),
 			ProductFamily: strPtr("service"),
 			AttributeFilters: []*schema.AttributeFilter{
 				{Key: "planName", Value: &planName},
