@@ -106,7 +106,7 @@
  └─ Lite plan                                                                                1                                         $0.00 
                                                                                                                                              
  ibm_resource_instance.resource_instance_power_iaas                                                                                          
- └─ test                                                                                     1  Instance                               $0.00 
+ └─ Workspace for Power Virtual Server                                                       1  Workspace                              $0.00 
                                                                                                                                              
  ibm_resource_instance.resource_instance_secrets_manager                                                                                     
  ├─ Instance                                                                                 1  Instance                             $321.00 

@@ -315,9 +315,17 @@ func GetSecretsManagerCostComponents(r *ResourceInstance) []*schema.CostComponen
 		}
 	} else {
 		costComponent := schema.CostComponent{
-			Name:            fmt.Sprintf("Plan: %s", r.Plan),
+			Name:            fmt.Sprintf("Plan %s not found", r.Plan),
 			UnitMultiplier:  decimal.NewFromInt(1),
 			MonthlyQuantity: decimalPtr(decimal.NewFromInt(1)),
+			ProductFilter: &schema.ProductFilter{
+				VendorName: strPtr("ibm"),
+				Region:     strPtr(r.Location),
+				Service:    &r.Service,
+				AttributeFilters: []*schema.AttributeFilter{
+					{Key: "planName", Value: &r.Plan},
+				},
+			},
 		}
 		costComponent.SetCustomPrice(decimalPtr(decimal.NewFromInt(0)))
 		return []*schema.CostComponent{
@@ -327,13 +335,20 @@ func GetSecretsManagerCostComponents(r *ResourceInstance) []*schema.CostComponen
 }
 
 func GetPowerCostComponents(r *ResourceInstance) []*schema.CostComponent {
-	q := decimalPtr(decimal.NewFromInt(1))
 
 	costComponent := schema.CostComponent{
-		Name:            r.Name,
-		Unit:            "Instance",
+		Name:            "Workspace for Power Virtual Server",
+		Unit:            "Workspace",
 		UnitMultiplier:  decimal.NewFromInt(1),
-		MonthlyQuantity: q,
+		MonthlyQuantity: decimalPtr(decimal.NewFromInt(1)),
+		ProductFilter: &schema.ProductFilter{
+			VendorName: strPtr("ibm"),
+			Region:     strPtr(r.Location),
+			Service:    &r.Service,
+			AttributeFilters: []*schema.AttributeFilter{
+				{Key: "planName", Value: &r.Plan},
+			},
+		},
 	}
 	costComponent.SetCustomPrice(decimalPtr(decimal.NewFromInt(0)))
 	return []*schema.CostComponent{
@@ -425,9 +440,17 @@ func GetAppIDCostComponents(r *ResourceInstance) []*schema.CostComponent {
 		}
 	} else {
 		costComponent := schema.CostComponent{
-			Name:            fmt.Sprintf("Plan: %s", r.Plan),
+			Name:            fmt.Sprintf("Plan %s not found", r.Plan),
 			UnitMultiplier:  decimal.NewFromInt(1),
 			MonthlyQuantity: decimalPtr(decimal.NewFromInt(1)),
+			ProductFilter: &schema.ProductFilter{
+				VendorName: strPtr("ibm"),
+				Region:     strPtr(r.Location),
+				Service:    &r.Service,
+				AttributeFilters: []*schema.AttributeFilter{
+					{Key: "planName", Value: &r.Plan},
+				},
+			},
 		}
 		costComponent.SetCustomPrice(decimalPtr(decimal.NewFromInt(0)))
 		return []*schema.CostComponent{
@@ -525,6 +548,14 @@ func GetAppConnectCostComponents(r *ResourceInstance) []*schema.CostComponent {
 			Name:            "Lite plan",
 			UnitMultiplier:  decimal.NewFromInt(1),
 			MonthlyQuantity: decimalPtr(decimal.NewFromInt(1)),
+			ProductFilter: &schema.ProductFilter{
+				VendorName: strPtr("ibm"),
+				Region:     strPtr(r.Location),
+				Service:    &r.Service,
+				AttributeFilters: []*schema.AttributeFilter{
+					{Key: "planName", Value: &r.Plan},
+				},
+			},
 		}
 		costComponent.SetCustomPrice(decimalPtr(decimal.NewFromInt(0)))
 		return []*schema.CostComponent{
@@ -532,9 +563,17 @@ func GetAppConnectCostComponents(r *ResourceInstance) []*schema.CostComponent {
 		}
 	} else {
 		costComponent := schema.CostComponent{
-			Name:            fmt.Sprintf("Plan %s with customized pricing", r.Plan),
+			Name:            fmt.Sprintf("Plan %s not found", r.Plan),
 			UnitMultiplier:  decimal.NewFromInt(1),
 			MonthlyQuantity: decimalPtr(decimal.NewFromInt(1)),
+			ProductFilter: &schema.ProductFilter{
+				VendorName: strPtr("ibm"),
+				Region:     strPtr(r.Location),
+				Service:    &r.Service,
+				AttributeFilters: []*schema.AttributeFilter{
+					{Key: "planName", Value: &r.Plan},
+				},
+			},
 		}
 		costComponent.SetCustomPrice(decimalPtr(decimal.NewFromInt(0)))
 		return []*schema.CostComponent{
@@ -553,6 +592,14 @@ func GetLogDNACostComponents(r *ResourceInstance) []*schema.CostComponent {
 			Name:            "Lite plan",
 			UnitMultiplier:  decimal.NewFromInt(1),
 			MonthlyQuantity: decimalPtr(decimal.NewFromInt(1)),
+			ProductFilter: &schema.ProductFilter{
+				VendorName: strPtr("ibm"),
+				Region:     strPtr(r.Location),
+				Service:    &r.Service,
+				AttributeFilters: []*schema.AttributeFilter{
+					{Key: "planName", Value: &r.Plan},
+				},
+			},
 		}
 		costComponent.SetCustomPrice(decimalPtr(decimal.NewFromInt(0)))
 		return []*schema.CostComponent{
@@ -589,6 +636,14 @@ func GetActivityTrackerCostComponents(r *ResourceInstance) []*schema.CostCompone
 			Name:            "Lite plan",
 			UnitMultiplier:  decimal.NewFromInt(1),
 			MonthlyQuantity: decimalPtr(decimal.NewFromInt(1)),
+			ProductFilter: &schema.ProductFilter{
+				VendorName: strPtr("ibm"),
+				Region:     strPtr(r.Location),
+				Service:    &r.Service,
+				AttributeFilters: []*schema.AttributeFilter{
+					{Key: "planName", Value: &r.Plan},
+				},
+			},
 		}
 		costComponent.SetCustomPrice(decimalPtr(decimal.NewFromInt(0)))
 		return []*schema.CostComponent{costComponent}
@@ -623,6 +678,14 @@ func GetContinuousDeliveryCostComponenets(r *ResourceInstance) []*schema.CostCom
 			Name:            "Lite plan",
 			UnitMultiplier:  decimal.NewFromInt(1),
 			MonthlyQuantity: decimalPtr(decimal.NewFromInt(1)),
+			ProductFilter: &schema.ProductFilter{
+				VendorName: strPtr("ibm"),
+				Region:     strPtr(r.Location),
+				Service:    &r.Service,
+				AttributeFilters: []*schema.AttributeFilter{
+					{Key: "planName", Value: &r.Plan},
+				},
+			},
 		}
 		costComponent.SetCustomPrice(decimalPtr(decimal.NewFromInt(0)))
 		return []*schema.CostComponent{costComponent}
