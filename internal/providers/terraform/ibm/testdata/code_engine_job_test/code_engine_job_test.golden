@@ -1,0 +1,18 @@
+
+ Name                              Monthly Qty  Unit        Monthly Cost 
+                                                                         
+ ibm_code_engine_job.ce_job                                              
+ ├─ Virtual Processor Cores Hours            1  vCPU Hours         $0.12 
+ └─ RAM Hours                                4  GB Hours           $0.05 
+                                                                         
+ ibm_code_engine_job.ce_job2                                             
+ ├─ Virtual Processor Cores Hours            1  vCPU Hours         $0.12 
+ └─ RAM Hours                                4  GB Hours           $0.05 
+                                                                         
+ OVERALL TOTAL                                                     $0.35 
+──────────────────────────────────
+4 cloud resources were detected:
+∙ 2 were estimated
+∙ 2 were free:
+  ∙ 1 x ibm_code_engine_project
+  ∙ 1 x ibm_resource_group

@@ -1275,6 +1275,21 @@ resource_usage:
     monthly_data_retrieval: 1000 # Amount of data retrieved in GB
     public_standard_egress: 1000 # Amount of data downloaded in GB
 
+  ibm_code_engine_app.ce_app:
+    http_request_calls: 1000
+    instance_hours: 1
+
+  ibm_code_engine_build.ce_build:
+    instance_hours: 1
+
+  ibm_code_engine_function.ce_function:
+    http_request_calls: 100
+    instance_hours: 1
+
+  ibm_code_engine_job.ce_job:
+    scaled_instances: 1
+    instance_hours: 1
+
   ibm_container_vpc_cluster.cluster:
     monthly_instance_hours: 730 # Monthly number of hours an instance runs
 

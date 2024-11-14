@@ -1,0 +1,30 @@
+
+ Name                                        Monthly Qty  Unit        Monthly Cost 
+                                                                                   
+ ibm_code_engine_build.ce_build                                                    
+ ├─ Virtual Processor Cores (small build)            0.5  vCPU Hours         $0.06 
+ └─ RAM (small build)                                  2  GB Hours           $0.03 
+                                                                                   
+ ibm_code_engine_build.ce_build2                                                   
+ ├─ Virtual Processor Cores (medium build)             1  vCPU Hours         $0.12 
+ └─ RAM (medium build)                                 4  GB Hours           $0.05 
+                                                                                   
+ ibm_code_engine_build.ce_build3                                                   
+ ├─ Virtual Processor Cores (large build)              2  vCPU Hours         $0.25 
+ └─ RAM (large build)                                  8  GB Hours           $0.10 
+                                                                                   
+ ibm_code_engine_build.ce_build4                                                   
+ ├─ Virtual Processor Cores (xlarge build)             4  vCPU Hours         $0.49 
+ └─ RAM (xlarge build)                                16  GB Hours           $0.20 
+                                                                                   
+ ibm_code_engine_build.ce_build5                                                   
+ ├─ Virtual Processor Cores (xxlarge build)           12  vCPU Hours         $1.48 
+ └─ RAM (xxlarge build)                               48  GB Hours           $0.61 
+                                                                                   
+ OVERALL TOTAL                                                               $3.41 
+──────────────────────────────────
+7 cloud resources were detected:
+∙ 5 were estimated
+∙ 2 were free:
+  ∙ 1 x ibm_code_engine_project
+  ∙ 1 x ibm_resource_group

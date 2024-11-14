@@ -1,0 +1,12 @@
+version: 0.1
+resource_usage:
+  ibm_code_engine_build.ce_build:
+    instance_hours: 1
+  ibm_code_engine_build.ce_build2:
+    instance_hours: 1
+  ibm_code_engine_build.ce_build3:
+    instance_hours: 1
+  ibm_code_engine_build.ce_build4:
+    instance_hours: 1
+  ibm_code_engine_build.ce_build5:
+    instance_hours: 1
