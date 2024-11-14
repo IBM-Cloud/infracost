@@ -134,7 +134,7 @@ require (
 	github.com/Azure/go-autorest/tracing v0.6.0 // indirect
 	github.com/Microsoft/go-winio v0.6.2 // indirect
 	github.com/ProtonMail/go-crypto v0.0.0-20230828082145-3c4c8a2d2371 // indirect
-	github.com/agnivade/levenshtein v1.1.1 // indirect
+	github.com/agnivade/levenshtein v1.2.0 // indirect
 	github.com/asaskevich/govalidator v0.0.0-20230301143203-a9d515a09cc2 // indirect
 	github.com/aws/aws-sdk-go-v2/internal/v4a v1.0.17 // indirect
 	github.com/aws/aws-sdk-go-v2/service/internal/checksum v1.1.21 // indirect
@@ -195,7 +195,7 @@ require (
 	github.com/oklog/ulid v1.3.1 // indirect
 	github.com/opencontainers/runc v1.1.14 // indirect
 	github.com/pjbgf/sha1cd v0.3.0 // indirect
-	github.com/prometheus/client_golang v1.20.2 // indirect
+	github.com/prometheus/client_golang v1.20.5 // indirect
 	github.com/prometheus/client_model v0.6.1 // indirect
 	github.com/prometheus/common v0.55.0 // indirect
 	github.com/prometheus/procfs v0.15.1 // indirect
@@ -250,7 +250,7 @@ require (
 	github.com/iancoleman/orderedmap v0.2.0 // indirect
 	github.com/klauspost/compress v1.17.11 // indirect
 	github.com/mitchellh/go-testing-interface v1.14.1 // indirect
-	github.com/open-policy-agent/opa v0.68.0
+	github.com/open-policy-agent/opa v0.70.0
 	github.com/otiai10/copy v1.7.0
 	github.com/rcrowley/go-metrics v0.0.0-20200313005456-10cdbea86bc0 // indirect
 	github.com/ulikunitz/xz v0.5.10 // indirect
