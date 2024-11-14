@@ -54,26 +54,26 @@ func (r *ContainerVpcCluster) PopulateUsage(u *schema.UsageData) {
 func (r *ContainerVpcCluster) BuildResource() *schema.Resource {
 	isOpenshift := strings.HasSuffix(strings.ToLower(r.KubeVersion), "openshift")
 	operatingSystem := "UBUNTU"
+	useOcpPrices := false
 	if isOpenshift {
 		operatingSystem = "RHEL"
+		// if an entitlement is specified, then ocp licensing is already covered. use pricing that
+		// does not include ocp charges.
+		if !r.Entitlement {
+			useOcpPrices = true
+		}
 	}
+	// filter on the catalogRegion in the product attribute instead of the region column because
+	// some regions (like eu-de) are recorded under eu-central instead, which isn't used in provisioning
 	var attributeFilters = []*schema.AttributeFilter{
 		{Key: "provider", Value: strPtr("vpc-gen2")},
 		{Key: "flavor", Value: strPtr(r.Flavor)},
 		{Key: "serverType", Value: strPtr("virtual")},
 		{Key: "isolation", Value: strPtr("public")},
-		{Key: "catalogRegion", Value: strPtr(r.Region)},
 		{Key: "operatingSystem", ValueRegex: strPtr(fmt.Sprintf("/%s/i", operatingSystem))},
+		{Key: "catalogRegion", Value: strPtr(r.Region)},
 	}
-	// if an entitlement is specified, then ocp licensing is already covered. use pricing that
-	// does not include ocp charges.
-	if r.Entitlement {
-		attributeFilters = append(attributeFilters, &schema.AttributeFilter{
-			Key: "ocpIncluded", Value: strPtr(""),
-		})
-	} else {
-		// if there's no entitlement, then ocp licenses will be added to the hourly pricing.
-		// set filter for prices that include ocp costs.
+	if useOcpPrices {
 		attributeFilters = append(attributeFilters, &schema.AttributeFilter{
 			Key: "ocpIncluded", Value: strPtr("true"),
 		})
