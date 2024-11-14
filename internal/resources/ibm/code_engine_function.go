@@ -2,7 +2,6 @@ package ibm
 
 import (
 	"math"
-	"fmt"
 	"strconv"
 
 	"github.com/infracost/infracost/internal/resources"
@@ -10,7 +9,7 @@ import (
 	"github.com/shopspring/decimal"
 )
 
-const MILLION_HTTP_REQUESTS float64 = 1000000
+const CODE_ENGINE_FUNCTION_MILLION_HTTP_REQUESTS float64 = 1000000
 
 // CodeEngineFunction struct represents <TODO: cloud service short description>.
 //
@@ -53,9 +52,9 @@ func (r *CodeEngineFunction) CodeEngineFunctionVirtualProcessorCoreCostComponent
 	}
 	
 	return &schema.CostComponent{
-		Name:			fmt.Sprintf("Virtual Processor Cores"),
+		Name:			"Virtual Processor Cores",
 		Unit:			"vCPU Hours",
-		UnitMultiplier:	decimal.NewFromInt(100),
+		UnitMultiplier:	decimal.NewFromInt(1),
 		MonthlyQuantity: hours,
 		ProductFilter: &schema.ProductFilter{
 			VendorName: strPtr("ibm"),
@@ -79,7 +78,7 @@ func (r *CodeEngineFunction) CodeEngineFunctionRAMCostComponent() *schema.CostCo
 		trimmedMemory := r.Memory[:len(r.Memory)-1]
 		memGB, _ = strconv.ParseFloat(trimmedMemory, 64)
 		if string(r.Memory[len(r.Memory)-1]) == "M" {
-			memGB = memGB / float64(1024)
+			memGB = math.Ceil(memGB / float64(1024))
 		}
 	} else {
 		memGB = float64(4) // Default 4GB
@@ -91,9 +90,9 @@ func (r *CodeEngineFunction) CodeEngineFunctionRAMCostComponent() *schema.CostCo
 	}
 	
 	return &schema.CostComponent{
-		Name:			fmt.Sprintf("RAM"),
+		Name:			"RAM",
 		Unit:			"GB Hours",
-		UnitMultiplier:	decimal.NewFromInt(100),
+		UnitMultiplier:	decimal.NewFromInt(1),
 		MonthlyQuantity: hours,
 		ProductFilter: &schema.ProductFilter{
 			VendorName: strPtr("ibm"),
@@ -114,14 +113,14 @@ func (r *CodeEngineFunction) CodeEngineFunctionRAMCostComponent() *schema.CostCo
 func (r *CodeEngineFunction) CodeEngineFunctionHTTPRequestsCostComponent() *schema.CostComponent {
 	var q *decimal.Decimal
 	if r.HttpRequestCalls != nil {
-		mil_req := math.Ceil(*r.HttpRequestCalls / MILLION_HTTP_REQUESTS)
+		mil_req := *r.HttpRequestCalls / CODE_ENGINE_FUNCTION_MILLION_HTTP_REQUESTS
 		q = decimalPtr(decimal.NewFromFloat(mil_req))
 	}
 
 	return &schema.CostComponent{
 		Name:			"Million HTTP calls",
 		Unit:			"Million HTTP calls",
-		UnitMultiplier:	decimal.NewFromInt(5),
+		UnitMultiplier:	decimal.NewFromInt(1),
 		MonthlyQuantity: q,
 		ProductFilter: &schema.ProductFilter{
 			VendorName: strPtr("ibm"),

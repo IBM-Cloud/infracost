@@ -1,15 +1,17 @@
 
- Name                                   Monthly Qty  Unit  Monthly Cost 
-                                                                        
- ibm_code_engine_function.ce_function                                   
- ├─ Virtual Processor Cores                    0.01  vCPU         $0.12 
- └─ RAM                                        0.04  GB           $0.05 
-                                                                        
- ibm_code_engine_function.ce_function1                                  
- ├─ Virtual Processor Cores                   0.005  vCPU         $0.06 
- └─ RAM                                        0.02  GB           $0.03 
-                                                                        
- OVERALL TOTAL                                                    $0.26 
+ Name                                   Monthly Qty  Unit                Monthly Cost 
+                                                                                      
+ ibm_code_engine_function.ce_function                                                 
+ ├─ Virtual Processor Cores                       1  vCPU Hours                 $0.12 
+ ├─ RAM                                           4  GB Hours                   $0.05 
+ └─ Million HTTP calls                       0.0001  Million HTTP calls         $0.00 
+                                                                                      
+ ibm_code_engine_function.ce_function2                                                
+ ├─ Virtual Processor Cores                     0.5  vCPU Hours                 $0.06 
+ ├─ RAM                                           2  GB Hours                   $0.03 
+ └─ Million HTTP calls                       0.0006  Million HTTP calls         $0.00 
+                                                                                      
+ OVERALL TOTAL                                                                  $0.26 
 ──────────────────────────────────
 4 cloud resources were detected:
 ∙ 2 were estimated

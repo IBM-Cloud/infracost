@@ -49,5 +49,5 @@ resource "ibm_code_engine_app" "ce_app4" {
   image_reference               = "icr.io/codeengine/helloworld"
   scale_initial_instances       = 3
   scale_memory_limit            = "2000M"
-  scale_cpu_limit               = "1"
+  scale_cpu_limit               = "0.5"
 }

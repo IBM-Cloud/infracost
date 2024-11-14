@@ -10,7 +10,7 @@ import (
 	"github.com/shopspring/decimal"
 )
 
-const MILLION_HTTP_REQUESTS float64 = 1000000
+const CODE_ENGINE_APP_MILLION_HTTP_REQUESTS float64 = 1000000
 
 // CodeEngineApp struct represents <TODO: cloud service short description>.
 //
@@ -60,7 +60,7 @@ func (r *CodeEngineApp) CodeEngineAppVirtualProcessorCoreCostComponent() *schema
 	return &schema.CostComponent{
 		Name:			fmt.Sprintf("Virtual Processor Cores (%s initial instances)", strconv.FormatInt(instances, 10)),
 		Unit:			"vCPU Hours",
-		UnitMultiplier:	decimal.NewFromInt(100),
+		UnitMultiplier:	decimal.NewFromInt(1),
 		MonthlyQuantity: hours,
 		ProductFilter: &schema.ProductFilter{
 			VendorName: strPtr("ibm"),
@@ -84,7 +84,7 @@ func (r *CodeEngineApp) CodeEngineAppRAMCostComponent() *schema.CostComponent {
 		trimmedMemory := r.Memory[:len(r.Memory)-1]
 		memGB, _ = strconv.ParseFloat(trimmedMemory, 64)
 		if string(r.Memory[len(r.Memory)-1]) == "M" {
-			memGB = memGB / float64(1024)
+			memGB = math.Ceil(memGB / float64(1024))
 		}
 	} else {
 		memGB = float64(4) // Default 4GB
@@ -103,7 +103,7 @@ func (r *CodeEngineApp) CodeEngineAppRAMCostComponent() *schema.CostComponent {
 	return &schema.CostComponent{
 		Name:			fmt.Sprintf("RAM (%s initial instances)", strconv.FormatInt(instances, 10)),
 		Unit:			"GB Hours",
-		UnitMultiplier:	decimal.NewFromInt(100),
+		UnitMultiplier:	decimal.NewFromInt(1),
 		MonthlyQuantity: hours,
 		ProductFilter: &schema.ProductFilter{
 			VendorName: strPtr("ibm"),
@@ -124,14 +124,14 @@ func (r *CodeEngineApp) CodeEngineAppRAMCostComponent() *schema.CostComponent {
 func (r *CodeEngineApp) CodeEngineAppHTTPRequestsCostComponent() *schema.CostComponent {
 	var q *decimal.Decimal
 	if r.HttpRequestCalls != nil {
-		mil_req := math.Ceil(*r.HttpRequestCalls / MILLION_HTTP_REQUESTS)
+		mil_req := *r.HttpRequestCalls / CODE_ENGINE_APP_MILLION_HTTP_REQUESTS
 		q = decimalPtr(decimal.NewFromFloat(mil_req))
 	}
 
 	return &schema.CostComponent{
 		Name:			"Million HTTP calls",
 		Unit:			"Million HTTP calls",
-		UnitMultiplier:	decimal.NewFromInt(5),
+		UnitMultiplier:	decimal.NewFromInt(1),
 		MonthlyQuantity: q,
 		ProductFilter: &schema.ProductFilter{
 			VendorName: strPtr("ibm"),

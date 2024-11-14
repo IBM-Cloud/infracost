@@ -7,8 +7,8 @@ resource_usage:
     http_request_calls: 1000
     instance_hours: 1
   ibm_code_engine_app.ce_app3:
-    http_request_calls: 1000
+    http_request_calls: 100000000
     instance_hours: 1
   ibm_code_engine_app.ce_app4:
-    http_request_calls: 1000
+    http_request_calls: 20000000
     instance_hours: 2

@@ -58,7 +58,7 @@ func (r *CodeEngineJob) CodeEngineJobVirtualProcessorCoreCostComponent() *schema
 	return &schema.CostComponent{
 		Name:			fmt.Sprintf("Virtual Processor Cores Hours"),
 		Unit:			"vCPU Hours",
-		UnitMultiplier:	decimal.NewFromInt(100),
+		UnitMultiplier:	decimal.NewFromInt(1),
 		MonthlyQuantity: ih,
 		ProductFilter: &schema.ProductFilter{
 			VendorName: strPtr("ibm"),
@@ -101,7 +101,7 @@ func (r *CodeEngineJob) CodeEngineJobRAMCostComponent() *schema.CostComponent {
 	return &schema.CostComponent{
 		Name:			fmt.Sprintf("RAM Hours"),
 		Unit:			"GB Hours",
-		UnitMultiplier:	decimal.NewFromInt(100),
+		UnitMultiplier:	decimal.NewFromInt(1),
 		MonthlyQuantity: ih,
 		ProductFilter: &schema.ProductFilter{
 			VendorName: strPtr("ibm"),

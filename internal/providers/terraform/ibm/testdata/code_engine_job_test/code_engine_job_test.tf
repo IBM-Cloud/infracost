@@ -27,9 +27,9 @@ resource "ibm_code_engine_job" "ce_job" {
   scale_cpu_limit               = "1"
 }
 
-resource "ibm_code_engine_job" "ce_job1" {
+resource "ibm_code_engine_job" "ce_job2" {
   project_id                    = ibm_code_engine_project.ce_project.id
-  name                          = "ce-job1"
+  name                          = "ce-job2"
   image_reference                = "icr.io/codeengine/helloworld"
   scale_memory_limit            = "4G"
   scale_cpu_limit               = "1"

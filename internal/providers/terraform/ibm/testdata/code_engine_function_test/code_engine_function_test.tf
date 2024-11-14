@@ -1,3 +1,15 @@
+terraform {
+  required_providers {
+    ibm = {
+      source = "IBM-Cloud/ibm"
+    }
+  }
+}
+
+provider "ibm" {
+  region = "us-south"
+}
+
 resource "ibm_resource_group" "test_group" {
   name = "test-resource-group"
 }
@@ -9,7 +21,7 @@ resource "ibm_code_engine_project" "ce_project" {
 
 resource "ibm_code_engine_function" "ce_function" {
   project_id                    = ibm_code_engine_project.ce_project.id
-  name                          = "ce_function"
+  name                          = "ce-function"
   code_reference                = "icr.io/codeengine/helloworld"
   scale_memory_limit            = "4G"
   scale_cpu_limit               = "1"
@@ -18,7 +30,7 @@ resource "ibm_code_engine_function" "ce_function" {
 
 resource "ibm_code_engine_function" "ce_function2" {
   project_id                    = ibm_code_engine_project.ce_project.id
-  name                          = "ce_function2"
+  name                          = "ce-function2"
   code_reference                = "icr.io/codeengine/helloworld"
   scale_memory_limit            = "2G"
   scale_cpu_limit               = "0.5"

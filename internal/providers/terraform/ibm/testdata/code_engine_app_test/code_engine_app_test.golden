@@ -1,30 +1,30 @@
 
- Name                                              Monthly Qty  Unit  Monthly Cost 
-                                                                                   
- ibm_code_engine_app.ce_app                                                        
- ├─ Virtual Processor Cores (2 initial instances)         0.02  vCPU         $0.25 
- └─ RAM (2 initial instances)                             0.08  GB           $0.10 
-                                                                                   
- ibm_code_engine_app.ce_app2                                                       
- ├─ Virtual Processor Cores (1 initial instances)         0.01  vCPU         $0.12 
- └─ RAM (1 initial instances)                             0.04  GB           $0.05 
-                                                                                   
- ibm_code_engine_app.ce_app3                                                       
- ├─ Virtual Processor Cores (1 initial instances)         0.01  vCPU         $0.12 
- └─ RAM (1 initial instances)                             0.02  GB           $0.03 
-                                                                                   
- ibm_code_engine_app.ce_app4                                                       
- ├─ Virtual Processor Cores (2 initial instances)         0.02  vCPU         $0.25 
- └─ RAM (2 initial instances)                             0.04  GB           $0.05 
-                                                                                   
- ibm_code_engine_app.ce_app5                                                       
- ├─ Virtual Processor Cores (1 initial instances)         0.01  vCPU         $0.12 
- └─ RAM (1 initial instances)                           0.0195  GB           $0.03 
-                                                                                   
- OVERALL TOTAL                                                               $1.12 
+ Name                                              Monthly Qty  Unit                Monthly Cost 
+                                                                                                 
+ ibm_code_engine_app.ce_app                                                                      
+ ├─ Virtual Processor Cores (1 initial instances)            1  vCPU Hours                 $0.12 
+ ├─ RAM (1 initial instances)                                2  GB Hours                   $0.03 
+ └─ Million HTTP calls                                   0.001  Million HTTP calls         $0.00 
+                                                                                                 
+ ibm_code_engine_app.ce_app2                                                                     
+ ├─ Virtual Processor Cores (1 initial instances)            1  vCPU Hours                 $0.12 
+ ├─ RAM (1 initial instances)                                4  GB Hours                   $0.05 
+ └─ Million HTTP calls                                   0.001  Million HTTP calls         $0.00 
+                                                                                                 
+ ibm_code_engine_app.ce_app3                                                                     
+ ├─ Virtual Processor Cores (2 initial instances)            2  vCPU Hours                 $0.25 
+ ├─ RAM (2 initial instances)                                4  GB Hours                   $0.05 
+ └─ Million HTTP calls                                     100  Million HTTP calls        $53.80 
+                                                                                                 
+ ibm_code_engine_app.ce_app4                                                                     
+ ├─ Virtual Processor Cores (3 initial instances)            3  vCPU Hours                 $0.37 
+ ├─ RAM (3 initial instances)                               12  GB Hours                   $0.15 
+ └─ Million HTTP calls                                      20  Million HTTP calls        $10.76 
+                                                                                                 
+ OVERALL TOTAL                                                                            $65.71 
 ──────────────────────────────────
-7 cloud resources were detected:
-∙ 5 were estimated
+6 cloud resources were detected:
+∙ 4 were estimated
 ∙ 2 were free:
   ∙ 1 x ibm_code_engine_project
   ∙ 1 x ibm_resource_group
