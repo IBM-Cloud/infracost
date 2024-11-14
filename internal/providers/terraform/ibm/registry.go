@@ -19,6 +19,7 @@ var ResourceRegistry []*schema.RegistryItem = []*schema.RegistryItem{
 	getIsLbRegistryItem(),
 	getIbmPiVolumeRegistryItem(),
 	getCodeEngineAppRegistryItem(),
+	getCodeEngineBuildRegistryItem(),
 	getCodeEngineFunctionRegistryItem(),
 	getCodeEngineJobRegistryItem(),
 	getDatabaseRegistryItem(),
