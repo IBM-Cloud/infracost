@@ -85,7 +85,7 @@ var FreeResources = []string{
 	"ibm_cd_toolchain_tool_sonarqube",
 	"ibm_cloud_shell_account_settings",
 	"ibm_cloudant_database",
-  "ibm_code_engine_binding",
+  	"ibm_code_engine_binding",
 	"ibm_code_engine_config_map",
 	"ibm_code_engine_domain_mapping",
 	"ibm_code_engine_project",
