@@ -328,3 +328,19 @@ resource "ibm_resource_instance" "messagehub_satellite" {
   location          = "satcon_dal"
   resource_group_id = "default"
 }
+
+resource "ibm_resource_instance" "event_notifications_lite" {
+  name              = "event-notifications-lite"
+  service           = "event-notifications"
+  plan              = "lite"
+  location          = "us-south"
+  resource_group_id = "default"
+}
+
+resource "ibm_resource_instance" "event_notifications_standard" {
+  name              = "event-notifications-standard"
+  service           = "event-notifications"
+  plan              = "standard"
+  location          = "us-south"
+  resource_group_id = "default"
+}
