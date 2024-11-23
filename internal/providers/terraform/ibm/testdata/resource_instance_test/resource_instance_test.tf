@@ -342,3 +342,11 @@ resource "ibm_resource_instance" "event_notifications" {
   resource_group_id = "default"
   service           = "event-notifications"
 }
+
+resource "ibm_resource_instance" "event_notifications_no_usage" {
+  name              = "event-notifications-standard-no-usage"
+  location          = "us-south"
+  plan              = "standard"
+  resource_group_id = "default"
+  service           = "event-notifications"
+}
