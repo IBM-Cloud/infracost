@@ -18,6 +18,37 @@
  └─ Additional Million DNS Queries (first 999 Million Queries)                             999  Million Queries                      $645.16 
  └─ Additional Million DNS Queries (over 999 Million Queries)                                1  Million Queries                        $0.32 
                                                                                                                                              
+ ibm_resource_instance.event_notifications["lite"]                                                                                           
+ └─ Lite Plan                                                                                1                                         $0.00 
+                                                                                                                                             
+ ibm_resource_instance.event_notifications["standard"]                                                                                       
+ ├─ Ingested Events                                                                          1  Million Events                         $1.08 
+ ├─ Outbound Custom Domain E-mail GB Transmitted                                             1  GB                                     $0.12 
+ ├─ Outbound Custom Domain E-mails                                                       1,000  E-mails                                $0.15 
+ ├─ Outbound E-mails                                                                   100,000  E-mails                                $4.31 
+ ├─ Outbound HTTP Messages                                                           1,000,000  Messages                               $1.08 
+ ├─ Outbound Push Messages (first 100 Messages)                                            100  Messages                               $0.00 
+ ├─ Outbound Push Messages (over 100 Messages)                                               1  Messages                               $0.00 
+ ├─ Outbound SMS Messages                                                                1,000  Messages                              $16.15 
+ ├─ Pre-Prod Push Destination Instances                                                      1  Instances                             $10.00 
+ ├─ Push Destination Instances                                                               1  Instances                             $35.00 
+ ├─ SMS Number Monthly Resource Units                                                        1  Resource Units                         $1.00 
+ └─ SMS Number Setup Resource Units                                                          1  Resource Units                         $1.00 
+                                                                                                                                             
+ ibm_resource_instance.event_notifications_no_usage                                                                                          
+ ├─ Ingested Events                                                      Monthly cost depends on usage: $1.08 per Million Events             
+ ├─ Outbound Custom Domain E-mail GB Transmitted                         Monthly cost depends on usage: $0.12 per GB                         
+ ├─ Outbound Custom Domain E-mails                                       Monthly cost depends on usage: $0.00015 per E-mails                 
+ ├─ Outbound E-mails                                                     Monthly cost depends on usage: $0.0000431 per E-mails               
+ ├─ Outbound HTTP Messages                                               Monthly cost depends on usage: $0.00000108 per Messages             
+ ├─ Outbound Push Messages (first 100 Messages)                          Monthly cost depends on usage: $0.000001 per Messages               
+ ├─ Outbound Push Messages (over 100 Messages)                           Monthly cost depends on usage: $0.0000005 per Messages              
+ ├─ Outbound SMS Messages                                                Monthly cost depends on usage: $0.01615 per Messages                
+ ├─ Pre-Prod Push Destination Instances                                  Monthly cost depends on usage: $10.00 per Instances                 
+ ├─ Push Destination Instances                                           Monthly cost depends on usage: $35.00 per Instances                 
+ ├─ SMS Number Monthly Resource Units                                    Monthly cost depends on usage: $1.00 per Resource Units             
+ └─ SMS Number Setup Resource Units                                      Monthly cost depends on usage: $1.00 per Resource Units             
+                                                                                                                                             
  ibm_resource_instance.messagehub_enterprise                                                                                                 
  ├─ Base Capacity Unit-Hour                                                                  1  Hours                                  $7.37 
  ├─ Additional Capacity Unit-Hour                                                            1  Hours                                  $7.37 
@@ -197,7 +228,7 @@
  ├─ Class 2 Resource Units                                                                  50  RU                                     $0.09 
  └─ Class 3 Resource Units                                                                  50  RU                                     $0.25 
                                                                                                                                              
- OVERALL TOTAL                                                                                                                    $19,305.11 
+ OVERALL TOTAL                                                                                                                    $19,375.00 
 ──────────────────────────────────
-41 cloud resources were detected:
-∙ 41 were estimated, all of which include usage-based costs, see https://infracost.io/usage-file
+44 cloud resources were detected:
+∙ 44 were estimated, all of which include usage-based costs, see https://infracost.io/usage-file
