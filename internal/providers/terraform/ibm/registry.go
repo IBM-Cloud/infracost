@@ -30,6 +30,7 @@ var ResourceRegistry []*schema.RegistryItem = []*schema.RegistryItem{
 	getEnSubscriptionChromeRegistryItem(),
 	getEnDestinationChromeRegistryItem(),
 	getEnDestinationFirefoxRegistryItem(),
+	getEnDestinationHuaweiRegistryItem(),
 }
 
 // FreeResources grouped alphabetically
