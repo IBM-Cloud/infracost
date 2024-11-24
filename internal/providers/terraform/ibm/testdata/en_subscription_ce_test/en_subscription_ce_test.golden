@@ -1,0 +1,22 @@
+
+ Name                                                            Monthly Qty  Unit                    Monthly Cost 
+                                                                                                                   
+ ibm_en_subscription_ce.subscription_ce_lite                                                                       
+ └─ Plan lite not found                                                    1                                 $0.00 
+                                                                                                                   
+ ibm_en_subscription_ce.subscription_ce_standard                                                                   
+ └─ Outbound Code Engine HTTP Messages (Standard plan)             1,000,000  Messages                       $1.08 
+                                                                                                                   
+ ibm_en_subscription_ce.subscription_ce_standard_no_usage                                                          
+ └─ Outbound Code Engine HTTP Messages (Standard plan)     Monthly cost depends on usage: $0.00000108 per Messages 
+                                                                                                                   
+ ibm_resource_instance.event_notifications["lite"]                                                                 
+ └─ Lite Plan                                                              1  Instance                       $0.00 
+                                                                                                                   
+ ibm_resource_instance.event_notifications["standard"]                                                             
+ └─ Ingested Events                                        Monthly cost depends on usage: $1.08 per Million Events 
+                                                                                                                   
+ OVERALL TOTAL                                                                                               $1.08 
+──────────────────────────────────
+5 cloud resources were detected:
+∙ 5 were estimated, 2 of which include usage-based costs, see https://infracost.io/usage-file
