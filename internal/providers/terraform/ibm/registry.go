@@ -39,6 +39,7 @@ var ResourceRegistry []*schema.RegistryItem = []*schema.RegistryItem{
 	getEnSubscriptionSafariRegistryItem(),
 	getEnSubscriptionSlackRegistryItem(),
 	getEnSubscriptionMsteamsRegistryItem(),
+	getEnSubscriptionPagerdutyRegistryItem(),
 }
 
 // FreeResources grouped alphabetically
