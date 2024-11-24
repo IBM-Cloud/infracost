@@ -45,6 +45,7 @@ var ResourceRegistry []*schema.RegistryItem = []*schema.RegistryItem{
 	getEnSubscriptionCeRegistryItem(),
 	getEnSubscriptionCosRegistryItem(),
 	getEnSubscriptionSmsRegistryItem(),
+	getEnSubscriptionEmailRegistryItem(),
 }
 
 // FreeResources grouped alphabetically
