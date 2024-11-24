@@ -25,6 +25,7 @@ var ResourceRegistry []*schema.RegistryItem = []*schema.RegistryItem{
 	getDatabaseRegistryItem(),
 	getIsShareRegistryItem(),
 	getIsVpnServerRegistryItem(),
+	getEnDestinationRegistryItem(),
 }
 
 // FreeResources grouped alphabetically
