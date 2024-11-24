@@ -2,13 +2,16 @@
  Name                                                                  Monthly Qty  Unit                      Monthly Cost 
                                                                                                                            
  ibm_en_subscription_sms.subscription_sms_lite                                                                             
- └─ Outbound IBM Cloud SMS Message Units (Lite plan) (Max. 20)                  20  Message Units                    $0.00 
+ ├─ Outbound IBM Cloud SMS Message Units (Lite plan) (Max. 20)                  20  Message Units                    $0.00 
+ └─ SMS Number Setup Resource Units (Lite plan)                                  1  Resource Units                   $0.00 
                                                                                                                            
  ibm_en_subscription_sms.subscription_sms_standard                                                                         
- └─ Outbound IBM Cloud SMS Message Units (Standard plan)                     1,000  Message Units                   $16.15 
+ ├─ Outbound IBM Cloud SMS Message Units (Standard plan)                     1,000  Message Units                   $16.15 
+ └─ SMS Number Setup Resource Units                                              1  Resource Units                   $1.00 
                                                                                                                            
  ibm_en_subscription_sms.subscription_sms_standard_no_usage                                                                
- └─ Outbound IBM Cloud SMS Message Units (Standard plan)        Monthly cost depends on usage: $0.01615 per Message Units  
+ ├─ Outbound IBM Cloud SMS Message Units (Standard plan)        Monthly cost depends on usage: $0.01615 per Message Units  
+ └─ SMS Number Setup Resource Units                                              1  Resource Units                   $1.00 
                                                                                                                            
  ibm_resource_instance.event_notifications["lite"]                                                                         
  └─ Lite Plan                                                                    1  Instance                         $0.00 
@@ -16,7 +19,7 @@
  ibm_resource_instance.event_notifications["standard"]                                                                     
  └─ Ingested Events                                             Monthly cost depends on usage: $1.08 per Million Events    
                                                                                                                            
- OVERALL TOTAL                                                                                                      $16.15 
+ OVERALL TOTAL                                                                                                      $18.15 
 ──────────────────────────────────
 5 cloud resources were detected:
 ∙ 5 were estimated, 2 of which include usage-based costs, see https://infracost.io/usage-file
