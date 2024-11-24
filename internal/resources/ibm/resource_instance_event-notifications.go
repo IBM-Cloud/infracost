@@ -14,6 +14,7 @@ func GetEventNotificationsCostComponents(r *ResourceInstance) []*schema.CostComp
 	if r.Plan == EVENT_NOTIFICATIONS_LITE_PLAN_PROGRAMMATIC_NAME {
 		costComponent := schema.CostComponent{
 			Name:            "Lite Plan",
+			Unit:            "Instance",
 			UnitMultiplier:  decimal.NewFromInt(1),
 			MonthlyQuantity: decimalPtr(decimal.NewFromInt(1)),
 			ProductFilter: &schema.ProductFilter{

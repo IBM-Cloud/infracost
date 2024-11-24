@@ -19,7 +19,7 @@
  └─ Additional Million DNS Queries (over 999 Million Queries)                                1  Million Queries                        $0.32 
                                                                                                                                              
  ibm_resource_instance.event_notifications["lite"]                                                                                           
- └─ Lite Plan                                                                                1                                         $0.00 
+ └─ Lite Plan                                                                                1  Instance                               $0.00 
                                                                                                                                              
  ibm_resource_instance.event_notifications["standard"]                                                                                       
  └─ Ingested Events                                                                          1  Million Events                         $1.08 
