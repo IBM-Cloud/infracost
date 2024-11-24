@@ -36,7 +36,7 @@ func (r *EnSubscription) PopulateUsage(u *schema.UsageData) {
 // See providers folder for more information.
 func (r *EnSubscription) BuildResource() *schema.Resource {
 	costComponents := []*schema.CostComponent{
-		EnSubscriptionOutboundPushMessagesCostComponent(r),
+		EnSubscriptionAndroidOutboundPushMessagesCostComponent(r),
 	}
 
 	return &schema.Resource{
@@ -46,7 +46,7 @@ func (r *EnSubscription) BuildResource() *schema.Resource {
 	}
 }
 
-func EnSubscriptionOutboundPushMessagesCostComponent(r *EnSubscription) *schema.CostComponent {
+func EnSubscriptionAndroidOutboundPushMessagesCostComponent(r *EnSubscription) *schema.CostComponent {
 	var costComponent schema.CostComponent
 	component_name := "Outbound Android Push Messages"
 	component_unit := "Messages"
