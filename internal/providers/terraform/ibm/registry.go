@@ -37,6 +37,7 @@ var ResourceRegistry []*schema.RegistryItem = []*schema.RegistryItem{
 	getEnSubscriptionIphoneosRegistryItem(), // iOS
 	getEnSubscriptionRegistryItem(),         // Android
 	getEnSubscriptionSafariRegistryItem(),
+	getEnSubscriptionSlackRegistryItem(),
 }
 
 // FreeResources grouped alphabetically
