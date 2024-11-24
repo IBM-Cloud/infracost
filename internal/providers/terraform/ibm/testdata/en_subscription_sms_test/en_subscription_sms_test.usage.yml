@@ -1,0 +1,6 @@
+version: 0.1
+resource_usage:
+  ibm_en_subscription_sms.subscription_sms_lite:
+    event-notifications_notifications_OUTBOUND_DIGITAL_MESSAGES_SMS_UNITS: 1000
+  ibm_en_subscription_sms.subscription_sms_standard:
+    event-notifications_notifications_OUTBOUND_DIGITAL_MESSAGES_SMS_UNITS: 1000
