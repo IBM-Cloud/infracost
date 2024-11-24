@@ -32,16 +32,14 @@ func GetEventNotificationsCostComponents(r *ResourceInstance) []*schema.CostComp
 	} else if r.Plan == EVENT_NOTIFICATIONS_STANDARD_PLAN_PROGRAMMATIC_NAME {
 		return []*schema.CostComponent{
 			EventNotificationsInboundIngestedEventsCostComponent(r),
-			EventNotificationsOutboundCustomDomainEmailGBsTransmittedCostComponent(r),
-			EventNotificationsOutboundCustomDomainEmailsCostComponent(r),
-			EventNotificationsOutboundEmailsCostComponent(r),
-			EventNotificationsOutboundHTTPMessagesCostComponent(r),
-			EventNotificationsOutboundPushMessagesCostComponent(r),
-			EventNotificationsOutboundSMSMessagesCostComponent(r),
-			EventNotificationsPreProdPushDestinationInstancesCostComponent(r),
-			EventNotificationsPushDestinationInstancesCostComponent(r),
-			EventNotificationsResourceUnitsMonthlyCostComponent(r),
-			EventNotificationsResourceUnitsSetupCostComponent(r),
+			// EventNotificationsOutboundCustomDomainEmailGBsTransmittedCostComponent(r),
+			// EventNotificationsOutboundCustomDomainEmailsCostComponent(r),
+			// EventNotificationsOutboundEmailsCostComponent(r),
+			// EventNotificationsOutboundHTTPMessagesCostComponent(r),
+			// EventNotificationsOutboundPushMessagesCostComponent(r),
+			// EventNotificationsOutboundSMSMessagesCostComponent(r),
+			// EventNotificationsResourceUnitsMonthlyCostComponent(r),
+			// EventNotificationsResourceUnitsSetupCostComponent(r),
 		}
 	} else {
 		costComponent := schema.CostComponent{
@@ -91,280 +89,226 @@ func EventNotificationsInboundIngestedEventsCostComponent(r *ResourceInstance) *
 	return &costComponent
 }
 
-func EventNotificationsOutboundCustomDomainEmailGBsTransmittedCostComponent(r *ResourceInstance) *schema.CostComponent {
+// func EventNotificationsOutboundCustomDomainEmailGBsTransmittedCostComponent(r *ResourceInstance) *schema.CostComponent {
 
-	var quantity *decimal.Decimal
-	if r.EventNotifications_OutboundCustomDomainEmailGBsTransmitted != nil {
-		quantity = decimalPtr(decimal.NewFromFloat(*r.EventNotifications_OutboundCustomDomainEmailGBsTransmitted))
-	}
+// 	var quantity *decimal.Decimal
+// 	if r.EventNotifications_OutboundCustomDomainEmailGBsTransmitted != nil {
+// 		quantity = decimalPtr(decimal.NewFromFloat(*r.EventNotifications_OutboundCustomDomainEmailGBsTransmitted))
+// 	}
 
-	costComponent := schema.CostComponent{
-		Name:            "Outbound Custom Domain E-mail GB Transmitted",
-		Unit:            "GB",
-		UnitMultiplier:  decimal.NewFromInt(1),
-		MonthlyQuantity: quantity,
-		ProductFilter: &schema.ProductFilter{
-			VendorName: strPtr("ibm"),
-			Region:     strPtr(r.Location),
-			Service:    &r.Service,
-			AttributeFilters: []*schema.AttributeFilter{
-				{Key: "planName", Value: &r.Plan},
-			},
-		},
-		PriceFilter: &schema.PriceFilter{
-			Unit: strPtr("GIGABYTE_TRANSMITTED_OUTBOUND_CUSTOM_DOMAIN_EMAIL"),
-		},
-	}
-	return &costComponent
-}
+// 	costComponent := schema.CostComponent{
+// 		Name:            "Outbound Custom Domain E-mail GB Transmitted",
+// 		Unit:            "GB",
+// 		UnitMultiplier:  decimal.NewFromInt(1),
+// 		MonthlyQuantity: quantity,
+// 		ProductFilter: &schema.ProductFilter{
+// 			VendorName: strPtr("ibm"),
+// 			Region:     strPtr(r.Location),
+// 			Service:    &r.Service,
+// 			AttributeFilters: []*schema.AttributeFilter{
+// 				{Key: "planName", Value: &r.Plan},
+// 			},
+// 		},
+// 		PriceFilter: &schema.PriceFilter{
+// 			Unit: strPtr("GIGABYTE_TRANSMITTED_OUTBOUND_CUSTOM_DOMAIN_EMAIL"),
+// 		},
+// 	}
+// 	return &costComponent
+// }
 
-func EventNotificationsOutboundCustomDomainEmailsCostComponent(r *ResourceInstance) *schema.CostComponent {
+// func EventNotificationsOutboundCustomDomainEmailsCostComponent(r *ResourceInstance) *schema.CostComponent {
 
-	var quantity *decimal.Decimal
-	if r.EventNotifications_OutboundCustomDomainEmails != nil {
-		quantity = decimalPtr(decimal.NewFromInt(*r.EventNotifications_OutboundCustomDomainEmails))
-	}
+// 	var quantity *decimal.Decimal
+// 	if r.EventNotifications_OutboundCustomDomainEmails != nil {
+// 		quantity = decimalPtr(decimal.NewFromInt(*r.EventNotifications_OutboundCustomDomainEmails))
+// 	}
 
-	costComponent := schema.CostComponent{
-		Name:            "Outbound Custom Domain E-mails",
-		Unit:            "E-mails",
-		UnitMultiplier:  decimal.NewFromInt(1),
-		MonthlyQuantity: quantity,
-		ProductFilter: &schema.ProductFilter{
-			VendorName: strPtr("ibm"),
-			Region:     strPtr(r.Location),
-			Service:    &r.Service,
-			AttributeFilters: []*schema.AttributeFilter{
-				{Key: "planName", Value: &r.Plan},
-			},
-		},
-		PriceFilter: &schema.PriceFilter{
-			Unit: strPtr("OUTBOUND_DIGITAL_MESSAGE_CUSTOM_DOMAIN_EMAIL"),
-		},
-	}
-	return &costComponent
-}
+// 	costComponent := schema.CostComponent{
+// 		Name:            "Outbound Custom Domain E-mails",
+// 		Unit:            "E-mails",
+// 		UnitMultiplier:  decimal.NewFromInt(1),
+// 		MonthlyQuantity: quantity,
+// 		ProductFilter: &schema.ProductFilter{
+// 			VendorName: strPtr("ibm"),
+// 			Region:     strPtr(r.Location),
+// 			Service:    &r.Service,
+// 			AttributeFilters: []*schema.AttributeFilter{
+// 				{Key: "planName", Value: &r.Plan},
+// 			},
+// 		},
+// 		PriceFilter: &schema.PriceFilter{
+// 			Unit: strPtr("OUTBOUND_DIGITAL_MESSAGE_CUSTOM_DOMAIN_EMAIL"),
+// 		},
+// 	}
+// 	return &costComponent
+// }
 
-func EventNotificationsOutboundEmailsCostComponent(r *ResourceInstance) *schema.CostComponent {
+// func EventNotificationsOutboundEmailsCostComponent(r *ResourceInstance) *schema.CostComponent {
 
-	var quantity *decimal.Decimal
-	if r.EventNotifications_OutboundEmails != nil {
-		quantity = decimalPtr(decimal.NewFromInt(*r.EventNotifications_OutboundEmails))
-	}
+// 	var quantity *decimal.Decimal
+// 	if r.EventNotifications_OutboundEmails != nil {
+// 		quantity = decimalPtr(decimal.NewFromInt(*r.EventNotifications_OutboundEmails))
+// 	}
 
-	costComponent := schema.CostComponent{
-		Name:            "Outbound E-mails",
-		Unit:            "E-mails",
-		UnitMultiplier:  decimal.NewFromInt(1),
-		MonthlyQuantity: quantity,
-		ProductFilter: &schema.ProductFilter{
-			VendorName: strPtr("ibm"),
-			Region:     strPtr(r.Location),
-			Service:    &r.Service,
-			AttributeFilters: []*schema.AttributeFilter{
-				{Key: "planName", Value: &r.Plan},
-			},
-		},
-		PriceFilter: &schema.PriceFilter{
-			Unit: strPtr("OUTBOUND_DIGITAL_MESSAGES_EMAILS"),
-		},
-	}
-	return &costComponent
-}
+// 	costComponent := schema.CostComponent{
+// 		Name:            "Outbound E-mails",
+// 		Unit:            "E-mails",
+// 		UnitMultiplier:  decimal.NewFromInt(1),
+// 		MonthlyQuantity: quantity,
+// 		ProductFilter: &schema.ProductFilter{
+// 			VendorName: strPtr("ibm"),
+// 			Region:     strPtr(r.Location),
+// 			Service:    &r.Service,
+// 			AttributeFilters: []*schema.AttributeFilter{
+// 				{Key: "planName", Value: &r.Plan},
+// 			},
+// 		},
+// 		PriceFilter: &schema.PriceFilter{
+// 			Unit: strPtr("OUTBOUND_DIGITAL_MESSAGES_EMAILS"),
+// 		},
+// 	}
+// 	return &costComponent
+// }
 
-func EventNotificationsOutboundHTTPMessagesCostComponent(r *ResourceInstance) *schema.CostComponent {
+// func EventNotificationsOutboundHTTPMessagesCostComponent(r *ResourceInstance) *schema.CostComponent {
 
-	var quantity *decimal.Decimal
-	if r.EventNotifications_OutboundHTTPMessages != nil {
-		quantity = decimalPtr(decimal.NewFromInt(*r.EventNotifications_OutboundHTTPMessages))
-	}
+// 	var quantity *decimal.Decimal
+// 	if r.EventNotifications_OutboundHTTPMessages != nil {
+// 		quantity = decimalPtr(decimal.NewFromInt(*r.EventNotifications_OutboundHTTPMessages))
+// 	}
 
-	costComponent := schema.CostComponent{
-		Name:            "Outbound HTTP Messages",
-		Unit:            "Messages",
-		UnitMultiplier:  decimal.NewFromInt(1),
-		MonthlyQuantity: quantity,
-		ProductFilter: &schema.ProductFilter{
-			VendorName: strPtr("ibm"),
-			Region:     strPtr(r.Location),
-			Service:    &r.Service,
-			AttributeFilters: []*schema.AttributeFilter{
-				{Key: "planName", Value: &r.Plan},
-			},
-		},
-		PriceFilter: &schema.PriceFilter{
-			Unit: strPtr("OUTBOUND_DIGITAL_MESSAGES_HTTP"),
-		},
-	}
-	return &costComponent
-}
+// 	costComponent := schema.CostComponent{
+// 		Name:            "Outbound HTTP Messages",
+// 		Unit:            "Messages",
+// 		UnitMultiplier:  decimal.NewFromInt(1),
+// 		MonthlyQuantity: quantity,
+// 		ProductFilter: &schema.ProductFilter{
+// 			VendorName: strPtr("ibm"),
+// 			Region:     strPtr(r.Location),
+// 			Service:    &r.Service,
+// 			AttributeFilters: []*schema.AttributeFilter{
+// 				{Key: "planName", Value: &r.Plan},
+// 			},
+// 		},
+// 		PriceFilter: &schema.PriceFilter{
+// 			Unit: strPtr("OUTBOUND_DIGITAL_MESSAGES_HTTP"),
+// 		},
+// 	}
+// 	return &costComponent
+// }
 
-func EventNotificationsOutboundPushMessagesCostComponent(r *ResourceInstance) *schema.CostComponent {
+// func EventNotificationsOutboundPushMessagesCostComponent(r *ResourceInstance) *schema.CostComponent {
 
-	var quantity *decimal.Decimal
-	if r.EventNotifications_OutboundPushMessages != nil {
-		quantity = decimalPtr(decimal.NewFromInt(*r.EventNotifications_OutboundPushMessages))
-	}
+// 	var quantity *decimal.Decimal
+// 	if r.EventNotifications_OutboundPushMessages != nil {
+// 		quantity = decimalPtr(decimal.NewFromInt(*r.EventNotifications_OutboundPushMessages))
+// 	}
 
-	costComponent := schema.CostComponent{
-		Name:            "Outbound Push Messages",
-		Unit:            "Messages",
-		UnitMultiplier:  decimal.NewFromInt(1),
-		MonthlyQuantity: quantity,
-		ProductFilter: &schema.ProductFilter{
-			VendorName: strPtr("ibm"),
-			Region:     strPtr(r.Location),
-			Service:    &r.Service,
-			AttributeFilters: []*schema.AttributeFilter{
-				{Key: "planName", Value: &r.Plan},
-			},
-		},
-		PriceFilter: &schema.PriceFilter{
-			Unit: strPtr("OUTBOUND_DIGITAL_MESSAGES_PUSH"),
-		},
-	}
-	return &costComponent
-}
+// 	costComponent := schema.CostComponent{
+// 		Name:            "Outbound Push Messages",
+// 		Unit:            "Messages",
+// 		UnitMultiplier:  decimal.NewFromInt(1),
+// 		MonthlyQuantity: quantity,
+// 		ProductFilter: &schema.ProductFilter{
+// 			VendorName: strPtr("ibm"),
+// 			Region:     strPtr(r.Location),
+// 			Service:    &r.Service,
+// 			AttributeFilters: []*schema.AttributeFilter{
+// 				{Key: "planName", Value: &r.Plan},
+// 			},
+// 		},
+// 		PriceFilter: &schema.PriceFilter{
+// 			Unit: strPtr("OUTBOUND_DIGITAL_MESSAGES_PUSH"),
+// 		},
+// 	}
+// 	return &costComponent
+// }
 
-func EventNotificationsOutboundSMSMessagesCostComponent(r *ResourceInstance) *schema.CostComponent {
+// func EventNotificationsOutboundSMSMessagesCostComponent(r *ResourceInstance) *schema.CostComponent {
 
-	var quantity *decimal.Decimal
-	if r.EventNotifications_OutboundSMSMessages != nil {
-		quantity = decimalPtr(decimal.NewFromInt(*r.EventNotifications_OutboundSMSMessages))
-	}
+// 	var quantity *decimal.Decimal
+// 	if r.EventNotifications_OutboundSMSMessages != nil {
+// 		quantity = decimalPtr(decimal.NewFromInt(*r.EventNotifications_OutboundSMSMessages))
+// 	}
 
-	costComponent := schema.CostComponent{
-		Name:            "Outbound SMS Messages",
-		Unit:            "Messages",
-		UnitMultiplier:  decimal.NewFromInt(1),
-		MonthlyQuantity: quantity,
-		ProductFilter: &schema.ProductFilter{
-			VendorName: strPtr("ibm"),
-			Region:     strPtr(r.Location),
-			Service:    &r.Service,
-			AttributeFilters: []*schema.AttributeFilter{
-				{Key: "planName", Value: &r.Plan},
-			},
-		},
-		PriceFilter: &schema.PriceFilter{
-			Unit: strPtr("OUTBOUND_DIGITAL_MESSAGES_SMS_UNITS"),
-		},
-	}
-	return &costComponent
-}
+// 	costComponent := schema.CostComponent{
+// 		Name:            "Outbound SMS Messages",
+// 		Unit:            "Messages",
+// 		UnitMultiplier:  decimal.NewFromInt(1),
+// 		MonthlyQuantity: quantity,
+// 		ProductFilter: &schema.ProductFilter{
+// 			VendorName: strPtr("ibm"),
+// 			Region:     strPtr(r.Location),
+// 			Service:    &r.Service,
+// 			AttributeFilters: []*schema.AttributeFilter{
+// 				{Key: "planName", Value: &r.Plan},
+// 			},
+// 		},
+// 		PriceFilter: &schema.PriceFilter{
+// 			Unit: strPtr("OUTBOUND_DIGITAL_MESSAGES_SMS_UNITS"),
+// 		},
+// 	}
+// 	return &costComponent
+// }
 
-func EventNotificationsPreProdPushDestinationInstancesCostComponent(r *ResourceInstance) *schema.CostComponent {
+// /*
+//  * D0HNPZX - IBM Cloud Event Notifications SMS number monthly fee unit Resource Unit Pay per Use
+//  * This part covers the monthly usage fee for a phone number. It recurs monthly. The charge metric is 'resource unit'. Since every country and number type is a different price, the Event Notifications team will send over the proper number of units for the given use case. One unit = $1.
+//  */
+// func EventNotificationsResourceUnitsMonthlyCostComponent(r *ResourceInstance) *schema.CostComponent {
 
-	var quantity *decimal.Decimal
-	if r.EventNotifications_PreProdPushDestinationInstances != nil {
-		quantity = decimalPtr(decimal.NewFromInt(*r.EventNotifications_PreProdPushDestinationInstances))
-	}
+// 	var quantity *decimal.Decimal
+// 	if r.EventNotifications_ResourceUnitsMonthly != nil {
+// 		quantity = decimalPtr(decimal.NewFromFloat(*r.EventNotifications_ResourceUnitsMonthly))
+// 	}
 
-	costComponent := schema.CostComponent{
-		Name:            "Pre-Prod Push Destination Instances",
-		Unit:            "Instances",
-		UnitMultiplier:  decimal.NewFromInt(1),
-		MonthlyQuantity: quantity,
-		ProductFilter: &schema.ProductFilter{
-			VendorName: strPtr("ibm"),
-			Region:     strPtr(r.Location),
-			Service:    &r.Service,
-			AttributeFilters: []*schema.AttributeFilter{
-				{Key: "planName", Value: &r.Plan},
-			},
-		},
-		PriceFilter: &schema.PriceFilter{
-			Unit: strPtr("PUSH_PREPROD_DESTINATION_INSTANCES"),
-		},
-	}
-	return &costComponent
-}
+// 	costComponent := schema.CostComponent{
+// 		Name:            "SMS Number Monthly Resource Units",
+// 		Unit:            "Resource Units",
+// 		UnitMultiplier:  decimal.NewFromInt(1),
+// 		MonthlyQuantity: quantity,
+// 		ProductFilter: &schema.ProductFilter{
+// 			VendorName: strPtr("ibm"),
+// 			Region:     strPtr(r.Location),
+// 			Service:    &r.Service,
+// 			AttributeFilters: []*schema.AttributeFilter{
+// 				{Key: "planName", Value: &r.Plan},
+// 			},
+// 		},
+// 		PriceFilter: &schema.PriceFilter{
+// 			Unit: strPtr("RESOURCE_UNITS_NUMBER_MONTHLY"),
+// 		},
+// 	}
+// 	return &costComponent
+// }
 
-func EventNotificationsPushDestinationInstancesCostComponent(r *ResourceInstance) *schema.CostComponent {
+// /*
+//  * D0HNQZX - IBM Cloud Event Notifications SMS number setup fee unit Resource Unit Pay per Use.
+//  * This part covers any setup fee a phone number might have. It will be a one-time fee. The charge metric is 'resource unit'. Since every country and number type is a different price, the Event Notifications team will send over the proper number of units for the given use case. One unit = $1.
+//  */
+// func EventNotificationsResourceUnitsSetupCostComponent(r *ResourceInstance) *schema.CostComponent {
 
-	var quantity *decimal.Decimal
-	if r.EventNotifications_PushDestinationInstances != nil {
-		quantity = decimalPtr(decimal.NewFromInt(*r.EventNotifications_PushDestinationInstances))
-	}
+// 	var quantity *decimal.Decimal
+// 	if r.EventNotifications_ResourceUnitsSetup != nil {
+// 		quantity = decimalPtr(decimal.NewFromFloat(*r.EventNotifications_ResourceUnitsSetup))
+// 	}
 
-	costComponent := schema.CostComponent{
-		Name:            "Push Destination Instances",
-		Unit:            "Instances",
-		UnitMultiplier:  decimal.NewFromInt(1),
-		MonthlyQuantity: quantity,
-		ProductFilter: &schema.ProductFilter{
-			VendorName: strPtr("ibm"),
-			Region:     strPtr(r.Location),
-			Service:    &r.Service,
-			AttributeFilters: []*schema.AttributeFilter{
-				{Key: "planName", Value: &r.Plan},
-			},
-		},
-		PriceFilter: &schema.PriceFilter{
-			Unit: strPtr("PUSH_DESTINATION_INSTANCES"),
-		},
-	}
-	return &costComponent
-}
-
-/*
- * D0HNPZX - IBM Cloud Event Notifications SMS number monthly fee unit Resource Unit Pay per Use
- * This part covers the monthly usage fee for a phone number. It recurs monthly. The charge metric is 'resource unit'. Since every country and number type is a different price, the Event Notifications team will send over the proper number of units for the given use case. One unit = $1.
- */
-func EventNotificationsResourceUnitsMonthlyCostComponent(r *ResourceInstance) *schema.CostComponent {
-
-	var quantity *decimal.Decimal
-	if r.EventNotifications_ResourceUnitsMonthly != nil {
-		quantity = decimalPtr(decimal.NewFromFloat(*r.EventNotifications_ResourceUnitsMonthly))
-	}
-
-	costComponent := schema.CostComponent{
-		Name:            "SMS Number Monthly Resource Units",
-		Unit:            "Resource Units",
-		UnitMultiplier:  decimal.NewFromInt(1),
-		MonthlyQuantity: quantity,
-		ProductFilter: &schema.ProductFilter{
-			VendorName: strPtr("ibm"),
-			Region:     strPtr(r.Location),
-			Service:    &r.Service,
-			AttributeFilters: []*schema.AttributeFilter{
-				{Key: "planName", Value: &r.Plan},
-			},
-		},
-		PriceFilter: &schema.PriceFilter{
-			Unit: strPtr("RESOURCE_UNITS_NUMBER_MONTHLY"),
-		},
-	}
-	return &costComponent
-}
-
-/*
- * D0HNQZX - IBM Cloud Event Notifications SMS number setup fee unit Resource Unit Pay per Use.
- * This part covers any setup fee a phone number might have. It will be a one-time fee. The charge metric is 'resource unit'. Since every country and number type is a different price, the Event Notifications team will send over the proper number of units for the given use case. One unit = $1.
- */
-func EventNotificationsResourceUnitsSetupCostComponent(r *ResourceInstance) *schema.CostComponent {
-
-	var quantity *decimal.Decimal
-	if r.EventNotifications_ResourceUnitsSetup != nil {
-		quantity = decimalPtr(decimal.NewFromFloat(*r.EventNotifications_ResourceUnitsSetup))
-	}
-
-	costComponent := schema.CostComponent{
-		Name:            "SMS Number Setup Resource Units",
-		Unit:            "Resource Units",
-		UnitMultiplier:  decimal.NewFromInt(1),
-		MonthlyQuantity: quantity,
-		ProductFilter: &schema.ProductFilter{
-			VendorName: strPtr("ibm"),
-			Region:     strPtr(r.Location),
-			Service:    &r.Service,
-			AttributeFilters: []*schema.AttributeFilter{
-				{Key: "planName", Value: &r.Plan},
-			},
-		},
-		PriceFilter: &schema.PriceFilter{
-			Unit: strPtr("RESOURCE_UNITS_NUMBER_SETUP"),
-		},
-	}
-	return &costComponent
-}
+// 	costComponent := schema.CostComponent{
+// 		Name:            "SMS Number Setup Resource Units",
+// 		Unit:            "Resource Units",
+// 		UnitMultiplier:  decimal.NewFromInt(1),
+// 		MonthlyQuantity: quantity,
+// 		ProductFilter: &schema.ProductFilter{
+// 			VendorName: strPtr("ibm"),
+// 			Region:     strPtr(r.Location),
+// 			Service:    &r.Service,
+// 			AttributeFilters: []*schema.AttributeFilter{
+// 				{Key: "planName", Value: &r.Plan},
+// 			},
+// 		},
+// 		PriceFilter: &schema.PriceFilter{
+// 			Unit: strPtr("RESOURCE_UNITS_NUMBER_SETUP"),
+// 		},
+// 	}
+// 	return &costComponent
+// }

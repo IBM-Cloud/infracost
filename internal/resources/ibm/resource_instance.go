@@ -109,17 +109,15 @@ type ResourceInstance struct {
 	EventStreams_TerabyteHours                *float64 `infracost_usage:"messagehub_TERABYTE_HOURS"`
 	EventStreams_Terabytes                    *float64 `infracost_usage:"messagehub_qty_terabytes"`
 	// Event Notifications
-	EventNotifications_InboundIngestedEvents                   *float64 `infracost_usage:"event-notifications_MILLION_INGESTED_EVENTS"`
-	EventNotifications_OutboundCustomDomainEmailGBsTransmitted *float64 `infracost_usage:"event-notifications_GIGABYTE_TRANSMITTED_OUTBOUND_CUSTOM_DOMAIN_EMAIL"`
-	EventNotifications_OutboundCustomDomainEmails              *int64   `infracost_usage:"event-notifications_OUTBOUND_DIGITAL_MESSAGE_CUSTOM_DOMAIN_EMAIL"`
-	EventNotifications_OutboundEmails                          *int64   `infracost_usage:"event-notifications_OUTBOUND_DIGITAL_MESSAGES_EMAILS"`
-	EventNotifications_OutboundHTTPMessages                    *int64   `infracost_usage:"event-notifications_OUTBOUND_DIGITAL_MESSAGES_HTTP"`
-	EventNotifications_OutboundPushMessages                    *int64   `infracost_usage:"event-notifications_OUTBOUND_DIGITAL_MESSAGES_PUSH"`
-	EventNotifications_OutboundSMSMessages                     *int64   `infracost_usage:"event-notifications_OUTBOUND_DIGITAL_MESSAGES_SMS_UNITS"`
-	EventNotifications_PreProdPushDestinationInstances         *int64   `infracost_usage:"event-notifications_PUSH_PREPROD_DESTINATION_INSTANCES"`
-	EventNotifications_PushDestinationInstances                *int64   `infracost_usage:"event-notifications_PUSH_DESTINATION_INSTANCES"`
-	EventNotifications_ResourceUnitsMonthly                    *float64 `infracost_usage:"event-notifications_RESOURCE_UNITS_NUMBER_MONTHLY"`
-	EventNotifications_ResourceUnitsSetup                      *float64 `infracost_usage:"event-notifications_RESOURCE_UNITS_NUMBER_SETUP"`
+	EventNotifications_InboundIngestedEvents *float64 `infracost_usage:"event-notifications_MILLION_INGESTED_EVENTS"`
+	// EventNotifications_OutboundCustomDomainEmailGBsTransmitted *float64 `infracost_usage:"event-notifications_GIGABYTE_TRANSMITTED_OUTBOUND_CUSTOM_DOMAIN_EMAIL"`
+	// EventNotifications_OutboundCustomDomainEmails              *int64   `infracost_usage:"event-notifications_OUTBOUND_DIGITAL_MESSAGE_CUSTOM_DOMAIN_EMAIL"`
+	// EventNotifications_OutboundEmails                          *int64   `infracost_usage:"event-notifications_OUTBOUND_DIGITAL_MESSAGES_EMAILS"`
+	// EventNotifications_OutboundHTTPMessages                    *int64   `infracost_usage:"event-notifications_OUTBOUND_DIGITAL_MESSAGES_HTTP"`
+	// EventNotifications_OutboundPushMessages                    *int64   `infracost_usage:"event-notifications_OUTBOUND_DIGITAL_MESSAGES_PUSH"`
+	// EventNotifications_OutboundSMSMessages                     *int64   `infracost_usage:"event-notifications_OUTBOUND_DIGITAL_MESSAGES_SMS_UNITS"`
+	// EventNotifications_ResourceUnitsMonthly                    *float64 `infracost_usage:"event-notifications_RESOURCE_UNITS_NUMBER_MONTHLY"`
+	// EventNotifications_ResourceUnitsSetup                      *float64 `infracost_usage:"event-notifications_RESOURCE_UNITS_NUMBER_SETUP"`
 }
 
 type ResourceCostComponentsFunc func(*ResourceInstance) []*schema.CostComponent
@@ -190,16 +188,14 @@ var ResourceInstanceUsageSchema = []*schema.UsageItem{
 	{Key: "messagehub_TERABYTE_HOURS", DefaultValue: 1, ValueType: schema.Float64},
 	{Key: "messagehub_qty_terabytes", DefaultValue: 1, ValueType: schema.Float64},
 	{Key: "event-notifications_MILLION_INGESTED_EVENTS", DefaultValue: 0, ValueType: schema.Float64},
-	{Key: "event-notifications_GIGABYTE_TRANSMITTED_OUTBOUND_CUSTOM_DOMAIN_EMAIL", DefaultValue: 0, ValueType: schema.Float64},
-	{Key: "event-notifications_OUTBOUND_DIGITAL_MESSAGE_CUSTOM_DOMAIN_EMAIL", DefaultValue: 0, ValueType: schema.Int64},
-	{Key: "event-notifications_OUTBOUND_DIGITAL_MESSAGES_EMAILS", DefaultValue: 0, ValueType: schema.Int64},
-	{Key: "event-notifications_OUTBOUND_DIGITAL_MESSAGES_HTTP", DefaultValue: 0, ValueType: schema.Int64},
-	{Key: "event-notifications_OUTBOUND_DIGITAL_MESSAGES_PUSH", DefaultValue: 0, ValueType: schema.Int64},
-	{Key: "event-notifications_OUTBOUND_DIGITAL_MESSAGES_SMS_UNITS", DefaultValue: 0, ValueType: schema.Int64},
-	{Key: "event-notifications_PUSH_PREPROD_DESTINATION_INSTANCES", DefaultValue: 0, ValueType: schema.Int64},
-	{Key: "event-notifications_PUSH_DESTINATION_INSTANCES", DefaultValue: 0, ValueType: schema.Int64},
-	{Key: "event-notifications_RESOURCE_UNITS_NUMBER_MONTHLY", DefaultValue: 0, ValueType: schema.Float64},
-	{Key: "event-notifications_RESOURCE_UNITS_NUMBER_SETUP", DefaultValue: 0, ValueType: schema.Float64},
+	// {Key: "event-notifications_GIGABYTE_TRANSMITTED_OUTBOUND_CUSTOM_DOMAIN_EMAIL", DefaultValue: 0, ValueType: schema.Float64},
+	// {Key: "event-notifications_OUTBOUND_DIGITAL_MESSAGE_CUSTOM_DOMAIN_EMAIL", DefaultValue: 0, ValueType: schema.Int64},
+	// {Key: "event-notifications_OUTBOUND_DIGITAL_MESSAGES_EMAILS", DefaultValue: 0, ValueType: schema.Int64},
+	// {Key: "event-notifications_OUTBOUND_DIGITAL_MESSAGES_HTTP", DefaultValue: 0, ValueType: schema.Int64},
+	// {Key: "event-notifications_OUTBOUND_DIGITAL_MESSAGES_PUSH", DefaultValue: 0, ValueType: schema.Int64},
+	// {Key: "event-notifications_OUTBOUND_DIGITAL_MESSAGES_SMS_UNITS", DefaultValue: 0, ValueType: schema.Int64},
+	// {Key: "event-notifications_RESOURCE_UNITS_NUMBER_MONTHLY", DefaultValue: 0, ValueType: schema.Float64},
+	// {Key: "event-notifications_RESOURCE_UNITS_NUMBER_SETUP", DefaultValue: 0, ValueType: schema.Float64},
 }
 
 var ResourceInstanceCostMap map[string]ResourceCostComponentsFunc = map[string]ResourceCostComponentsFunc{
@@ -698,6 +694,7 @@ func GetContinuousDeliveryCostComponenets(r *ResourceInstance) []*schema.CostCom
 		q = decimalPtr(decimal.NewFromInt(*r.ContinuousDelivery_AuthorizedUsers))
 	}
 	if r.Plan == "lite" {
+
 		costComponent := &schema.CostComponent{
 			Name:            "Lite plan",
 			UnitMultiplier:  decimal.NewFromInt(1),

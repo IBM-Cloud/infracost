@@ -147,13 +147,3 @@ resource_usage:
 
   ibm_resource_instance.event_notifications[*]:
     event-notifications_MILLION_INGESTED_EVENTS: 1
-    event-notifications_GIGABYTE_TRANSMITTED_OUTBOUND_CUSTOM_DOMAIN_EMAIL: 1
-    event-notifications_OUTBOUND_DIGITAL_MESSAGE_CUSTOM_DOMAIN_EMAIL: 1000
-    event-notifications_OUTBOUND_DIGITAL_MESSAGES_EMAILS: 100000
-    event-notifications_OUTBOUND_DIGITAL_MESSAGES_HTTP: 1000000
-    event-notifications_OUTBOUND_DIGITAL_MESSAGES_PUSH: 101
-    event-notifications_OUTBOUND_DIGITAL_MESSAGES_SMS_UNITS: 1000
-    event-notifications_PUSH_PREPROD_DESTINATION_INSTANCES: 1
-    event-notifications_PUSH_DESTINATION_INSTANCES: 1
-    event-notifications_RESOURCE_UNITS_NUMBER_MONTHLY: 1
-    event-notifications_RESOURCE_UNITS_NUMBER_SETUP: 1
