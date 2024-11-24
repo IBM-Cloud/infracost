@@ -34,7 +34,7 @@ func (r *EnDestination) PopulateUsage(u *schema.UsageData) {
 // See providers folder for more information.
 func (r *EnDestination) BuildResource() *schema.Resource {
 	costComponents := []*schema.CostComponent{
-		EnDestinationPushDestinationInstancesCostComponent(r),
+		EnDestinationAndroidPushDestinationInstancesCostComponent(r),
 	}
 
 	return &schema.Resource{
@@ -44,7 +44,7 @@ func (r *EnDestination) BuildResource() *schema.Resource {
 	}
 }
 
-func EnDestinationPushDestinationInstancesCostComponent(r *EnDestination) *schema.CostComponent {
+func EnDestinationAndroidPushDestinationInstancesCostComponent(r *EnDestination) *schema.CostComponent {
 
 	var costComponent schema.CostComponent
 	component_name := "Push Destination Instances"
