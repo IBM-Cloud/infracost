@@ -25,17 +25,18 @@ var ResourceRegistry []*schema.RegistryItem = []*schema.RegistryItem{
 	getDatabaseRegistryItem(),
 	getIsShareRegistryItem(),
 	getIsVpnServerRegistryItem(),
-	getEnDestinationRegistryItem(),  // Android
-	getEnSubscriptionRegistryItem(), // Android
-	getEnSubscriptionChromeRegistryItem(),
 	getEnDestinationChromeRegistryItem(),
 	getEnDestinationFirefoxRegistryItem(),
 	getEnDestinationHuaweiRegistryItem(),
 	getEnDestinationIphoneosRegistryItem(), // iOS
+	getEnDestinationRegistryItem(),         // Android
 	getEnDestinationSafariRegistryItem(),
+	getEnSubscriptionChromeRegistryItem(),
 	getEnSubscriptionFirefoxRegistryItem(),
 	getEnSubscriptionHuaweiRegistryItem(),
 	getEnSubscriptionIphoneosRegistryItem(), // iOS
+	getEnSubscriptionRegistryItem(),         // Android
+	getEnSubscriptionSafariRegistryItem(),
 }
 
 // FreeResources grouped alphabetically
