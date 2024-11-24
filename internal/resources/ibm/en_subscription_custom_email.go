@@ -2,6 +2,7 @@ package ibm
 
 import (
 	"fmt"
+	"math"
 
 	"github.com/infracost/infracost/internal/resources"
 	"github.com/infracost/infracost/internal/schema"
@@ -57,14 +58,12 @@ func EnSubscriptionEmailOutboundCustomDomainEmailMessagesCostComponent(r *EnSubs
 	component_name := "Outbound Custom Domain E-mail Messages"
 	component_unit := "Messages"
 
-	if r.EnSubscriptionEmail_OutboundCustomDomainEmailMessages != nil {
-		quantity = decimalPtr(decimal.NewFromInt(*r.EnSubscriptionEmail_OutboundCustomDomainEmailMessages))
-	}
-
 	if r.Plan == "lite" {
 
+		quantity = decimalPtr(decimal.NewFromFloat(math.Min(float64(*r.EnSubscriptionEmail_OutboundCustomDomainEmailMessages), float64(20))))
+
 		costComponent = schema.CostComponent{
-			Name:            fmt.Sprintf("%s (Lite plan)", component_name),
+			Name:            fmt.Sprintf("%s (Lite plan) (Max. 20)", component_name),
 			Unit:            component_unit,
 			UnitMultiplier:  decimal.NewFromInt(1),
 			MonthlyQuantity: quantity,
@@ -77,6 +76,10 @@ func EnSubscriptionEmailOutboundCustomDomainEmailMessagesCostComponent(r *EnSubs
 		costComponent.SetCustomPrice(decimalPtr(decimal.NewFromInt(0)))
 
 	} else if r.Plan == "standard" {
+
+		if r.EnSubscriptionEmail_OutboundCustomDomainEmailMessages != nil {
+			quantity = decimalPtr(decimal.NewFromInt(*r.EnSubscriptionEmail_OutboundCustomDomainEmailMessages))
+		}
 
 		costComponent = schema.CostComponent{
 			Name:            fmt.Sprintf("%s (Standard plan)", component_name),
