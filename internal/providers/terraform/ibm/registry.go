@@ -31,21 +31,22 @@ var ResourceRegistry []*schema.RegistryItem = []*schema.RegistryItem{
 	getEnDestinationIphoneosRegistryItem(), // iOS
 	getEnDestinationRegistryItem(),         // Android
 	getEnDestinationSafariRegistryItem(),
+	getEnSubscriptionCeRegistryItem(),
 	getEnSubscriptionChromeRegistryItem(),
+	getEnSubscriptionCosRegistryItem(),
+	getEnSubscriptionCustomEmailRegistryItem(),
+	getEnSubscriptionEmailRegistryItem(),
 	getEnSubscriptionFirefoxRegistryItem(),
 	getEnSubscriptionHuaweiRegistryItem(),
 	getEnSubscriptionIphoneosRegistryItem(), // iOS
-	getEnSubscriptionRegistryItem(),         // Android
-	getEnSubscriptionSafariRegistryItem(),
-	getEnSubscriptionSlackRegistryItem(),
 	getEnSubscriptionMsteamsRegistryItem(),
 	getEnSubscriptionPagerdutyRegistryItem(),
-	getEnSubscriptionWebhookRegistryItem(),
-	getEnSubscriptionSnRegistryItem(),
-	getEnSubscriptionCeRegistryItem(),
-	getEnSubscriptionCosRegistryItem(),
+	getEnSubscriptionRegistryItem(), // Android
+	getEnSubscriptionSafariRegistryItem(),
+	getEnSubscriptionSlackRegistryItem(),
 	getEnSubscriptionSmsRegistryItem(),
-	getEnSubscriptionEmailRegistryItem(),
+	getEnSubscriptionSnRegistryItem(),
+	getEnSubscriptionWebhookRegistryItem(),
 }
 
 // FreeResources grouped alphabetically

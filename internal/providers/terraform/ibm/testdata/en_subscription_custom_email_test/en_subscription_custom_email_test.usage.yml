@@ -1,0 +1,8 @@
+version: 0.1
+resource_usage:
+  ibm_en_subscription_custom_email.subscription_custom_email_lite:
+    event-notifications_OUTBOUND_DIGITAL_MESSAGE_CUSTOM_DOMAIN_EMAIL: 1000
+    event-notifications_GIGABYTE_TRANSMITTED_OUTBOUND_CUSTOM_DOMAIN_EMAIL: 1
+  ibm_en_subscription_custom_email.subscription_custom_email_standard:
+    event-notifications_OUTBOUND_DIGITAL_MESSAGE_CUSTOM_DOMAIN_EMAIL: 1000
+    event-notifications_GIGABYTE_TRANSMITTED_OUTBOUND_CUSTOM_DOMAIN_EMAIL: 1
