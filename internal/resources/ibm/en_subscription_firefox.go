@@ -48,7 +48,7 @@ func (r *EnSubscriptionFirefox) BuildResource() *schema.Resource {
 
 func EnSubscriptionFirefoxOutboundPushMessagesCostComponent(r *EnSubscriptionFirefox) *schema.CostComponent {
 	var costComponent schema.CostComponent
-	component_name := "Outbound Chrome Push Messages"
+	component_name := "Outbound Firefox Push Messages"
 	component_unit := "Messages"
 
 	if r.Plan == "lite" {
