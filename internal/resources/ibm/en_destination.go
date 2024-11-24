@@ -8,13 +8,10 @@ import (
 	"github.com/shopspring/decimal"
 )
 
-// EnDestination struct represents <TODO: cloud service short description>.
+// EnDestination struct
 //
-// <TODO: Add any important information about the resource and links to the
-// pricing pages or documentation that might be useful to developers in the future, e.g:>
-//
-// Resource information: https://cloud.ibm.com/<PATH/TO/RESOURCE>/
-// Pricing information: https://cloud.ibm.com/<PATH/TO/PRICING>/
+// Resource information: https://cloud.ibm.com/catalog/services/event-notifications#about
+// Pricing information: https://cloud.ibm.com/catalog/services/event-notifications
 type EnDestination struct {
 	Address   string
 	IsPreProd bool
