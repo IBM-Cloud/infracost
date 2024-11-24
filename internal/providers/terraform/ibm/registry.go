@@ -27,6 +27,7 @@ var ResourceRegistry []*schema.RegistryItem = []*schema.RegistryItem{
 	getIsVpnServerRegistryItem(),
 	getEnDestinationRegistryItem(),  // Android
 	getEnSubscriptionRegistryItem(), // Android
+	getEnSubscriptionChromeRegistryItem(),
 }
 
 // FreeResources grouped alphabetically
