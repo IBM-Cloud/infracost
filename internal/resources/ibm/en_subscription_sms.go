@@ -18,16 +18,16 @@ type EnSubscriptionSms struct {
 	Region                                     string
 	Name                                       string
 	Plan                                       string
-	EnSubscriptionSMS_NumberResourceUnits      *float64 `infracost_usage:"event-notifications_notifications_RESOURCE_UNITS_NUMBER_MONTHLY"`
-	EnSubscriptionSMS_NumberSetupResourceUnits *float64 `infracost_usage:"event-notifications_notifications_RESOURCE_UNITS_NUMBER_SETUP"`
-	EnSubscriptionSMS_OutboundMessageUnits     *float64 `infracost_usage:"event-notifications_notifications_OUTBOUND_DIGITAL_MESSAGES_SMS_UNITS"`
+	EnSubscriptionSMS_NumberResourceUnits      *float64 `infracost_usage:"event-notifications_RESOURCE_UNITS_NUMBER_MONTHLY"`
+	EnSubscriptionSMS_NumberSetupResourceUnits *float64 `infracost_usage:"event-notifications_RESOURCE_UNITS_NUMBER_SETUP"`
+	EnSubscriptionSMS_OutboundMessageUnits     *float64 `infracost_usage:"event-notifications_OUTBOUND_DIGITAL_MESSAGES_SMS_UNITS"`
 }
 
 // EnSubscriptionSmsUsageSchema defines a list which represents the usage schema of EnSubscriptionSms.
 var EnSubscriptionSmsUsageSchema = []*schema.UsageItem{
-	{Key: "event-notifications_notifications_OUTBOUND_DIGITAL_MESSAGES_SMS_UNITS", DefaultValue: 0, ValueType: schema.Float64},
-	{Key: "event-notifications_notifications_RESOURCE_UNITS_NUMBER_SETUP", DefaultValue: 0, ValueType: schema.Float64},
-	{Key: "event-notifications_notifications_RESOURCE_UNITS_NUMBER_MONTHLY", DefaultValue: 0, ValueType: schema.Float64},
+	{Key: "event-notifications_OUTBOUND_DIGITAL_MESSAGES_SMS_UNITS", DefaultValue: 0, ValueType: schema.Float64},
+	{Key: "event-notifications_RESOURCE_UNITS_NUMBER_SETUP", DefaultValue: 0, ValueType: schema.Float64},
+	{Key: "event-notifications_RESOURCE_UNITS_NUMBER_MONTHLY", DefaultValue: 0, ValueType: schema.Float64},
 }
 
 // PopulateUsage parses the u schema.UsageData into the EnSubscriptionSms.

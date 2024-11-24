@@ -1,6 +1,6 @@
 version: 0.1
 resource_usage:
   ibm_en_subscription_cos.subscription_cos_lite:
-    event-notifications_notifications_OUTBOUND_DIGITAL_MESSAGES_HTTP: 1000000
+    event-notifications_OUTBOUND_DIGITAL_MESSAGES_HTTP: 1000000
   ibm_en_subscription_cos.subscription_cos_standard:
-    event-notifications_notifications_OUTBOUND_DIGITAL_MESSAGES_HTTP: 1000000
+    event-notifications_OUTBOUND_DIGITAL_MESSAGES_HTTP: 1000000

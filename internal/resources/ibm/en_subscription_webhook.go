@@ -18,12 +18,12 @@ type EnSubscriptionWebhook struct {
 	Region                                     string
 	Name                                       string
 	Plan                                       string
-	EnSubscriptionWebhook_OutboundHTTPMessages *int64 `infracost_usage:"event-notifications_notifications_OUTBOUND_DIGITAL_MESSAGES_HTTP"`
+	EnSubscriptionWebhook_OutboundHTTPMessages *int64 `infracost_usage:"event-notifications_OUTBOUND_DIGITAL_MESSAGES_HTTP"`
 }
 
 // EnSubscriptionWebhookUsageSchema defines a list which represents the usage schema of EnSubscriptionWebhook.
 var EnSubscriptionWebhookUsageSchema = []*schema.UsageItem{
-	{Key: "event-notifications_notifications_OUTBOUND_DIGITAL_MESSAGES_HTTP", DefaultValue: 0, ValueType: schema.Int64},
+	{Key: "event-notifications_OUTBOUND_DIGITAL_MESSAGES_HTTP", DefaultValue: 0, ValueType: schema.Int64},
 }
 
 // PopulateUsage parses the u schema.UsageData into the EnSubscriptionWebhook.

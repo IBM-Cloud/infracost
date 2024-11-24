@@ -17,12 +17,12 @@ type EnSubscriptionSlack struct {
 	Region                                   string
 	Name                                     string
 	Plan                                     string
-	EnSubscriptionSlack_OutboundHTTPMessages *int64 `infracost_usage:"event-notifications_notifications_OUTBOUND_DIGITAL_MESSAGES_HTTP"`
+	EnSubscriptionSlack_OutboundHTTPMessages *int64 `infracost_usage:"event-notifications_OUTBOUND_DIGITAL_MESSAGES_HTTP"`
 }
 
 // EnSubscriptionSlackUsageSchema defines a list which represents the usage schema of EnSubscriptionSlack.
 var EnSubscriptionSlackUsageSchema = []*schema.UsageItem{
-	{Key: "event-notifications_notifications_OUTBOUND_DIGITAL_MESSAGES_HTTP", DefaultValue: 0, ValueType: schema.Int64},
+	{Key: "event-notifications_OUTBOUND_DIGITAL_MESSAGES_HTTP", DefaultValue: 0, ValueType: schema.Int64},
 }
 
 // PopulateUsage parses the u schema.UsageData into the EnSubscriptionSlack.
