@@ -34,6 +34,7 @@ var ResourceRegistry []*schema.RegistryItem = []*schema.RegistryItem{
 	getEnDestinationIphoneosRegistryItem(), // iOS
 	getEnDestinationSafariRegistryItem(),
 	getEnSubscriptionFirefoxRegistryItem(),
+	getEnSubscriptionHuaweiRegistryItem(),
 }
 
 // FreeResources grouped alphabetically
