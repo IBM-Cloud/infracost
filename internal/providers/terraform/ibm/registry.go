@@ -28,6 +28,7 @@ var ResourceRegistry []*schema.RegistryItem = []*schema.RegistryItem{
 	getEnDestinationRegistryItem(),  // Android
 	getEnSubscriptionRegistryItem(), // Android
 	getEnSubscriptionChromeRegistryItem(),
+	getEnDestinationChromeRegistryItem(),
 }
 
 // FreeResources grouped alphabetically
