@@ -2,7 +2,7 @@
  Name                                                            Monthly Qty  Unit                    Monthly Cost 
                                                                                                                    
  ibm_en_subscription_ce.subscription_ce_lite                                                                       
- └─ Plan lite not found                                                    1                                 $0.00 
+ └─ Outbound Code Engine HTTP Messages (Lite plan)                 1,000,000  Messages                       $0.00 
                                                                                                                    
  ibm_en_subscription_ce.subscription_ce_standard                                                                   
  └─ Outbound Code Engine HTTP Messages (Standard plan)             1,000,000  Messages                       $1.08 

@@ -47,16 +47,33 @@ func (r *EnSubscriptionPagerduty) BuildResource() *schema.Resource {
 }
 
 func EnSubscriptionPagerDutyOutboundHTTPMessagesCostComponent(r *EnSubscriptionPagerduty) *schema.CostComponent {
+
 	var costComponent schema.CostComponent
+	var quantity *decimal.Decimal
+
 	component_name := "Outbound PagerDuty HTTP Messages"
 	component_unit := "Messages"
 
-	if r.Plan == "standard" {
+	if r.EnSubscriptionPagerDuty_OutboundHTTPMessages != nil {
+		quantity = decimalPtr(decimal.NewFromInt(*r.EnSubscriptionPagerDuty_OutboundHTTPMessages))
+	}
 
-		var quantity *decimal.Decimal
-		if r.EnSubscriptionPagerDuty_OutboundHTTPMessages != nil {
-			quantity = decimalPtr(decimal.NewFromInt(*r.EnSubscriptionPagerDuty_OutboundHTTPMessages))
+	if r.Plan == "lite" {
+
+		costComponent = schema.CostComponent{
+			Name:            fmt.Sprintf("%s (Lite plan)", component_name),
+			Unit:            component_unit,
+			UnitMultiplier:  decimal.NewFromInt(1),
+			MonthlyQuantity: quantity,
+			ProductFilter: &schema.ProductFilter{
+				VendorName: strPtr("ibm"),
+				Region:     strPtr(r.Region),
+				Service:    strPtr("event-notifications"),
+			},
 		}
+		costComponent.SetCustomPrice(decimalPtr(decimal.NewFromInt(0)))
+
+	} else if r.Plan == "standard" {
 
 		costComponent = schema.CostComponent{
 			Name:            fmt.Sprintf("%s (Standard plan)", component_name),

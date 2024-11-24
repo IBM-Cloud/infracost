@@ -47,16 +47,33 @@ func (r *EnSubscriptionSn) BuildResource() *schema.Resource {
 }
 
 func EnSubscriptionServiceNowOutboundHTTPMessagesCostComponent(r *EnSubscriptionSn) *schema.CostComponent {
+
 	var costComponent schema.CostComponent
+	var quantity *decimal.Decimal
+
 	component_name := "Outbound ServiceNow HTTP Messages"
 	component_unit := "Messages"
 
-	if r.Plan == "standard" {
+	if r.EnSubscriptionServiceNow_OutboundHTTPMessages != nil {
+		quantity = decimalPtr(decimal.NewFromInt(*r.EnSubscriptionServiceNow_OutboundHTTPMessages))
+	}
 
-		var quantity *decimal.Decimal
-		if r.EnSubscriptionServiceNow_OutboundHTTPMessages != nil {
-			quantity = decimalPtr(decimal.NewFromInt(*r.EnSubscriptionServiceNow_OutboundHTTPMessages))
+	if r.Plan == "lite" {
+
+		costComponent = schema.CostComponent{
+			Name:            fmt.Sprintf("%s (Lite plan)", component_name),
+			Unit:            component_unit,
+			UnitMultiplier:  decimal.NewFromInt(1),
+			MonthlyQuantity: quantity,
+			ProductFilter: &schema.ProductFilter{
+				VendorName: strPtr("ibm"),
+				Region:     strPtr(r.Region),
+				Service:    strPtr("event-notifications"),
+			},
 		}
+		costComponent.SetCustomPrice(decimalPtr(decimal.NewFromInt(0)))
+
+	} else if r.Plan == "standard" {
 
 		costComponent = schema.CostComponent{
 			Name:            fmt.Sprintf("%s (Standard plan)", component_name),
