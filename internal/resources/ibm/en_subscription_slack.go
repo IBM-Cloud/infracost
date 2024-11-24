@@ -51,20 +51,7 @@ func EnSubscriptionSlackOutboundHTTPMessagesCostComponent(r *EnSubscriptionSlack
 	component_name := "Outbound Slack HTTP Messages"
 	component_unit := "Messages"
 
-	if r.Plan == "lite" {
-		costComponent = schema.CostComponent{
-			Name:            fmt.Sprintf("%s (Lite plan)", component_name),
-			Unit:            component_unit,
-			UnitMultiplier:  decimal.NewFromInt(1),
-			MonthlyQuantity: decimalPtr(decimal.NewFromInt(1)),
-			ProductFilter: &schema.ProductFilter{
-				VendorName: strPtr("ibm"),
-				Region:     strPtr(r.Region),
-				Service:    strPtr("event-notifications"),
-			},
-		}
-		costComponent.SetCustomPrice(decimalPtr(decimal.NewFromInt(0)))
-	} else if r.Plan == "standard" {
+	if r.Plan == "standard" {
 
 		var quantity *decimal.Decimal
 		if r.EnSubscriptionSlack_OutboundHTTPMessages != nil {
