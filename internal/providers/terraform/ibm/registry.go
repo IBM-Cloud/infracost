@@ -41,6 +41,7 @@ var ResourceRegistry []*schema.RegistryItem = []*schema.RegistryItem{
 	getEnSubscriptionMsteamsRegistryItem(),
 	getEnSubscriptionPagerdutyRegistryItem(),
 	getEnSubscriptionWebhookRegistryItem(),
+	getEnSubscriptionSnRegistryItem(),
 }
 
 // FreeResources grouped alphabetically
