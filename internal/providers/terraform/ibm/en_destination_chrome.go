@@ -25,7 +25,7 @@ func newEnDestinationChrome(d *schema.ResourceData, u *schema.UsageData) *schema
 		plan = enReferenceAttributes[0].Get("plan").String()
 	}
 
-	r := &ibm.EnDestination{
+	r := &ibm.EnDestinationChrome{
 		Address:   d.Address,
 		IsPreProd: is_pre_prod,
 		Name:      name,

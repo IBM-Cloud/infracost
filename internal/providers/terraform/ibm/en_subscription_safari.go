@@ -24,7 +24,7 @@ func newEnSubscriptionSafari(d *schema.ResourceData, u *schema.UsageData) *schem
 		plan = enReferenceAttributes[0].Get("plan").String()
 	}
 
-	r := &ibm.EnSubscription{
+	r := &ibm.EnSubscriptionSafari{
 		Address: d.Address,
 		Region:  region,
 		Name:    name,

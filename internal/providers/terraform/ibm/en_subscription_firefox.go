@@ -24,7 +24,7 @@ func newEnSubscriptionFirefox(d *schema.ResourceData, u *schema.UsageData) *sche
 		plan = enReferenceAttributes[0].Get("plan").String()
 	}
 
-	r := &ibm.EnSubscription{
+	r := &ibm.EnSubscriptionFirefox{
 		Address: d.Address,
 		Region:  region,
 		Name:    name,

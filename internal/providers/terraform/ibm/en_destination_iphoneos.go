@@ -25,7 +25,7 @@ func newEnDestinationIphoneos(d *schema.ResourceData, u *schema.UsageData) *sche
 		plan = enReferenceAttributes[0].Get("plan").String()
 	}
 
-	r := &ibm.EnDestination{
+	r := &ibm.EnDestinationIphoneos{
 		Address:   d.Address,
 		IsPreProd: is_pre_prod,
 		Name:      name,

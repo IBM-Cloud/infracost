@@ -23,7 +23,7 @@ func newEnSubscriptionChrome(d *schema.ResourceData, u *schema.UsageData) *schem
 		plan = enReferenceAttributes[0].Get("plan").String()
 	}
 
-	r := &ibm.EnSubscription{
+	r := &ibm.EnSubscriptionChrome{
 		Address: d.Address,
 		Region:  region,
 		Name:    name,

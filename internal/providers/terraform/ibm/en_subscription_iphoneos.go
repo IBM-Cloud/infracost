@@ -24,7 +24,7 @@ func newEnSubscriptionIphoneos(d *schema.ResourceData, u *schema.UsageData) *sch
 		plan = enReferenceAttributes[0].Get("plan").String()
 	}
 
-	r := &ibm.EnSubscription{
+	r := &ibm.EnSubscriptionIphoneos{
 		Address: d.Address,
 		Region:  region,
 		Name:    name,

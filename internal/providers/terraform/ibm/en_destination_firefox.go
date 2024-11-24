@@ -25,7 +25,7 @@ func newEnDestinationFirefox(d *schema.ResourceData, u *schema.UsageData) *schem
 		plan = enReferenceAttributes[0].Get("plan").String()
 	}
 
-	r := &ibm.EnDestination{
+	r := &ibm.EnDestinationFirefox{
 		Address:   d.Address,
 		IsPreProd: is_pre_prod,
 		Name:      name,
