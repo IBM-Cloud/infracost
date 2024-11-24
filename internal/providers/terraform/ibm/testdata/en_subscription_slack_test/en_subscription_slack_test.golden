@@ -2,7 +2,7 @@
  Name                                                                  Monthly Qty  Unit                    Monthly Cost 
                                                                                                                          
  ibm_en_subscription_slack.subscription_slack_lite                                                                       
- └─ Outbound Slack HTTP Messages (Lite plan)                                     1  Messages                       $0.00 
+ └─ Plan lite not found                                                          1                                 $0.00 
                                                                                                                          
  ibm_en_subscription_slack.subscription_slack_standard                                                                   
  └─ Outbound Slack HTTP Messages (Standard plan)                         1,000,000  Messages                       $1.08 

@@ -2,19 +2,17 @@ package ibm
 
 import (
 	"fmt"
+	"math"
 
 	"github.com/infracost/infracost/internal/resources"
 	"github.com/infracost/infracost/internal/schema"
 	"github.com/shopspring/decimal"
 )
 
-// EnSubscriptionSafari struct represents <TODO: cloud service short description>.
+// EnSubscriptionSafari struct
 //
-// <TODO: Add any important information about the resource and links to the
-// pricing pages or documentation that might be useful to developers in the future, e.g:>
-//
-// Resource information: https://cloud.ibm.com/<PATH/TO/RESOURCE>/
-// Pricing information: https://cloud.ibm.com/<PATH/TO/PRICING>/
+// Resource information: https://cloud.ibm.com/catalog/services/event-notifications#about
+// Pricing information: https://cloud.ibm.com/catalog/services/event-notifications
 type EnSubscriptionSafari struct {
 	Address                                   string
 	Region                                    string
@@ -55,11 +53,14 @@ func EnSubscriptionSafariOutboundPushMessagesCostComponent(r *EnSubscriptionSafa
 	component_unit := "Messages"
 
 	if r.Plan == "lite" {
+
+		quantity := math.Min(float64(*r.EnSubscriptionSafari_OutboundPushMessages), float64(1000))
+
 		costComponent = schema.CostComponent{
-			Name:            fmt.Sprintf("%s (Lite plan)", component_name),
+			Name:            fmt.Sprintf("%s (Lite plan) (Max. 1,000 per destination)", component_name),
 			Unit:            component_unit,
 			UnitMultiplier:  decimal.NewFromInt(1),
-			MonthlyQuantity: decimalPtr(decimal.NewFromInt(1)),
+			MonthlyQuantity: decimalPtr(decimal.NewFromFloat(quantity)),
 			ProductFilter: &schema.ProductFilter{
 				VendorName: strPtr("ibm"),
 				Region:     strPtr(r.Region),

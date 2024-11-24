@@ -2,6 +2,7 @@ package ibm
 
 import (
 	"fmt"
+	"math"
 
 	"github.com/infracost/infracost/internal/resources"
 	"github.com/infracost/infracost/internal/schema"
@@ -52,11 +53,14 @@ func EnSubscriptionFirefoxOutboundPushMessagesCostComponent(r *EnSubscriptionFir
 	component_unit := "Messages"
 
 	if r.Plan == "lite" {
+
+		quantity := math.Min(float64(*r.EnSubscriptionFirefox_OutboundPushMessages), float64(1000))
+
 		costComponent = schema.CostComponent{
-			Name:            fmt.Sprintf("%s (Lite plan)", component_name),
+			Name:            fmt.Sprintf("%s (Lite plan) (Max. 1,000 per destination)", component_name),
 			Unit:            component_unit,
 			UnitMultiplier:  decimal.NewFromInt(1),
-			MonthlyQuantity: decimalPtr(decimal.NewFromInt(1)),
+			MonthlyQuantity: decimalPtr(decimal.NewFromFloat(quantity)),
 			ProductFilter: &schema.ProductFilter{
 				VendorName: strPtr("ibm"),
 				Region:     strPtr(r.Region),
