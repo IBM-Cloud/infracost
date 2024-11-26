@@ -97,7 +97,7 @@ func EnSubscriptionSMSNumberSetupResourceUnitsCostComponent(r *EnSubscriptionSms
 		}
 
 		costComponent = schema.CostComponent{
-			Name:            component_name,
+			Name:            fmt.Sprintf("%s (One-time Fee) (Standard plan)", component_name),
 			Unit:            component_unit,
 			UnitMultiplier:  decimal.NewFromInt(1),
 			MonthlyQuantity: quantity,
