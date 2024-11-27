@@ -1,0 +1,25 @@
+
+ Name                                                                  Monthly Qty  Unit                    Monthly Cost 
+                                                                                                                         
+ ibm_en_destination_huawei.destination_huawei_lite["false"]                                                              
+ └─ Push Destination Instances (Lite plan)                                       1  Instance                       $0.00 
+                                                                                                                         
+ ibm_en_destination_huawei.destination_huawei_lite["true"]                                                               
+ └─ Pre-Prod Push Destination Instances (Lite plan)                              1  Instance                       $0.00 
+                                                                                                                         
+ ibm_en_destination_huawei.destination_huawei_standard["false"]                                                          
+ └─ Push Destination Instances (Standard plan)                                   1  Instance                      $35.00 
+                                                                                                                         
+ ibm_en_destination_huawei.destination_huawei_standard["true"]                                                           
+ └─ Pre-Prod Push Destination Instances (Standard plan)                          1  Instance                      $10.00 
+                                                                                                                         
+ ibm_resource_instance.event_notifications["lite"]                                                                       
+ └─ Lite Plan                                                                    1  Instance                       $0.00 
+                                                                                                                         
+ ibm_resource_instance.event_notifications["standard"]                                                                   
+ └─ Ingested Events                                              Monthly cost depends on usage: $1.08 per Million Events 
+                                                                                                                         
+ OVERALL TOTAL                                                                                                    $45.00 
+──────────────────────────────────
+6 cloud resources were detected:
+∙ 6 were estimated, 2 of which include usage-based costs, see https://infracost.io/usage-file

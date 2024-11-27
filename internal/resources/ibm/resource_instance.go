@@ -108,6 +108,8 @@ type ResourceInstance struct {
 	EventStreams_Instances                    *float64 `infracost_usage:"messagehub_qty_instances"`
 	EventStreams_TerabyteHours                *float64 `infracost_usage:"messagehub_TERABYTE_HOURS"`
 	EventStreams_Terabytes                    *float64 `infracost_usage:"messagehub_qty_terabytes"`
+	// Event Notifications
+	EventNotifications_InboundIngestedEvents *float64 `infracost_usage:"event-notifications_MILLION_INGESTED_EVENTS"`
 }
 
 type ResourceCostComponentsFunc func(*ResourceInstance) []*schema.CostComponent
@@ -177,27 +179,29 @@ var ResourceInstanceUsageSchema = []*schema.UsageItem{
 	{Key: "messagehub_qty_instances", DefaultValue: 1, ValueType: schema.Float64},
 	{Key: "messagehub_TERABYTE_HOURS", DefaultValue: 1, ValueType: schema.Float64},
 	{Key: "messagehub_qty_terabytes", DefaultValue: 1, ValueType: schema.Float64},
+	{Key: "event-notifications_MILLION_INGESTED_EVENTS", DefaultValue: 0, ValueType: schema.Float64},
 }
 
 var ResourceInstanceCostMap map[string]ResourceCostComponentsFunc = map[string]ResourceCostComponentsFunc{
-	"kms":                     GetKMSCostComponents,
-	"secrets-manager":         GetSecretsManagerCostComponents,
-	"appid":                   GetAppIDCostComponents,
+	"aiopenscale":             GetWGOVCostComponents,
 	"appconnect":              GetAppConnectCostComponents,
-	"power-iaas":              GetPowerCostComponents,
+	"appid":                   GetAppIDCostComponents,
+	"compliance":              GetSCCCostComponents,
+	"continuous-delivery":     GetContinuousDeliveryCostComponenets,
+	"conversation":            GetWACostComponents,
+	"data-science-experience": GetWSCostComponents,
+	"discovery":               GetWDCostComponents,
+	"dns-svcs":                GetDNSServicesCostComponents,
+	"event-notifications":     GetEventNotificationsCostComponents,
+	"kms":                     GetKMSCostComponents,
 	"logdna":                  GetLogDNACostComponents,
 	"logdnaat":                GetActivityTrackerCostComponents,
-	"sysdig-monitor":          GetSysdigCostComponenets,
-	"continuous-delivery":     GetContinuousDeliveryCostComponenets,
-	"pm-20":                   GetWMLCostComponents,
-	"conversation":            GetWACostComponents,
-	"discovery":               GetWDCostComponents,
-	"compliance":              GetSCCCostComponents,
-	"data-science-experience": GetWSCostComponents,
-	"sysdig-secure":           GetSCCWPCostComponents,
-	"aiopenscale":             GetWGOVCostComponents,
-	"dns-svcs":                GetDNSServicesCostComponents,
 	"messagehub":              GetEventStreamsCostComponents,
+	"pm-20":                   GetWMLCostComponents,
+	"power-iaas":              GetPowerCostComponents,
+	"secrets-manager":         GetSecretsManagerCostComponents,
+	"sysdig-monitor":          GetSysdigCostComponenets,
+	"sysdig-secure":           GetSCCWPCostComponents,
 }
 
 func KMSKeyVersionsFreeCostComponent(r *ResourceInstance) *schema.CostComponent {
@@ -674,6 +678,7 @@ func GetContinuousDeliveryCostComponenets(r *ResourceInstance) []*schema.CostCom
 		q = decimalPtr(decimal.NewFromInt(*r.ContinuousDelivery_AuthorizedUsers))
 	}
 	if r.Plan == "lite" {
+
 		costComponent := &schema.CostComponent{
 			Name:            "Lite plan",
 			UnitMultiplier:  decimal.NewFromInt(1),

@@ -114,7 +114,7 @@ resource_usage:
     messagehub_CAPACITY_UNIT_HOURS: 1
     messagehub_qty_capacity_units: 1
     messagehub_CAPACITY_UNIT_HOURS_ADDITIONAL: 1
-    messagehub_qty_capacity_units_additional: 1 
+    messagehub_qty_capacity_units_additional: 1
     messagehub_CAPACITY_UNIT_HOURS_MIRRORING: 1
     messagehub_qty_capacity_units_mirroring: 1
     messagehub_INSTANCE_HOURS: 1
@@ -127,12 +127,12 @@ resource_usage:
     messagehub_INSTANCE_HOURS: 100
     messagehub_qty_instances: 1
     messagehub_GIGABYTE_TRANSMITTED_OUTBOUNDS: 100
-    
+
   ibm_resource_instance.messagehub_enterprise:
     messagehub_CAPACITY_UNIT_HOURS: 1
     messagehub_qty_capacity_units: 1
     messagehub_CAPACITY_UNIT_HOURS_ADDITIONAL: 1
-    messagehub_qty_capacity_units_additional: 1 
+    messagehub_qty_capacity_units_additional: 1
     messagehub_CAPACITY_UNIT_HOURS_MIRRORING: 1
     messagehub_qty_capacity_units_mirroring: 1
     messagehub_TERABYTE_HOURS: 10
@@ -143,4 +143,7 @@ resource_usage:
     messagehub_CAPACITY_UNIT_HOURS: 1
     messagehub_qty_capacity_units: 1
     messagehub_CAPACITY_UNIT_HOURS_ADDITIONAL: 1
-    messagehub_qty_capacity_units_additional: 1 
+    messagehub_qty_capacity_units_additional: 1
+
+  ibm_resource_instance.event_notifications[*]:
+    event-notifications_MILLION_INGESTED_EVENTS: 1

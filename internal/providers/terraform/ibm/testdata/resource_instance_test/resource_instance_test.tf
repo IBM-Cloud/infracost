@@ -328,3 +328,25 @@ resource "ibm_resource_instance" "messagehub_satellite" {
   location          = "satcon_dal"
   resource_group_id = "default"
 }
+
+locals {
+  event_notifications = {
+    plans : ["lite", "standard"]
+  }
+}
+resource "ibm_resource_instance" "event_notifications" {
+  for_each          = toset(local.event_notifications.plans)
+  name              = "event-notifications-${each.value}"
+  location          = "us-south"
+  plan              = each.value
+  resource_group_id = "default"
+  service           = "event-notifications"
+}
+
+resource "ibm_resource_instance" "event_notifications_no_usage" {
+  name              = "event-notifications-standard-no-usage"
+  location          = "us-south"
+  plan              = "standard"
+  resource_group_id = "default"
+  service           = "event-notifications"
+}

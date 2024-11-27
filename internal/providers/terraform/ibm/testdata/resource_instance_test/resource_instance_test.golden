@@ -18,6 +18,15 @@
  └─ Additional Million DNS Queries (first 999 Million Queries)                             999  Million Queries                      $645.16 
  └─ Additional Million DNS Queries (over 999 Million Queries)                                1  Million Queries                        $0.32 
                                                                                                                                              
+ ibm_resource_instance.event_notifications["lite"]                                                                                           
+ └─ Lite Plan                                                                                1  Instance                               $0.00 
+                                                                                                                                             
+ ibm_resource_instance.event_notifications["standard"]                                                                                       
+ └─ Ingested Events                                                                          1  Million Events                         $1.08 
+                                                                                                                                             
+ ibm_resource_instance.event_notifications_no_usage                                                                                          
+ └─ Ingested Events                                                      Monthly cost depends on usage: $1.08 per Million Events             
+                                                                                                                                             
  ibm_resource_instance.messagehub_enterprise                                                                                                 
  ├─ Base Capacity Unit-Hour                                                                  1  Hours                                  $7.37 
  ├─ Additional Capacity Unit-Hour                                                            1  Hours                                  $7.37 
@@ -197,7 +206,7 @@
  ├─ Class 2 Resource Units                                                                  50  RU                                     $0.09 
  └─ Class 3 Resource Units                                                                  50  RU                                     $0.25 
                                                                                                                                              
- OVERALL TOTAL                                                                                                                    $19,305.11 
+ OVERALL TOTAL                                                                                                                    $19,306.19 
 ──────────────────────────────────
-41 cloud resources were detected:
-∙ 41 were estimated, all of which include usage-based costs, see https://infracost.io/usage-file
+44 cloud resources were detected:
+∙ 44 were estimated, all of which include usage-based costs, see https://infracost.io/usage-file

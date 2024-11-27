@@ -1,0 +1,6 @@
+version: 0.1
+resource_usage:
+  ibm_en_subscription_email.subscription_email_lite:
+    event-notifications_OUTBOUND_DIGITAL_MESSAGES_EMAILS: 100000
+  ibm_en_subscription_email.subscription_email_standard:
+    event-notifications_OUTBOUND_DIGITAL_MESSAGES_EMAILS: 100000

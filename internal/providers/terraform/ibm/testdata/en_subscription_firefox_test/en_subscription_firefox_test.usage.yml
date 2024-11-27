@@ -1,0 +1,6 @@
+version: 0.1
+resource_usage:
+  ibm_en_subscription_firefox.subscription_firefox_lite:
+    event-notifications_OUTBOUND_DIGITAL_MESSAGES_PUSH: 1
+  ibm_en_subscription_firefox.subscription_firefox_standard:
+    event-notifications_OUTBOUND_DIGITAL_MESSAGES_PUSH: 10100
