@@ -38,7 +38,7 @@ require (
 	github.com/spf13/pflag v1.0.5
 	github.com/stretchr/testify v1.9.0
 	github.com/tidwall/gjson v1.14.3
-	github.com/zclconf/go-cty v1.12.1
+	github.com/zclconf/go-cty v1.15.1
 	golang.org/x/crypto v0.29.0
 	golang.org/x/mod v0.22.0
 	gopkg.in/go-playground/assert.v1 v1.2.1
@@ -135,6 +135,7 @@ require (
 	github.com/Microsoft/go-winio v0.6.2 // indirect
 	github.com/ProtonMail/go-crypto v0.0.0-20230828082145-3c4c8a2d2371 // indirect
 	github.com/agnivade/levenshtein v1.2.0 // indirect
+	github.com/apparentlymart/go-textseg/v15 v15.0.0 // indirect
 	github.com/asaskevich/govalidator v0.0.0-20230301143203-a9d515a09cc2 // indirect
 	github.com/aws/aws-sdk-go-v2/internal/v4a v1.0.17 // indirect
 	github.com/aws/aws-sdk-go-v2/service/internal/checksum v1.1.21 // indirect
