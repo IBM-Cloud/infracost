@@ -38,7 +38,7 @@ require (
 	github.com/spf13/pflag v1.0.5
 	github.com/stretchr/testify v1.9.0
 	github.com/tidwall/gjson v1.14.3
-	github.com/zclconf/go-cty v1.12.1
+	github.com/zclconf/go-cty v1.13.1
 	golang.org/x/crypto v0.29.0
 	golang.org/x/mod v0.22.0
 	gopkg.in/go-playground/assert.v1 v1.2.1
@@ -101,7 +101,7 @@ require (
 	github.com/google/go-github/v41 v41.0.0
 	github.com/gruntwork-io/terragrunt v0.36.9
 	github.com/hashicorp/go-terraform-address v0.0.0-20210506203813-2cc4f0f34da8
-	github.com/hashicorp/terraform-svchost v0.0.1
+	github.com/hashicorp/terraform-svchost v0.1.1
 	github.com/maruel/panicparse/v2 v2.3.1
 	github.com/pkg/browser v0.0.0-20201207095918-0426ae3fba23
 	github.com/pterm/pterm v0.12.50
