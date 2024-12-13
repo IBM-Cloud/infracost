@@ -77,6 +77,10 @@ func (r *ContainerVpcCluster) BuildResource() *schema.Resource {
 		attributeFilters = append(attributeFilters, &schema.AttributeFilter{
 			Key: "ocpIncluded", Value: strPtr("true"),
 		})
+	} else {
+		attributeFilters = append(attributeFilters, &schema.AttributeFilter{
+			Key: "ocpIncluded", Value: strPtr("false"),
+		})
 	}
 	WorkerCount := decimalPtr(decimal.NewFromInt(1))
 	if r.WorkerCount != 0 {
