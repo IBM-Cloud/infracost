@@ -21,9 +21,17 @@
  ├─ VPC Container Work Zone flavor: (bx2.4x16) region: (eu-de) name: (eu-de-1) x(3) workers        2,190  hours        $1,039.78 
  └─ VPC Container Work Zone flavor: (bx2.4x16) region: (eu-de) name: (eu-de-2) x(3) workers        2,190  hours        $1,039.78 
                                                                                                                                  
- OVERALL TOTAL                                                                                                         $8,226.30 
+ roks-no-entitlement                                                                                                             
+ ├─ VPC Container Work Zone flavor: (bx2.4x16) region: (eu-de) name: (eu-de-1) x(3) workers            3  hours            $1.42 
+ └─ VPC Container Work Zone flavor: (bx2.4x16) region: (eu-de) name: (eu-de-2) x(3) workers            3  hours            $1.42 
+                                                                                                                                 
+ roks-with-entitlement                                                                                                           
+ ├─ VPC Container Work Zone flavor: (bx2.4x16) region: (eu-de) name: (eu-de-1) x(3) workers            3  hours            $0.91 
+ └─ VPC Container Work Zone flavor: (bx2.4x16) region: (eu-de) name: (eu-de-2) x(3) workers            3  hours            $0.91 
+                                                                                                                                 
+ OVERALL TOTAL                                                                                                         $8,230.97 
 ──────────────────────────────────
-6 cloud resources were detected:
-∙ 4 were estimated, 1 of which usage-based costs, see https://infracost.io/usage-file
+8 cloud resources were detected:
+∙ 6 were estimated, 1 of which usage-based costs, see https://infracost.io/usage-file
 ∙ 2 were free:
   ∙ 2 x ibm_is_subnet
