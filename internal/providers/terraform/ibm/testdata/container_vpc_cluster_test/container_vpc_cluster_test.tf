@@ -77,3 +77,36 @@ resource "ibm_container_vpc_cluster" "roks_cluster_with_usage" {
     name      = "eu-de-2"
   }
 }
+
+resource "ibm_container_vpc_cluster" "roks_with_entitlement" {
+  name         = "roks-with-entitlement"
+  vpc_id       = ibm_is_vpc.vpc1.id
+  flavor       = "bx2.4x16"
+  worker_count = 3
+  kube_version = "4.13_openshift"
+  entitlement  = "cloud_pak"
+  zones {
+    subnet_id = ibm_is_subnet.subnet1.id
+    name      = "eu-de-1"
+  }
+  zones {
+    subnet_id = ibm_is_subnet.subnet1.id
+    name      = "eu-de-2"
+  }
+}
+
+resource "ibm_container_vpc_cluster" "roks_no_entitlement" {
+  name         = "roks-no-entitlement"
+  vpc_id       = ibm_is_vpc.vpc1.id
+  flavor       = "bx2.4x16"
+  worker_count = 3
+  kube_version = "4.13_openshift"
+  zones {
+    subnet_id = ibm_is_subnet.subnet1.id
+    name      = "eu-de-1"
+  }
+  zones {
+    subnet_id = ibm_is_subnet.subnet1.id
+    name      = "eu-de-2"
+  }
+}
