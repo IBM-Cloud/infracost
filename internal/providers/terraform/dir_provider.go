@@ -510,10 +510,6 @@ func checkTerraformVersion(v string, fullV string) error {
 		return fmt.Errorf("Terraform %s is not supported. Please use Terraform version >= %s. Update it or set the environment variable INFRACOST_TERRAFORM_BINARY.", v, minTerraformVer) //nolint
 	}
 
-	if strings.HasPrefix(fullV, "terragrunt") && semver.Compare(v, minTerragruntVer) < 0 {
-		return fmt.Errorf("Terragrunt %s is not supported. Please use Terragrunt version >= %s. Update it or set the environment variable INFRACOST_TERRAFORM_BINARY.", v, minTerragruntVer) //nolint
-	}
-
 	// Allow any non-terraform and non-terragrunt binaries
 	return nil
 }

@@ -69,21 +69,12 @@ func Detect(ctx *config.ProjectContext, includePastResources bool) (schema.Provi
 		}
 
 		return h, nil
-	case "terragrunt_dir":
-		h := terraform.NewTerragruntHCLProvider(ctx, includePastResources)
-		if err := validateProjectForHCL(ctx, path); err != nil {
-			return h, err
-		}
-
-		return h, nil
 	case "terraform_plan_json":
 		return terraform.NewPlanJSONProvider(ctx, includePastResources), nil
 	case "terraform_plan_binary":
 		return terraform.NewPlanProvider(ctx, includePastResources), nil
 	case "terraform_cli":
 		return terraform.NewDirProvider(ctx, includePastResources), nil
-	case "terragrunt_cli":
-		return terraform.NewTerragruntProvider(ctx, includePastResources), nil
 	case "terraform_state_json":
 		return terraform.NewStateJSONProvider(ctx, includePastResources), nil
 	case "cloudformation":
