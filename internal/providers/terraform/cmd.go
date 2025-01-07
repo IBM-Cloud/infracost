@@ -193,7 +193,7 @@ func CreateConfigFile(dir string, terraformCloudHost string, terraformCloudToken
 
 func copyFile(srcPath string, dstPath string) error {
 	// Ensure that the srcPath is canonical for the host OS
-	src = filepath.Clean(srcPath)
+	srcPath = filepath.Clean(srcPath)
 
 	src, err := os.Open(srcPath)
 	if err != nil {
@@ -202,7 +202,7 @@ func copyFile(srcPath string, dstPath string) error {
 	defer src.Close()
 
 	// Ensure that the dstPath is canonical for the host OS
-	dst = filepath.Clean(dstPath)
+	dstPath = filepath.Clean(dstPath)
 
 	dst, err := os.Create(dstPath)
 	if err != nil {
