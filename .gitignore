@@ -18,7 +18,7 @@ VSWorkspaceState.json
 *.out
 
 # Local
-.env.local
+.env*
 vendor/
 
 # Terraform artifacts
