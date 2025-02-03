@@ -175,7 +175,7 @@ func newRootCmd(ctx *config.RunContext) *cobra.Command {
 	rootCmd.PersistentFlags().Bool("debug-report", false, "Generate a debug report file which can be sent to Infracost team")
 
 	rootCmd.AddCommand(authCmd(ctx))
-	rootCmd.AddCommand(registerCmd(ctx))
+	// rootCmd.AddCommand(registerCmd(ctx))
 	rootCmd.AddCommand(configureCmd(ctx))
 	rootCmd.AddCommand(diffCmd(ctx))
 	rootCmd.AddCommand(breakdownCmd(ctx))
