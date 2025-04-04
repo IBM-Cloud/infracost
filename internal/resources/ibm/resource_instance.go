@@ -312,7 +312,25 @@ func SecretsManagerActiveSecretsCostComponent(r *ResourceInstance) *schema.CostC
 }
 
 func GetSecretsManagerCostComponents(r *ResourceInstance) []*schema.CostComponent {
-	if r.Plan == "standard" {
+	if r.Plan == "trial" {
+		costComponent := schema.CostComponent{
+			Name:            "Trial plan",
+			UnitMultiplier:  decimal.NewFromInt(1),
+			MonthlyQuantity: decimalPtr(decimal.NewFromInt(1)),
+			ProductFilter: &schema.ProductFilter{
+				VendorName: strPtr("ibm"),
+				Region:     strPtr(r.Location),
+				Service:    &r.Service,
+				AttributeFilters: []*schema.AttributeFilter{
+					{Key: "planName", Value: &r.Plan},
+				},
+			},
+		}
+		costComponent.SetCustomPrice(decimalPtr(decimal.NewFromInt(0)))
+		return []*schema.CostComponent{
+			&costComponent,
+		}
+	} else if r.Plan == "standard" {
 		return []*schema.CostComponent{
 			SecretsManagerInstanceCostComponent(r),
 			SecretsManagerActiveSecretsCostComponent(r),

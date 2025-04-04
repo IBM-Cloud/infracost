@@ -117,9 +117,12 @@
  ibm_resource_instance.resource_instance_power_iaas                                                                                          
  └─ Workspace for Power Virtual Server                                                       1  Workspace                              $0.00 
                                                                                                                                              
- ibm_resource_instance.resource_instance_secrets_manager                                                                                     
+ ibm_resource_instance.resource_instance_secrets_manager_standard                                                                            
  ├─ Instance                                                                                 1  Instance                             $321.00 
  └─ Active Secrets                                                                         400  Secrets                               $86.00 
+                                                                                                                                             
+ ibm_resource_instance.resource_instance_secrets_manager_trial                                                                               
+ └─ Trial plan                                                                               1                                         $0.00 
                                                                                                                                              
  ibm_resource_instance.scc_standard                                                                                                          
  └─ Evaluations                                                                          1,000  Evaluations                           $13.39 
