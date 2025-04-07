@@ -18,10 +18,18 @@ resource "ibm_resource_instance" "resource_instance_kms" {
   resource_group_id = "default"
 }
 
-resource "ibm_resource_instance" "resource_instance_secrets_manager" {
+resource "ibm_resource_instance" "resource_instance_secrets_manager_standard" {
   name              = "test"
   service           = "secrets-manager"
   plan              = "standard"
+  location          = "us-south"
+  resource_group_id = "default"
+}
+
+resource "ibm_resource_instance" "resource_instance_secrets_manager_trial" {
+  name              = "test"
+  service           = "secrets-manager"
+  plan              = "trial"
   location          = "us-south"
   resource_group_id = "default"
 }
