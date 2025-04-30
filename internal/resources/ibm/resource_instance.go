@@ -64,6 +64,19 @@ type ResourceInstance struct {
 	WML_Class1RU *float64 `infracost_usage:"wml_class1_ru"`
 	WML_Class2RU *float64 `infracost_usage:"wml_class2_ru"`
 	WML_Class3RU *float64 `infracost_usage:"wml_class3_ru"`
+	WML_Hours_Category_One *float64 `infracost_usage:"wml_hours_category_one"`
+	WML_Hours_Category_Two *float64 `infracost_usage:"wml_hours_category_two"`
+	WML_Hours_Category_Three *float64 `infracost_usage:"wml_hours_category_three"`
+	WML_Hours_Category_Four *float64 `infracost_usage:"wml_hours_category_four"`
+	WML_Hours_Category_Five *float64 `infracost_usage:"wml_hours_category_five"`
+	WML_Hours_Category_Six *float64 `infracost_usage:"wml_hours_category_six"`
+	WML_Hours_Mistral_Large *float64 `infracost_usage:"wml_hours_mistral_large"`
+	WML_Pages_Category_One *float64 `infracost_usage:"wml_pages_category_one"`
+	WML_Pages_Category_Two *float64 `infracost_usage:"wml_pages_category_two"`
+	WML_Model_Inference_Ibm *float64 `infracost_usage:"wml_model_inference_ibm"`
+	WML_Mistral_Large_Input_Resource_Units *float64 `infracost_usage:"wml_mistral_large_input_resource_units"`
+	WML_Mistral_Large_Resource_Units *float64 `infracost_usage:"wml_mistral_large_resource_units"`
+	WML_Model_Inference_Third_Party *float64 `infracost_usage:"wml_model_inference_third_party"`
 	// Watson Assistant
 	WA_Instance *float64 `infracost_usage:"wa_instance"`
 	WA_mau      *float64 `infracost_usage:"wa_monthly_active_users"`
@@ -143,6 +156,19 @@ var ResourceInstanceUsageSchema = []*schema.UsageItem{
 	{Key: "wml_class1_ru", DefaultValue: 0, ValueType: schema.Float64},
 	{Key: "wml_class2_ru", DefaultValue: 0, ValueType: schema.Float64},
 	{Key: "wml_class3_ru", DefaultValue: 0, ValueType: schema.Float64},
+	{Key: "wml_hours_category_one", DefaultValue: 0, ValueType: schema.Float64},
+	{Key: "wml_hours_category_two", DefaultValue: 0, ValueType: schema.Float64},
+	{Key: "wml_hours_category_three", DefaultValue: 0, ValueType: schema.Float64},
+	{Key: "wml_hours_category_four", DefaultValue: 0, ValueType: schema.Float64},
+	{Key: "wml_hours_category_five", DefaultValue: 0, ValueType: schema.Float64},
+	{Key: "wml_hours_category_six", DefaultValue: 0, ValueType: schema.Float64},
+	{Key: "wml_hours_mistral_large", DefaultValue: 0, ValueType: schema.Float64},
+	{Key: "wml_pages_category_one", DefaultValue: 0, ValueType: schema.Float64},
+	{Key: "wml_pages_category_two", DefaultValue: 0, ValueType: schema.Float64},
+	{Key: "wml_model_inference_ibm", DefaultValue: 0, ValueType: schema.Float64},
+	{Key: "wml_mistral_large_input_resource_units", DefaultValue: 0, ValueType: schema.Float64},
+	{Key: "wml_mistral_large_resource_units", DefaultValue: 0, ValueType: schema.Float64},
+	{Key: "wml_model_inference_third_party", DefaultValue: 0, ValueType: schema.Float64},
 	{Key: "wa_instance", DefaultValue: 0, ValueType: schema.Float64},
 	{Key: "wa_monthly_active_users", DefaultValue: 0, ValueType: schema.Float64},
 	{Key: "wa_monthly_voice_users", DefaultValue: 0, ValueType: schema.Float64},
