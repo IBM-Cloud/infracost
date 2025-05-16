@@ -1,24 +1,24 @@
 
- Name                                                                          Monthly Qty  Unit                    Monthly Cost 
-                                                                                                                                 
- ibm_en_subscription_chrome.subscription_chrome_lite                                                                             
- └─ Outbound Android Push Messages (Lite plan)                                           1  Messages                       $0.00 
-                                                                                                                                 
- ibm_en_subscription_chrome.subscription_chrome_standard                                                                         
- └─ Outbound Android Push Messages (Standard plan) (first 100 Messages)                100  Messages                       $0.00 
- └─ Outbound Android Push Messages (Standard plan) (over 100 Messages)              10,000  Messages                       $0.01 
-                                                                                                                                 
- ibm_en_subscription_chrome.subscription_chrome_standard_no_usage                                                                
- └─ Outbound Android Push Messages (Standard plan) (first 100 Messages)  Monthly cost depends on usage: $0.000001 per Messages   
- └─ Outbound Android Push Messages (Standard plan) (over 100 Messages)   Monthly cost depends on usage: $0.0000005 per Messages  
-                                                                                                                                 
- ibm_resource_instance.event_notifications["lite"]                                                                               
- └─ Lite Plan                                                                            1  Instance                       $0.00 
-                                                                                                                                 
- ibm_resource_instance.event_notifications["standard"]                                                                           
- └─ Ingested Events                                                      Monthly cost depends on usage: $1.08 per Million Events 
-                                                                                                                                 
- OVERALL TOTAL                                                                                                             $0.01 
+ Name                                                                             Monthly Qty  Unit                    Monthly Cost 
+                                                                                                                                    
+ ibm_en_subscription_chrome.subscription_chrome_lite                                                                                
+ └─ Outbound Chrome Push Messages (Lite plan) (Max. 1,000 per destination)                  1  Messages                       $0.00 
+                                                                                                                                    
+ ibm_en_subscription_chrome.subscription_chrome_standard                                                                            
+ └─ Outbound Chrome Push Messages (Standard plan) (first 100 Messages)                    100  Messages                       $0.00 
+ └─ Outbound Chrome Push Messages (Standard plan) (over 100 Messages)                  10,000  Messages                       $0.01 
+                                                                                                                                    
+ ibm_en_subscription_chrome.subscription_chrome_standard_no_usage                                                                   
+ └─ Outbound Chrome Push Messages (Standard plan) (first 100 Messages)      Monthly cost depends on usage: $0.000001 per Messages   
+ └─ Outbound Chrome Push Messages (Standard plan) (over 100 Messages)       Monthly cost depends on usage: $0.0000005 per Messages  
+                                                                                                                                    
+ ibm_resource_instance.event_notifications["lite"]                                                                                  
+ └─ Lite Plan                                                                               1  Instance                       $0.00 
+                                                                                                                                    
+ ibm_resource_instance.event_notifications["standard"]                                                                              
+ └─ Ingested Events                                                         Monthly cost depends on usage: $1.08 per Million Events 
+                                                                                                                                    
+ OVERALL TOTAL                                                                                                                $0.01 
 ──────────────────────────────────
 5 cloud resources were detected:
 ∙ 5 were estimated, 2 of which include usage-based costs, see https://infracost.io/usage-file
