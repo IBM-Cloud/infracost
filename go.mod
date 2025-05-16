@@ -38,7 +38,7 @@ require (
 	github.com/spf13/pflag v1.0.6
 	github.com/stretchr/testify v1.10.0
 	github.com/tidwall/gjson v1.14.3
-	github.com/zclconf/go-cty v1.12.1
+	github.com/zclconf/go-cty v1.15.0
 	golang.org/x/crypto v0.38.0
 	golang.org/x/mod v0.22.0
 	gopkg.in/go-playground/assert.v1 v1.2.1
@@ -126,6 +126,7 @@ require (
 	github.com/Microsoft/go-winio v0.6.2 // indirect
 	github.com/ProtonMail/go-crypto v1.1.6 // indirect
 	github.com/agnivade/levenshtein v1.2.1 // indirect
+	github.com/apparentlymart/go-textseg/v15 v15.0.0 // indirect
 	github.com/asaskevich/govalidator v0.0.0-20230301143203-a9d515a09cc2 // indirect
 	github.com/aws/aws-sdk-go-v2/internal/v4a v1.0.17 // indirect
 	github.com/aws/aws-sdk-go-v2/service/internal/checksum v1.1.21 // indirect
@@ -240,4 +241,4 @@ replace github.com/jedib0t/go-pretty/v6 => github.com/aliscott/go-pretty/v6 v6.1
 replace github.com/spf13/cobra => github.com/spf13/cobra v1.4.0
 
 // go-cty-yaml repo has some CVE's that have been addressed in a private fork within GHE
-// replace github.com/zclconf/go-cty-yaml => github.ibm.com/dataops/go-cty-yaml v1.0.0
+// replace github.com/zclconf/go-cty-yaml => github.ibm.com/dataops/go-cty-yaml v1.0.1
