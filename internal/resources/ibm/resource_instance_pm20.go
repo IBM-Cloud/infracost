@@ -19,14 +19,14 @@ func GetWMLCostComponents(r *ResourceInstance) []*schema.CostComponent {
 		return []*schema.CostComponent{
 			WMLInstanceCostComponent(r),
 			WMLStandardCapacityUnitHoursCostComponent(r),
-			WMLClass1ResourceUnitsCostComponent(r),
+			WMLMistralLargeOutputResourceUnitsCostComponent(r),
 			WMLClass2ResourceUnitsCostComponent(r),
 			WMLClass3ResourceUnitsCostComponent(r),
 		}
 	} else if r.Plan == "v2-standard" {
 		return []*schema.CostComponent{
 			WMLEssentialsCapacityUnitHoursCostComponent(r),
-			WMLClass1ResourceUnitsCostComponent(r),
+			WMLMistralLargeOutputResourceUnitsCostComponent(r),
 			WMLClass2ResourceUnitsCostComponent(r),
 			WMLClass3ResourceUnitsCostComponent(r),
 		}
@@ -102,7 +102,7 @@ func WMLEssentialsCapacityUnitHoursCostComponent(r *ResourceInstance) *schema.Co
 	}
 	return &schema.CostComponent{
 		Name:            "Capacity Unit-Hours",
-		Unit:            "CUH",
+		Unit:            "CAPACITY_UNIT_HOURS",
 		UnitMultiplier:  decimal.NewFromInt(1),
 		MonthlyQuantity: q,
 		ProductFilter: &schema.ProductFilter{
@@ -140,7 +140,7 @@ func WMLStandardCapacityUnitHoursCostComponent(r *ResourceInstance) *schema.Cost
 
 	return &schema.CostComponent{
 		Name:            "Additional Capacity Unit-Hours",
-		Unit:            "CUH",
+		Unit:            "CAPACITY_UNIT_HOURS",
 		UnitMultiplier:  decimal.NewFromInt(1),
 		MonthlyQuantity: q,
 		ProductFilter: &schema.ProductFilter{
@@ -157,13 +157,13 @@ func WMLStandardCapacityUnitHoursCostComponent(r *ResourceInstance) *schema.Cost
 	}
 }
 
-func WMLClass1ResourceUnitsCostComponent(r *ResourceInstance) *schema.CostComponent {
+func WMLMistralLargeOutputResourceUnitsCostComponent(r *ResourceInstance) *schema.CostComponent {
 	var q *decimal.Decimal
-	if r.WML_Class1RU != nil {
-		q = decimalPtr(decimal.NewFromFloat(*r.WML_Class1RU))
+	if r.WML_MistralLargeOutput != nil {
+		q = decimalPtr(decimal.NewFromFloat(*r.WML_MistralLargeOutput))
 	}
 	return &schema.CostComponent{
-		Name:            "Class 1 Resource Units",
+		Name:            "Mistral Large Resource Units",
 		Unit:            "RU",
 		UnitMultiplier:  decimal.NewFromInt(1),
 		MonthlyQuantity: q,
@@ -176,14 +176,14 @@ func WMLClass1ResourceUnitsCostComponent(r *ResourceInstance) *schema.CostCompon
 			},
 		},
 		PriceFilter: &schema.PriceFilter{
-			Unit: strPtr("CLASS_ONE_RESOURCE_UNITS"),
+			Unit: strPtr("MISTRAL_LARGE_RESOURCE_UNITS"),
 		},
 	}
 }
 
 func WMLClass2ResourceUnitsCostComponent(r *ResourceInstance) *schema.CostComponent {
 	var q *decimal.Decimal
-	if r.WML_Class1RU != nil {
+	if r.WML_Class2RU != nil {
 		q = decimalPtr(decimal.NewFromFloat(*r.WML_Class2RU))
 	}
 	return &schema.CostComponent{
@@ -207,7 +207,7 @@ func WMLClass2ResourceUnitsCostComponent(r *ResourceInstance) *schema.CostCompon
 
 func WMLClass3ResourceUnitsCostComponent(r *ResourceInstance) *schema.CostComponent {
 	var q *decimal.Decimal
-	if r.WML_Class1RU != nil {
+	if r.WML_Class3RU != nil {
 		q = decimalPtr(decimal.NewFromFloat(*r.WML_Class3RU))
 	}
 	return &schema.CostComponent{
