@@ -45,15 +45,21 @@ resource_usage:
     wml_mistral_unit_output_ru: 50
   ibm_resource_instance.wml_instance_essentials:
     wml_capacity_unit_hour: 20
-    wml_class1_ru: 50
-    wml_class2_ru: 50
-    wml_class3_ru: 50
+    wml_mistral_unit_output_ru: 10
+    wml_mistral_unit_input_ru: 10
+    wml_text_extract_cat_1: 10
+    wml_text_extract_cat_2: 10
+    wml_ibm_model_ru: 500
+    wml_3rd_party_model_ru: 500
   ibm_resource_instance.wml_instance_standard:
-    wml_capacity_unit_hour: 20
+    wml_capacity_unit_hour: 3000
     wml_instance: 1
-    wml_class1_ru: 50
-    wml_class2_ru: 50
-    wml_class3_ru: 50
+    wml_mistral_unit_output_ru: 10
+    wml_mistral_unit_input_ru: 10
+    wml_text_extract_cat_1: 10
+    wml_text_extract_cat_2: 10
+    wml_ibm_model_ru: 500
+    wml_3rd_party_model_ru: 500
   ibm_resource_instance.wa_instance_plus:
     wa_instance: 1
     wa_monthly_active_users: 2000
