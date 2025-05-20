@@ -16,19 +16,27 @@ const CUH_PER_INSTANCE = 2500
  */
 func GetWMLCostComponents(r *ResourceInstance) []*schema.CostComponent {
 	if r.Plan == "v2-professional" {
+		fmt.Println("professional called")
 		return []*schema.CostComponent{
 			WMLInstanceCostComponent(r),
 			WMLStandardCapacityUnitHoursCostComponent(r),
 			WMLMistralLargeOutputResourceUnitsCostComponent(r),
-			WMLClass2ResourceUnitsCostComponent(r),
-			WMLClass3ResourceUnitsCostComponent(r),
+			WMLTextExtractionCatOneCostComponent(r),
+			WMLTextExtractionCatTwoCostComponent(r, "PAGES_CATEGORY_TWO"),
+			WMLIBMModelResourceUnits(r),
+			WML3rdPartyModelResourceUnits(r),
+			WMLMistralLargeInputResourceUnitsCostComponent(r),
 		}
 	} else if r.Plan == "v2-standard" {
+		fmt.Println("essentials called")
 		return []*schema.CostComponent{
 			WMLEssentialsCapacityUnitHoursCostComponent(r),
 			WMLMistralLargeOutputResourceUnitsCostComponent(r),
-			WMLClass2ResourceUnitsCostComponent(r),
-			WMLClass3ResourceUnitsCostComponent(r),
+			WMLTextExtractionCatOneCostComponent(r),
+			WMLTextExtractionCatTwoCostComponent(r, "PAGES_CATAGORY_TWO"),
+			WMLIBMModelResourceUnits(r),
+			WML3rdPartyModelResourceUnits(r),
+			WMLMistralLargeInputResourceUnitsCostComponent(r),
 		}
 	} else if r.Plan == "lite" {
 		costComponent := schema.CostComponent{
@@ -163,7 +171,7 @@ func WMLMistralLargeOutputResourceUnitsCostComponent(r *ResourceInstance) *schem
 		q = decimalPtr(decimal.NewFromFloat(*r.WML_MistralLargeOutput))
 	}
 	return &schema.CostComponent{
-		Name:            "Mistral Large Resource Units",
+		Name:            "Mistral Large Output Resource Unit",
 		Unit:            "RU",
 		UnitMultiplier:  decimal.NewFromInt(1),
 		MonthlyQuantity: q,
@@ -181,14 +189,14 @@ func WMLMistralLargeOutputResourceUnitsCostComponent(r *ResourceInstance) *schem
 	}
 }
 
-func WMLClass2ResourceUnitsCostComponent(r *ResourceInstance) *schema.CostComponent {
+func WMLTextExtractionCatOneCostComponent(r *ResourceInstance) *schema.CostComponent {
 	var q *decimal.Decimal
-	if r.WML_Class2RU != nil {
-		q = decimalPtr(decimal.NewFromFloat(*r.WML_Class2RU))
+	if r.WML_TextExtractCat1 != nil {
+		q = decimalPtr(decimal.NewFromFloat(*r.WML_TextExtractCat1))
 	}
 	return &schema.CostComponent{
-		Name:            "Class 2 Resource Units",
-		Unit:            "RU",
+		Name:            "Text Extraction Category 1",
+		Unit:            "PAGES_CATEGORY_ONE",
 		UnitMultiplier:  decimal.NewFromInt(1),
 		MonthlyQuantity: q,
 		ProductFilter: &schema.ProductFilter{
@@ -200,19 +208,20 @@ func WMLClass2ResourceUnitsCostComponent(r *ResourceInstance) *schema.CostCompon
 			},
 		},
 		PriceFilter: &schema.PriceFilter{
-			Unit: strPtr("CLASS_TWO_RESOURCE_UNITS"),
+			Unit: strPtr("PAGES_CATEGORY_ONE"),
 		},
 	}
 }
 
-func WMLClass3ResourceUnitsCostComponent(r *ResourceInstance) *schema.CostComponent {
+func WMLTextExtractionCatTwoCostComponent(r *ResourceInstance, unit string) *schema.CostComponent {
 	var q *decimal.Decimal
-	if r.WML_Class3RU != nil {
-		q = decimalPtr(decimal.NewFromFloat(*r.WML_Class3RU))
+	if r.WML_TextExtractCat2  != nil {
+		q = decimalPtr(decimal.NewFromFloat(*r.WML_TextExtractCat2))
 	}
+	fmt.Println(r.Plan)
 	return &schema.CostComponent{
-		Name:            "Class 3 Resource Units",
-		Unit:            "RU",
+		Name:            "Text Extraction Category 2",
+		Unit:            unit,
 		UnitMultiplier:  decimal.NewFromInt(1),
 		MonthlyQuantity: q,
 		ProductFilter: &schema.ProductFilter{
@@ -224,7 +233,81 @@ func WMLClass3ResourceUnitsCostComponent(r *ResourceInstance) *schema.CostCompon
 			},
 		},
 		PriceFilter: &schema.PriceFilter{
-			Unit: strPtr("CLASS_THREE_RESOURCE_UNITS"),
+			Unit: strPtr(unit),
+		},
+	}
+}
+
+func WMLIBMModelResourceUnits(r *ResourceInstance) *schema.CostComponent {
+	var q *decimal.Decimal
+	if r.WML_IBMModelRU != nil {
+		q = decimalPtr(decimal.NewFromFloat(*r.WML_IBMModelRU))
+	}
+	fmt.Println(r.Plan)
+	return &schema.CostComponent{
+		Name:            "Resource Units (IBM Models)",
+		Unit:            "MODEL_INFERENCE_IBM",
+		UnitMultiplier:  decimal.NewFromInt(1),
+		MonthlyQuantity: q,
+		ProductFilter: &schema.ProductFilter{
+			VendorName: strPtr("ibm"),
+			Region:     strPtr(r.Location),
+			Service:    &r.Service,
+			AttributeFilters: []*schema.AttributeFilter{
+				{Key: "planName", Value: &r.Plan},
+			},
+		},
+		PriceFilter: &schema.PriceFilter{
+			Unit: strPtr("MODEL_INFERENCE_IBM"),
+		},
+	}
+}
+
+func WML3rdPartyModelResourceUnits(r *ResourceInstance) *schema.CostComponent {
+	var q *decimal.Decimal
+	if r.WML_3rdPartyModelRU != nil {
+		q = decimalPtr(decimal.NewFromFloat(*r.WML_3rdPartyModelRU))
+	}
+	fmt.Println(r.Plan)
+	return &schema.CostComponent{
+		Name:            "Resource Units (Third Party Models)",
+		Unit:            "MODEL_INFERENCE_THIRD_PARTY",
+		UnitMultiplier:  decimal.NewFromInt(1),
+		MonthlyQuantity: q,
+		ProductFilter: &schema.ProductFilter{
+			VendorName: strPtr("ibm"),
+			Region:     strPtr(r.Location),
+			Service:    &r.Service,
+			AttributeFilters: []*schema.AttributeFilter{
+				{Key: "planName", Value: &r.Plan},
+			},
+		},
+		PriceFilter: &schema.PriceFilter{
+			Unit: strPtr("MODEL_INFERENCE_THIRD_PARTY"),
+		},
+	}
+}
+
+func WMLMistralLargeInputResourceUnitsCostComponent(r *ResourceInstance) *schema.CostComponent {
+	var q *decimal.Decimal
+	if r.WML_MistralLargeInput != nil {
+		q = decimalPtr(decimal.NewFromFloat(*r.WML_MistralLargeInput))
+	}
+	return &schema.CostComponent{
+		Name:            "Mistral Large Input Resource Unit",
+		Unit:            "MISTRAL_LARGE_INPUT_RESOURCE_UNITS",
+		UnitMultiplier:  decimal.NewFromInt(1),
+		MonthlyQuantity: q,
+		ProductFilter: &schema.ProductFilter{
+			VendorName: strPtr("ibm"),
+			Region:     strPtr(r.Location),
+			Service:    &r.Service,
+			AttributeFilters: []*schema.AttributeFilter{
+				{Key: "planName", Value: &r.Plan},
+			},
+		},
+		PriceFilter: &schema.PriceFilter{
+			Unit: strPtr("MISTRAL_LARGE_INPUT_RESOURCE_UNITS"),
 		},
 	}
 }

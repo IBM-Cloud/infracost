@@ -62,8 +62,11 @@ type ResourceInstance struct {
 	WML_CUH      *float64 `infracost_usage:"wml_capacity_unit_hour"`
 	WML_Instance *float64 `infracost_usage:"wml_instance"`
 	WML_MistralLargeOutput *float64 `infracost_usage:"wml_mistral_unit_output_ru"`
-	WML_Class2RU *float64 `infracost_usage:"wml_class2_ru"`
-	WML_Class3RU *float64 `infracost_usage:"wml_class3_ru"`
+	WML_MistralLargeInput *float64 `infracost_usage:"wml_mistral_unit_input_ru"`
+	WML_TextExtractCat1 *float64 `infracost_usage:"wml_text_extract_cat_1"`
+	WML_TextExtractCat2 *float64 `infracost_usage:"wml_text_extract_cat_2"`
+	WML_IBMModelRU *float64 `infracost_usage:"wml_ibm_model_ru"`
+	WML_3rdPartyModelRU *float64 `infracost_usage:"wml_3rd_party_model_ru"`
 	// Watson Assistant
 	WA_Instance *float64 `infracost_usage:"wa_instance"`
 	WA_mau      *float64 `infracost_usage:"wa_monthly_active_users"`
