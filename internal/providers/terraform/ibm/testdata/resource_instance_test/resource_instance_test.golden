@@ -197,7 +197,7 @@
                                                                                                                                              
  ibm_resource_instance.wml_instance_essentials                                                                                               
  ├─ Capacity Unit-Hours                                                                     20  CUH                                   $10.40 
- ├─ Mistral Large Output Resource Unit                                                      10  RU                                     $0.10 
+ ├─ Mistral Large Output Resource Unit                                                      10  RESOURCE_UNITS                         $0.10 
  ├─ Text Extraction Category 1                                                              10  Page                                   $0.38 
  ├─ Text Extraction Category 2                                                              10  Page                                   $0.19 
  ├─ Resource Units (IBM Models)                                                            500  RU                                     $0.05 
@@ -206,7 +206,7 @@
                                                                                                                                              
  ibm_resource_instance.wml_instance_essentials_no_quantity                                                                                   
  ├─ Capacity Unit-Hours                                                  Monthly cost depends on usage: $0.52 per CUH                        
- ├─ Mistral Large Output Resource Unit                                   Monthly cost depends on usage: $0.01 per RU                         
+ ├─ Mistral Large Output Resource Unit                                   Monthly cost depends on usage: $0.01 per RESOURCE_UNITS             
  ├─ Text Extraction Category 1                                           Monthly cost depends on usage: $0.038 per Page                      
  ├─ Text Extraction Category 2                                           Monthly cost depends on usage: $0.019 per Page                      
  ├─ Resource Units (IBM Models)                                          Monthly cost depends on usage: $0.0001 per RU                       
@@ -219,24 +219,46 @@
  ibm_resource_instance.wml_instance_standard                                                                                                 
  ├─ Instance (2500 CUH included)                                                             1  Instance                           $1,050.00 
  ├─ Additional Capacity Unit-Hours                                                         500  CUH                                  $210.00 
- ├─ Mistral Large Output Resource Unit                                                      10  RU                                     $0.10 
+ ├─ Mistral Large Output Resource Unit                                                      10  RESOURCE_UNITS                         $0.10 
  ├─ Text Extraction Category 1                                                              10  Page                                   $0.30 
  ├─ Text Extraction Category 2                                                              10  Page                                   $0.15 
  ├─ Resource Units (IBM Models)                                                            500  RU                                     $0.05 
  ├─ Resource Units (Third Party Models)                                                    500  RU                                     $0.05 
- └─ Mistral Large Input Resource Unit                                                       10  RU                                     $0.03 
+ ├─ Mistral Large Input Resource Unit                                                       10  RU                                     $0.03 
+ ├─ Small Model Hosting                                                                      1  Hours                                  $5.22 
+ ├─ Medium Model Hosting                                                                     1  Hours                                 $10.40 
+ ├─ Large Model Hosting                                                                      1  Hours                                 $20.85 
+ ├─ Extra Large Model Hosting                                                                1  Hours                                 $41.70 
+ ├─ Extra Small Model Hosting                                                                1  Hours                                  $4.43 
+ ├─ Very Large Model Hosting                                                                 1  Hours                                 $83.50 
+ ├─ Mistral Large Model Hosting Access                                                       1  Hours                                 $34.30 
+ ├─ InstructLab Data                                                                        10  RU                                     $0.06 
+ ├─ InstructLab Tuning                                                                      10  RU                                     $0.07 
+ ├─ Mistral 1 GPU Model Hosting Access                                                       1  Hours                                  $8.60 
+ └─ Mistral 2 GPU Model Hosting Access                                                       1  Hours                                 $17.20 
                                                                                                                                              
  ibm_resource_instance.wml_instance_standard_no_quantity                                                                                     
  ├─ Instance (2500 CUH included)                                                             1  Instance                           $1,050.00 
  ├─ Additional Capacity Unit-Hours                                       Monthly cost depends on usage: $0.42 per CUH                        
- ├─ Mistral Large Output Resource Unit                                   Monthly cost depends on usage: $0.01 per RU                         
+ ├─ Mistral Large Output Resource Unit                                   Monthly cost depends on usage: $0.01 per RESOURCE_UNITS             
  ├─ Text Extraction Category 1                                           Monthly cost depends on usage: $0.03 per Page                       
  ├─ Text Extraction Category 2                                           Monthly cost depends on usage: $0.015 per Page                      
  ├─ Resource Units (IBM Models)                                          Monthly cost depends on usage: $0.0001 per RU                       
  ├─ Resource Units (Third Party Models)                                  Monthly cost depends on usage: $0.0001 per RU                       
- └─ Mistral Large Input Resource Unit                                    Monthly cost depends on usage: $0.003 per RU                        
+ ├─ Mistral Large Input Resource Unit                                    Monthly cost depends on usage: $0.003 per RU                        
+ ├─ Small Model Hosting                                                  Monthly cost depends on usage: $5.22 per Hours                      
+ ├─ Medium Model Hosting                                                 Monthly cost depends on usage: $10.40 per Hours                     
+ ├─ Large Model Hosting                                                  Monthly cost depends on usage: $20.85 per Hours                     
+ ├─ Extra Large Model Hosting                                            Monthly cost depends on usage: $41.70 per Hours                     
+ ├─ Extra Small Model Hosting                                            Monthly cost depends on usage: $4.43 per Hours                      
+ ├─ Very Large Model Hosting                                             Monthly cost depends on usage: $83.50 per Hours                     
+ ├─ Mistral Large Model Hosting Access                                   Monthly cost depends on usage: $34.30 per Hours                     
+ ├─ InstructLab Data                                                     Monthly cost depends on usage: $0.00625 per RU                      
+ ├─ InstructLab Tuning                                                   Monthly cost depends on usage: $0.007 per RU                        
+ ├─ Mistral 1 GPU Model Hosting Access                                   Monthly cost depends on usage: $8.60 per Hours                      
+ └─ Mistral 2 GPU Model Hosting Access                                   Monthly cost depends on usage: $17.20 per Hours                     
                                                                                                                                              
- OVERALL TOTAL                                                                                                                    $23,879.58 
+ OVERALL TOTAL                                                                                                                    $24,105.92 
 ──────────────────────────────────
 47 cloud resources were detected:
 ∙ 47 were estimated, all of which include usage-based costs, see https://infracost.io/usage-file

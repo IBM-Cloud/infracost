@@ -60,6 +60,17 @@ resource_usage:
     wml_text_extract_cat_2: 10
     wml_ibm_model_ru: 500
     wml_3rd_party_model_ru: 500
+    wml_small_model_hosting: 1
+    wml_medium_model_hosting: 1
+    wml_large_model_hosting: 1
+    wml_extra_large_model_hosting: 1
+    wml_extra_small_model_hosting: 1
+    wml_very_large_model_hosting: 1
+    wml_mistral_large_model_hosting_access: 1
+    wml_instructlab_data_ru: 10
+    wsl_instructlab_tuning_ru: 10
+    wsl_mistral_1_gpu_model_hosting_access: 1
+    wsl_mistral_2_gpu_model_hosting_access: 1
   ibm_resource_instance.wa_instance_plus:
     wa_instance: 1
     wa_monthly_active_users: 2000
