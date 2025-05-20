@@ -61,7 +61,7 @@ type ResourceInstance struct {
 	// https://dataplatform.cloud.ibm.com/docs/content/wsj/getting-started/wml-plans.html?context=cpdaas
 	WML_CUH      *float64 `infracost_usage:"wml_capacity_unit_hour"`
 	WML_Instance *float64 `infracost_usage:"wml_instance"`
-	WML_Class1RU *float64 `infracost_usage:"wml_class1_ru"`
+	WML_MistralLargeOutput *float64 `infracost_usage:"wml_mistral_unit_output_ru"`
 	WML_Class2RU *float64 `infracost_usage:"wml_class2_ru"`
 	WML_Class3RU *float64 `infracost_usage:"wml_class3_ru"`
 	// Watson Assistant
