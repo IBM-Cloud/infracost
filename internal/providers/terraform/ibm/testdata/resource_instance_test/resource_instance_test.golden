@@ -12,7 +12,9 @@
  ├─ Pool Hours                                                                                  1  Hours                                                  $0.04 
  ├─ GLB Instance Hours                                                                          1  Hours                                                  $0.04 
  ├─ Health Checks                                                                               1  Health Checks                                          $1.08 
- ├─ Custom Resolver Location Hours                                                              1  Hours                                                  $0.00 
+ ├─ Custom Resolver Essential Location Hours                                                    1  Hours                                                  $0.13 
+ ├─ Custom Resolver Premier Location Hours                                                      1  Hours                                                  $0.72 
+ ├─ Custom Resolver Advanced Location Hours                                                     1  Hours                                                  $0.36 
  ├─ Million Custom Resolver External Queries (first 10 Million Queries)                        10  Million Queries                                        $4.31 
  ├─ Million Custom Resolver External Queries (over 10 Million Queries)                          1  Million Queries                                        $0.22 
  └─ Additional Million DNS Queries (first 999 Million Queries)                                999  Million Queries                                      $645.16 
@@ -234,7 +236,7 @@
  ├─ Resource Units (Third Party Models)                                  Monthly cost depends on usage: $0.0001 per MODEL_INFERENCE_THIRD_PARTY                 
  └─ Mistral Large Input Resource Unit                                    Monthly cost depends on usage: $0.003 per MISTRAL_LARGE_INPUT_RESOURCE_UNITS           
                                                                                                                                                                 
- OVERALL TOTAL                                                                                                                                       $23,878.36 
+ OVERALL TOTAL                                                                                                                                       $23,879.58 
 ──────────────────────────────────
 47 cloud resources were detected:
 ∙ 47 were estimated, all of which include usage-based costs, see https://infracost.io/usage-file
