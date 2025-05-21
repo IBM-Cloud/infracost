@@ -110,7 +110,7 @@ func WMLEssentialsCapacityUnitHoursCostComponent(r *ResourceInstance) *schema.Co
 	}
 	return &schema.CostComponent{
 		Name:            "Capacity Unit-Hours",
-		Unit:            "CAPACITY_UNIT_HOURS",
+		Unit:            "CUH",
 		UnitMultiplier:  decimal.NewFromInt(1),
 		MonthlyQuantity: q,
 		ProductFilter: &schema.ProductFilter{
@@ -148,7 +148,7 @@ func WMLStandardCapacityUnitHoursCostComponent(r *ResourceInstance) *schema.Cost
 
 	return &schema.CostComponent{
 		Name:            "Additional Capacity Unit-Hours",
-		Unit:            "CAPACITY_UNIT_HOURS",
+		Unit:            "CUH",
 		UnitMultiplier:  decimal.NewFromInt(1),
 		MonthlyQuantity: q,
 		ProductFilter: &schema.ProductFilter{
@@ -196,7 +196,7 @@ func WMLTextExtractionCatOneCostComponent(r *ResourceInstance) *schema.CostCompo
 	}
 	return &schema.CostComponent{
 		Name:            "Text Extraction Category 1",
-		Unit:            "PAGES_CATEGORY_ONE",
+		Unit:            "Page",
 		UnitMultiplier:  decimal.NewFromInt(1),
 		MonthlyQuantity: q,
 		ProductFilter: &schema.ProductFilter{
@@ -221,7 +221,7 @@ func WMLTextExtractionCatTwoCostComponent(r *ResourceInstance, unit string) *sch
 	fmt.Println(r.Plan)
 	return &schema.CostComponent{
 		Name:            "Text Extraction Category 2",
-		Unit:            unit,
+		Unit:            "Page",
 		UnitMultiplier:  decimal.NewFromInt(1),
 		MonthlyQuantity: q,
 		ProductFilter: &schema.ProductFilter{
@@ -246,7 +246,7 @@ func WMLIBMModelResourceUnits(r *ResourceInstance) *schema.CostComponent {
 	fmt.Println(r.Plan)
 	return &schema.CostComponent{
 		Name:            "Resource Units (IBM Models)",
-		Unit:            "MODEL_INFERENCE_IBM",
+		Unit:            "RU",
 		UnitMultiplier:  decimal.NewFromInt(1),
 		MonthlyQuantity: q,
 		ProductFilter: &schema.ProductFilter{
@@ -271,7 +271,7 @@ func WML3rdPartyModelResourceUnits(r *ResourceInstance) *schema.CostComponent {
 	fmt.Println(r.Plan)
 	return &schema.CostComponent{
 		Name:            "Resource Units (Third Party Models)",
-		Unit:            "MODEL_INFERENCE_THIRD_PARTY",
+		Unit:            "RU",
 		UnitMultiplier:  decimal.NewFromInt(1),
 		MonthlyQuantity: q,
 		ProductFilter: &schema.ProductFilter{
@@ -295,7 +295,7 @@ func WMLMistralLargeInputResourceUnitsCostComponent(r *ResourceInstance) *schema
 	}
 	return &schema.CostComponent{
 		Name:            "Mistral Large Input Resource Unit",
-		Unit:            "MISTRAL_LARGE_INPUT_RESOURCE_UNITS",
+		Unit:            "RU",
 		UnitMultiplier:  decimal.NewFromInt(1),
 		MonthlyQuantity: q,
 		ProductFilter: &schema.ProductFilter{
