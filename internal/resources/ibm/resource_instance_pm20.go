@@ -181,7 +181,7 @@ func WMLMistralLargeOutputResourceUnitsCostComponent(r *ResourceInstance) *schem
 	}
 	return &schema.CostComponent{
 		Name:            "Mistral Large Output Resource Unit",
-		Unit:            "RESOURCE_UNITS",
+		Unit:            "RU",
 		UnitMultiplier:  decimal.NewFromInt(1),
 		MonthlyQuantity: q,
 		ProductFilter: &schema.ProductFilter{
