@@ -123,6 +123,21 @@ resource "ibm_pi_instance" "hana-dedicated-e980-instance" {
   }
 }
 
+resource "ibm_pi_instance" "hana-dedicated-e980-instance_no_quantity" {
+  pi_instance_name     = "hana-dedicated-e980"
+  pi_image_id          = ibm_pi_image.hana_image.id
+  pi_key_pair_name     = ibm_pi_key.key.id
+  pi_sys_type          = "e980"
+  pi_cloud_instance_id = ibm_resource_instance.powervs_service.guid
+  pi_pin_policy        = "none"
+  pi_health_status     = "WARNING"
+  pi_storage_type      = ibm_pi_image.ibmi_image.pi_image_storage_type
+  pi_sap_profile_id    = "ush1-4x128"
+  pi_network {
+    network_id = "test-id"
+  }
+}
+
 resource "ibm_pi_instance" "netweaver-shared-s922-instance" {
   pi_memory            = "1"
   pi_processors        = "1"
