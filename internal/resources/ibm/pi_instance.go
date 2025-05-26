@@ -76,7 +76,7 @@ func (r *PiInstance) BuildResource() *schema.Resource {
 	}
 
 	if r.Profile != "" {
-		costComponents = append(costComponents, r.piInstanceMemoryHanaProfileCostComponent(), r.piInstanceCoresHanaProfileCostComponent())
+		costComponents = append(costComponents, r.piInstanceMemoryHanaProfileCostComponent(), r.piInstanceCoresHanaProfileCostComponent(), r.piInstanceOSHanaProfileCostComponent(),)
 	} else {
 		costComponents = append(costComponents, r.piInstanceCoresCostComponent(), r.piInstanceMemoryCostComponent())
 	}
@@ -316,6 +316,38 @@ func (r *PiInstance) piInstanceCoresHanaProfileCostComponent() *schema.CostCompo
 	return &schema.CostComponent{
 		Name:            "Linux HANA Cores",
 		Unit:            "Core hours",
+		UnitMultiplier:  decimal.NewFromInt(1),
+		MonthlyQuantity: q,
+		ProductFilter: &schema.ProductFilter{
+			VendorName:    strPtr("ibm"),
+			Region:        strPtr(r.Region),
+			ProductFamily: strPtr("service"),
+			Service:       strPtr("power-iaas"),
+			AttributeFilters: []*schema.AttributeFilter{
+				{Key: "planName", Value: strPtr("power-virtual-server-group")},
+				{Key: "planType", Value: strPtr("Paid")},
+			},
+		},
+		PriceFilter: &schema.PriceFilter{
+			Unit: strPtr(unit),
+		},
+	}
+}
+
+func (r *PiInstance) piInstanceOSHanaProfileCostComponent() *schema.CostComponent {
+
+	var q *decimal.Decimal
+
+	if r.MonthlyInstanceHours != nil {
+		hours := *r.MonthlyInstanceHours
+		q = decimalPtr(decimal.NewFromFloat(hours))
+	}
+
+	unit := "SUSE_OS_SAP_TIER_TWO_INSTANCE_HOURS"
+
+	return &schema.CostComponent{
+		Name:            "Linux OS",
+		Unit:            "Instance hours",
 		UnitMultiplier:  decimal.NewFromInt(1),
 		MonthlyQuantity: q,
 		ProductFilter: &schema.ProductFilter{
