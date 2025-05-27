@@ -112,6 +112,7 @@ var FreeResources = []string{
 	"ibm_code_engine_domain_mapping",
 	"ibm_code_engine_project",
 	"ibm_code_engine_secret",
+	"ibm_code_engine_allowed_outbound_destination",
 	"ibm_container_addons",
 	"ibm_cos_bucket_object_lock_configuration",
 	"ibm_dns_custom_resolver",
