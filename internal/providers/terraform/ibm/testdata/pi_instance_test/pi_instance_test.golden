@@ -27,6 +27,18 @@
  ├─ Operating System IBMi OS                                                      730  Core hours                 $2,067.00 
  └─ Operating System IBMi Service Extension                                       730  Core hours                   $817.02 
                                                                                                                             
+ ibm_pi_instance.ibmi-dedicated-e980-instance-no-quantity                                                                   
+ ├─ Storage - tier1                                                 Monthly cost depends on usage: $0.000274 per GB hours   
+ ├─ Cores                                                           Monthly cost depends on usage: $1.77 per Core hours     
+ ├─ Memory                                                          Monthly cost depends on usage: $0.011913 per GB hours   
+ ├─ Operating System IBMi LPP                                       Monthly cost depends on usage: $0.0452 per Core hours   
+ ├─ Operating System IBMi OS                                        Monthly cost depends on usage: $2.83 per Core hours     
+ ├─ Cloud Storage Solution                                          Monthly cost depends on usage: $0.0959 per Core hours   
+ ├─ High Availability                                               Monthly cost depends on usage: $0.30 per Core hours     
+ ├─ IBM DB2 Web Query                                               Monthly cost depends on usage: $1.46 per Core hours     
+ ├─ Rational Dev Studio                                             Monthly cost depends on usage: $0.16 per Instance hours 
+ └─ Operating System IBMi Service Extension                         Monthly cost depends on usage: $1.12 per Core hours     
+                                                                                                                            
  ibm_pi_instance.netweaver-shared-s922-instance                                                                             
  ├─ Storage - tier1                                                            14,600  GB hours                       $4.00 
  ├─ Cores                                                                         730  Core hours                    $92.23 
@@ -42,8 +54,8 @@
                                                                                                                             
  OVERALL TOTAL                                                                                                    $6,529.42 
 ──────────────────────────────────
-13 cloud resources were detected:
-∙ 7 were estimated, all of which include usage-based costs, see https://infracost.io/usage-file
+14 cloud resources were detected:
+∙ 8 were estimated, all of which include usage-based costs, see https://infracost.io/usage-file
 ∙ 6 were free:
   ∙ 4 x ibm_pi_image
   ∙ 1 x ibm_pi_key
