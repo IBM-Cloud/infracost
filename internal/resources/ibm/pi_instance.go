@@ -346,7 +346,7 @@ func (r *PiInstance) piInstanceOSHanaProfileCostComponent() *schema.CostComponen
 	unit := "SUSE_OS_SAP_TIER_TWO_INSTANCE_HOURS"
 
 	return &schema.CostComponent{
-		Name:            "Linux OS",
+		Name:            "Linux HANA OS",
 		Unit:            "Instance hours",
 		UnitMultiplier:  decimal.NewFromInt(1),
 		MonthlyQuantity: q,

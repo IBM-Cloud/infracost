@@ -11,13 +11,13 @@
  ├─ Storage - tier1                                                            14,600  GB hours                       $4.00 
  ├─ Linux HANA Memory                                                          93,440  Memory hours                 $289.66 
  ├─ Linux HANA Cores                                                            2,920  Core hours                 $1,279.54 
- └─ Linux OS                                                                      730  Instance hours               $496.40 
+ └─ Linux HANA OS                                                                 730  Instance hours               $496.40 
                                                                                                                             
  ibm_pi_instance.hana-dedicated-e980-instance_no_quantity                                                                   
  ├─ Storage - tier1                                                 Monthly cost depends on usage: $0.000274 per GB hours   
  ├─ Linux HANA Memory                                               Monthly cost depends on usage: $0.0031 per Memory hours 
  ├─ Linux HANA Cores                                                Monthly cost depends on usage: $0.44 per Core hours     
- └─ Linux OS                                                        Monthly cost depends on usage: $0.68 per Instance hours 
+ └─ Linux HANA OS                                                   Monthly cost depends on usage: $0.68 per Instance hours 
                                                                                                                             
  ibm_pi_instance.ibmi-dedicated-e980-instance                                                                               
  ├─ Storage - tier1                                                            14,600  GB hours                       $4.00 
