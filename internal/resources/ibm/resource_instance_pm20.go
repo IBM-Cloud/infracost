@@ -19,16 +19,33 @@ func GetWMLCostComponents(r *ResourceInstance) []*schema.CostComponent {
 		return []*schema.CostComponent{
 			WMLInstanceCostComponent(r),
 			WMLStandardCapacityUnitHoursCostComponent(r),
-			WMLClass1ResourceUnitsCostComponent(r),
-			WMLClass2ResourceUnitsCostComponent(r),
-			WMLClass3ResourceUnitsCostComponent(r),
+			WMLMistralLargeOutputResourceUnitsCostComponent(r),
+			WMLTextExtractionCatOneCostComponent(r),
+			WMLTextExtractionCatTwoCostComponent(r, "PAGES_CATEGORY_TWO"),
+			WMLIBMModelResourceUnitsCostComponent(r),
+			WML3rdPartyModelResourceUnitsCostComponent(r),
+			WMLMistralLargeInputResourceUnitsCostComponent(r),
+			WMLSmallModelHostingCostComponent(r),
+			WMLMediumModelHostingCostComponent(r),
+			WMLLargeModelHostingCostComponent(r),
+			WMLExtraLargeModelHostingCostComponent(r),
+			WMLExtraSmallModelHostingCostComponent(r),
+			WMLVeryLargeModelHostingCostComponent(r),
+			WMLMistralLargeModelHostingAccessCostComponent(r),
+			WMLInstructLabDataCostComponent(r),
+			WMLInstructLabTuningCostComponent(r),
+			WMLMistral1GPUModelHostingAccessCostComponent(r),
+			WMLMistral2GPUModelHostingAccessCostComponent(r),
 		}
 	} else if r.Plan == "v2-standard" {
 		return []*schema.CostComponent{
 			WMLEssentialsCapacityUnitHoursCostComponent(r),
-			WMLClass1ResourceUnitsCostComponent(r),
-			WMLClass2ResourceUnitsCostComponent(r),
-			WMLClass3ResourceUnitsCostComponent(r),
+			WMLMistralLargeOutputResourceUnitsCostComponent(r),
+			WMLTextExtractionCatOneCostComponent(r),
+			WMLTextExtractionCatTwoCostComponent(r, "PAGES_CATAGORY_TWO"),
+			WMLIBMModelResourceUnitsCostComponent(r),
+			WML3rdPartyModelResourceUnitsCostComponent(r),
+			WMLMistralLargeInputResourceUnitsCostComponent(r),
 		}
 	} else if r.Plan == "lite" {
 		costComponent := schema.CostComponent{
@@ -157,13 +174,13 @@ func WMLStandardCapacityUnitHoursCostComponent(r *ResourceInstance) *schema.Cost
 	}
 }
 
-func WMLClass1ResourceUnitsCostComponent(r *ResourceInstance) *schema.CostComponent {
+func WMLMistralLargeOutputResourceUnitsCostComponent(r *ResourceInstance) *schema.CostComponent {
 	var q *decimal.Decimal
-	if r.WML_Class1RU != nil {
-		q = decimalPtr(decimal.NewFromFloat(*r.WML_Class1RU))
+	if r.WML_MistralLargeOutputRU != nil {
+		q = decimalPtr(decimal.NewFromFloat(*r.WML_MistralLargeOutputRU))
 	}
 	return &schema.CostComponent{
-		Name:            "Class 1 Resource Units",
+		Name:            "Mistral Large Output Resource Unit",
 		Unit:            "RU",
 		UnitMultiplier:  decimal.NewFromInt(1),
 		MonthlyQuantity: q,
@@ -176,19 +193,19 @@ func WMLClass1ResourceUnitsCostComponent(r *ResourceInstance) *schema.CostCompon
 			},
 		},
 		PriceFilter: &schema.PriceFilter{
-			Unit: strPtr("CLASS_ONE_RESOURCE_UNITS"),
+			Unit: strPtr("MISTRAL_LARGE_RESOURCE_UNITS"),
 		},
 	}
 }
 
-func WMLClass2ResourceUnitsCostComponent(r *ResourceInstance) *schema.CostComponent {
+func WMLTextExtractionCatOneCostComponent(r *ResourceInstance) *schema.CostComponent {
 	var q *decimal.Decimal
-	if r.WML_Class1RU != nil {
-		q = decimalPtr(decimal.NewFromFloat(*r.WML_Class2RU))
+	if r.WML_TextExtractCat1 != nil {
+		q = decimalPtr(decimal.NewFromFloat(*r.WML_TextExtractCat1))
 	}
 	return &schema.CostComponent{
-		Name:            "Class 2 Resource Units",
-		Unit:            "RU",
+		Name:            "Text Extraction Category 1",
+		Unit:            "Page",
 		UnitMultiplier:  decimal.NewFromInt(1),
 		MonthlyQuantity: q,
 		ProductFilter: &schema.ProductFilter{
@@ -200,18 +217,42 @@ func WMLClass2ResourceUnitsCostComponent(r *ResourceInstance) *schema.CostCompon
 			},
 		},
 		PriceFilter: &schema.PriceFilter{
-			Unit: strPtr("CLASS_TWO_RESOURCE_UNITS"),
+			Unit: strPtr("PAGES_CATEGORY_ONE"),
 		},
 	}
 }
 
-func WMLClass3ResourceUnitsCostComponent(r *ResourceInstance) *schema.CostComponent {
+func WMLTextExtractionCatTwoCostComponent(r *ResourceInstance, unit string) *schema.CostComponent {
 	var q *decimal.Decimal
-	if r.WML_Class1RU != nil {
-		q = decimalPtr(decimal.NewFromFloat(*r.WML_Class3RU))
+	if r.WML_TextExtractCat2 != nil {
+		q = decimalPtr(decimal.NewFromFloat(*r.WML_TextExtractCat2))
 	}
 	return &schema.CostComponent{
-		Name:            "Class 3 Resource Units",
+		Name:            "Text Extraction Category 2",
+		Unit:            "Page",
+		UnitMultiplier:  decimal.NewFromInt(1),
+		MonthlyQuantity: q,
+		ProductFilter: &schema.ProductFilter{
+			VendorName: strPtr("ibm"),
+			Region:     strPtr(r.Location),
+			Service:    &r.Service,
+			AttributeFilters: []*schema.AttributeFilter{
+				{Key: "planName", Value: &r.Plan},
+			},
+		},
+		PriceFilter: &schema.PriceFilter{
+			Unit: strPtr(unit),
+		},
+	}
+}
+
+func WMLIBMModelResourceUnitsCostComponent(r *ResourceInstance) *schema.CostComponent {
+	var q *decimal.Decimal
+	if r.WML_IBMModelRU != nil {
+		q = decimalPtr(decimal.NewFromFloat(*r.WML_IBMModelRU))
+	}
+	return &schema.CostComponent{
+		Name:            "Resource Units (IBM Models)",
 		Unit:            "RU",
 		UnitMultiplier:  decimal.NewFromInt(1),
 		MonthlyQuantity: q,
@@ -224,7 +265,319 @@ func WMLClass3ResourceUnitsCostComponent(r *ResourceInstance) *schema.CostCompon
 			},
 		},
 		PriceFilter: &schema.PriceFilter{
-			Unit: strPtr("CLASS_THREE_RESOURCE_UNITS"),
+			Unit: strPtr("MODEL_INFERENCE_IBM"),
+		},
+	}
+}
+
+func WML3rdPartyModelResourceUnitsCostComponent(r *ResourceInstance) *schema.CostComponent {
+	var q *decimal.Decimal
+	if r.WML_3rdPartyModelRU != nil {
+		q = decimalPtr(decimal.NewFromFloat(*r.WML_3rdPartyModelRU))
+	}
+	return &schema.CostComponent{
+		Name:            "Resource Units (Third Party Models)",
+		Unit:            "RU",
+		UnitMultiplier:  decimal.NewFromInt(1),
+		MonthlyQuantity: q,
+		ProductFilter: &schema.ProductFilter{
+			VendorName: strPtr("ibm"),
+			Region:     strPtr(r.Location),
+			Service:    &r.Service,
+			AttributeFilters: []*schema.AttributeFilter{
+				{Key: "planName", Value: &r.Plan},
+			},
+		},
+		PriceFilter: &schema.PriceFilter{
+			Unit: strPtr("MODEL_INFERENCE_THIRD_PARTY"),
+		},
+	}
+}
+
+func WMLMistralLargeInputResourceUnitsCostComponent(r *ResourceInstance) *schema.CostComponent {
+	var q *decimal.Decimal
+	if r.WML_MistralLargeInputRU != nil {
+		q = decimalPtr(decimal.NewFromFloat(*r.WML_MistralLargeInputRU))
+	}
+	return &schema.CostComponent{
+		Name:            "Mistral Large Input Resource Unit",
+		Unit:            "RU",
+		UnitMultiplier:  decimal.NewFromInt(1),
+		MonthlyQuantity: q,
+		ProductFilter: &schema.ProductFilter{
+			VendorName: strPtr("ibm"),
+			Region:     strPtr(r.Location),
+			Service:    &r.Service,
+			AttributeFilters: []*schema.AttributeFilter{
+				{Key: "planName", Value: &r.Plan},
+			},
+		},
+		PriceFilter: &schema.PriceFilter{
+			Unit: strPtr("MISTRAL_LARGE_INPUT_RESOURCE_UNITS"),
+		},
+	}
+}
+
+func WMLSmallModelHostingCostComponent(r *ResourceInstance) *schema.CostComponent {
+	var q *decimal.Decimal
+	if r.WML_SmallModelHosting != nil {
+		q = decimalPtr(decimal.NewFromFloat(*r.WML_SmallModelHosting))
+	}
+	return &schema.CostComponent{
+		Name:            "Small Model Hosting",
+		Unit:            "Hours",
+		UnitMultiplier:  decimal.NewFromInt(1),
+		MonthlyQuantity: q,
+		ProductFilter: &schema.ProductFilter{
+			VendorName: strPtr("ibm"),
+			Region:     strPtr(r.Location),
+			Service:    &r.Service,
+			AttributeFilters: []*schema.AttributeFilter{
+				{Key: "planName", Value: &r.Plan},
+			},
+		},
+		PriceFilter: &schema.PriceFilter{
+			Unit: strPtr("HOURS_CATEGORY_ONE"),
+		},
+	}
+}
+
+func WMLMediumModelHostingCostComponent(r *ResourceInstance) *schema.CostComponent {
+	var q *decimal.Decimal
+	if r.WML_MediumModelHosting != nil {
+		q = decimalPtr(decimal.NewFromFloat(*r.WML_MediumModelHosting))
+	}
+	return &schema.CostComponent{
+		Name:            "Medium Model Hosting",
+		Unit:            "Hours",
+		UnitMultiplier:  decimal.NewFromInt(1),
+		MonthlyQuantity: q,
+		ProductFilter: &schema.ProductFilter{
+			VendorName: strPtr("ibm"),
+			Region:     strPtr(r.Location),
+			Service:    &r.Service,
+			AttributeFilters: []*schema.AttributeFilter{
+				{Key: "planName", Value: &r.Plan},
+			},
+		},
+		PriceFilter: &schema.PriceFilter{
+			Unit: strPtr("HOURS_CATEGORY_TWO"),
+		},
+	}
+}
+
+func WMLLargeModelHostingCostComponent(r *ResourceInstance) *schema.CostComponent {
+	var q *decimal.Decimal
+	if r.WML_LargeModelHosting != nil {
+		q = decimalPtr(decimal.NewFromFloat(*r.WML_LargeModelHosting))
+	}
+	return &schema.CostComponent{
+		Name:            "Large Model Hosting",
+		Unit:            "Hours",
+		UnitMultiplier:  decimal.NewFromInt(1),
+		MonthlyQuantity: q,
+		ProductFilter: &schema.ProductFilter{
+			VendorName: strPtr("ibm"),
+			Region:     strPtr(r.Location),
+			Service:    &r.Service,
+			AttributeFilters: []*schema.AttributeFilter{
+				{Key: "planName", Value: &r.Plan},
+			},
+		},
+		PriceFilter: &schema.PriceFilter{
+			Unit: strPtr("HOURS_CATEGORY_THREE"),
+		},
+	}
+}
+
+func WMLExtraLargeModelHostingCostComponent(r *ResourceInstance) *schema.CostComponent {
+	var q *decimal.Decimal
+	if r.WML_ExtraLargeModelHosting != nil {
+		q = decimalPtr(decimal.NewFromFloat(*r.WML_ExtraLargeModelHosting))
+	}
+	return &schema.CostComponent{
+		Name:            "Extra Large Model Hosting",
+		Unit:            "Hours",
+		UnitMultiplier:  decimal.NewFromInt(1),
+		MonthlyQuantity: q,
+		ProductFilter: &schema.ProductFilter{
+			VendorName: strPtr("ibm"),
+			Region:     strPtr(r.Location),
+			Service:    &r.Service,
+			AttributeFilters: []*schema.AttributeFilter{
+				{Key: "planName", Value: &r.Plan},
+			},
+		},
+		PriceFilter: &schema.PriceFilter{
+			Unit: strPtr("HOURS_CATEGORY_FOUR"),
+		},
+	}
+}
+
+func WMLExtraSmallModelHostingCostComponent(r *ResourceInstance) *schema.CostComponent {
+	var q *decimal.Decimal
+	if r.WML_ExtraSmallModelHosting != nil {
+		q = decimalPtr(decimal.NewFromFloat(*r.WML_ExtraSmallModelHosting))
+	}
+	return &schema.CostComponent{
+		Name:            "Extra Small Model Hosting",
+		Unit:            "Hours",
+		UnitMultiplier:  decimal.NewFromInt(1),
+		MonthlyQuantity: q,
+		ProductFilter: &schema.ProductFilter{
+			VendorName: strPtr("ibm"),
+			Region:     strPtr(r.Location),
+			Service:    &r.Service,
+			AttributeFilters: []*schema.AttributeFilter{
+				{Key: "planName", Value: &r.Plan},
+			},
+		},
+		PriceFilter: &schema.PriceFilter{
+			Unit: strPtr("HOURS_CATEGORY_FIVE"),
+		},
+	}
+}
+
+func WMLVeryLargeModelHostingCostComponent(r *ResourceInstance) *schema.CostComponent {
+	var q *decimal.Decimal
+	if r.WML_VeryLargeModelHosting != nil {
+		q = decimalPtr(decimal.NewFromFloat(*r.WML_VeryLargeModelHosting))
+	}
+	return &schema.CostComponent{
+		Name:            "Very Large Model Hosting",
+		Unit:            "Hours",
+		UnitMultiplier:  decimal.NewFromInt(1),
+		MonthlyQuantity: q,
+		ProductFilter: &schema.ProductFilter{
+			VendorName: strPtr("ibm"),
+			Region:     strPtr(r.Location),
+			Service:    &r.Service,
+			AttributeFilters: []*schema.AttributeFilter{
+				{Key: "planName", Value: &r.Plan},
+			},
+		},
+		PriceFilter: &schema.PriceFilter{
+			Unit: strPtr("HOURS_CATEGORY_SIX"),
+		},
+	}
+}
+
+func WMLMistralLargeModelHostingAccessCostComponent(r *ResourceInstance) *schema.CostComponent {
+	var q *decimal.Decimal
+	if r.WML_MistralLargeModelHostingAccess != nil {
+		q = decimalPtr(decimal.NewFromFloat(*r.WML_MistralLargeModelHostingAccess))
+	}
+	return &schema.CostComponent{
+		Name:            "Mistral Large Model Hosting Access",
+		Unit:            "Hours",
+		UnitMultiplier:  decimal.NewFromInt(1),
+		MonthlyQuantity: q,
+		ProductFilter: &schema.ProductFilter{
+			VendorName: strPtr("ibm"),
+			Region:     strPtr(r.Location),
+			Service:    &r.Service,
+			AttributeFilters: []*schema.AttributeFilter{
+				{Key: "planName", Value: &r.Plan},
+			},
+		},
+		PriceFilter: &schema.PriceFilter{
+			Unit: strPtr("HOURS_MISTRAL_LARGE"),
+		},
+	}
+}
+
+func WMLInstructLabDataCostComponent(r *ResourceInstance) *schema.CostComponent {
+	var q *decimal.Decimal
+	if r.WML_InstructlabDataRU != nil {
+		q = decimalPtr(decimal.NewFromFloat(*r.WML_InstructlabDataRU))
+	}
+	return &schema.CostComponent{
+		Name:            "InstructLab Data",
+		Unit:            "RU",
+		UnitMultiplier:  decimal.NewFromInt(1),
+		MonthlyQuantity: q,
+		ProductFilter: &schema.ProductFilter{
+			VendorName: strPtr("ibm"),
+			Region:     strPtr(r.Location),
+			Service:    &r.Service,
+			AttributeFilters: []*schema.AttributeFilter{
+				{Key: "planName", Value: &r.Plan},
+			},
+		},
+		PriceFilter: &schema.PriceFilter{
+			Unit: strPtr("INSTRUCTLAB_DATA"),
+		},
+	}
+}
+
+func WMLInstructLabTuningCostComponent(r *ResourceInstance) *schema.CostComponent {
+	var q *decimal.Decimal
+	if r.WML_InstructlabDataRU != nil {
+		q = decimalPtr(decimal.NewFromFloat(*r.WML_InstructlabDataRU))
+	}
+	return &schema.CostComponent{
+		Name:            "InstructLab Tuning",
+		Unit:            "RU",
+		UnitMultiplier:  decimal.NewFromInt(1),
+		MonthlyQuantity: q,
+		ProductFilter: &schema.ProductFilter{
+			VendorName: strPtr("ibm"),
+			Region:     strPtr(r.Location),
+			Service:    &r.Service,
+			AttributeFilters: []*schema.AttributeFilter{
+				{Key: "planName", Value: &r.Plan},
+			},
+		},
+		PriceFilter: &schema.PriceFilter{
+			Unit: strPtr("INSTRUCTLAB_TUNING"),
+		},
+	}
+}
+
+func WMLMistral2GPUModelHostingAccessCostComponent(r *ResourceInstance) *schema.CostComponent {
+	var q *decimal.Decimal
+	if r.WML_Mistral2GPUModelHostingAccess != nil {
+		q = decimalPtr(decimal.NewFromFloat(*r.WML_Mistral2GPUModelHostingAccess))
+	}
+	return &schema.CostComponent{
+		Name:            "Mistral 2 GPU Model Hosting Access",
+		Unit:            "Hours",
+		UnitMultiplier:  decimal.NewFromInt(1),
+		MonthlyQuantity: q,
+		ProductFilter: &schema.ProductFilter{
+			VendorName: strPtr("ibm"),
+			Region:     strPtr(r.Location),
+			Service:    &r.Service,
+			AttributeFilters: []*schema.AttributeFilter{
+				{Key: "planName", Value: &r.Plan},
+			},
+		},
+		PriceFilter: &schema.PriceFilter{
+			Unit: strPtr("HOURS_MISTRAL_TWO_GPU"),
+		},
+	}
+}
+
+func WMLMistral1GPUModelHostingAccessCostComponent(r *ResourceInstance) *schema.CostComponent {
+	var q *decimal.Decimal
+	if r.WML_Mistral1GPUModelHostingAccess != nil {
+		q = decimalPtr(decimal.NewFromFloat(*r.WML_Mistral1GPUModelHostingAccess))
+	}
+	return &schema.CostComponent{
+		Name:            "Mistral 1 GPU Model Hosting Access",
+		Unit:            "Hours",
+		UnitMultiplier:  decimal.NewFromInt(1),
+		MonthlyQuantity: q,
+		ProductFilter: &schema.ProductFilter{
+			VendorName: strPtr("ibm"),
+			Region:     strPtr(r.Location),
+			Service:    &r.Service,
+			AttributeFilters: []*schema.AttributeFilter{
+				{Key: "planName", Value: &r.Plan},
+			},
+		},
+		PriceFilter: &schema.PriceFilter{
+			Unit: strPtr("HOURS_MISTRAL_ONE_GPU"),
 		},
 	}
 }

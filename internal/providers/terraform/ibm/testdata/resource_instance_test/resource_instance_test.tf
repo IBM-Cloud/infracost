@@ -172,7 +172,23 @@ resource "ibm_resource_instance" "wml_instance_essentials" {
   resource_group_id = "default"
 }
 
+resource "ibm_resource_instance" "wml_instance_essentials_no_quantity" {
+  name              = "wml_essentials"
+  service           = "pm-20"
+  plan              = "v2-standard"
+  location          = "us-south"
+  resource_group_id = "default"
+}
+
 resource "ibm_resource_instance" "wml_instance_standard" {
+  name              = "wml_standard"
+  service           = "pm-20"
+  plan              = "v2-professional"
+  location          = "us-south"
+  resource_group_id = "default"
+}
+
+resource "ibm_resource_instance" "wml_instance_standard_no_quantity" {
   name              = "wml_standard"
   service           = "pm-20"
   plan              = "v2-professional"
