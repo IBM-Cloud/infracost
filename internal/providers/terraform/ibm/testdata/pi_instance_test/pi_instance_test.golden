@@ -9,15 +9,22 @@
                                                                                                                             
  ibm_pi_instance.hana-dedicated-e980-instance                                                                               
  ├─ Storage - tier1                                                            14,600  GB hours                       $4.00 
- ├─ Linux HANA Memory                                                          93,440  Memory hours                 $301.04 
- └─ Linux HANA Cores                                                            2,920  Core hours                 $1,337.12 
+ ├─ Linux HANA Memory                                                          93,440  Memory hours                 $289.66 
+ ├─ Linux HANA Cores                                                            2,920  Core hours                 $1,279.54 
+ └─ Linux OS                                                                      730  Instance hours               $496.40 
+                                                                                                                            
+ ibm_pi_instance.hana-dedicated-e980-instance_no_quantity                                                                   
+ ├─ Storage - tier1                                                 Monthly cost depends on usage: $0.000274 per GB hours   
+ ├─ Linux HANA Memory                                               Monthly cost depends on usage: $0.0031 per Memory hours 
+ ├─ Linux HANA Cores                                                Monthly cost depends on usage: $0.44 per Core hours     
+ └─ Linux OS                                                        Monthly cost depends on usage: $0.68 per Instance hours 
                                                                                                                             
  ibm_pi_instance.ibmi-dedicated-e980-instance                                                                               
  ├─ Storage - tier1                                                            14,600  GB hours                       $4.00 
  ├─ Cores                                                                         730  Core hours                 $1,291.28 
  ├─ Memory                                                                        730  GB hours                       $8.70 
- ├─ Operating System IBMi LPP                                                     730  Core hours                   $880.02 
- ├─ Operating System IBMi OS                                                      730  Core hours                 $2,200.00 
+ ├─ Operating System IBMi LPP                                                     730  Core hours                    $33.00 
+ ├─ Operating System IBMi OS                                                      730  Core hours                 $2,067.00 
  └─ Operating System IBMi Service Extension                                       730  Core hours                   $817.02 
                                                                                                                             
  ibm_pi_instance.netweaver-shared-s922-instance                                                                             
@@ -31,12 +38,12 @@
  └─ Memory                                                          Monthly cost depends on usage: $0.011913 per GB hours   
                                                                                                                             
  ibm_resource_instance.powervs_service                                                                                      
- └─ Power instance                                                                  1  Instance                       $0.00 
+ └─ Workspace for Power Virtual Server                                              1  Workspace                      $0.00 
                                                                                                                             
- OVERALL TOTAL                                                                                                    $7,082.00 
+ OVERALL TOTAL                                                                                                    $6,529.42 
 ──────────────────────────────────
-12 cloud resources were detected:
-∙ 6 were estimated, all of which include usage-based costs, see https://infracost.io/usage-file
+13 cloud resources were detected:
+∙ 7 were estimated, all of which include usage-based costs, see https://infracost.io/usage-file
 ∙ 6 were free:
   ∙ 4 x ibm_pi_image
   ∙ 1 x ibm_pi_key
