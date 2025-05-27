@@ -51,9 +51,6 @@ resource_usage:
   ibm_resource_instance.wml_instance_standard:
     wml_capacity_unit_hour: 20
     wml_instance: 1
-    wml_class1_ru: 50
-    wml_class2_ru: 50
-    wml_class3_ru: 50
   ibm_resource_instance.wa_instance_plus:
     wa_instance: 1
     wa_monthly_active_users: 2000
