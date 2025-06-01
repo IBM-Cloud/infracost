@@ -38,7 +38,7 @@ require (
 	github.com/spf13/pflag v1.0.6
 	github.com/stretchr/testify v1.10.0
 	github.com/tidwall/gjson v1.14.3
-	github.com/zclconf/go-cty v1.15.0
+	github.com/zclconf/go-cty v1.16.3
 	golang.org/x/crypto v0.38.0
 	golang.org/x/mod v0.22.0
 	gopkg.in/go-playground/assert.v1 v1.2.1
