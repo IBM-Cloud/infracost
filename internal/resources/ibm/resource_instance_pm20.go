@@ -114,8 +114,8 @@ func WMLInstanceCostComponent(r *ResourceInstance) *schema.CostComponent {
 
 func WMLEssentialsCapacityUnitHoursCostComponent(r *ResourceInstance) *schema.CostComponent {
 	var q *decimal.Decimal
-	if r.WML_CUH != nil {
-		q = decimalPtr(decimal.NewFromFloat(*r.WML_CUH))
+	if r.WML_CUHHours != nil {
+		q = decimalPtr(decimal.NewFromFloat(*r.WML_CUHHours))
 	}
 	return &schema.CostComponent{
 		Name:            "Capacity Unit-Hours",
@@ -145,11 +145,11 @@ func WMLStandardCapacityUnitHoursCostComponent(r *ResourceInstance) *schema.Cost
 	} else {
 		instance = 1
 	}
-	if r.WML_CUH != nil {
+	if r.WML_CUHHours != nil {
 
 		// standard plan is billed a fixed amount for each instance, which includes 2500 CUH's per instance.
 		// if the used CUH exceeds the included quantity, the overage is charged at a flat rate.
-		additional_cuh := *r.WML_CUH - (CUH_PER_INSTANCE * instance)
+		additional_cuh := *r.WML_CUHHours - (CUH_PER_INSTANCE * instance)
 		if additional_cuh > 0 {
 			q = decimalPtr(decimal.NewFromFloat(additional_cuh))
 		}
@@ -200,12 +200,12 @@ func WMLMistralLargeOutputResourceUnitsCostComponent(r *ResourceInstance) *schem
 
 func WMLTextExtractionCatOneCostComponent(r *ResourceInstance) *schema.CostComponent {
 	var q *decimal.Decimal
-	if r.WML_TextExtractCat1 != nil {
-		q = decimalPtr(decimal.NewFromFloat(*r.WML_TextExtractCat1))
+	if r.WML_TextExtractCat1Pages != nil {
+		q = decimalPtr(decimal.NewFromFloat(*r.WML_TextExtractCat1Pages))
 	}
 	return &schema.CostComponent{
 		Name:            "Text Extraction Category 1",
-		Unit:            "Page",
+		Unit:            "Pages",
 		UnitMultiplier:  decimal.NewFromInt(1),
 		MonthlyQuantity: q,
 		ProductFilter: &schema.ProductFilter{
@@ -224,12 +224,12 @@ func WMLTextExtractionCatOneCostComponent(r *ResourceInstance) *schema.CostCompo
 
 func WMLTextExtractionCatTwoCostComponent(r *ResourceInstance, unit string) *schema.CostComponent {
 	var q *decimal.Decimal
-	if r.WML_TextExtractCat2 != nil {
-		q = decimalPtr(decimal.NewFromFloat(*r.WML_TextExtractCat2))
+	if r.WML_TextExtractCat2Pages != nil {
+		q = decimalPtr(decimal.NewFromFloat(*r.WML_TextExtractCat2Pages))
 	}
 	return &schema.CostComponent{
 		Name:            "Text Extraction Category 2",
-		Unit:            "Page",
+		Unit:            "Pages",
 		UnitMultiplier:  decimal.NewFromInt(1),
 		MonthlyQuantity: q,
 		ProductFilter: &schema.ProductFilter{
@@ -320,8 +320,8 @@ func WMLMistralLargeInputResourceUnitsCostComponent(r *ResourceInstance) *schema
 
 func WMLSmallModelHostingCostComponent(r *ResourceInstance) *schema.CostComponent {
 	var q *decimal.Decimal
-	if r.WML_SmallModelHosting != nil {
-		q = decimalPtr(decimal.NewFromFloat(*r.WML_SmallModelHosting))
+	if r.WML_SmallModelHostingHours != nil {
+		q = decimalPtr(decimal.NewFromFloat(*r.WML_SmallModelHostingHours))
 	}
 	return &schema.CostComponent{
 		Name:            "Small Model Hosting",
@@ -344,8 +344,8 @@ func WMLSmallModelHostingCostComponent(r *ResourceInstance) *schema.CostComponen
 
 func WMLMediumModelHostingCostComponent(r *ResourceInstance) *schema.CostComponent {
 	var q *decimal.Decimal
-	if r.WML_MediumModelHosting != nil {
-		q = decimalPtr(decimal.NewFromFloat(*r.WML_MediumModelHosting))
+	if r.WML_MediumModelHostingHours != nil {
+		q = decimalPtr(decimal.NewFromFloat(*r.WML_MediumModelHostingHours))
 	}
 	return &schema.CostComponent{
 		Name:            "Medium Model Hosting",
@@ -368,8 +368,8 @@ func WMLMediumModelHostingCostComponent(r *ResourceInstance) *schema.CostCompone
 
 func WMLLargeModelHostingCostComponent(r *ResourceInstance) *schema.CostComponent {
 	var q *decimal.Decimal
-	if r.WML_LargeModelHosting != nil {
-		q = decimalPtr(decimal.NewFromFloat(*r.WML_LargeModelHosting))
+	if r.WML_LargeModelHostingHours != nil {
+		q = decimalPtr(decimal.NewFromFloat(*r.WML_LargeModelHostingHours))
 	}
 	return &schema.CostComponent{
 		Name:            "Large Model Hosting",
@@ -392,8 +392,8 @@ func WMLLargeModelHostingCostComponent(r *ResourceInstance) *schema.CostComponen
 
 func WMLExtraLargeModelHostingCostComponent(r *ResourceInstance) *schema.CostComponent {
 	var q *decimal.Decimal
-	if r.WML_ExtraLargeModelHosting != nil {
-		q = decimalPtr(decimal.NewFromFloat(*r.WML_ExtraLargeModelHosting))
+	if r.WML_ExtraLargeModelHostingHours != nil {
+		q = decimalPtr(decimal.NewFromFloat(*r.WML_ExtraLargeModelHostingHours))
 	}
 	return &schema.CostComponent{
 		Name:            "Extra Large Model Hosting",
@@ -416,8 +416,8 @@ func WMLExtraLargeModelHostingCostComponent(r *ResourceInstance) *schema.CostCom
 
 func WMLExtraSmallModelHostingCostComponent(r *ResourceInstance) *schema.CostComponent {
 	var q *decimal.Decimal
-	if r.WML_ExtraSmallModelHosting != nil {
-		q = decimalPtr(decimal.NewFromFloat(*r.WML_ExtraSmallModelHosting))
+	if r.WML_ExtraSmallModelHostingHours != nil {
+		q = decimalPtr(decimal.NewFromFloat(*r.WML_ExtraSmallModelHostingHours))
 	}
 	return &schema.CostComponent{
 		Name:            "Extra Small Model Hosting",
@@ -440,8 +440,8 @@ func WMLExtraSmallModelHostingCostComponent(r *ResourceInstance) *schema.CostCom
 
 func WMLVeryLargeModelHostingCostComponent(r *ResourceInstance) *schema.CostComponent {
 	var q *decimal.Decimal
-	if r.WML_VeryLargeModelHosting != nil {
-		q = decimalPtr(decimal.NewFromFloat(*r.WML_VeryLargeModelHosting))
+	if r.WML_VeryLargeModelHostingHours != nil {
+		q = decimalPtr(decimal.NewFromFloat(*r.WML_VeryLargeModelHostingHours))
 	}
 	return &schema.CostComponent{
 		Name:            "Very Large Model Hosting",
@@ -464,8 +464,8 @@ func WMLVeryLargeModelHostingCostComponent(r *ResourceInstance) *schema.CostComp
 
 func WMLMistralLargeModelHostingAccessCostComponent(r *ResourceInstance) *schema.CostComponent {
 	var q *decimal.Decimal
-	if r.WML_MistralLargeModelHostingAccess != nil {
-		q = decimalPtr(decimal.NewFromFloat(*r.WML_MistralLargeModelHostingAccess))
+	if r.WML_MistralLargeModelHostingAccessHours != nil {
+		q = decimalPtr(decimal.NewFromFloat(*r.WML_MistralLargeModelHostingAccessHours))
 	}
 	return &schema.CostComponent{
 		Name:            "Mistral Large Model Hosting Access",
@@ -536,8 +536,8 @@ func WMLInstructLabTuningCostComponent(r *ResourceInstance) *schema.CostComponen
 
 func WMLMistral2GPUModelHostingAccessCostComponent(r *ResourceInstance) *schema.CostComponent {
 	var q *decimal.Decimal
-	if r.WML_Mistral2GPUModelHostingAccess != nil {
-		q = decimalPtr(decimal.NewFromFloat(*r.WML_Mistral2GPUModelHostingAccess))
+	if r.WML_Mistral2GPUModelHostingAccessHours != nil {
+		q = decimalPtr(decimal.NewFromFloat(*r.WML_Mistral2GPUModelHostingAccessHours))
 	}
 	return &schema.CostComponent{
 		Name:            "Mistral 2 GPU Model Hosting Access",
@@ -560,8 +560,8 @@ func WMLMistral2GPUModelHostingAccessCostComponent(r *ResourceInstance) *schema.
 
 func WMLMistral1GPUModelHostingAccessCostComponent(r *ResourceInstance) *schema.CostComponent {
 	var q *decimal.Decimal
-	if r.WML_Mistral1GPUModelHostingAccess != nil {
-		q = decimalPtr(decimal.NewFromFloat(*r.WML_Mistral1GPUModelHostingAccess))
+	if r.WML_Mistral1GPUModelHostingAccessHours != nil {
+		q = decimalPtr(decimal.NewFromFloat(*r.WML_Mistral1GPUModelHostingAccessHours))
 	}
 	return &schema.CostComponent{
 		Name:            "Mistral 1 GPU Model Hosting Access",

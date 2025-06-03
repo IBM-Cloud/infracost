@@ -41,36 +41,36 @@ resource_usage:
   ibm_resource_instance.cd_instance_professional:
     continuousdelivery_authorized_users: 2
   ibm_resource_instance.wml_instance_lite:
-    wml_capacity_unit_hour: 20
+    wml_capacity_unit_hours: 20
     wml_mistral_unit_output_ru: 50
   ibm_resource_instance.wml_instance_essentials:
-    wml_capacity_unit_hour: 20
+    wml_capacity_unit_hours: 20
     wml_mistral_unit_output_ru: 10
     wml_mistral_unit_input_ru: 10
-    wml_text_extract_cat_1: 10
-    wml_text_extract_cat_2: 10
+    wml_text_extract_cat_1_pages: 10
+    wml_text_extract_cat_2_pages: 10
     wml_ibm_model_ru: 500
     wml_3rd_party_model_ru: 500
   ibm_resource_instance.wml_instance_standard:
-    wml_capacity_unit_hour: 3000
-    wml_instance: 1
+    wml_capacity_unit_hours: 3000
+    wml_instances: 1
     wml_mistral_unit_output_ru: 10
     wml_mistral_unit_input_ru: 10
-    wml_text_extract_cat_1: 10
-    wml_text_extract_cat_2: 10
+    wml_text_extract_cat_1_pages: 10
+    wml_text_extract_cat_2_pages: 10
     wml_ibm_model_ru: 500
     wml_3rd_party_model_ru: 500
-    wml_small_model_hosting: 1
-    wml_medium_model_hosting: 1
-    wml_large_model_hosting: 1
-    wml_extra_large_model_hosting: 1
-    wml_extra_small_model_hosting: 1
-    wml_very_large_model_hosting: 1
-    wml_mistral_large_model_hosting_access: 1
+    wml_small_model_hosting_hours: 1
+    wml_medium_model_hosting_hours: 1
+    wml_large_model_hosting_hours: 1
+    wml_extra_large_model_hosting_hours: 1
+    wml_extra_small_model_hosting_hours: 1
+    wml_very_large_model_hosting_hours: 1
+    wml_mistral_large_model_hosting_access_hours: 1
     wml_instructlab_data_ru: 10
     wsl_instructlab_tuning_ru: 10
-    wsl_mistral_1_gpu_model_hosting_access: 1
-    wsl_mistral_2_gpu_model_hosting_access: 1
+    wsl_mistral_1_gpu_model_hosting_access_hours: 1
+    wsl_mistral_2_gpu_model_hosting_access_hours: 1
   ibm_resource_instance.wa_instance_plus:
     wa_instance: 1
     wa_monthly_active_users: 2000

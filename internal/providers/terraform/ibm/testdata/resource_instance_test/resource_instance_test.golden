@@ -198,8 +198,8 @@
  ibm_resource_instance.wml_instance_essentials                                                                                               
  ├─ Capacity Unit-Hours                                                                     20  CUH                                   $10.40 
  ├─ Mistral Large Output Resource Unit                                                      10  RU                                     $0.10 
- ├─ Text Extraction Category 1                                                              10  Page                                   $0.38 
- ├─ Text Extraction Category 2                                                              10  Page                                   $0.19 
+ ├─ Text Extraction Category 1                                                              10  Pages                                  $0.38 
+ ├─ Text Extraction Category 2                                                              10  Pages                                  $0.19 
  ├─ Resource Units (IBM Models)                                                            500  RU                                     $0.05 
  ├─ Resource Units (Third Party Models)                                                    500  RU                                     $0.05 
  └─ Mistral Large Input Resource Unit                                                       10  RU                                     $0.03 
@@ -207,8 +207,8 @@
  ibm_resource_instance.wml_instance_essentials_no_quantity                                                                                   
  ├─ Capacity Unit-Hours                                                  Monthly cost depends on usage: $0.52 per CUH                        
  ├─ Mistral Large Output Resource Unit                                   Monthly cost depends on usage: $0.01 per RU                         
- ├─ Text Extraction Category 1                                           Monthly cost depends on usage: $0.038 per Page                      
- ├─ Text Extraction Category 2                                           Monthly cost depends on usage: $0.019 per Page                      
+ ├─ Text Extraction Category 1                                           Monthly cost depends on usage: $0.038 per Pages                     
+ ├─ Text Extraction Category 2                                           Monthly cost depends on usage: $0.019 per Pages                     
  ├─ Resource Units (IBM Models)                                          Monthly cost depends on usage: $0.0001 per RU                       
  ├─ Resource Units (Third Party Models)                                  Monthly cost depends on usage: $0.0001 per RU                       
  └─ Mistral Large Input Resource Unit                                    Monthly cost depends on usage: $0.003 per RU                        
@@ -220,8 +220,8 @@
  ├─ Instance (2500 CUH included)                                                             1  Instance                           $1,050.00 
  ├─ Additional Capacity Unit-Hours                                                         500  CUH                                  $210.00 
  ├─ Mistral Large Output Resource Unit                                                      10  RU                                     $0.10 
- ├─ Text Extraction Category 1                                                              10  Page                                   $0.30 
- ├─ Text Extraction Category 2                                                              10  Page                                   $0.15 
+ ├─ Text Extraction Category 1                                                              10  Pages                                  $0.30 
+ ├─ Text Extraction Category 2                                                              10  Pages                                  $0.15 
  ├─ Resource Units (IBM Models)                                                            500  RU                                     $0.05 
  ├─ Resource Units (Third Party Models)                                                    500  RU                                     $0.05 
  ├─ Mistral Large Input Resource Unit                                                       10  RU                                     $0.03 
@@ -241,8 +241,8 @@
  ├─ Instance (2500 CUH included)                                                             1  Instance                           $1,050.00 
  ├─ Additional Capacity Unit-Hours                                       Monthly cost depends on usage: $0.42 per CUH                        
  ├─ Mistral Large Output Resource Unit                                   Monthly cost depends on usage: $0.01 per RU                         
- ├─ Text Extraction Category 1                                           Monthly cost depends on usage: $0.03 per Page                       
- ├─ Text Extraction Category 2                                           Monthly cost depends on usage: $0.015 per Page                      
+ ├─ Text Extraction Category 1                                           Monthly cost depends on usage: $0.03 per Pages                      
+ ├─ Text Extraction Category 2                                           Monthly cost depends on usage: $0.015 per Pages                     
  ├─ Resource Units (IBM Models)                                          Monthly cost depends on usage: $0.0001 per RU                       
  ├─ Resource Units (Third Party Models)                                  Monthly cost depends on usage: $0.0001 per RU                       
  ├─ Mistral Large Input Resource Unit                                    Monthly cost depends on usage: $0.003 per RU                        

@@ -59,25 +59,25 @@ type ResourceInstance struct {
 	ContinuousDelivery_AuthorizedUsers *int64 `infracost_usage:"continuousdelivery_authorized_users"`
 	// Watson Machine Learning
 	// https://dataplatform.cloud.ibm.com/docs/content/wsj/getting-started/wml-plans.html?context=cpdaas
-	WML_CUH                            *float64 `infracost_usage:"wml_capacity_unit_hour"`
-	WML_Instance                       *float64 `infracost_usage:"wml_instance"`
-	WML_MistralLargeOutputRU           *float64 `infracost_usage:"wml_mistral_unit_output_ru"`
-	WML_MistralLargeInputRU            *float64 `infracost_usage:"wml_mistral_unit_input_ru"`
-	WML_TextExtractCat1                *float64 `infracost_usage:"wml_text_extract_cat_1"`
-	WML_TextExtractCat2                *float64 `infracost_usage:"wml_text_extract_cat_2"`
-	WML_IBMModelRU                     *float64 `infracost_usage:"wml_ibm_model_ru"`
-	WML_3rdPartyModelRU                *float64 `infracost_usage:"wml_3rd_party_model_ru"`
-	WML_SmallModelHosting              *float64 `infracost_usage:"wml_small_model_hosting"`
-	WML_MediumModelHosting             *float64 `infracost_usage:"wml_medium_model_hosting"`
-	WML_LargeModelHosting              *float64 `infracost_usage:"wml_large_model_hosting"`
-	WML_ExtraLargeModelHosting         *float64 `infracost_usage:"wml_extra_large_model_hosting"`
-	WML_ExtraSmallModelHosting         *float64 `infracost_usage:"wml_extra_small_model_hosting"`
-	WML_VeryLargeModelHosting          *float64 `infracost_usage:"wml_very_large_model_hosting"`
-	WML_MistralLargeModelHostingAccess *float64 `infracost_usage:"wml_mistral_large_model_hosting_access"`
-	WML_InstructlabDataRU              *float64 `infracost_usage:"wml_instructlab_data_ru"`
-	WML_InstructlabTuningRU            *float64 `infracost_usage:"wsl_instructlab_tuning_ru"`
-	WML_Mistral1GPUModelHostingAccess  *float64 `infracost_usage:"wsl_mistral_1_gpu_model_hosting_access"`
-	WML_Mistral2GPUModelHostingAccess  *float64 `infracost_usage:"wsl_mistral_2_gpu_model_hosting_access"`
+	WML_CUHHours                            *float64 `infracost_usage:"wml_capacity_unit_hours"`
+	WML_Instance                            *float64 `infracost_usage:"wml_instance"`
+	WML_MistralLargeOutputRU                *float64 `infracost_usage:"wml_mistral_unit_output_ru"`
+	WML_MistralLargeInputRU                 *float64 `infracost_usage:"wml_mistral_unit_input_ru"`
+	WML_TextExtractCat1Pages                *float64 `infracost_usage:"wml_text_extract_cat_1_pages"`
+	WML_TextExtractCat2Pages                *float64 `infracost_usage:"wml_text_extract_cat_2_pages"`
+	WML_IBMModelRU                          *float64 `infracost_usage:"wml_ibm_model_ru"`
+	WML_3rdPartyModelRU                     *float64 `infracost_usage:"wml_3rd_party_model_ru"`
+	WML_SmallModelHostingHours              *float64 `infracost_usage:"wml_small_model_hosting_hours"`
+	WML_MediumModelHostingHours             *float64 `infracost_usage:"wml_medium_model_hosting_hours"`
+	WML_LargeModelHostingHours              *float64 `infracost_usage:"wml_large_model_hosting_hours"`
+	WML_ExtraLargeModelHostingHours         *float64 `infracost_usage:"wml_extra_large_model_hosting_hours"`
+	WML_ExtraSmallModelHostingHours         *float64 `infracost_usage:"wml_extra_small_model_hosting_hours"`
+	WML_VeryLargeModelHostingHours          *float64 `infracost_usage:"wml_very_large_model_hosting_hours"`
+	WML_MistralLargeModelHostingAccessHours *float64 `infracost_usage:"wml_mistral_large_model_hosting_access_hours"`
+	WML_InstructlabDataRU                   *float64 `infracost_usage:"wml_instructlab_data_ru"`
+	WML_InstructlabTuningRU                 *float64 `infracost_usage:"wsl_instructlab_tuning_ru"`
+	WML_Mistral1GPUModelHostingAccessHours  *float64 `infracost_usage:"wsl_mistral_1_gpu_model_hosting_access_hours"`
+	WML_Mistral2GPUModelHostingAccessHours  *float64 `infracost_usage:"wsl_mistral_2_gpu_model_hosting_access_hours"`
 	// Watson Assistant
 	WA_Instance *float64 `infracost_usage:"wa_instance"`
 	WA_mau      *float64 `infracost_usage:"wa_monthly_active_users"`
@@ -152,7 +152,7 @@ var ResourceInstanceUsageSchema = []*schema.UsageItem{
 	{Key: "sysdig-monitor_API_CALL_HOURS", DefaultValue: 0, ValueType: schema.Float64},
 	{Key: "sysdig-monitor_TIME_SERIES_HOURS", DefaultValue: 0, ValueType: schema.Float64},
 	{Key: "continuousdelivery_authorized_users", DefaultValue: 0, ValueType: schema.Int64},
-	{Key: "wml_capacity_unit_hour", DefaultValue: 0, ValueType: schema.Float64},
+	{Key: "wml_capacity_unit_hours", DefaultValue: 0, ValueType: schema.Float64},
 	{Key: "wml_instance", DefaultValue: 0, ValueType: schema.Float64},
 	{Key: "wml_class1_ru", DefaultValue: 0, ValueType: schema.Float64},
 	{Key: "wml_class2_ru", DefaultValue: 0, ValueType: schema.Float64},
