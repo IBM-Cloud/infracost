@@ -17,9 +17,9 @@ func GetDNSServicesCostComponents(r *ResourceInstance) []*schema.CostComponent {
 			DNSServicesPoolsPerHourCostComponent(r),
 			DNSServicesGLBInstancesPerHourCostComponent(r),
 			DNSServicesHealthChecksCostComponent(r),
-			DNSServicesCustomResolverEssentialLocationsPerHourCostComponent(r),
-			DNSServicesCustomResolverPremierLocationsPerHourCostComponent(r),
-			DNSServicesCustomResolverAdvancedLocationsPerHourCostComponent(r),
+			DNSServicesCustomResolverLocationsPerHourCostComponent(r, "ESSENTIAL_RESOLVER_LOCATION_HOURS"),
+			DNSServicesCustomResolverLocationsPerHourCostComponent(r, "PREMIER_RESOLVER_LOCATION_HOURS"),
+			DNSServicesCustomResolverLocationsPerHourCostComponent(r, "ADVANCED_RESOLVER_LOCATION_HOURS"),
 			DNSServicesMillionCustomResolverExternalQueriesCostComponent(r),
 			DNSServicesMillionDNSQueriesCostComponent(r),
 		}
@@ -167,8 +167,13 @@ func DNSServicesHealthChecksCostComponent(r *ResourceInstance) *schema.CostCompo
 }
 
 // Unit: RESOLVERLOCATIONS (Linear Tier)
-func DNSServicesCustomResolverEssentialLocationsPerHourCostComponent(r *ResourceInstance) *schema.CostComponent {
 
+func DNSServicesCustomResolverLocationsPerHourCostComponent(r* ResourceInstance, unit string) *schema.CostComponent {
+	unitMap := map[string]string {
+		"ESSENTIAL_RESOLVER_LOCATION_HOURS": "Essential",
+		"PREMIER_RESOLVER_LOCATION_HOURS": "Premier",
+		"ADVANCED_RESOLVER_LOCATION_HOURS": "Advanced",
+	}
 	var quantity *decimal.Decimal
 
 	if (r.DNSServices_CustomResolverLocationHours != nil) && (r.DNSServices_CustomResolverLocations != nil) {
@@ -176,7 +181,7 @@ func DNSServicesCustomResolverEssentialLocationsPerHourCostComponent(r *Resource
 	}
 
 	costComponent := schema.CostComponent{
-		Name:            "Custom Resolver Essential Location Hours",
+		Name:            "Custom Resolver " + unitMap[unit] + " Location Hours",
 		Unit:            "Hours",
 		UnitMultiplier:  decimal.NewFromFloat(1), // Final quantity for this cost component will be divided by this amount
 		MonthlyQuantity: quantity,
@@ -189,68 +194,11 @@ func DNSServicesCustomResolverEssentialLocationsPerHourCostComponent(r *Resource
 			},
 		},
 		PriceFilter: &schema.PriceFilter{
-			Unit: strPtr("ESSENTIAL_RESOLVER_LOCATION_HOURS"),
+			Unit: strPtr(unit),
 		},
 	}
 	return &costComponent
 }
-
-func DNSServicesCustomResolverPremierLocationsPerHourCostComponent(r *ResourceInstance) *schema.CostComponent {
-
-	var quantity *decimal.Decimal
-
-	if (r.DNSServices_CustomResolverLocationHours != nil) && (r.DNSServices_CustomResolverLocations != nil) {
-		quantity = decimalPtr(decimal.NewFromFloat(*r.DNSServices_CustomResolverLocationHours * float64(*r.DNSServices_CustomResolverLocations)))
-	}
-
-	costComponent := schema.CostComponent{
-		Name:            "Custom Resolver Premier Location Hours",
-		Unit:            "Hours",
-		UnitMultiplier:  decimal.NewFromFloat(1), // Final quantity for this cost component will be divided by this amount
-		MonthlyQuantity: quantity,
-		ProductFilter: &schema.ProductFilter{
-			VendorName: strPtr("ibm"),
-			Region:     strPtr(r.Location),
-			Service:    &r.Service,
-			AttributeFilters: []*schema.AttributeFilter{
-				{Key: "planName", Value: &r.Plan},
-			},
-		},
-		PriceFilter: &schema.PriceFilter{
-			Unit: strPtr("PREMIER_RESOLVER_LOCATION_HOURS"),
-		},
-	}
-	return &costComponent
-}
-
-func DNSServicesCustomResolverAdvancedLocationsPerHourCostComponent(r *ResourceInstance) *schema.CostComponent {
-
-	var quantity *decimal.Decimal
-
-	if (r.DNSServices_CustomResolverLocationHours != nil) && (r.DNSServices_CustomResolverLocations != nil) {
-		quantity = decimalPtr(decimal.NewFromFloat(*r.DNSServices_CustomResolverLocationHours * float64(*r.DNSServices_CustomResolverLocations)))
-	}
-
-	costComponent := schema.CostComponent{
-		Name:            "Custom Resolver Advanced Location Hours",
-		Unit:            "Hours",
-		UnitMultiplier:  decimal.NewFromFloat(1), // Final quantity for this cost component will be divided by this amount
-		MonthlyQuantity: quantity,
-		ProductFilter: &schema.ProductFilter{
-			VendorName: strPtr("ibm"),
-			Region:     strPtr(r.Location),
-			Service:    &r.Service,
-			AttributeFilters: []*schema.AttributeFilter{
-				{Key: "planName", Value: &r.Plan},
-			},
-		},
-		PriceFilter: &schema.PriceFilter{
-			Unit: strPtr("ADVANCED_RESOLVER_LOCATION_HOURS"),
-		},
-	}
-	return &costComponent
-}
-
 
 // Unit: MILLION_ITEMS_CREXTERNALQUERIES (Graduated Tier)
 func DNSServicesMillionCustomResolverExternalQueriesCostComponent(r *ResourceInstance) *schema.CostComponent {
