@@ -72,17 +72,9 @@ resource_type_default_usage:
     wml_text_extract_cat_2_pages: 10
     wml_ibm_model_ru: 500
     wml_3rd_party_model_ru: 500
-    wml_small_model_hosting_hours: 1
-    wml_medium_model_hosting_hours: 1
-    wml_large_model_hosting_hours: 1
-    wml_extra_large_model_hosting_hours: 1
-    wml_extra_small_model_hosting_hours: 1
-    wml_very_large_model_hosting_hours: 1
-    wml_mistral_large_model_hosting_access_hours: 1
     wml_instructlab_data_ru: 10
-    wsl_instructlab_tuning_ru: 10
-    wsl_mistral_1_gpu_model_hosting_access_hours: 1
-    wsl_mistral_2_gpu_model_hosting_access_hours: 1
+    wml_instructlab_tuning_ru: 10
+    wml_model_hosting_hours: 1
     wa_instance: 1
     wa_monthly_active_users: 1001
     wa_monthly_voice_users: 101
@@ -1378,17 +1370,9 @@ resource_usage:
     wml_text_extract_cat_2_pages: 10 # Number of pages for text extraction category 2
     wml_ibm_model_ru: 500 # Number of resource units for IBM models
     wml_3rd_party_model_ru: 500 # Number of resource units for third party models
-    wml_small_model_hosting_hours: 1 # Number of hours for small model hosting
-    wml_medium_model_hosting_hours: 1 # Number of hours for medium model hosting
-    wml_large_model_hosting_hours: 1 # Number of hours for large model hosting
-    wml_extra_large_model_hosting_hours: 1 # Number of hours for extra large model hosting
-    wml_extra_small_model_hosting_hours: 1 # Number of hours for extra small model hosting
-    wml_very_large_model_hosting_hours: 1 # Number of hours for very large model hosting
-    wml_mistral_large_model_hosting_access_hours: 1  # Number of hours for Mistral large model hosting access
     wml_instructlab_data_ru: 10 # Number of resource units for InstructLab data
-    wsl_instructlab_tuning_ru: 10 # Number of resource units for InstructLab tuning
-    wsl_mistral_1_gpu_model_hosting_access_hours: 1 # Number of hours for Mistral 1 GPU model hosting access
-    wsl_mistral_2_gpu_model_hosting_access_hours: 1 # Number of hours for Mistral 2 GPU model hosting access
+    wml_instructlab_tuning_ru: 10 # Number of resource units for InstructLab tuning
+    wml_model_hosting_hours: 1 # Number of hours for model hosting
     wa_instance: 1 # The number of instances used per month where each instance includes 1000 monthly active users
     wa_monthly_active_users: 1100 # The number of monthly active users
     wa_monthly_voice_users: 100 # The number of monthly active voice users

@@ -10,6 +10,14 @@ import (
 // Graduated Tier pricing model
 const DNS_SERVICES_PROGRAMMATIC_PLAN_NAME string = "standard-dns"
 
+// Map used to generate cost components based on different Custom Resolver categories.
+// The keys are the unit values defined in our PostGres DB. The values are the title to be used in the golden file.
+var unitMap = map[string]string{
+	"ESSENTIAL_RESOLVER_LOCATION_HOURS": "Essential",
+	"PREMIER_RESOLVER_LOCATION_HOURS":   "Premier",
+	"ADVANCED_RESOLVER_LOCATION_HOURS":  "Advanced",
+}
+
 func GetDNSServicesCostComponents(r *ResourceInstance) []*schema.CostComponent {
 	if r.Plan == DNS_SERVICES_PROGRAMMATIC_PLAN_NAME {
 		return []*schema.CostComponent{
@@ -168,12 +176,8 @@ func DNSServicesHealthChecksCostComponent(r *ResourceInstance) *schema.CostCompo
 
 // Unit: RESOLVERLOCATIONS (Linear Tier)
 
-func DNSServicesCustomResolverLocationsPerHourCostComponent(r* ResourceInstance, unit string) *schema.CostComponent {
-	unitMap := map[string]string {
-		"ESSENTIAL_RESOLVER_LOCATION_HOURS": "Essential",
-		"PREMIER_RESOLVER_LOCATION_HOURS": "Premier",
-		"ADVANCED_RESOLVER_LOCATION_HOURS": "Advanced",
-	}
+func DNSServicesCustomResolverLocationsPerHourCostComponent(r *ResourceInstance, unit string) *schema.CostComponent {
+
 	var quantity *decimal.Decimal
 
 	if (r.DNSServices_CustomResolverLocationHours != nil) && (r.DNSServices_CustomResolverLocations != nil) {

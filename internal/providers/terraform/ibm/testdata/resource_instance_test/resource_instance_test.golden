@@ -225,17 +225,31 @@
  ├─ Resource Units (IBM Models)                                                            500  RU                                     $0.05 
  ├─ Resource Units (Third Party Models)                                                    500  RU                                     $0.05 
  ├─ Mistral Large Input Resource Unit                                                       10  RU                                     $0.03 
+ ├─ InstructLab Data                                                                        10  RU                                     $0.06 
+ ├─ InstructLab Tuning                                                                      10  RU                                     $0.07 
+ ├─ Mistral Large Model Hosting Access                                                       1  Hours                                 $34.30 
+ ├─ Mistral 1 GPU Model Hosting Access                                                       1  Hours                                  $8.60 
+ ├─ Mistral 2 GPU Model Hosting Access                                                       1  Hours                                 $17.20 
  ├─ Small Model Hosting                                                                      1  Hours                                  $5.22 
  ├─ Medium Model Hosting                                                                     1  Hours                                 $10.40 
  ├─ Large Model Hosting                                                                      1  Hours                                 $20.85 
  ├─ Extra Large Model Hosting                                                                1  Hours                                 $41.70 
  ├─ Extra Small Model Hosting                                                                1  Hours                                  $4.43 
  ├─ Very Large Model Hosting                                                                 1  Hours                                 $83.50 
- ├─ Mistral Large Model Hosting Access                                                       1  Hours                                 $34.30 
- ├─ InstructLab Data                                                                        10  RU                                     $0.06 
- ├─ InstructLab Tuning                                                                      10  RU                                     $0.07 
- ├─ Mistral 1 GPU Model Hosting Access                                                       1  Hours                                  $8.60 
- └─ Mistral 2 GPU Model Hosting Access                                                       1  Hours                                 $17.20 
+ ├─ Model Hosting 1 L40S                                                                     1  Hours                                  $4.43 
+ ├─ Model Hosting 2 L40S                                                                     1  Hours                                  $8.86 
+ ├─ Model Hosting 1 A100                                                                     1  Hours                                  $5.80 
+ ├─ Model Hosting 2 A100                                                                     1  Hours                                 $11.60 
+ ├─ Model Hosting 4 A100                                                                     1  Hours                                 $23.20 
+ ├─ Model Hosting 8 A100                                                                     1  Hours                                 $46.40 
+ ├─ Model Hosting 1 H100                                                                     1  Hours                                 $14.50 
+ ├─ Model Hosting 2 H100                                                                     1  Hours                                 $29.00 
+ ├─ Model Hosting 4 H100                                                                     1  Hours                                 $58.00 
+ ├─ Model Hosting 8 H100                                                                     1  Hours                                $116.00 
+ ├─ Model Hosting 1 H200                                                                     1  Hours                                 $16.00 
+ ├─ Model Hosting 2 H200                                                                     1  Hours                                 $32.00 
+ ├─ Model Hosting 4 H200                                                                     1  Hours                                 $64.00 
+ └─ Model Hosting 8 H200                                                                     1  Hours                                $128.00 
                                                                                                                                              
  ibm_resource_instance.wml_instance_standard_no_quantity                                                                                     
  ├─ Instance (2500 CUH included)                                                             1  Instance                           $1,050.00 
@@ -246,19 +260,33 @@
  ├─ Resource Units (IBM Models)                                          Monthly cost depends on usage: $0.0001 per RU                       
  ├─ Resource Units (Third Party Models)                                  Monthly cost depends on usage: $0.0001 per RU                       
  ├─ Mistral Large Input Resource Unit                                    Monthly cost depends on usage: $0.003 per RU                        
+ ├─ InstructLab Data                                                     Monthly cost depends on usage: $0.00625 per RU                      
+ ├─ InstructLab Tuning                                                   Monthly cost depends on usage: $0.007 per RU                        
+ ├─ Mistral Large Model Hosting Access                                   Monthly cost depends on usage: $34.30 per Hours                     
+ ├─ Mistral 1 GPU Model Hosting Access                                   Monthly cost depends on usage: $8.60 per Hours                      
+ ├─ Mistral 2 GPU Model Hosting Access                                   Monthly cost depends on usage: $17.20 per Hours                     
  ├─ Small Model Hosting                                                  Monthly cost depends on usage: $5.22 per Hours                      
  ├─ Medium Model Hosting                                                 Monthly cost depends on usage: $10.40 per Hours                     
  ├─ Large Model Hosting                                                  Monthly cost depends on usage: $20.85 per Hours                     
  ├─ Extra Large Model Hosting                                            Monthly cost depends on usage: $41.70 per Hours                     
  ├─ Extra Small Model Hosting                                            Monthly cost depends on usage: $4.43 per Hours                      
  ├─ Very Large Model Hosting                                             Monthly cost depends on usage: $83.50 per Hours                     
- ├─ Mistral Large Model Hosting Access                                   Monthly cost depends on usage: $34.30 per Hours                     
- ├─ InstructLab Data                                                     Monthly cost depends on usage: $0.00625 per RU                      
- ├─ InstructLab Tuning                                                   Monthly cost depends on usage: $0.007 per RU                        
- ├─ Mistral 1 GPU Model Hosting Access                                   Monthly cost depends on usage: $8.60 per Hours                      
- └─ Mistral 2 GPU Model Hosting Access                                   Monthly cost depends on usage: $17.20 per Hours                     
+ ├─ Model Hosting 1 L40S                                                 Monthly cost depends on usage: $4.43 per Hours                      
+ ├─ Model Hosting 2 L40S                                                 Monthly cost depends on usage: $8.86 per Hours                      
+ ├─ Model Hosting 1 A100                                                 Monthly cost depends on usage: $5.80 per Hours                      
+ ├─ Model Hosting 2 A100                                                 Monthly cost depends on usage: $11.60 per Hours                     
+ ├─ Model Hosting 4 A100                                                 Monthly cost depends on usage: $23.20 per Hours                     
+ ├─ Model Hosting 8 A100                                                 Monthly cost depends on usage: $46.40 per Hours                     
+ ├─ Model Hosting 1 H100                                                 Monthly cost depends on usage: $14.50 per Hours                     
+ ├─ Model Hosting 2 H100                                                 Monthly cost depends on usage: $29.00 per Hours                     
+ ├─ Model Hosting 4 H100                                                 Monthly cost depends on usage: $58.00 per Hours                     
+ ├─ Model Hosting 8 H100                                                 Monthly cost depends on usage: $116.00 per Hours                    
+ ├─ Model Hosting 1 H200                                                 Monthly cost depends on usage: $16.00 per Hours                     
+ ├─ Model Hosting 2 H200                                                 Monthly cost depends on usage: $32.00 per Hours                     
+ ├─ Model Hosting 4 H200                                                 Monthly cost depends on usage: $64.00 per Hours                     
+ └─ Model Hosting 8 H200                                                 Monthly cost depends on usage: $128.00 per Hours                    
                                                                                                                                              
- OVERALL TOTAL                                                                                                                    $24,105.92 
+ OVERALL TOTAL                                                                                                                    $24,663.71 
 ──────────────────────────────────
 47 cloud resources were detected:
 ∙ 47 were estimated, all of which include usage-based costs, see https://infracost.io/usage-file
