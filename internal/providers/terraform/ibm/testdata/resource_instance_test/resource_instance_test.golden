@@ -95,6 +95,15 @@
  ibm_resource_instance.resource_instance_logdna_lite                                                                                         
  └─ Lite plan                                                                                1                                         $0.00 
                                                                                                                                              
+ ibm_resource_instance.resource_instance_logs                                                                                                
+ ├─ Store and Search                                                                        34  GB/Hour                               $16.32 
+ ├─ Analyze and Alert                                                                       34  GB/Hour                               $25.50 
+ ├─ Priority Insights (Retention 7 days)                                                    34  GB/Hour                               $40.80 
+ ├─ Priority Insights (Retention 14 days)                                                   34  GB/Hour                               $59.50 
+ ├─ Priority Insights (Retention 30 days)                                                   34  GB/Hour                               $76.50 
+ ├─ Priority Insights (Retention 60 days)                                                   34  GB/Hour                               $93.50 
+ └─ Priority Insights (Retention 90 days)                                                   34  GB/Hour                              $110.50 
+                                                                                                                                             
  ibm_resource_instance.resource_instance_monitoring_graduated                                                                                
  ├─ Additional Time series (first 1000 Time series hour)                                   100  Time series hour                       $0.01 
  ├─ Additional Time series (next 9000 Time series hour)                                      0  Time series hour                       $0.00 
@@ -286,7 +295,7 @@
  ├─ Model Hosting 4 H200                                                 Monthly cost depends on usage: $64.00 per Hours                     
  └─ Model Hosting 8 H200                                                 Monthly cost depends on usage: $128.00 per Hours                    
                                                                                                                                              
- OVERALL TOTAL                                                                                                                    $24,663.71 
+ OVERALL TOTAL                                                                                                                    $25,086.33 
 ──────────────────────────────────
-47 cloud resources were detected:
-∙ 47 were estimated, all of which include usage-based costs, see https://infracost.io/usage-file
+48 cloud resources were detected:
+∙ 48 were estimated, all of which include usage-based costs, see https://infracost.io/usage-file
