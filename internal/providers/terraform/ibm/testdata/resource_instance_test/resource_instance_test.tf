@@ -374,3 +374,12 @@ resource "ibm_resource_instance" "event_notifications_no_usage" {
   resource_group_id = "default"
   service           = "event-notifications"
 }
+
+resource "ibm_resource_instance" "resource_instance_logs" {
+  name              = "test"
+  service           = "logs"
+  location          = "us-south"
+  plan              = "standard"
+  resource_group_id = "default"
+}
+
