@@ -95,6 +95,7 @@ var globalCatalogServiceId = map[string]catalogMetadata{
 	"sysdig-monitor":                {"090c2c10-8c38-11e8-bec2-493df9c49eb8", []string{}, nil, "https://cloud.ibm.com/observe/catalog/ibm-cloud-monitoring"},
 	"sysdig-secure":                 {"e831e900-82d6-11ec-95c5-c12c5a5d9687", []string{}, nil, "https://cloud.ibm.com/workload-protection/catalog/security-and-compliance-center-workload-protection"},
 	"wx":                            {"51c53b72-918f-4869-b834-2d99eb28422a", []string{}, nil, "https://cloud.ibm.com/watsonx/overview"},
+	"watsonx-orchestrate":           {"b69f78c0-11d7-11ef-9bdf-c92eb40d1838", []string{}, nil, "https://cloud.ibm.com/catalog/services/watsonx-orchestrate"},
 }
 
 func SetCatalogMetadata(d *schema.ResourceData, resourceType string, config map[string]any) {
