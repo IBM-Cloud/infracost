@@ -10,6 +10,14 @@ import (
 // Graduated Tier pricing model
 const DNS_SERVICES_PROGRAMMATIC_PLAN_NAME string = "standard-dns"
 
+// Map used to generate cost components based on different Custom Resolver categories.
+// The keys are the unit values defined in our PostGres DB. The values are the title to be used in the golden file.
+var unitMap = map[string]string{
+	"ESSENTIAL_RESOLVER_LOCATION_HOURS": "Essential",
+	"PREMIER_RESOLVER_LOCATION_HOURS":   "Premier",
+	"ADVANCED_RESOLVER_LOCATION_HOURS":  "Advanced",
+}
+
 func GetDNSServicesCostComponents(r *ResourceInstance) []*schema.CostComponent {
 	if r.Plan == DNS_SERVICES_PROGRAMMATIC_PLAN_NAME {
 		return []*schema.CostComponent{
@@ -17,7 +25,9 @@ func GetDNSServicesCostComponents(r *ResourceInstance) []*schema.CostComponent {
 			DNSServicesPoolsPerHourCostComponent(r),
 			DNSServicesGLBInstancesPerHourCostComponent(r),
 			DNSServicesHealthChecksCostComponent(r),
-			DNSServicesCustomResolverLocationsPerHourCostComponent(r),
+			DNSServicesCustomResolverLocationsPerHourCostComponent(r, "ESSENTIAL_RESOLVER_LOCATION_HOURS"),
+			DNSServicesCustomResolverLocationsPerHourCostComponent(r, "PREMIER_RESOLVER_LOCATION_HOURS"),
+			DNSServicesCustomResolverLocationsPerHourCostComponent(r, "ADVANCED_RESOLVER_LOCATION_HOURS"),
 			DNSServicesMillionCustomResolverExternalQueriesCostComponent(r),
 			DNSServicesMillionDNSQueriesCostComponent(r),
 		}
@@ -165,7 +175,8 @@ func DNSServicesHealthChecksCostComponent(r *ResourceInstance) *schema.CostCompo
 }
 
 // Unit: RESOLVERLOCATIONS (Linear Tier)
-func DNSServicesCustomResolverLocationsPerHourCostComponent(r *ResourceInstance) *schema.CostComponent {
+
+func DNSServicesCustomResolverLocationsPerHourCostComponent(r *ResourceInstance, unit string) *schema.CostComponent {
 
 	var quantity *decimal.Decimal
 
@@ -174,7 +185,7 @@ func DNSServicesCustomResolverLocationsPerHourCostComponent(r *ResourceInstance)
 	}
 
 	costComponent := schema.CostComponent{
-		Name:            "Custom Resolver Location Hours",
+		Name:            "Custom Resolver " + unitMap[unit] + " Location Hours",
 		Unit:            "Hours",
 		UnitMultiplier:  decimal.NewFromFloat(1), // Final quantity for this cost component will be divided by this amount
 		MonthlyQuantity: quantity,
@@ -187,7 +198,7 @@ func DNSServicesCustomResolverLocationsPerHourCostComponent(r *ResourceInstance)
 			},
 		},
 		PriceFilter: &schema.PriceFilter{
-			Unit: strPtr("RESOLVERLOCATIONS"),
+			Unit: strPtr(unit),
 		},
 	}
 	return &costComponent
