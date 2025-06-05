@@ -43,7 +43,16 @@
  ├─ Disk (2 members)                                                            8,192  GB         $5,147.03 
  └─ Virtual Processor Cores (2 members)                                            56  CPU        $1,811.15 
                                                                                                             
- OVERALL TOTAL                                                                                  $129,727.93 
+ ibm_database.rabbitmq_b3c                                                                                  
+ ├─ Host Flavor (3 members, m3c.30x240.encrypted)                                   3  Flavor         $0.00 
+ └─ Disk (3 members)                                                           12,288  GB         $7,720.55 
+                                                                                                            
+ ibm_database.rabbitmq_multitenant                                                                          
+ ├─ RAM (3 members)                                                                36  GB           $193.93 
+ ├─ Disk (3 members)                                                              750  GB           $471.23 
+ └─ Virtual Processor Cores (3 members)                                             9  CPU          $291.08 
+                                                                                                            
+ OVERALL TOTAL                                                                                  $138,404.72 
 ──────────────────────────────────
-9 cloud resources were detected:
-∙ 9 were estimated
+11 cloud resources were detected:
+∙ 11 were estimated
