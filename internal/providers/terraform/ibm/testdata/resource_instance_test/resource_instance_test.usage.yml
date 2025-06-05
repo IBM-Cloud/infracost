@@ -158,4 +158,4 @@ resource_usage:
     event-notifications_MILLION_INGESTED_EVENTS: 1
   
   ibm_resource_instance.resource_instance_logs:
-    logs_hour: 34
+    logs_hours: 34

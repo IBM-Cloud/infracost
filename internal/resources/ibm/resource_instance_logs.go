@@ -22,8 +22,8 @@ func GetLogsCostComponents(r *ResourceInstance) []*schema.CostComponent {
 
 func LogsStoreNSearchCostComponent(r* ResourceInstance) *schema.CostComponent {
 	var q *decimal.Decimal
-	if r.Logs_Hour!= nil {
-		q = decimalPtr(decimal.NewFromFloat(*r.Logs_Hour))
+	if r.Logs_Hours!= nil {
+		q = decimalPtr(decimal.NewFromFloat(*r.Logs_Hours))
 	}
 
 	return &schema.CostComponent{
@@ -48,8 +48,8 @@ func LogsStoreNSearchCostComponent(r* ResourceInstance) *schema.CostComponent {
 
 func LogsAnalyzeNAlertCostComponent(r* ResourceInstance) *schema.CostComponent {
 	var q *decimal.Decimal
-	if r.Logs_Hour!= nil {
-		q = decimalPtr(decimal.NewFromFloat(*r.Logs_Hour))
+	if r.Logs_Hours!= nil {
+		q = decimalPtr(decimal.NewFromFloat(*r.Logs_Hours))
 	}
 
 	return &schema.CostComponent{
@@ -74,8 +74,8 @@ func LogsAnalyzeNAlertCostComponent(r* ResourceInstance) *schema.CostComponent {
 
 func LogsPriorityInsightsCostComponent(r* ResourceInstance, unit string, days string) *schema.CostComponent {
 	var q *decimal.Decimal
-	if r.Logs_Hour!= nil {
-		q = decimalPtr(decimal.NewFromFloat(*r.Logs_Hour))
+	if r.Logs_Hours!= nil {
+		q = decimalPtr(decimal.NewFromFloat(*r.Logs_Hours))
 	}
 
 	return &schema.CostComponent{

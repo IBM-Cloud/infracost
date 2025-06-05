@@ -116,7 +116,7 @@ type ResourceInstance struct {
 	EventStreams_Terabytes                    *float64 `infracost_usage:"messagehub_qty_terabytes"`
 	// Event Notifications
 	EventNotifications_InboundIngestedEvents *float64 `infracost_usage:"event-notifications_MILLION_INGESTED_EVENTS"`
-	Logs_Hour 								  *float64 `infracost_usage:"logs_hour"`
+	Logs_Hours 								  *float64 `infracost_usage:"logs_hours"`
 }
 
 type ResourceCostComponentsFunc func(*ResourceInstance) []*schema.CostComponent
