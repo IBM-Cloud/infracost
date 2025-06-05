@@ -64,11 +64,17 @@ resource_type_default_usage:
     sysdig-monitor_API_CALL_HOURS: 1000
     sysdig-monitor_TIME_SERIES_HOURS: 1000
     continuousdelivery_authorized_users: 1
-    wml_capacity_unit_hour: 20
+    wml_capacity_unit_hours: 20
     wml_instance: 1
-    wml_class1_ru: 20
-    wml_class2_ru: 20
-    wml_class3_ru: 20
+    wml_mistral_unit_output_ru: 10
+    wml_mistral_unit_input_ru: 10
+    wml_text_extract_cat_1_pages: 10
+    wml_text_extract_cat_2_pages: 10
+    wml_ibm_model_ru: 500
+    wml_3rd_party_model_ru: 500
+    wml_instructlab_data_ru: 10
+    wml_instructlab_tuning_ru: 10
+    wml_model_hosting_hours: 1
     wa_instance: 1
     wa_monthly_active_users: 1001
     wa_monthly_voice_users: 101
@@ -1363,11 +1369,17 @@ resource_usage:
     sysdig-monitor_API_CALL_HOURS: 1000 # Additional API calls above the base 1M/instance
     sysdig-monitor_TIME_SERIES_HOURS: 1000 # Additional time-series cost above the base 1000/host
     continuousdelivery_authorized_users: 10 # Number of authorized users to the CD instance and its managed toolchains
-    wml_capacity_unit_hour: 20 # Amount of Capacity Unit-Hours used in a month
+    wml_capacity_unit_hours: 20 # Amount of Capacity Unit-Hours used in a month
     wml_instance: 1 # The number of instances per month where each instance includes 2500 CUHs
-    wml_class1_ru: 20 # The number of resource units used for inferencing with class 1 type models where each ru is 1000 tokens
-    wml_class2_ru: 20 # The number of resource units used for inferencing with class 2 type models where each ru is 1000 tokens
-    wml_class3_ru: 20 # The number of resource units used for inferencing with class 3 type models where each ru is 1000 tokens
+    wml_mistral_unit_output_ru: 10 # Number of Mistral large output resource units
+    wml_mistral_unit_input_ru: 10 # Number of Mistral large input resource units
+    wml_text_extract_cat_1_pages: 10 # Number of pages for text extraction category 1
+    wml_text_extract_cat_2_pages: 10 # Number of pages for text extraction category 2
+    wml_ibm_model_ru: 500 # Number of resource units for IBM models
+    wml_3rd_party_model_ru: 500 # Number of resource units for third party models
+    wml_instructlab_data_ru: 10 # Number of resource units for InstructLab data
+    wml_instructlab_tuning_ru: 10 # Number of resource units for InstructLab tuning
+    wml_model_hosting_hours: 1 # Number of hours for model hosting
     wa_instance: 1 # The number of instances used per month where each instance includes 1000 monthly active users
     wa_monthly_active_users: 1100 # The number of monthly active users
     wa_monthly_voice_users: 100 # The number of monthly active voice users
