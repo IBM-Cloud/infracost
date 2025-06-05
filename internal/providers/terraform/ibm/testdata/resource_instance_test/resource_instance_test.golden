@@ -12,7 +12,9 @@
  ├─ Pool Hours                                                                               1  Hours                                  $0.04 
  ├─ GLB Instance Hours                                                                       1  Hours                                  $0.04 
  ├─ Health Checks                                                                            1  Health Checks                          $1.08 
- ├─ Custom Resolver Location Hours                                                           1  Hours                                  $0.13 
+ ├─ Custom Resolver Essential Location Hours                                                 1  Hours                                  $0.13 
+ ├─ Custom Resolver Premier Location Hours                                                   1  Hours                                  $0.72 
+ ├─ Custom Resolver Advanced Location Hours                                                  1  Hours                                  $0.36 
  ├─ Million Custom Resolver External Queries (first 10 Million Queries)                     10  Million Queries                        $4.31 
  ├─ Million Custom Resolver External Queries (over 10 Million Queries)                       1  Million Queries                        $0.22 
  └─ Additional Million DNS Queries (first 999 Million Queries)                             999  Million Queries                      $645.16 
@@ -131,12 +133,12 @@
  └─ Trial                                                                                    1                                         $0.00 
                                                                                                                                              
  ibm_resource_instance.sccwp_graduated_tier                                                                                                  
- ├─ Multi-Cloud CSPM Compute Instance Hours (first 25 Instance-Hours)                       25  Instance-Hours                       $206.00 
- ├─ Multi-Cloud CSPM Compute Instance Hours (next 25 Instance-Hours)                        25  Instance-Hours                       $175.10 
- ├─ Multi-Cloud CSPM Compute Instance Hours (next 50 Instance-Hours)                        50  Instance-Hours                       $309.00 
- ├─ Multi-Cloud CSPM Compute Instance Hours (next 150 Instance-Hours)                      150  Instance-Hours                       $865.20 
- ├─ Multi-Cloud CSPM Compute Instance Hours (next 250 Instance-Hours)                      250  Instance-Hours                     $1,236.00 
- ├─ Multi-Cloud CSPM Compute Instance Hours (over 500 Instance-Hours)                        1  Instance-Hours                         $4.53 
+ ├─ Multi-Cloud CSPM Compute Instance Hours (first 25 Instance-Hours)                       25  Instance-Hours                       $450.00 
+ ├─ Multi-Cloud CSPM Compute Instance Hours (next 25 Instance-Hours)                        25  Instance-Hours                       $382.50 
+ ├─ Multi-Cloud CSPM Compute Instance Hours (next 50 Instance-Hours)                        50  Instance-Hours                       $675.00 
+ ├─ Multi-Cloud CSPM Compute Instance Hours (next 150 Instance-Hours)                      150  Instance-Hours                     $1,890.00 
+ ├─ Multi-Cloud CSPM Compute Instance Hours (next 250 Instance-Hours)                      250  Instance-Hours                     $2,700.00 
+ ├─ Multi-Cloud CSPM Compute Instance Hours (over 500 Instance-Hours)                        1  Instance-Hours                         $9.90 
  ├─ Node Hours (first 3 Instance-Hours)                                                      3  Instance-Hours                         $0.19 
  ├─ Node Hours (next 2 Instance-Hours)                                                       2  Instance-Hours                         $0.11 
  ├─ Node Hours (next 5 Instance-Hours)                                                       5  Instance-Hours                         $0.24 
@@ -195,21 +197,96 @@
                                                                                                                                              
  ibm_resource_instance.wml_instance_essentials                                                                                               
  ├─ Capacity Unit-Hours                                                                     20  CUH                                   $10.40 
- ├─ Class 1 Resource Units                                                                  50  RU                                     $0.03 
- ├─ Class 2 Resource Units                                                                  50  RU                                     $0.09 
- └─ Class 3 Resource Units                                                                  50  RU                                     $0.25 
+ ├─ Mistral Large Output Resource Unit                                                      10  RU                                     $0.10 
+ ├─ Text Extraction Category 1                                                              10  Pages                                  $0.38 
+ ├─ Text Extraction Category 2                                                              10  Pages                                  $0.19 
+ ├─ Resource Units (IBM Models)                                                            500  RU                                     $0.05 
+ ├─ Resource Units (Third Party Models)                                                    500  RU                                     $0.05 
+ └─ Mistral Large Input Resource Unit                                                       10  RU                                     $0.03 
+                                                                                                                                             
+ ibm_resource_instance.wml_instance_essentials_no_quantity                                                                                   
+ ├─ Capacity Unit-Hours                                                  Monthly cost depends on usage: $0.52 per CUH                        
+ ├─ Mistral Large Output Resource Unit                                   Monthly cost depends on usage: $0.01 per RU                         
+ ├─ Text Extraction Category 1                                           Monthly cost depends on usage: $0.038 per Pages                     
+ ├─ Text Extraction Category 2                                           Monthly cost depends on usage: $0.019 per Pages                     
+ ├─ Resource Units (IBM Models)                                          Monthly cost depends on usage: $0.0001 per RU                       
+ ├─ Resource Units (Third Party Models)                                  Monthly cost depends on usage: $0.0001 per RU                       
+ └─ Mistral Large Input Resource Unit                                    Monthly cost depends on usage: $0.003 per RU                        
                                                                                                                                              
  ibm_resource_instance.wml_instance_lite                                                                                                     
  └─ Lite plan                                                                                1                                         $0.00 
                                                                                                                                              
  ibm_resource_instance.wml_instance_standard                                                                                                 
  ├─ Instance (2500 CUH included)                                                             1  Instance                           $1,050.00 
- ├─ Additional Capacity Unit-Hours                                       Monthly cost depends on usage: $0.42 per CUH                        
- ├─ Class 1 Resource Units                                                                  50  RU                                     $0.03 
- ├─ Class 2 Resource Units                                                                  50  RU                                     $0.09 
- └─ Class 3 Resource Units                                                                  50  RU                                     $0.25 
+ ├─ Additional Capacity Unit-Hours                                                         500  CUH                                  $210.00 
+ ├─ Mistral Large Output Resource Unit                                                      10  RU                                     $0.10 
+ ├─ Text Extraction Category 1                                                              10  Pages                                  $0.30 
+ ├─ Text Extraction Category 2                                                              10  Pages                                  $0.15 
+ ├─ Resource Units (IBM Models)                                                            500  RU                                     $0.05 
+ ├─ Resource Units (Third Party Models)                                                    500  RU                                     $0.05 
+ ├─ Mistral Large Input Resource Unit                                                       10  RU                                     $0.03 
+ ├─ InstructLab Data                                                                        10  RU                                     $0.06 
+ ├─ InstructLab Tuning                                                                      10  RU                                     $0.07 
+ ├─ Mistral Large Model Hosting Access                                                       1  Hours                                 $34.30 
+ ├─ Mistral 1 GPU Model Hosting Access                                                       1  Hours                                  $8.60 
+ ├─ Mistral 2 GPU Model Hosting Access                                                       1  Hours                                 $17.20 
+ ├─ Small Model Hosting                                                                      1  Hours                                  $5.22 
+ ├─ Medium Model Hosting                                                                     1  Hours                                 $10.40 
+ ├─ Large Model Hosting                                                                      1  Hours                                 $20.85 
+ ├─ Extra Large Model Hosting                                                                1  Hours                                 $41.70 
+ ├─ Extra Small Model Hosting                                                                1  Hours                                  $4.43 
+ ├─ Very Large Model Hosting                                                                 1  Hours                                 $83.50 
+ ├─ Model Hosting 1 L40S                                                                     1  Hours                                  $4.43 
+ ├─ Model Hosting 2 L40S                                                                     1  Hours                                  $8.86 
+ ├─ Model Hosting 1 A100                                                                     1  Hours                                  $5.80 
+ ├─ Model Hosting 2 A100                                                                     1  Hours                                 $11.60 
+ ├─ Model Hosting 4 A100                                                                     1  Hours                                 $23.20 
+ ├─ Model Hosting 8 A100                                                                     1  Hours                                 $46.40 
+ ├─ Model Hosting 1 H100                                                                     1  Hours                                 $14.50 
+ ├─ Model Hosting 2 H100                                                                     1  Hours                                 $29.00 
+ ├─ Model Hosting 4 H100                                                                     1  Hours                                 $58.00 
+ ├─ Model Hosting 8 H100                                                                     1  Hours                                $116.00 
+ ├─ Model Hosting 1 H200                                                                     1  Hours                                 $16.00 
+ ├─ Model Hosting 2 H200                                                                     1  Hours                                 $32.00 
+ ├─ Model Hosting 4 H200                                                                     1  Hours                                 $64.00 
+ └─ Model Hosting 8 H200                                                                     1  Hours                                $128.00 
                                                                                                                                              
- OVERALL TOTAL                                                                                                                    $19,306.19 
+ ibm_resource_instance.wml_instance_standard_no_quantity                                                                                     
+ ├─ Instance (2500 CUH included)                                                             1  Instance                           $1,050.00 
+ ├─ Additional Capacity Unit-Hours                                       Monthly cost depends on usage: $0.42 per CUH                        
+ ├─ Mistral Large Output Resource Unit                                   Monthly cost depends on usage: $0.01 per RU                         
+ ├─ Text Extraction Category 1                                           Monthly cost depends on usage: $0.03 per Pages                      
+ ├─ Text Extraction Category 2                                           Monthly cost depends on usage: $0.015 per Pages                     
+ ├─ Resource Units (IBM Models)                                          Monthly cost depends on usage: $0.0001 per RU                       
+ ├─ Resource Units (Third Party Models)                                  Monthly cost depends on usage: $0.0001 per RU                       
+ ├─ Mistral Large Input Resource Unit                                    Monthly cost depends on usage: $0.003 per RU                        
+ ├─ InstructLab Data                                                     Monthly cost depends on usage: $0.00625 per RU                      
+ ├─ InstructLab Tuning                                                   Monthly cost depends on usage: $0.007 per RU                        
+ ├─ Mistral Large Model Hosting Access                                   Monthly cost depends on usage: $34.30 per Hours                     
+ ├─ Mistral 1 GPU Model Hosting Access                                   Monthly cost depends on usage: $8.60 per Hours                      
+ ├─ Mistral 2 GPU Model Hosting Access                                   Monthly cost depends on usage: $17.20 per Hours                     
+ ├─ Small Model Hosting                                                  Monthly cost depends on usage: $5.22 per Hours                      
+ ├─ Medium Model Hosting                                                 Monthly cost depends on usage: $10.40 per Hours                     
+ ├─ Large Model Hosting                                                  Monthly cost depends on usage: $20.85 per Hours                     
+ ├─ Extra Large Model Hosting                                            Monthly cost depends on usage: $41.70 per Hours                     
+ ├─ Extra Small Model Hosting                                            Monthly cost depends on usage: $4.43 per Hours                      
+ ├─ Very Large Model Hosting                                             Monthly cost depends on usage: $83.50 per Hours                     
+ ├─ Model Hosting 1 L40S                                                 Monthly cost depends on usage: $4.43 per Hours                      
+ ├─ Model Hosting 2 L40S                                                 Monthly cost depends on usage: $8.86 per Hours                      
+ ├─ Model Hosting 1 A100                                                 Monthly cost depends on usage: $5.80 per Hours                      
+ ├─ Model Hosting 2 A100                                                 Monthly cost depends on usage: $11.60 per Hours                     
+ ├─ Model Hosting 4 A100                                                 Monthly cost depends on usage: $23.20 per Hours                     
+ ├─ Model Hosting 8 A100                                                 Monthly cost depends on usage: $46.40 per Hours                     
+ ├─ Model Hosting 1 H100                                                 Monthly cost depends on usage: $14.50 per Hours                     
+ ├─ Model Hosting 2 H100                                                 Monthly cost depends on usage: $29.00 per Hours                     
+ ├─ Model Hosting 4 H100                                                 Monthly cost depends on usage: $58.00 per Hours                     
+ ├─ Model Hosting 8 H100                                                 Monthly cost depends on usage: $116.00 per Hours                    
+ ├─ Model Hosting 1 H200                                                 Monthly cost depends on usage: $16.00 per Hours                     
+ ├─ Model Hosting 2 H200                                                 Monthly cost depends on usage: $32.00 per Hours                     
+ ├─ Model Hosting 4 H200                                                 Monthly cost depends on usage: $64.00 per Hours                     
+ └─ Model Hosting 8 H200                                                 Monthly cost depends on usage: $128.00 per Hours                    
+                                                                                                                                             
+ OVERALL TOTAL                                                                                                                    $24,663.71 
 ──────────────────────────────────
-44 cloud resources were detected:
-∙ 44 were estimated, all of which include usage-based costs, see https://infracost.io/usage-file
+47 cloud resources were detected:
+∙ 47 were estimated, all of which include usage-based costs, see https://infracost.io/usage-file
