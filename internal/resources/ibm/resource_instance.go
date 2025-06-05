@@ -74,6 +74,15 @@ type ResourceInstance struct {
 	WD_Queries      *float64 `infracost_usage:"wd_queries"`
 	WD_CustomModels *float64 `infracost_usage:"wd_custom_models"`
 	WD_Collections  *float64 `infracost_usage:"wd_collections"`
+	// watsonx Orchestrate
+	WO_Instance  *float64 `infracost_usage:"wo_instance"`
+	WO_mau       *float64 `infracost_usage:"wo_monthly_active_users"`
+	WO_vu        *float64 `infracost_usage:"wo_monthly_voice_users"`
+	WO_skillruns *float64 `infracost_usage:"wo_skill_runs"`
+	WO_Class1RU  *float64 `infracost_usage:"wo_class1_ru"`
+	WO_Class2RU  *float64 `infracost_usage:"wo_class2_ru"`
+	WO_Class3RU  *float64 `infracost_usage:"wo_class3_ru"`
+
 	// Security and Compliance Center (SCC)
 	SCC_Evaluations *float64 `infracost_usage:"scc_evaluations"`
 	// Watson Studio
@@ -151,6 +160,13 @@ var ResourceInstanceUsageSchema = []*schema.UsageItem{
 	{Key: "wd_queries", DefaultValue: 0, ValueType: schema.Float64},
 	{Key: "wd_custom_models", DefaultValue: 0, ValueType: schema.Float64},
 	{Key: "wd_collections", DefaultValue: 0, ValueType: schema.Float64},
+	{Key: "wo_instance", DefaultValue: 0, ValueType: schema.Float64},
+	{Key: "wo_monthly_active_users", DefaultValue: 0, ValueType: schema.Float64},
+	{Key: "wo_monthly_voice_users", DefaultValue: 0, ValueType: schema.Float64},
+	{Key: "wo_skill_runs", DefaultValue: 0, ValueType: schema.Float64},
+	{Key: "wo_class1_ru", DefaultValue: 0, ValueType: schema.Float64},
+	{Key: "wo_class2_ru", DefaultValue: 0, ValueType: schema.Float64},
+	{Key: "wo_class3_ru", DefaultValue: 0, ValueType: schema.Float64},
 	{Key: "scc_evaluations", DefaultValue: 0, ValueType: schema.Float64},
 	{Key: "data-science-experience_CAPACITY_UNIT_HOURS", DefaultValue: 1, ValueType: schema.Float64},
 	{Key: "sysdig-secure_MULTI_CLOUD_CSPM_COMPUTE_INSTANCES", DefaultValue: 0, ValueType: schema.Float64},
@@ -202,6 +218,7 @@ var ResourceInstanceCostMap map[string]ResourceCostComponentsFunc = map[string]R
 	"secrets-manager":         GetSecretsManagerCostComponents,
 	"sysdig-monitor":          GetSysdigCostComponenets,
 	"sysdig-secure":           GetSCCWPCostComponents,
+	"watsonx-orchestrate":     GetWOCostComponents,
 }
 
 func KMSKeyVersionsFreeCostComponent(r *ResourceInstance) *schema.CostComponent {
