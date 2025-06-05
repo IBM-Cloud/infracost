@@ -50,45 +50,45 @@ func GetWMLCostComponents(r *ResourceInstance) []*schema.CostComponent {
 			WMLInstanceCostComponent(r),
 			WMLStandardCapacityUnitHoursCostComponent(r),
 			WMLMistralLargeOutputResourceUnitsCostComponent(r),
-			WMLTextExtractionCatOneCostComponent(r),
-			WMLTextExtractionCatTwoCostComponent(r, "PAGES_CATEGORY_TWO"),
+			WMLTextExtractionCatOneResourceUnitsCostComponent(r),
+			WMLTextExtractionCatTwoResourceUnitsCostComponent(r, "PAGES_CATEGORY_TWO"),
 			WMLIBMModelResourceUnitsCostComponent(r),
 			WML3rdPartyModelResourceUnitsCostComponent(r),
 			WMLMistralLargeInputResourceUnitsCostComponent(r),
-			WMLInstructLabDataCostComponent(r),
-			WMLInstructLabTuningCostComponent(r),
+			WMLInstructLabDataResourceUnitsCostComponent(r),
+			WMLInstructLabTuningResourceUnitsCostComponent(r),
 			// Categorial GPU selection
-			WMLModelHostingGPUCostComponent(r, "HOURS_MISTRAL_LARGE"),
-			WMLModelHostingGPUCostComponent(r, "HOURS_MISTRAL_ONE_GPU"),
-			WMLModelHostingGPUCostComponent(r, "HOURS_MISTRAL_TWO_GPU"),
-			WMLModelHostingGPUCostComponent(r, "HOURS_CATEGORY_ONE"),
-			WMLModelHostingGPUCostComponent(r, "HOURS_CATEGORY_TWO"),
-			WMLModelHostingGPUCostComponent(r, "HOURS_CATEGORY_THREE"),
-			WMLModelHostingGPUCostComponent(r, "HOURS_CATEGORY_FOUR"),
-			WMLModelHostingGPUCostComponent(r, "HOURS_CATEGORY_FIVE"),
-			WMLModelHostingGPUCostComponent(r, "HOURS_CATEGORY_SIX"),
+			WMLModelHostingGPUHoursCostComponent(r, "HOURS_MISTRAL_LARGE"),
+			WMLModelHostingGPUHoursCostComponent(r, "HOURS_MISTRAL_ONE_GPU"),
+			WMLModelHostingGPUHoursCostComponent(r, "HOURS_MISTRAL_TWO_GPU"),
+			WMLModelHostingGPUHoursCostComponent(r, "HOURS_CATEGORY_ONE"),
+			WMLModelHostingGPUHoursCostComponent(r, "HOURS_CATEGORY_TWO"),
+			WMLModelHostingGPUHoursCostComponent(r, "HOURS_CATEGORY_THREE"),
+			WMLModelHostingGPUHoursCostComponent(r, "HOURS_CATEGORY_FOUR"),
+			WMLModelHostingGPUHoursCostComponent(r, "HOURS_CATEGORY_FIVE"),
+			WMLModelHostingGPUHoursCostComponent(r, "HOURS_CATEGORY_SIX"),
 			// Specific GPU selection
-			WMLModelHostingGPUCostComponent(r, "HOURS_ONE_L_FORTY_S"),
-			WMLModelHostingGPUCostComponent(r, "HOURS_TWO_L_FORTY_S"),
-			WMLModelHostingGPUCostComponent(r, "HOURS_ONE_A_ONE_HUNDRED"),
-			WMLModelHostingGPUCostComponent(r, "HOURS_TWO_A_ONE_HUNDRED"),
-			WMLModelHostingGPUCostComponent(r, "HOURS_FOUR_A_ONE_HUNDRED"),
-			WMLModelHostingGPUCostComponent(r, "HOURS_EIGHT_A_ONE_HUNDRED"),
-			WMLModelHostingGPUCostComponent(r, "HOURS_ONE_H_ONE_HUNDRED"),
-			WMLModelHostingGPUCostComponent(r, "HOURS_TWO_H_ONE_HUNDRED"),
-			WMLModelHostingGPUCostComponent(r, "HOURS_FOUR_H_ONE_HUNDRED"),
-			WMLModelHostingGPUCostComponent(r, "HOURS_EIGHT_H_ONE_HUNDRED"),
-			WMLModelHostingGPUCostComponent(r, "HOURS_ONE_H_TWO_HUNDRED"),
-			WMLModelHostingGPUCostComponent(r, "HOURS_TWO_H_TWO_HUNDRED"),
-			WMLModelHostingGPUCostComponent(r, "HOURS_FOUR_H_TWO_HUNDRED"),
-			WMLModelHostingGPUCostComponent(r, "HOURS_EIGHT_H_TWO_HUNDRED"),
+			WMLModelHostingGPUHoursCostComponent(r, "HOURS_ONE_L_FORTY_S"),
+			WMLModelHostingGPUHoursCostComponent(r, "HOURS_TWO_L_FORTY_S"),
+			WMLModelHostingGPUHoursCostComponent(r, "HOURS_ONE_A_ONE_HUNDRED"),
+			WMLModelHostingGPUHoursCostComponent(r, "HOURS_TWO_A_ONE_HUNDRED"),
+			WMLModelHostingGPUHoursCostComponent(r, "HOURS_FOUR_A_ONE_HUNDRED"),
+			WMLModelHostingGPUHoursCostComponent(r, "HOURS_EIGHT_A_ONE_HUNDRED"),
+			WMLModelHostingGPUHoursCostComponent(r, "HOURS_ONE_H_ONE_HUNDRED"),
+			WMLModelHostingGPUHoursCostComponent(r, "HOURS_TWO_H_ONE_HUNDRED"),
+			WMLModelHostingGPUHoursCostComponent(r, "HOURS_FOUR_H_ONE_HUNDRED"),
+			WMLModelHostingGPUHoursCostComponent(r, "HOURS_EIGHT_H_ONE_HUNDRED"),
+			WMLModelHostingGPUHoursCostComponent(r, "HOURS_ONE_H_TWO_HUNDRED"),
+			WMLModelHostingGPUHoursCostComponent(r, "HOURS_TWO_H_TWO_HUNDRED"),
+			WMLModelHostingGPUHoursCostComponent(r, "HOURS_FOUR_H_TWO_HUNDRED"),
+			WMLModelHostingGPUHoursCostComponent(r, "HOURS_EIGHT_H_TWO_HUNDRED"),
 		}
 	} else if r.Plan == "v2-standard" {
 		return []*schema.CostComponent{
 			WMLEssentialsCapacityUnitHoursCostComponent(r),
 			WMLMistralLargeOutputResourceUnitsCostComponent(r),
-			WMLTextExtractionCatOneCostComponent(r),
-			WMLTextExtractionCatTwoCostComponent(r, "PAGES_CATAGORY_TWO"),
+			WMLTextExtractionCatOneResourceUnitsCostComponent(r),
+			WMLTextExtractionCatTwoResourceUnitsCostComponent(r, "PAGES_CATAGORY_TWO"),
 			WMLIBMModelResourceUnitsCostComponent(r),
 			WML3rdPartyModelResourceUnitsCostComponent(r),
 			WMLMistralLargeInputResourceUnitsCostComponent(r),
@@ -244,7 +244,7 @@ func WMLMistralLargeOutputResourceUnitsCostComponent(r *ResourceInstance) *schem
 	}
 }
 
-func WMLTextExtractionCatOneCostComponent(r *ResourceInstance) *schema.CostComponent {
+func WMLTextExtractionCatOneResourceUnitsCostComponent(r *ResourceInstance) *schema.CostComponent {
 	var q *decimal.Decimal
 	if r.WML_TextExtractCat1Pages != nil {
 		q = decimalPtr(decimal.NewFromFloat(*r.WML_TextExtractCat1Pages))
@@ -268,7 +268,7 @@ func WMLTextExtractionCatOneCostComponent(r *ResourceInstance) *schema.CostCompo
 	}
 }
 
-func WMLTextExtractionCatTwoCostComponent(r *ResourceInstance, unit string) *schema.CostComponent {
+func WMLTextExtractionCatTwoResourceUnitsCostComponent(r *ResourceInstance, unit string) *schema.CostComponent {
 	var q *decimal.Decimal
 	if r.WML_TextExtractCat2Pages != nil {
 		q = decimalPtr(decimal.NewFromFloat(*r.WML_TextExtractCat2Pages))
@@ -364,7 +364,7 @@ func WMLMistralLargeInputResourceUnitsCostComponent(r *ResourceInstance) *schema
 	}
 }
 
-func WMLInstructLabDataCostComponent(r *ResourceInstance) *schema.CostComponent {
+func WMLInstructLabDataResourceUnitsCostComponent(r *ResourceInstance) *schema.CostComponent {
 	var q *decimal.Decimal
 	if r.WML_InstructlabDataRU != nil {
 		q = decimalPtr(decimal.NewFromFloat(*r.WML_InstructlabDataRU))
@@ -388,7 +388,7 @@ func WMLInstructLabDataCostComponent(r *ResourceInstance) *schema.CostComponent 
 	}
 }
 
-func WMLInstructLabTuningCostComponent(r *ResourceInstance) *schema.CostComponent {
+func WMLInstructLabTuningResourceUnitsCostComponent(r *ResourceInstance) *schema.CostComponent {
 	var q *decimal.Decimal
 	if r.WML_InstructlabDataRU != nil {
 		q = decimalPtr(decimal.NewFromFloat(*r.WML_InstructlabDataRU))
@@ -412,7 +412,7 @@ func WMLInstructLabTuningCostComponent(r *ResourceInstance) *schema.CostComponen
 	}
 }
 
-func WMLModelHostingGPUCostComponent(r *ResourceInstance, unit string) *schema.CostComponent {
+func WMLModelHostingGPUHoursCostComponent(r *ResourceInstance, unit string) *schema.CostComponent {
 	var q *decimal.Decimal
 	// Finds the title for the GPU corresponding to the unit
 	title := gpuMap[unit]
