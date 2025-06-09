@@ -34,16 +34,15 @@ func RabbitMqHostFlavorComponent(r *Database) *schema.CostComponent {
 		"m3c.30x240.encrypted": "HOST_THIRTY_TWOHUNDREDFORTY",
 	}
 
-	fmt.Println(CostUnit[r.Flavor])
 	return &schema.CostComponent{
-		Name:            fmt.Sprintf("Host Flavor (%s members, %s)", strconv.FormatInt(r.Members, 10), r.Flavor),
-		Unit:            "Flavor",
+		Name:            fmt.Sprintf("Host Flavour - %s (%s members)", r.Flavor, strconv.FormatInt(r.Members, 10)),
+		Unit:            "Instance",
 		UnitMultiplier:  decimal.NewFromInt(1), // Final quantity for this cost component will be divided by this amount
 		MonthlyQuantity: decimalPtr(decimal.NewFromInt(r.Members)),
 		ProductFilter: &schema.ProductFilter{
 			VendorName:    strPtr("ibm"),
 			Region:        strPtr(r.Location),
-			Service:       strPtr("messages_for_rabbitmq"),
+			Service:       strPtr("messages-for-rabbitmq"),
 			ProductFamily: strPtr("service"),
 			AttributeFilters: []*schema.AttributeFilter{
 				{

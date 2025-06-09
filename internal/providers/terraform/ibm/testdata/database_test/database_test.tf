@@ -10,6 +10,23 @@ provider "ibm" {
   region = "us-south"
 }
 
+resource "ibm_database" "rabbitmq_b3c" {
+  name              = "rabbitmq_b3c"
+  plan              = "standard"
+  location          = "us-south"
+  service           = "messages-for-rabbitmq"
+  service_endpoints = "private"
+  group {
+    group_id = "member"
+    host_flavor {
+      id = "b3c.4x16.encrypted"
+    }
+    disk {
+      allocation_mb = 4194304
+    }
+  } 
+}
+
 # -------------------------------------------
 # POSTGRES
 # -------------------------------------------
@@ -240,19 +257,3 @@ resource "ibm_database" "rabbitmq_multitenant" {
   }
 }
 
-resource "ibm_database" "rabbitmq_b3c" {
-  name              = "rabbitmq_b3c"
-  plan              = "standard"
-  location          = "us-south"
-  service           = "messages-for-rabbitmq"
-  service_endpoints = "private"
-  group {
-    group_id = "member"
-    host_flavor {
-      id = "m3c.30x240.encrypted"
-    }
-    disk {
-      allocation_mb = 4194304
-    }
-  } 
-}

@@ -1,58 +1,58 @@
 
- Name                                                                     Monthly Qty  Unit    Monthly Cost 
-                                                                                                            
- ibm_database.elasticsearch_enterprise                                                                      
- ├─ RAM (3 members)                                                               336  GB         $5,433.46 
- ├─ Disk (3 members)                                                           12,288  GB         $7,720.55 
- └─ Virtual Processor Cores (3 members)                                            84  CPU        $2,716.73 
-                                                                                                            
- ibm_database.elasticsearch_enterprise_flavor                                                               
- ├─ Host Flavor (3 members, m3c.30x240.encrypted)                                   3  Flavor    $14,553.90 
- └─ Disk (3 members)                                                           12,288  GB         $7,720.55 
-                                                                                                            
- ibm_database.elasticsearch_enterprise_multitenant_flavor                                                   
- ├─ RAM (3 members)                                                               336  GB         $5,433.46 
- ├─ Disk (3 members)                                                           12,288  GB         $7,720.55 
- └─ Virtual Processor Cores (3 members)                                            84  CPU        $2,716.73 
-                                                                                                            
- ibm_database.elasticsearch_enterprise_multitenant_flavor_auto_cpu_scale                                    
- ├─ RAM (3 members)                                                                12  GB           $194.05 
- ├─ Disk (3 members)                                                               15  GB             $9.42 
- └─ Virtual Processor Cores (3 members)                                           1.5  CPU           $48.51 
-                                                                                                            
- ibm_database.elasticsearch_platinum                                                                        
- ├─ RAM (3 members)                                                               336  GB         $9,032.69 
- ├─ Disk (3 members)                                                           12,288  GB         $7,720.55 
- └─ Virtual Processor Cores (3 members)                                            84  CPU        $2,716.73 
-                                                                                                            
- ibm_database.elasticsearch_platinum_flavor                                                                 
- ├─ Host Flavor (3 members, m3c.30x240.encrypted)                                   3  Flavor    $22,266.54 
- └─ Disk (3 members)                                                           12,288  GB         $7,720.55 
-                                                                                                            
- ibm_database.postgresql_standard                                                                           
- ├─ RAM (2 members)                                                               224  GB         $1,206.67 
- ├─ Disk (2 members)                                                            8,192  GB         $5,147.03 
- └─ Virtual Processor Cores (2 members)                                            56  CPU        $1,811.15 
-                                                                                                            
- ibm_database.postgresql_standard_flavor                                                                    
- ├─ Host Flavor (2 members, m3c.30x240.encrypted)                                   2  Flavor     $4,526.23 
- └─ Disk (2 members)                                                            8,192  GB         $5,147.03 
-                                                                                                            
- ibm_database.postgresql_standard_multitenant_flavor                                                        
- ├─ RAM (2 members)                                                               224  GB         $1,206.67 
- ├─ Disk (2 members)                                                            8,192  GB         $5,147.03 
- └─ Virtual Processor Cores (2 members)                                            56  CPU        $1,811.15 
-                                                                                                            
- ibm_database.rabbitmq_b3c                                                                                  
- ├─ Host Flavor (3 members, m3c.30x240.encrypted)                                   3  Flavor         $0.00 
- └─ Disk (3 members)                                                           12,288  GB         $7,720.55 
-                                                                                                            
- ibm_database.rabbitmq_multitenant                                                                          
- ├─ RAM (3 members)                                                                36  GB           $193.93 
- ├─ Disk (3 members)                                                              750  GB           $471.23 
- └─ Virtual Processor Cores (3 members)                                             9  CPU          $291.08 
-                                                                                                            
- OVERALL TOTAL                                                                                  $138,404.72 
+ Name                                                                     Monthly Qty  Unit      Monthly Cost 
+                                                                                                              
+ ibm_database.elasticsearch_enterprise                                                                        
+ ├─ RAM (3 members)                                                               336  GB           $5,433.46 
+ ├─ Disk (3 members)                                                           12,288  GB           $7,720.55 
+ └─ Virtual Processor Cores (3 members)                                            84  CPU          $2,716.73 
+                                                                                                              
+ ibm_database.elasticsearch_enterprise_flavor                                                                 
+ ├─ Host Flavor (3 members, m3c.30x240.encrypted)                                   3  Flavor      $14,553.90 
+ └─ Disk (3 members)                                                           12,288  GB           $7,720.55 
+                                                                                                              
+ ibm_database.elasticsearch_enterprise_multitenant_flavor                                                     
+ ├─ RAM (3 members)                                                               336  GB           $5,433.46 
+ ├─ Disk (3 members)                                                           12,288  GB           $7,720.55 
+ └─ Virtual Processor Cores (3 members)                                            84  CPU          $2,716.73 
+                                                                                                              
+ ibm_database.elasticsearch_enterprise_multitenant_flavor_auto_cpu_scale                                      
+ ├─ RAM (3 members)                                                                12  GB             $194.05 
+ ├─ Disk (3 members)                                                               15  GB               $9.42 
+ └─ Virtual Processor Cores (3 members)                                           1.5  CPU             $48.51 
+                                                                                                              
+ ibm_database.elasticsearch_platinum                                                                          
+ ├─ RAM (3 members)                                                               336  GB           $9,032.69 
+ ├─ Disk (3 members)                                                           12,288  GB           $7,720.55 
+ └─ Virtual Processor Cores (3 members)                                            84  CPU          $2,716.73 
+                                                                                                              
+ ibm_database.elasticsearch_platinum_flavor                                                                   
+ ├─ Host Flavor (3 members, m3c.30x240.encrypted)                                   3  Flavor      $22,266.54 
+ └─ Disk (3 members)                                                           12,288  GB           $7,720.55 
+                                                                                                              
+ ibm_database.postgresql_standard                                                                             
+ ├─ RAM (2 members)                                                               224  GB           $1,206.67 
+ ├─ Disk (2 members)                                                            8,192  GB           $5,147.03 
+ └─ Virtual Processor Cores (2 members)                                            56  CPU          $1,811.15 
+                                                                                                              
+ ibm_database.postgresql_standard_flavor                                                                      
+ ├─ Host Flavor (2 members, m3c.30x240.encrypted)                                   2  Flavor       $4,526.23 
+ └─ Disk (2 members)                                                            8,192  GB           $5,147.03 
+                                                                                                              
+ ibm_database.postgresql_standard_multitenant_flavor                                                          
+ ├─ RAM (2 members)                                                               224  GB           $1,206.67 
+ ├─ Disk (2 members)                                                            8,192  GB           $5,147.03 
+ └─ Virtual Processor Cores (2 members)                                            56  CPU          $1,811.15 
+                                                                                                              
+ ibm_database.rabbitmq_b3c                                                                                    
+ ├─ Host Flavour - b3c.4x16.encrypted (3 members)                                   3  Instance       $646.68 
+ └─ Disk (3 members)                                                           12,288  GB           $7,720.55 
+                                                                                                              
+ ibm_database.rabbitmq_multitenant                                                                            
+ ├─ RAM (3 members)                                                                36  GB             $193.93 
+ ├─ Disk (3 members)                                                              750  GB             $471.23 
+ └─ Virtual Processor Cores (3 members)                                             9  CPU            $291.08 
+                                                                                                              
+ OVERALL TOTAL                                                                                    $139,051.39 
 ──────────────────────────────────
 11 cloud resources were detected:
 ∙ 11 were estimated
