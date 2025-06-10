@@ -10,6 +10,23 @@ provider "ibm" {
   region = "us-south"
 }
 
+resource "ibm_database" "rabbitmq_b3c" {
+  name              = "rabbitmq_b3c"
+  plan              = "standard"
+  location          = "us-south"
+  service           = "messages-for-rabbitmq"
+  service_endpoints = "private"
+  group {
+    group_id = "member"
+    host_flavor {
+      id = "b3c.4x16.encrypted"
+    }
+    disk {
+      allocation_mb = 4194304
+    }
+  } 
+}
+
 # -------------------------------------------
 # POSTGRES
 # -------------------------------------------
@@ -19,6 +36,7 @@ resource "ibm_database" "postgresql_standard_flavor" {
   service  = "databases-for-postgresql"
   plan     = "standard"
   location = "us-south"
+  service_endpoints = "private"
   group { # Note: "memory" not allowed when host_flavor is set
     group_id = "member"
     host_flavor {
@@ -40,6 +58,7 @@ resource "ibm_database" "postgresql_standard_multitenant_flavor" {
   service  = "databases-for-postgresql"
   plan     = "standard"
   location = "us-south"
+  service_endpoints = "private"
   group { # Note: "memory" not allowed when host_flavor is set
     group_id = "member"
     host_flavor {
@@ -67,6 +86,7 @@ resource "ibm_database" "postgresql_standard" {
   service  = "databases-for-postgresql"
   plan     = "standard"
   location = "us-south"
+  service_endpoints = "private"
   group {
     group_id = "member"
     memory { # >= 1024 and <= 114688 in increments of 128
@@ -95,6 +115,7 @@ resource "ibm_database" "elasticsearch_platinum" {
   service  = "databases-for-elasticsearch"
   plan     = "platinum"
   location = "us-south"
+  service_endpoints = "private"
   group {
     group_id = "member"
     memory { # >= 1024 and <= 114688 in increments of 128
@@ -114,6 +135,7 @@ resource "ibm_database" "elasticsearch_platinum_flavor" {
   service  = "databases-for-elasticsearch"
   plan     = "platinum"
   location = "us-south"
+  service_endpoints = "private"
   group { # Note: "memory" not allowed when host_flavor is set
     group_id = "member"
     host_flavor {
@@ -130,6 +152,7 @@ resource "ibm_database" "elasticsearch_enterprise" {
   service  = "databases-for-elasticsearch"
   plan     = "enterprise"
   location = "us-south"
+  service_endpoints = "private"
   group {
     group_id = "member"
 
@@ -150,6 +173,7 @@ resource "ibm_database" "elasticsearch_enterprise_flavor" {
   service  = "databases-for-elasticsearch"
   plan     = "enterprise"
   location = "us-south"
+  service_endpoints = "private"
   group { # Note: "memory" not allowed when host_flavor is set
     group_id = "member"
     host_flavor {
@@ -166,6 +190,7 @@ resource "ibm_database" "elasticsearch_enterprise_multitenant_flavor" {
   service  = "databases-for-elasticsearch"
   plan     = "enterprise"
   location = "us-south"
+  service_endpoints = "private"
   group {
     group_id = "member"
     host_flavor {
@@ -190,6 +215,7 @@ resource "ibm_database" "elasticsearch_enterprise_multitenant_flavor_auto_cpu_sc
   service  = "databases-for-elasticsearch"
   plan     = "enterprise"
   location = "us-south"
+  service_endpoints = "private"
   group {
     group_id = "member"
     host_flavor {
@@ -206,3 +232,28 @@ resource "ibm_database" "elasticsearch_enterprise_multitenant_flavor_auto_cpu_sc
     }
   }
 }
+
+resource "ibm_database" "rabbitmq_multitenant" {
+  name              = "rabbitmq_multitenant"
+  plan              = "standard"
+  location          = "us-south"
+  service           = "messages-for-rabbitmq"
+  service_endpoints = "private"
+  tags              = ["tag1", "tag2"]
+  group {
+    group_id = "member"
+    host_flavor {
+      id = "multitenant"
+    }
+    cpu {
+      allocation_count = 3
+    }
+    memory {
+      allocation_mb = 12288
+    }
+    disk {
+      allocation_mb = 256000
+    }
+  }
+}
+
