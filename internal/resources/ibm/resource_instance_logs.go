@@ -7,7 +7,7 @@ import (
 
 func GetLogsCostComponents(r *ResourceInstance) []*schema.CostComponent {
 	return []*schema.CostComponent{
-	//cost component functions go here
+		//cost component functions go here
 		LogsStoreNSearchCostComponent(r),
 		LogsAnalyzeNAlertCostComponent(r),
 		LogsPriorityInsightsCostComponent(r, "PRIORITY_INSIGHTS_RETENTION_SEVEN_DAYS", "7"),
@@ -15,15 +15,14 @@ func GetLogsCostComponents(r *ResourceInstance) []*schema.CostComponent {
 		LogsPriorityInsightsCostComponent(r, "PRIORITY_INSIGHTS_RETENTION_THIRTY_DAYS", "30"),
 		LogsPriorityInsightsCostComponent(r, "PRIORITY_INSIGHTS_RETENTION_SIXTY_DAYS", "60"),
 		LogsPriorityInsightsCostComponent(r, "PRIORITY_INSIGHTS_RETENTION_NINETY_DAYS", "90"),
-		
 	}
-			
+
 }
 
-func LogsStoreNSearchCostComponent(r* ResourceInstance) *schema.CostComponent {
+func LogsStoreNSearchCostComponent(r *ResourceInstance) *schema.CostComponent {
 	var q *decimal.Decimal
-	if r.Logs_Hour!= nil {
-		q = decimalPtr(decimal.NewFromFloat(*r.Logs_Hour))
+	if r.Logs_Hours != nil {
+		q = decimalPtr(decimal.NewFromFloat(*r.Logs_Hours))
 	}
 
 	return &schema.CostComponent{
@@ -46,10 +45,10 @@ func LogsStoreNSearchCostComponent(r* ResourceInstance) *schema.CostComponent {
 
 }
 
-func LogsAnalyzeNAlertCostComponent(r* ResourceInstance) *schema.CostComponent {
+func LogsAnalyzeNAlertCostComponent(r *ResourceInstance) *schema.CostComponent {
 	var q *decimal.Decimal
-	if r.Logs_Hour!= nil {
-		q = decimalPtr(decimal.NewFromFloat(*r.Logs_Hour))
+	if r.Logs_Hours != nil {
+		q = decimalPtr(decimal.NewFromFloat(*r.Logs_Hours))
 	}
 
 	return &schema.CostComponent{
@@ -72,14 +71,14 @@ func LogsAnalyzeNAlertCostComponent(r* ResourceInstance) *schema.CostComponent {
 
 }
 
-func LogsPriorityInsightsCostComponent(r* ResourceInstance, unit string, days string) *schema.CostComponent {
+func LogsPriorityInsightsCostComponent(r *ResourceInstance, unit string, days string) *schema.CostComponent {
 	var q *decimal.Decimal
-	if r.Logs_Hour!= nil {
-		q = decimalPtr(decimal.NewFromFloat(*r.Logs_Hour))
+	if r.Logs_Hours != nil {
+		q = decimalPtr(decimal.NewFromFloat(*r.Logs_Hours))
 	}
 
 	return &schema.CostComponent{
-		Name:            "Priority Insights (Retention " + days + " days)" ,
+		Name:            "Priority Insights (Retention " + days + " days)",
 		Unit:            "GB/Hour",
 		UnitMultiplier:  decimal.NewFromInt(1),
 		MonthlyQuantity: q,
@@ -97,4 +96,3 @@ func LogsPriorityInsightsCostComponent(r* ResourceInstance, unit string, days st
 	}
 
 }
-
