@@ -1,37 +1,43 @@
 
- Name                                                                                        Monthly Qty  Unit      Monthly Cost 
-                                                                                                                                 
- ibm_is_vpc.vpc1                                                                                                                 
- ├─ VPC instance                                                                                       1  Instance         $0.00 
- ├─ VPC egress free allowance (first 5GB)                                                              5  GB               $0.00 
- └─ VPC egress eu-de (first 9995 GB)                                                               9,995  GB           $1,002.70 
- └─ VPC egress eu-de (next 40000 GB)                                                              40,000  GB           $3,803.80 
- └─ VPC egress eu-de (next 100000 GB)                                                                100  GB               $8.05 
- └─ VPC egress eu-de (over 149995 GB)                                                                  0  GB               $0.00 
-                                                                                                                                 
- mycluster                                                                                                                       
- ├─ VPC Container Work Zone flavor: (bx2.4x16) region: (eu-de) name: (eu-de-1) x(3) workers        2,190  hours          $665.19 
- └─ VPC Container Work Zone flavor: (bx2.4x16) region: (eu-de) name: (eu-de-2) x(3) workers        2,190  hours          $665.19 
-                                                                                                                                 
- mycluster-without-usage                                                                                                         
- ├─ VPC Container Work Zone flavor: (bx2.4x16) region: (eu-de) name: (eu-de-1) x(3) workers            3  hours            $0.91 
- └─ VPC Container Work Zone flavor: (bx2.4x16) region: (eu-de) name: (eu-de-2) x(3) workers            3  hours            $0.91 
-                                                                                                                                 
- myrokscluster-with-usage                                                                                                        
- ├─ VPC Container Work Zone flavor: (bx2.4x16) region: (eu-de) name: (eu-de-1) x(3) workers        2,190  hours        $1,039.78 
- └─ VPC Container Work Zone flavor: (bx2.4x16) region: (eu-de) name: (eu-de-2) x(3) workers        2,190  hours        $1,039.78 
-                                                                                                                                 
- roks-no-entitlement                                                                                                             
- ├─ VPC Container Work Zone flavor: (bx2.4x16) region: (eu-de) name: (eu-de-1) x(3) workers            3  hours            $1.42 
- └─ VPC Container Work Zone flavor: (bx2.4x16) region: (eu-de) name: (eu-de-2) x(3) workers            3  hours            $1.42 
-                                                                                                                                 
- roks-with-entitlement                                                                                                           
- ├─ VPC Container Work Zone flavor: (bx2.4x16) region: (eu-de) name: (eu-de-1) x(3) workers            3  hours            $0.91 
- └─ VPC Container Work Zone flavor: (bx2.4x16) region: (eu-de) name: (eu-de-2) x(3) workers            3  hours            $0.91 
-                                                                                                                                 
- OVERALL TOTAL                                                                                                         $8,230.97 
+ Name                                                                                                 Monthly Qty  Unit      Monthly Cost 
+                                                                                                                                          
+ cluster_with_pool                                                                                                                        
+ └─ VPC Container Work Zone flavor: (bx2.8x32) region: (us-south) name: (us-south-1) x(1460) workers        1,460  hours        $1,199.47 
+                                                                                                                                          
+ ibm_container_vpc_worker_pool.cluster_pool                                                                                               
+ └─ VPC Container Work Zone flavor: (bx2.8x32) region: (us-south) name: (us-south-2) x(1460) workers        1,460  hours          $700.15 
+                                                                                                                                          
+ ibm_is_vpc.vpc1                                                                                                                          
+ ├─ VPC instance                                                                                                1  Instance         $0.00 
+ ├─ VPC egress free allowance (first 5GB)                                                                       5  GB               $0.00 
+ └─ VPC egress us-south (first 9995 GB)                                                                     9,995  GB             $908.70 
+ └─ VPC egress us-south (next 40000 GB)                                                                    40,000  GB           $3,469.40 
+ └─ VPC egress us-south (next 100000 GB)                                                                      100  GB               $7.32 
+ └─ VPC egress us-south (over 149995 GB)                                                                        0  GB               $0.00 
+                                                                                                                                          
+ mycluster                                                                                                                                
+ ├─ VPC Container Work Zone flavor: (bx2.4x16) region: (us-south) name: (us-south-1) x(3) workers           2,190  hours          $608.59 
+ └─ VPC Container Work Zone flavor: (bx2.4x16) region: (us-south) name: (us-south-2) x(3) workers           2,190  hours          $608.59 
+                                                                                                                                          
+ mycluster-without-usage                                                                                                                  
+ ├─ VPC Container Work Zone flavor: (bx2.4x16) region: (us-south) name: (us-south-1) x(3) workers               3  hours            $0.83 
+ └─ VPC Container Work Zone flavor: (bx2.4x16) region: (us-south) name: (us-south-2) x(3) workers               3  hours            $0.83 
+                                                                                                                                          
+ myrokscluster-with-usage                                                                                                                 
+ ├─ VPC Container Work Zone flavor: (bx2.4x16) region: (us-south) name: (us-south-1) x(3) workers           2,190  hours          $983.08 
+ └─ VPC Container Work Zone flavor: (bx2.4x16) region: (us-south) name: (us-south-2) x(3) workers           2,190  hours          $983.08 
+                                                                                                                                          
+ roks-no-entitlement                                                                                                                      
+ ├─ VPC Container Work Zone flavor: (bx2.8x32) region: (us-south) name: (us-south-1) x(3) workers               3  hours            $2.46 
+ └─ VPC Container Work Zone flavor: (bx2.8x32) region: (us-south) name: (us-south-2) x(3) workers               3  hours            $2.46 
+                                                                                                                                          
+ roks-with-entitlement                                                                                                                    
+ ├─ VPC Container Work Zone flavor: (bx2.8x32) region: (us-south) name: (us-south-1) x(3) workers               3  hours            $1.44 
+ └─ VPC Container Work Zone flavor: (bx2.8x32) region: (us-south) name: (us-south-2) x(3) workers               3  hours            $1.44 
+                                                                                                                                          
+ OVERALL TOTAL                                                                                                                  $9,477.82 
 ──────────────────────────────────
-8 cloud resources were detected:
-∙ 6 were estimated, 1 of which usage-based costs, see https://infracost.io/usage-file
+10 cloud resources were detected:
+∙ 8 were estimated, 2 of which include usage-based costs, see https://infracost.io/usage-file
 ∙ 2 were free:
   ∙ 2 x ibm_is_subnet
