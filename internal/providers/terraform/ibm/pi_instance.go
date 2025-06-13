@@ -32,7 +32,7 @@ func identifyOperatingSystem(imageName string) int64 {
 		return ibm.IBMI
 	}
 
-	if truncatedImageName == "CentOS" || truncatedImageName == "Linux" || truncatedImageName == "RHEL8" {
+	if truncatedImageName == "CentOS" || truncatedImageName == "Linux" || truncatedImageName == "RHEL8" || truncatedImageName == "RHEL9" {
 		return ibm.RHEL
 	}
 
@@ -66,6 +66,8 @@ func newPiInstance(d *schema.ResourceData, u *schema.UsageData) *schema.Resource
 
 	if len(refs) > 0 {
 		imageName = refs[0].Get("pi_image_name").String()
+	} else {
+		imageName = d.Get("pi_image_id").String()
 	}
 
 	region := d.Get("region").String()

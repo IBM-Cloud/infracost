@@ -47,6 +47,7 @@ const (
 )
 
 const s922 string = "s922"
+const s1022 string = "s1022"
 const e980 string = "e980"
 const e1080 string = "e1080"
 
@@ -76,7 +77,7 @@ func (r *PiInstance) BuildResource() *schema.Resource {
 	}
 
 	if r.Profile != "" {
-		costComponents = append(costComponents, r.piInstanceMemoryHanaProfileCostComponent(), r.piInstanceCoresHanaProfileCostComponent(), r.piInstanceOSHanaProfileCostComponent(),)
+		costComponents = append(costComponents, r.piInstanceMemoryHanaProfileCostComponent(), r.piInstanceCoresHanaProfileCostComponent(), r.piInstanceOSHanaProfileCostComponent())
 	} else {
 		costComponents = append(costComponents, r.piInstanceCoresCostComponent(), r.piInstanceMemoryCostComponent())
 	}
@@ -95,6 +96,8 @@ func (r *PiInstance) BuildResource() *schema.Resource {
 		if r.LegacyIBMiImageVersion {
 			costComponents = append(costComponents, r.piInstanceIBMiOperatingSystemServiceExtensionCostComponent())
 		}
+	} else if r.OperatingSystem == RHEL || r.OperatingSystem == SLES {
+		costComponents = append(costComponents, r.piInstanceLinuxLicenceCostComponent())
 	}
 
 	return &schema.Resource{
@@ -114,7 +117,7 @@ func (r *PiInstance) piInstanceAIXOperatingSystemCostComponent() *schema.CostCom
 
 	unit := ""
 
-	if r.SystemType == s922 {
+	if r.SystemType == s922 || r.SystemType == s1022 {
 		unit = "AIX_SMALL_APPLICATION_INSTANCE_HOURS"
 	} else if r.SystemType == e980 || r.SystemType == e1080 {
 		unit = "AIX_MEDIUM_APPLICATION_INSTANCE_HOURS"
@@ -151,7 +154,7 @@ func (r *PiInstance) piInstanceIBMiLPPPOperatingSystemCostComponent() *schema.Co
 
 	unit := ""
 
-	if r.SystemType == s922 {
+	if r.SystemType == s922 || r.SystemType == s1022 {
 		unit = "IBMI_LPP_PTEN_APPLICATION_INSTANCE_HOURS"
 	} else if r.SystemType == e980 {
 		unit = "IBMI_LPP_PTHIRTY_APPLICATION_INSTANCE_HOURS"
@@ -189,6 +192,8 @@ func (r *PiInstance) piInstanceIBMiOSOperatingSystemCostComponent() *schema.Cost
 	unit := ""
 
 	if r.SystemType == s922 {
+		unit = "IBMI_OS_PTEN_APPLICATION_INSTANCE_HOURS"
+	} else if r.SystemType == s1022 {
 		unit = "IBMI_OS_PTEN_APPLICATION_INSTANCE_HOURS"
 	} else if r.SystemType == e980 {
 		unit = "IBMI_OS_PTHIRTY_APPLICATION_INSTANCE_HOURS"
@@ -517,6 +522,8 @@ func (r *PiInstance) piInstanceCoresCostComponent() *schema.CostComponent {
 	if r.ProcessorMode == "shared" {
 		if r.SystemType == s922 {
 			unit = "SOS_VIRTUAL_PROCESSOR_CORE_HOURS"
+		} else if r.SystemType == s1022 {
+			unit = "SOS_VIRTUAL_PROCESSOR_CORE_HOURS"
 		} else if r.SystemType == e980 {
 			unit = "ESS_VIRTUAL_PROCESSOR_CORE_HOURS"
 		} else if r.SystemType == e1080 {
@@ -524,6 +531,8 @@ func (r *PiInstance) piInstanceCoresCostComponent() *schema.CostComponent {
 		}
 	} else if r.ProcessorMode == "dedicated" {
 		if r.SystemType == s922 {
+			unit = "SOD_VIRTUAL_PROCESSOR_CORE_HOURS"
+		} else if r.SystemType == s1022 {
 			unit = "SOD_VIRTUAL_PROCESSOR_CORE_HOURS"
 		} else if r.SystemType == e980 {
 			if epicEnabled {
@@ -540,6 +549,8 @@ func (r *PiInstance) piInstanceCoresCostComponent() *schema.CostComponent {
 		}
 	} else if r.ProcessorMode == "capped" {
 		if r.SystemType == s922 {
+			unit = "SOC_VIRTUAL_PROCESSOR_CORE_HOURS"
+		} else if r.SystemType == s1022 {
 			unit = "SOC_VIRTUAL_PROCESSOR_CORE_HOURS"
 		} else if r.SystemType == e980 {
 			unit = "ECC_VIRTUAL_PROCESSOR_CORE_HOURS"
@@ -632,6 +643,48 @@ func (r *PiInstance) piInstanceStorageCostComponent() *schema.CostComponent {
 
 	return &schema.CostComponent{
 		Name:            fmt.Sprintf("Storage - %s", r.StorageType),
+		Unit:            "GB hours",
+		UnitMultiplier:  decimal.NewFromInt(1),
+		MonthlyQuantity: q,
+		ProductFilter: &schema.ProductFilter{
+			VendorName:    strPtr("ibm"),
+			Region:        strPtr(r.Region),
+			ProductFamily: strPtr("service"),
+			Service:       strPtr("power-iaas"),
+			AttributeFilters: []*schema.AttributeFilter{
+				{Key: "planName", Value: strPtr("power-virtual-server-group")},
+				{Key: "planType", Value: strPtr("Paid")},
+			},
+		},
+		PriceFilter: &schema.PriceFilter{
+			Unit: strPtr(unit),
+		},
+	}
+}
+
+func (r *PiInstance) piInstanceLinuxLicenceCostComponent() *schema.CostComponent {
+
+	unit := ""
+	os := ""
+	var q *decimal.Decimal
+
+	if r.MonthlyInstanceHours != nil {
+		hours := *r.MonthlyInstanceHours
+		q = decimalPtr(decimal.NewFromFloat(hours))
+	}
+
+	fmt.Println(r.OperatingSystem)
+
+	if r.OperatingSystem == SLES {
+		unit = "SUSE_GP_LICENSE_PER_CORE_HOUR"
+		os = "SLES"
+	} else if r.OperatingSystem == RHEL {
+		unit = "REDHAT_GP_SCALE_UP_LICENSE_CORE_HOURS"
+		os = "RHEL"
+	}
+
+	return &schema.CostComponent{
+		Name:            "Linux Image cost (Licence Fee) for " + os,
 		Unit:            "GB hours",
 		UnitMultiplier:  decimal.NewFromInt(1),
 		MonthlyQuantity: q,
