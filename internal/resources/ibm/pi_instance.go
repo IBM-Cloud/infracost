@@ -80,24 +80,24 @@ func (r *PiInstance) BuildResource() *schema.Resource {
 		costComponents = append(costComponents, r.piInstanceMemoryHanaProfileCostComponent(), r.piInstanceCoresHanaProfileCostComponent(), r.piInstanceOSHanaProfileCostComponent())
 	} else {
 		costComponents = append(costComponents, r.piInstanceCoresCostComponent(), r.piInstanceMemoryCostComponent())
-	}
 
-	if r.OperatingSystem == AIX {
-		costComponents = append(costComponents, r.piInstanceAIXOperatingSystemCostComponent())
-	} else if r.OperatingSystem == IBMI {
-		costComponents = append(costComponents,
-			r.piInstanceIBMiLPPPOperatingSystemCostComponent(),
-			r.piInstanceIBMiOSOperatingSystemCostComponent(),
-			r.piInstanceCloudStorageSolutionCostComponent(),
-			r.piInstanceHighAvailabilityCostComponent(),
-			r.piInstanceDB2WebQueryCostComponent(),
-			r.piInstanceRationalDevStudioLicensesCostComponent(),
-		)
-		if r.LegacyIBMiImageVersion {
-			costComponents = append(costComponents, r.piInstanceIBMiOperatingSystemServiceExtensionCostComponent())
+		if r.OperatingSystem == AIX {
+			costComponents = append(costComponents, r.piInstanceAIXOperatingSystemCostComponent())
+		} else if r.OperatingSystem == IBMI {
+			costComponents = append(costComponents,
+				r.piInstanceIBMiLPPPOperatingSystemCostComponent(),
+				r.piInstanceIBMiOSOperatingSystemCostComponent(),
+				r.piInstanceCloudStorageSolutionCostComponent(),
+				r.piInstanceHighAvailabilityCostComponent(),
+				r.piInstanceDB2WebQueryCostComponent(),
+				r.piInstanceRationalDevStudioLicensesCostComponent(),
+			)
+			if r.LegacyIBMiImageVersion {
+				costComponents = append(costComponents, r.piInstanceIBMiOperatingSystemServiceExtensionCostComponent())
+			}
+		} else if r.OperatingSystem == RHEL || r.OperatingSystem == SLES {
+			costComponents = append(costComponents, r.piInstanceImageLicenceCostComponent())
 		}
-	} else if r.OperatingSystem == RHEL || r.OperatingSystem == SLES {
-		costComponents = append(costComponents, r.piInstanceLinuxLicenceCostComponent())
 	}
 
 	return &schema.Resource{
@@ -341,6 +341,9 @@ func (r *PiInstance) piInstanceCoresHanaProfileCostComponent() *schema.CostCompo
 
 func (r *PiInstance) piInstanceOSHanaProfileCostComponent() *schema.CostComponent {
 
+	unit := ""
+	nameString := ""
+
 	var q *decimal.Decimal
 
 	if r.MonthlyInstanceHours != nil {
@@ -348,10 +351,16 @@ func (r *PiInstance) piInstanceOSHanaProfileCostComponent() *schema.CostComponen
 		q = decimalPtr(decimal.NewFromFloat(hours))
 	}
 
-	unit := "SUSE_OS_SAP_TIER_TWO_INSTANCE_HOURS"
+	if r.OperatingSystem == SLES {
+		unit = "SUSE_OS_SAP_TIER_TWO_INSTANCE_HOURS"
+		nameString = "Linux HANA OS for SLES"
+	} else if r.OperatingSystem == RHEL {
+		unit = "OS_LICENSE_CORE_HOUR"
+		nameString = "Linux HANA OS for RHEL"
+	}
 
 	return &schema.CostComponent{
-		Name:            "Linux HANA OS",
+		Name:            nameString,
 		Unit:            "Instance hours",
 		UnitMultiplier:  decimal.NewFromInt(1),
 		MonthlyQuantity: q,
@@ -662,7 +671,7 @@ func (r *PiInstance) piInstanceStorageCostComponent() *schema.CostComponent {
 	}
 }
 
-func (r *PiInstance) piInstanceLinuxLicenceCostComponent() *schema.CostComponent {
+func (r *PiInstance) piInstanceImageLicenceCostComponent() *schema.CostComponent {
 
 	unit := ""
 	os := ""
@@ -673,8 +682,6 @@ func (r *PiInstance) piInstanceLinuxLicenceCostComponent() *schema.CostComponent
 		q = decimalPtr(decimal.NewFromFloat(hours))
 	}
 
-	fmt.Println(r.OperatingSystem)
-
 	if r.OperatingSystem == SLES {
 		unit = "SUSE_GP_LICENSE_PER_CORE_HOUR"
 		os = "SLES"
@@ -684,7 +691,7 @@ func (r *PiInstance) piInstanceLinuxLicenceCostComponent() *schema.CostComponent
 	}
 
 	return &schema.CostComponent{
-		Name:            "Linux Image cost (Licence Fee) for " + os,
+		Name:            "Image cost (Licence Fee) for " + os,
 		Unit:            "GB hours",
 		UnitMultiplier:  decimal.NewFromInt(1),
 		MonthlyQuantity: q,
