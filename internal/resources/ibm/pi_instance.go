@@ -352,10 +352,10 @@ func (r *PiInstance) piInstanceOSHanaProfileCostComponent() *schema.CostComponen
 	}
 
 	if r.OperatingSystem == SLES {
-		unit = "SUSE_OS_SAP_TIER_TWO_INSTANCE_HOURS"
+		unit = "SUSE_SAP_LICENSE_PER_COR_HOUR"
 		nameString = "Linux HANA OS for SLES"
 	} else if r.OperatingSystem == RHEL {
-		unit = "OS_LICENSE_CORE_HOUR"
+		unit = "REDHAT_SAP_SCALE_UP_LICENSE_PER_CORE_HOUR"
 		nameString = "Linux HANA OS for RHEL"
 	}
 
