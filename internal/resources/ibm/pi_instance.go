@@ -78,6 +78,8 @@ func (r *PiInstance) BuildResource() *schema.Resource {
 
 	if r.Profile != "" {
 		costComponents = append(costComponents, r.piInstanceMemoryHanaProfileCostComponent(), r.piInstanceCoresHanaProfileCostComponent(), r.piInstanceOSHanaProfileCostComponent())
+	} else if r.NetweaverImage {
+		costComponents = append(costComponents, r.piInstanceNetweaverImageCostComponent())
 	} else {
 		costComponents = append(costComponents, r.piInstanceCoresCostComponent(), r.piInstanceMemoryCostComponent())
 
@@ -693,6 +695,47 @@ func (r *PiInstance) piInstanceImageLicenceCostComponent() *schema.CostComponent
 	return &schema.CostComponent{
 		Name:            "Image cost (Licence Fee) for " + os,
 		Unit:            "GB hours",
+		UnitMultiplier:  decimal.NewFromInt(1),
+		MonthlyQuantity: q,
+		ProductFilter: &schema.ProductFilter{
+			VendorName:    strPtr("ibm"),
+			Region:        strPtr(r.Region),
+			ProductFamily: strPtr("service"),
+			Service:       strPtr("power-iaas"),
+			AttributeFilters: []*schema.AttributeFilter{
+				{Key: "planName", Value: strPtr("power-virtual-server-group")},
+				{Key: "planType", Value: strPtr("Paid")},
+			},
+		},
+		PriceFilter: &schema.PriceFilter{
+			Unit: strPtr(unit),
+		},
+	}
+}
+
+func (r *PiInstance) piInstanceNetweaverImageCostComponent() *schema.CostComponent {
+
+	unit := ""
+	nameString := ""
+
+	var q *decimal.Decimal
+
+	if r.MonthlyInstanceHours != nil {
+		hours := *r.MonthlyInstanceHours
+		q = decimalPtr(decimal.NewFromFloat(hours))
+	}
+
+	if r.OperatingSystem == SLES {
+		unit = "SUSE_SAP_LICENSE_PER_COR_HOUR"
+		nameString = "Linux NETWEAVER OS for SLES"
+	} else if r.OperatingSystem == RHEL {
+		unit = "REDHAT_SAP_SCALE_UP_LICENSE_PER_CORE_HOUR"
+		nameString = "Linux NETWEAVER OS for RHEL"
+	}
+
+	return &schema.CostComponent{
+		Name:            nameString,
+		Unit:            "Instance hours",
 		UnitMultiplier:  decimal.NewFromInt(1),
 		MonthlyQuantity: q,
 		ProductFilter: &schema.ProductFilter{

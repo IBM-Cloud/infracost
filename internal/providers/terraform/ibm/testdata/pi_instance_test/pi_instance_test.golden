@@ -11,13 +11,17 @@
  ├─ Storage - tier1                                                            14,600  GB hours                       $4.00 
  ├─ Linux HANA Memory                                                          93,440  Memory hours                 $289.66 
  ├─ Linux HANA Cores                                                            2,920  Core hours                 $1,279.54 
- └─ Linux HANA OS for SLES                                                        730  Instance hours               $496.40 
+ └─ Linux HANA OS for SLES (first 1 Instance hours)                                 1  Instance hours                 $0.34 
+ └─ Linux HANA OS for SLES (next 2 Instance hours)                                  2  Instance hours                 $1.36 
+ └─ Linux HANA OS for SLES (over 3 Instance hours)                                  2  Instance hours                 $1.64 
                                                                                                                             
  ibm_pi_instance.hana-dedicated-e980-instance_no_quantity                                                                   
  ├─ Storage - tier1                                                 Monthly cost depends on usage: $0.000274 per GB hours   
  ├─ Linux HANA Memory                                               Monthly cost depends on usage: $0.0031 per Memory hours 
  ├─ Linux HANA Cores                                                Monthly cost depends on usage: $0.44 per Core hours     
- └─ Linux HANA OS for SLES                                          Monthly cost depends on usage: $0.68 per Instance hours 
+ └─ Linux HANA OS for SLES (first 1 Instance hours)                 Monthly cost depends on usage: $0.34 per Instance hours 
+ └─ Linux HANA OS for SLES (next 2 Instance hours)                  Monthly cost depends on usage: $0.68 per Instance hours 
+ └─ Linux HANA OS for SLES (over 3 Instance hours)                  Monthly cost depends on usage: $0.82 per Instance hours 
                                                                                                                             
  ibm_pi_instance.ibmi-dedicated-e980-instance                                                                               
  ├─ Storage - tier1                                                            14,600  GB hours                       $4.00 
@@ -41,24 +45,20 @@
                                                                                                                             
  ibm_pi_instance.netweaver-shared-s922-instance                                                                             
  ├─ Storage - tier1                                                            14,600  GB hours                       $4.00 
- ├─ Cores                                                                         730  Core hours                    $92.23 
- ├─ Memory                                                                        730  GB hours                       $8.70 
- └─ Image cost (Licence Fee) for SLES (first 1 GB hours)                            1  GB hours                       $0.10 
- └─ Image cost (Licence Fee) for SLES (next 2 GB hours)                             2  GB hours                       $0.20 
- └─ Image cost (Licence Fee) for SLES (over 3 GB hours)                             2  GB hours                       $0.40 
+ └─ Linux NETWEAVER OS for SLES (first 1 Instance hours)                            1  Instance hours                 $0.34 
+ └─ Linux NETWEAVER OS for SLES (next 2 Instance hours)                             2  Instance hours                 $1.36 
+ └─ Linux NETWEAVER OS for SLES (over 3 Instance hours)                             2  Instance hours                 $1.64 
                                                                                                                             
  ibm_pi_instance.netweaver-shared-s922-no-usage-specified-instance                                                          
  ├─ Storage - tier1                                                 Monthly cost depends on usage: $0.000274 per GB hours   
- ├─ Cores                                                           Monthly cost depends on usage: $0.13 per Core hours     
- ├─ Memory                                                          Monthly cost depends on usage: $0.011913 per GB hours   
- └─ Image cost (Licence Fee) for SLES (first 1 GB hours)            Monthly cost depends on usage: $0.10 per GB hours       
- └─ Image cost (Licence Fee) for SLES (next 2 GB hours)             Monthly cost depends on usage: $0.10 per GB hours       
- └─ Image cost (Licence Fee) for SLES (over 3 GB hours)             Monthly cost depends on usage: $0.20 per GB hours       
+ └─ Linux NETWEAVER OS for SLES (first 1 Instance hours)            Monthly cost depends on usage: $0.34 per Instance hours 
+ └─ Linux NETWEAVER OS for SLES (next 2 Instance hours)             Monthly cost depends on usage: $0.68 per Instance hours 
+ └─ Linux NETWEAVER OS for SLES (over 3 Instance hours)             Monthly cost depends on usage: $0.82 per Instance hours 
                                                                                                                             
  ibm_resource_instance.powervs_service                                                                                      
  └─ Workspace for Power Virtual Server                                              1  Workspace                      $0.00 
                                                                                                                             
- OVERALL TOTAL                                                                                                    $6,530.12 
+ OVERALL TOTAL                                                                                                    $5,938.78 
 ──────────────────────────────────
 14 cloud resources were detected:
 ∙ 8 were estimated, all of which include usage-based costs, see https://infracost.io/usage-file
