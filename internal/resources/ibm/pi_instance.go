@@ -78,13 +78,13 @@ func (r *PiInstance) BuildResource() *schema.Resource {
 
 	if r.Profile != "" {
 		costComponents = append(costComponents, r.piInstanceMemoryHanaProfileCostComponent(), r.piInstanceCoresHanaProfileCostComponent(), r.piInstanceOSHanaProfileCostComponent())
-	} else if r.NetweaverImage {
-		costComponents = append(costComponents, r.piInstanceNetweaverImageCostComponent())
 	} else {
 		costComponents = append(costComponents, r.piInstanceCoresCostComponent(), r.piInstanceMemoryCostComponent())
 
 		if r.OperatingSystem == AIX {
 			costComponents = append(costComponents, r.piInstanceAIXOperatingSystemCostComponent())
+		} else if r.NetweaverImage {
+			costComponents = append(costComponents, r.piInstanceNetweaverImageCostComponent())
 		} else if r.OperatingSystem == IBMI {
 			costComponents = append(costComponents,
 				r.piInstanceIBMiLPPPOperatingSystemCostComponent(),
