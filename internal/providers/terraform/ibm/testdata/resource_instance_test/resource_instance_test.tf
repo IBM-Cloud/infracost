@@ -375,6 +375,15 @@ resource "ibm_resource_instance" "event_notifications_no_usage" {
   service           = "event-notifications"
 }
 
+resource "ibm_resource_instance" "resource_instance_logs" {
+  name              = "test"
+  service           = "logs"
+  location          = "us-south"
+  plan              = "standard"
+  resource_group_id = "default"
+}
+
+
 resource "ibm_resource_instance" "wx_orchestrate_trial" {
   name              = "watsonx-orchestrate-trial"
   location          = "us-south"

@@ -174,3 +174,7 @@ resource_usage:
     wo_class1_ru: 1
     wo_class2_ru: 1
     wo_class3_ru: 1
+
+  
+  ibm_resource_instance.resource_instance_logs:
+    logs_hours: 34

@@ -129,6 +129,7 @@ resource_type_default_usage:
     event-notifications_PUSH_PREPROD_DESTINATION_INSTANCES: 0
     event-notifications_RESOURCE_UNITS_NUMBER_MONTHLY: 1
     event-notifications_RESOURCE_UNITS_NUMBER_SETUP: 1
+    logs_hours: 34
 
   ibm_tg_gateway:
     connection: 3
