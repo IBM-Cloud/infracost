@@ -39,7 +39,7 @@ var DatabaseCostMap map[string]DatabaseCostComponentsFunc = map[string]DatabaseC
 	// "databases-for-etcd":
 	// "databases-for-redis":
 	"databases-for-elasticsearch": GetElasticSearchCostComponents,
-	// "messages-for-rabbitmq":
+	"messages-for-rabbitmq": GetRabbitMqCostComponents,
 	// "databases-for-mongodb":
 	// "databases-for-mysql":
 	// "databases-for-cassandra":
