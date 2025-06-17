@@ -111,17 +111,16 @@ resource "ibm_container_vpc_cluster" "roks_no_entitlement" {
 }
 
 /*
-  Copies the configuration from this DA: 
+  Copies this OpenShift container platform on VPC configuration: 
   https://cloud.ibm.com/catalog/7a4d68b4-cf8b-40cd-a3d1-f49aff526eb3/architecture/deploy-arch-ibm-ocp-vpc-1728a4fd-f561-4cf9-82ef-2b1eeb5da1a8-global
 
-  Uses 2 clusters and 2 worker pools each consisting of 730 workers. So 1460 workers
-  used for each resource to represent 2 instances of a cluster/pool.
+  Uses 2 clusters and 2 worker pools each running for 730 hours.
 */ 
-resource "ibm_container_vpc_cluster" "cluster_with_pool" {
-  name         = "cluster_with_pool"
+resource "ibm_container_vpc_cluster" "roks_cluster_vpc" {
+  name         = "roks-cluster-vpc"
   vpc_id       = ibm_is_vpc.vpc1.id
   flavor       = "bx2.8x32"
-  worker_count = 1460
+  worker_count = 2
   kube_version = "4.17_openshift" // Version as shown in console
   zones {
     subnet_id = ibm_is_subnet.subnet1.id
@@ -129,12 +128,13 @@ resource "ibm_container_vpc_cluster" "cluster_with_pool" {
   }
 }
 
-resource "ibm_container_vpc_worker_pool" "cluster_pool" {
-  cluster = ibm_container_vpc_cluster.cluster.id
+resource "ibm_container_vpc_worker_pool" "roks_worker_pool" {
+  cluster = ibm_container_vpc_cluster.roks_cluster_vpc.id
   worker_pool_name = "mywp"
   flavor = "bx2.8x32"
   vpc_id = ibm_is_vpc.vpc1.id
-  worker_count = 1460
+  worker_count = 2
+  entitlement = "cloud-pak"
   zones {
     name = "us-south-2"
     subnet_id = ibm_is_subnet.subnet2.id
