@@ -2,6 +2,10 @@ version: 0.1
 resource_usage:
   ibm_container_vpc_cluster.cluster:
     monthly_instance_hours: 730
+  ibm_container_vpc_cluster.roks_cluster_vpc:
+    monthly_instance_hours: 730
+  ibm_container_vpc_worker_pool.roks_worker_pool:
+    monthly_instance_hours: 730
   ibm_is_vpc.vpc1:
     gigabyte_transmitted_outbounds: 50100
   ibm_container_vpc_cluster.roks_cluster_with_usage:
