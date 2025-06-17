@@ -14,12 +14,14 @@ import (
 // Pricing information: https://cloud.ibm.com/kubernetes/catalog/about
 
 type IsInstance struct {
-	Address     string
-	Region      string
-	Profile     string // should be values from CLI 'ibmcloud is instance-profiles'
-	Zone        string
-	IsDedicated bool // will be true if a dedicated_host or dedicated_host_group is specified
-	BootVolume  struct {
+	Address         string
+	Region          string
+	OperatingSystem int64
+	Image           string
+	Profile         string // should be values from CLI 'ibmcloud is instance-profiles'
+	Zone            string
+	IsDedicated     bool // will be true if a dedicated_host or dedicated_host_group is specified
+	BootVolume      struct {
 		Name string
 		Size int64
 	}
@@ -37,6 +39,7 @@ func (r *IsInstance) PopulateUsage(u *schema.UsageData) {
 }
 
 func (r *IsInstance) instanceHoursCostComponent() *schema.CostComponent {
+	//fmt.Println(r.OperatingSystem)
 
 	service := "is.reservation"
 	planNamePrefix := "instance-"
@@ -108,6 +111,37 @@ func (r *IsInstance) bootVolumeCostComponent() *schema.CostComponent {
 	}
 }
 
+func (r *IsInstance) imageHoursCostComponent() *schema.CostComponent {
+
+	unit := ""
+
+	var q *decimal.Decimal
+
+	if r.MonthlyInstanceHours != nil {
+		q = decimalPtr(decimal.NewFromFloat(*r.MonthlyInstanceHours))
+	}
+
+	unit = "REDHAT_VCPU_HOURS"
+	return &schema.CostComponent{
+		Name:            fmt.Sprintf("Image (%s)", r.Image),
+		Unit:            "Hours",
+		UnitMultiplier:  decimal.NewFromInt(1),
+		MonthlyQuantity: q,
+		ProductFilter: &schema.ProductFilter{
+			VendorName:    strPtr("ibm"),
+			Region:        strPtr(r.Region),
+			Service:       strPtr("is.instance"),
+			ProductFamily: strPtr("service"),
+			AttributeFilters: []*schema.AttributeFilter{
+				{Key: "planName", Value: &r.Profile},
+			},
+		},
+		PriceFilter: &schema.PriceFilter{
+			Unit: strPtr(unit),
+		},
+	}
+}
+
 // BuildResource builds a schema.Resource from a valid IsShare struct.
 // This method is called after the resource is initialised by an IaC provider.
 // See providers folder for more information.
@@ -115,6 +149,7 @@ func (r *IsInstance) BuildResource() *schema.Resource {
 	costComponents := []*schema.CostComponent{
 		r.instanceHoursCostComponent(),
 		r.bootVolumeCostComponent(),
+		r.imageHoursCostComponent(),
 	}
 
 	return &schema.Resource{

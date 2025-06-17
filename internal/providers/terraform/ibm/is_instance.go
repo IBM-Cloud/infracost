@@ -20,6 +20,7 @@ func newIsInstance(d *schema.ResourceData, u *schema.UsageData) *schema.Resource
 
 	region := d.Get("region").String()
 	profile := d.Get("profile").String()
+	image := d.Get("image").String()
 	zone := d.Get("zone").String()
 	dedicatedHost := strings.TrimSpace(d.Get("dedicated_host").String())
 	dedicatedHostGroup := strings.TrimSpace(d.Get("dedicated_host_group").String())
@@ -39,13 +40,21 @@ func newIsInstance(d *schema.ResourceData, u *schema.UsageData) *schema.Resource
 			bootVolumeSize = bv[0].Get("size").Int()
 		}
 	}
+	var os int64 = -1
+	if len(image) > 0 {
+		os = identifyOperatingSystem(image)
+		// isLegacyIBMiImageVersion = isIBMiVersionLegacy(imageName)
+		// netweaverImage = isNetweaverImage(imageName)
+	}
 
 	r := &ibm.IsInstance{
-		Address:     d.Address,
-		Region:      region,
-		Profile:     profile,
-		Zone:        zone,
-		IsDedicated: isDedicated,
+		Address:         d.Address,
+		Region:          region,
+		Profile:         profile,
+		Image:           image,
+		OperatingSystem: os,
+		Zone:            zone,
+		IsDedicated:     isDedicated,
 		BootVolume: struct {
 			Name string
 			Size int64
@@ -56,6 +65,7 @@ func newIsInstance(d *schema.ResourceData, u *schema.UsageData) *schema.Resource
 
 	configuration := make(map[string]any)
 	configuration["name"] = name
+	configuration["image"] = image
 	configuration["on_dedicated_host"] = isDedicated
 	configuration["profile"] = profile
 	configuration["region"] = region
