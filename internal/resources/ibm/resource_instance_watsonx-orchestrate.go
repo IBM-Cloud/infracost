@@ -76,7 +76,7 @@ func WOInstanceCostComponent(r *ResourceInstance) *schema.CostComponent {
 	} else {
 		q = decimalPtr(decimal.NewFromInt(1))
 	}
-	if r.Plan == "essential" {
+	if r.Plan == "essentials" {
 		name = "Instance (4000 MAUs included)"
 	} else {
 		name = "Instance (40000 MAUs included)"
@@ -109,7 +109,7 @@ func WOMonthlyActiveUsersCostComponent(r *ResourceInstance) *schema.CostComponen
 	users_per_block = ADDITIONAL_MAU_PER_1000_USERS
 	unit = "1K MAU"
 
-	if r.Plan == "essential" {
+	if r.Plan == "essentials" {
 		included_allotment = ESSENTIAL_MAU_PER_INSTANCE
 	} else {
 		included_allotment = STANDARD_MAU_PER_INSTANCE
@@ -230,7 +230,7 @@ func WOClass1RUCostComponent(r *ResourceInstance) *schema.CostComponent {
 
 func WOClass2RUCostComponent(r *ResourceInstance) *schema.CostComponent {
 	var q *decimal.Decimal
-	if r.WO_Class1RU != nil {
+	if r.WO_Class2RU != nil {
 		q = decimalPtr(decimal.NewFromFloat(*r.WO_Class2RU))
 	}
 	return &schema.CostComponent{
@@ -254,7 +254,7 @@ func WOClass2RUCostComponent(r *ResourceInstance) *schema.CostComponent {
 
 func WOClass3RUCostComponent(r *ResourceInstance) *schema.CostComponent {
 	var q *decimal.Decimal
-	if r.WO_Class1RU != nil {
+	if r.WO_Class3RU != nil {
 		q = decimalPtr(decimal.NewFromFloat(*r.WO_Class3RU))
 	}
 	return &schema.CostComponent{

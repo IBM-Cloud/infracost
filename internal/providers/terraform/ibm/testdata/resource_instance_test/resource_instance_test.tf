@@ -406,3 +406,11 @@ resource "ibm_resource_instance" "wx_orchestrate_standard" {
   resource_group_id = "default"
   service           = "watsonx-orchestrate"
 }
+
+resource "ibm_resource_instance" "wx_orchestrate_standard_no_usage" {
+  name              = "watsonx-orchestrate-standard-no-usage"
+  location          = "us-south"
+  plan              = "standard"
+  resource_group_id = "default"
+  service           = "watsonx-orchestrate"
+}

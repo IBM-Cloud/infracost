@@ -287,8 +287,8 @@
  └─ Model Hosting 8 H200                                                 Monthly cost depends on usage: $128.00 per Hours                    
                                                                                                                                              
  ibm_resource_instance.wx_orchestrate_essentials                                                                                             
- ├─ Instance (40000 MAUs included)                                                           1  Instance                             $500.00 
- ├─ Additional Monthly Active Users                                      Monthly cost depends on usage: $100.00 per 1K MAU                   
+ ├─ Instance (4000 MAUs included)                                                            1  Instance                             $500.00 
+ ├─ Additional Monthly Active Users                                                          1  1K MAU                               $100.00 
  ├─ Monthly Active Users using voice                                                         1  1K MAU                               $100.00 
  ├─ Skill Runs                                                                               1  10K Skill Runs                       $100.00 
  ├─ Class 1 Resource Units                                                                   1  1K RU                                  $0.60 
@@ -296,7 +296,7 @@
  └─ Class 3 Resource Units                                                                   1  1K RU                                  $5.29 
                                                                                                                                              
  ibm_resource_instance.wx_orchestrate_essentials_no_usage                                                                                    
- ├─ Instance (40000 MAUs included)                                                           1  Instance                             $500.00 
+ ├─ Instance (4000 MAUs included)                                                            1  Instance                             $500.00 
  ├─ Additional Monthly Active Users                                      Monthly cost depends on usage: $100.00 per 1K MAU                   
  ├─ Monthly Active Users using voice                                     Monthly cost depends on usage: $100.00 per 1K MAU                   
  ├─ Skill Runs                                                           Monthly cost depends on usage: $100.00 per 10K Skill Runs           
@@ -313,10 +313,19 @@
  ├─ Class 2 Resource Units                                                                   1  1K RU                                  $1.91 
  └─ Class 3 Resource Units                                                                   1  1K RU                                  $5.29 
                                                                                                                                              
+ ibm_resource_instance.wx_orchestrate_standard_no_usage                                                                                      
+ ├─ Instance (40000 MAUs included)                                                           1  Instance                           $6,000.00 
+ ├─ Additional Monthly Active Users                                      Monthly cost depends on usage: $100.00 per 1K MAU                   
+ ├─ Monthly Active Users using voice                                     Monthly cost depends on usage: $100.00 per 1K MAU                   
+ ├─ Skill Runs                                                           Monthly cost depends on usage: $100.00 per 10K Skill Runs           
+ ├─ Class 1 Resource Units                                               Monthly cost depends on usage: $0.60 per 1K RU                      
+ ├─ Class 2 Resource Units                                               Monthly cost depends on usage: $1.91 per 1K RU                      
+ └─ Class 3 Resource Units                                               Monthly cost depends on usage: $5.29 per 1K RU                      
+                                                                                                                                             
  ibm_resource_instance.wx_orchestrate_trial                                                                                                  
  └─ Trial plan                                                                               1                                         $0.00 
                                                                                                                                              
- OVERALL TOTAL                                                                                                                    $32,179.31 
+ OVERALL TOTAL                                                                                                                    $38,279.31 
 ──────────────────────────────────
-51 cloud resources were detected:
-∙ 51 were estimated, all of which include usage-based costs, see https://infracost.io/usage-file
+52 cloud resources were detected:
+∙ 52 were estimated, all of which include usage-based costs, see https://infracost.io/usage-file
