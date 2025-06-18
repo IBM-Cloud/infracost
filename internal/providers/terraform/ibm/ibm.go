@@ -69,8 +69,8 @@ var globalCatalogServiceId = map[string]catalogMetadata{
 	"ibm_code_engine_build":         {"2ad2fdd0-bba5-11ea-8966-5d6402fed1c7", []string{}, nil, "https://cloud.ibm.com/docs/codeengine?topic=codeengine-pricing"},
 	"ibm_code_engine_function":      {"2ad2fdd0-bba5-11ea-8966-5d6402fed1c7", []string{}, nil, "https://cloud.ibm.com/docs/codeengine?topic=codeengine-pricing"},
 	"ibm_code_engine_job":           {"2ad2fdd0-bba5-11ea-8966-5d6402fed1c7", []string{}, nil, "https://cloud.ibm.com/docs/codeengine?topic=codeengine-pricing"},
-	"ibm_container_vpc_cluster":     {"containers-kubernetes", []string{}, nil, "https://cloud.ibm.com/kubernetes/catalog/about#pricing"},
-	"ibm_container_vpc_worker_pool": {"containers-kubernetes", []string{}, nil, "https://cloud.ibm.com/kubernetes/catalog/about#pricing"},
+	"ibm_container_vpc_cluster":     {"containers-kubernetes", []string{"ibm_container_vpc_worker_pool"}, nil, "https://cloud.ibm.com/kubernetes/catalog/about#pricing"},
+	"ibm_container_vpc_worker_pool": {"Worker Pool", []string{}, nil, "https://cloud.ibm.com/kubernetes/catalog/about#pricing"},
 	"ibm_cos_bucket":                {"Object Storage Bucket", []string{}, nil, "https://cloud.ibm.com/objectstorage/create#pricing"},
 	"ibm_is_floating_ip":            {"is.floating-ip", []string{}, nil, "https://cloud.ibm.com/vpc-ext/provision/vs"},
 	"ibm_is_flow_log":               {"is.flow-log-collector", []string{}, nil, "https://cloud.ibm.com/vpc-ext/provision/flowLog"},
@@ -95,6 +95,7 @@ var globalCatalogServiceId = map[string]catalogMetadata{
 	"sysdig-monitor":                {"090c2c10-8c38-11e8-bec2-493df9c49eb8", []string{}, nil, "https://cloud.ibm.com/observe/catalog/ibm-cloud-monitoring"},
 	"sysdig-secure":                 {"e831e900-82d6-11ec-95c5-c12c5a5d9687", []string{}, nil, "https://cloud.ibm.com/workload-protection/catalog/security-and-compliance-center-workload-protection"},
 	"wx":                            {"51c53b72-918f-4869-b834-2d99eb28422a", []string{}, nil, "https://cloud.ibm.com/watsonx/overview"},
+	"watsonx-orchestrate":           {"b69f78c0-11d7-11ef-9bdf-c92eb40d1838", []string{}, nil, "https://cloud.ibm.com/catalog/services/watsonx-orchestrate"},
 }
 
 func SetCatalogMetadata(d *schema.ResourceData, resourceType string, config map[string]any) {

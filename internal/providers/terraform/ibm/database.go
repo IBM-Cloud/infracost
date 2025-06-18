@@ -23,6 +23,8 @@ func newDatabase(d *schema.ResourceData, u *schema.UsageData) *schema.Resource {
 		members = 3
 	} else if service == "databases-for-postgresql" {
 		members = 2
+	} else if service == "messages-for-rabbitmq" {
+		members = 3
 	}
 
 	var flavor string

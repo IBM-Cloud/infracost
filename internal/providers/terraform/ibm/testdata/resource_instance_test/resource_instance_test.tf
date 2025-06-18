@@ -383,3 +383,43 @@ resource "ibm_resource_instance" "resource_instance_logs" {
   resource_group_id = "default"
 }
 
+
+resource "ibm_resource_instance" "wx_orchestrate_trial" {
+  name              = "watsonx-orchestrate-trial"
+  location          = "us-south"
+  plan              = "lite"
+  resource_group_id = "default"
+  service           = "watsonx-orchestrate"
+}
+
+resource "ibm_resource_instance" "wx_orchestrate_essentials_no_usage" {
+  name              = "watsonx-orchestrate-essentials-no-usage"
+  location          = "us-south"
+  plan              = "essentials"
+  resource_group_id = "default"
+  service           = "watsonx-orchestrate"
+}
+
+resource "ibm_resource_instance" "wx_orchestrate_essentials" {
+  name              = "watsonx-orchestrate-essentials-usage"
+  location          = "us-south"
+  plan              = "essentials"
+  resource_group_id = "default"
+  service           = "watsonx-orchestrate"
+}
+
+resource "ibm_resource_instance" "wx_orchestrate_standard" {
+  name              = "wx-orchestrate-standard"
+  location          = "us-south"
+  plan              = "standard"
+  resource_group_id = "default"
+  service           = "watsonx-orchestrate"
+}
+
+resource "ibm_resource_instance" "wx_orchestrate_standard_no_usage" {
+  name              = "watsonx-orchestrate-standard-no-usage"
+  location          = "us-south"
+  plan              = "standard"
+  resource_group_id = "default"
+  service           = "watsonx-orchestrate"
+}
