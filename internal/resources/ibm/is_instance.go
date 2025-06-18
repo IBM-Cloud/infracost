@@ -113,6 +113,24 @@ func (r *IsInstance) bootVolumeCostComponent() *schema.CostComponent {
 
 func (r *IsInstance) imageHoursCostComponent() *schema.CostComponent {
 
+	fmt.Println(r.OperatingSystem)
+
+	//Build up planName value
+
+	profile := ""
+
+	//pattern := `^[a-z]{2}3d.*$`
+
+	//re := regexp.MustCompile(pattern)
+
+	// if !re.MatchString(r.Profile) {
+	// 	profile = "gen2-instance"
+	// } else {
+	profile = r.Profile
+	//}
+
+	fmt.Println(profile)
+
 	unit := ""
 
 	var q *decimal.Decimal
@@ -121,7 +139,7 @@ func (r *IsInstance) imageHoursCostComponent() *schema.CostComponent {
 		q = decimalPtr(decimal.NewFromFloat(*r.MonthlyInstanceHours))
 	}
 
-	unit = "REDHAT_VCPU_HOURS"
+	unit = "SUSE_INSTANCE_HOURS"
 	return &schema.CostComponent{
 		Name:            fmt.Sprintf("Image (%s)", r.Image),
 		Unit:            "Hours",
@@ -133,7 +151,7 @@ func (r *IsInstance) imageHoursCostComponent() *schema.CostComponent {
 			Service:       strPtr("is.instance"),
 			ProductFamily: strPtr("service"),
 			AttributeFilters: []*schema.AttributeFilter{
-				{Key: "planName", Value: &r.Profile},
+				{Key: "planName", Value: &profile},
 			},
 		},
 		PriceFilter: &schema.PriceFilter{

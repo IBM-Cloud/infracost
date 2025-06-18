@@ -48,7 +48,7 @@ resource "ibm_is_ssh_key" "ssh_key" {
 resource "ibm_is_instance" "vsi" {
   for_each = toset(local.profiles)
   name     = "vsi-instance-${random_string.unique_identifier.result}-${each.key}"
-  image = "r006-f137ea64-0d27-4d81-afe0-353fd0557e81"
+  image = "cd71a4ad-effa-4f57-ace2-5246f7f71e23"
   keys  = [ibm_is_ssh_key.ssh_key.id]
   profile        = each.key
   resource_group = ibm_resource_group.resource_group.id
