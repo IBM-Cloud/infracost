@@ -156,3 +156,25 @@ resource_usage:
 
   ibm_resource_instance.event_notifications[*]:
     event-notifications_MILLION_INGESTED_EVENTS: 1
+  
+  ibm_resource_instance.wx_orchestrate_essentials:
+    wo_instance: 1
+    wo_monthly_active_users: 5000
+    wo_monthly_voice_users: 1
+    wo_skill_runs: 1
+    wo_class1_ru: 1
+    wo_class2_ru: 1
+    wo_class3_ru: 1
+  
+  ibm_resource_instance.wx_orchestrate_standard:
+    wo_instance: 1
+    wo_monthly_active_users: 41000
+    wo_monthly_voice_users: 1
+    wo_skill_runs: 1
+    wo_class1_ru: 1
+    wo_class2_ru: 1
+    wo_class3_ru: 1
+
+  
+  ibm_resource_instance.resource_instance_logs:
+    logs_hours: 34
