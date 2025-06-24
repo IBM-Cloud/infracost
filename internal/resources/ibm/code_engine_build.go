@@ -10,23 +10,23 @@ import (
 
 var CODE_ENGINE_BUILD_BUILDS_SIZE = map[string]map[string]float64{
 	"small": {
-		"CPU": 0.5,
+		"CPU":    0.5,
 		"Memory": 2,
 	},
 	"medium": {
-		"CPU": 1,
+		"CPU":    1,
 		"Memory": 4,
 	},
 	"large": {
-		"CPU": 2,
+		"CPU":    2,
 		"Memory": 8,
 	},
 	"xlarge": {
-		"CPU": 4,
+		"CPU":    4,
 		"Memory": 16,
 	},
 	"xxlarge": {
-		"CPU": 12,
+		"CPU":    12,
 		"Memory": 48,
 	},
 }
@@ -39,8 +39,8 @@ var CODE_ENGINE_BUILD_BUILDS_SIZE = map[string]map[string]float64{
 // Resource information: https://cloud.ibm.com/docs/codeengine?topic=codeengine-getting-started
 // Pricing information: https://cloud.ibm.com/docs/codeengine?topic=codeengine-pricing
 type CodeEngineBuild struct {
-	Address string
-	Region  string
+	Address      string
+	Region       string
 	StrategySize string
 
 	InstanceHours *float64 `infracost_usage:"instance_hours"`
@@ -66,19 +66,19 @@ func (r *CodeEngineBuild) CodeEngineBuildVirtualProcessorCoreCostComponent() *sc
 	var sscpu float64 = CODE_ENGINE_BUILD_BUILDS_SIZE[ss]["CPU"]
 
 	var hours *decimal.Decimal
-	if (r.InstanceHours != nil) {
+	if r.InstanceHours != nil {
 		hours = decimalPtr(decimal.NewFromFloat(*r.InstanceHours * sscpu))
 	}
-	
+
 	return &schema.CostComponent{
-		Name:			fmt.Sprintf("Virtual Processor Cores (%s build)", ss),
-		Unit:			"vCPU Hours",
-		UnitMultiplier:	decimal.NewFromInt(1),
+		Name:            fmt.Sprintf("Virtual Processor Cores (%s build)", ss),
+		Unit:            "vCPU Hours",
+		UnitMultiplier:  decimal.NewFromInt(1),
 		MonthlyQuantity: hours,
 		ProductFilter: &schema.ProductFilter{
 			VendorName: strPtr("ibm"),
-			Region: 	strPtr(r.Region),
-			Service: 	strPtr("codeengine"),
+			Region:     strPtr(r.Region),
+			Service:    strPtr("codeengine"),
 			AttributeFilters: []*schema.AttributeFilter{
 				{
 					Key: "planName", Value: strPtr("standard"),
@@ -100,19 +100,19 @@ func (r *CodeEngineBuild) CodeEngineBuildRAMCostComponent() *schema.CostComponen
 	var ssmem float64 = CODE_ENGINE_BUILD_BUILDS_SIZE[ss]["Memory"]
 
 	var hours *decimal.Decimal
-	if (r.InstanceHours != nil) {
+	if r.InstanceHours != nil {
 		hours = decimalPtr(decimal.NewFromFloat(*r.InstanceHours * ssmem))
 	}
-	
+
 	return &schema.CostComponent{
-		Name:			fmt.Sprintf("RAM (%s build)", ss),
-		Unit:			"GB Hours",
-		UnitMultiplier:	decimal.NewFromInt(1),
+		Name:            fmt.Sprintf("RAM (%s build)", ss),
+		Unit:            "GB Hours",
+		UnitMultiplier:  decimal.NewFromInt(1),
 		MonthlyQuantity: hours,
 		ProductFilter: &schema.ProductFilter{
 			VendorName: strPtr("ibm"),
-			Region: 	strPtr(r.Region),
-			Service: 	strPtr("codeengine"),
+			Region:     strPtr(r.Region),
+			Service:    strPtr("codeengine"),
 			AttributeFilters: []*schema.AttributeFilter{
 				{
 					Key: "planName", Value: strPtr("standard"),
@@ -124,7 +124,6 @@ func (r *CodeEngineBuild) CodeEngineBuildRAMCostComponent() *schema.CostComponen
 		},
 	}
 }
-
 
 // BuildResource builds a schema.Resource from a valid CodeEngineBuild struct.
 // This method is called after the resource is initialised by an IaC provider.

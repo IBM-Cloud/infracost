@@ -20,17 +20,17 @@ resource "ibm_code_engine_project" "ce_project" {
 }
 
 resource "ibm_code_engine_job" "ce_job" {
-  project_id                    = ibm_code_engine_project.ce_project.id
-  name                          = "ce-job"
-  image_reference                = "icr.io/codeengine/helloworld"
-  scale_memory_limit            = "4G"
-  scale_cpu_limit               = "1"
+  project_id         = ibm_code_engine_project.ce_project.id
+  name               = "ce-job"
+  image_reference    = "icr.io/codeengine/helloworld"
+  scale_memory_limit = "4G"
+  scale_cpu_limit    = "1"
 }
 
 resource "ibm_code_engine_job" "ce_job2" {
-  project_id                    = ibm_code_engine_project.ce_project.id
-  name                          = "ce-job2"
-  image_reference                = "icr.io/codeengine/helloworld"
-  scale_memory_limit            = "4G"
-  scale_cpu_limit               = "1"
+  project_id         = ibm_code_engine_project.ce_project.id
+  name               = "ce-job2"
+  image_reference    = "icr.io/codeengine/helloworld"
+  scale_memory_limit = "4G"
+  scale_cpu_limit    = "1"
 }

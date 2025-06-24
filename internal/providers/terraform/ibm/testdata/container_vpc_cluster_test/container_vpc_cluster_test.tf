@@ -115,7 +115,7 @@ resource "ibm_container_vpc_cluster" "roks_no_entitlement" {
   https://cloud.ibm.com/catalog/7a4d68b4-cf8b-40cd-a3d1-f49aff526eb3/architecture/deploy-arch-ibm-ocp-vpc-1728a4fd-f561-4cf9-82ef-2b1eeb5da1a8-global
 
   Uses 2 clusters and 2 worker pools each running for 730 hours.
-*/ 
+*/
 resource "ibm_container_vpc_cluster" "roks_cluster_vpc" {
   name         = "roks-cluster-vpc"
   vpc_id       = ibm_is_vpc.vpc1.id
@@ -129,14 +129,14 @@ resource "ibm_container_vpc_cluster" "roks_cluster_vpc" {
 }
 
 resource "ibm_container_vpc_worker_pool" "roks_worker_pool" {
-  cluster = ibm_container_vpc_cluster.roks_cluster_vpc.id
+  cluster          = ibm_container_vpc_cluster.roks_cluster_vpc.id
   worker_pool_name = "mywp"
-  flavor = "bx2.8x32"
-  vpc_id = ibm_is_vpc.vpc1.id
-  worker_count = 2
-  entitlement = "cloud-pak"
+  flavor           = "bx2.8x32"
+  vpc_id           = ibm_is_vpc.vpc1.id
+  worker_count     = 2
+  entitlement      = "cloud-pak"
   zones {
-    name = "us-south-2"
+    name      = "us-south-2"
     subnet_id = ibm_is_subnet.subnet2.id
   }
 }
