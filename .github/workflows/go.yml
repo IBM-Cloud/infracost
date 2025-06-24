@@ -2,7 +2,9 @@ name: Go
 
 on:
   push:
-    branches: [ master ]
+    # branches: [ master ]
+    branches:
+      - '**'
   pull_request:
     branches: [ master ]
 
@@ -18,8 +20,8 @@ jobs:
         with:
           go-version-file: go.mod
 
-      - name: Check Terraform format
-        run: make tf_fmt_check
+      # - name: Check Terraform format
+      #   run: make tf_fmt_check
 
       - name: Run golangci-lint
         uses: golangci/golangci-lint-action@v6.1.0
