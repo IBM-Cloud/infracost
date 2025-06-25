@@ -162,7 +162,7 @@ func (r *IsInstance) imageHoursCostComponent() *schema.CostComponent {
 			Service:       strPtr("is.instance"),
 			ProductFamily: strPtr("service"),
 			AttributeFilters: []*schema.AttributeFilter{
-				{Key: "planName", Value: strPtr("gen2-instance")},
+				{Key: "planName", Value: strPtr("gen2-instance-dedicated-host")},
 			},
 		},
 		PriceFilter: &schema.PriceFilter{
@@ -179,7 +179,7 @@ func (r *IsInstance) sqlLicenceCostComponent() *schema.CostComponent {
 	}
 
 	return &schema.CostComponent{
-		Name:            fmt.Sprintf("Image (%s)", r.Image),
+		Name:            fmt.Sprintf("SQL Licence (%s)", r.Image),
 		Unit:            "Hours",
 		UnitMultiplier:  decimal.NewFromInt(1),
 		MonthlyQuantity: q,
@@ -189,7 +189,7 @@ func (r *IsInstance) sqlLicenceCostComponent() *schema.CostComponent {
 			Service:       strPtr("is.instance"),
 			ProductFamily: strPtr("service"),
 			AttributeFilters: []*schema.AttributeFilter{
-				{Key: "planName", Value: strPtr("gen2-instance")},
+				{Key: "planName", Value: strPtr("gen2-instance-dedicated-host")},
 			},
 		},
 		PriceFilter: &schema.PriceFilter{
@@ -207,7 +207,7 @@ func (r *IsInstance) BuildResource() *schema.Resource {
 		r.bootVolumeCostComponent(),
 		r.imageHoursCostComponent(),
 	}
-	if r.Profile == "r006-be892432-a287-4b5b-a249-af30f58d108d" {
+	if r.Image == "r006-be892432-a287-4b5b-a249-af30f58d108d" {
 		costComponents = append(costComponents, r.sqlLicenceCostComponent())
 	}
 
