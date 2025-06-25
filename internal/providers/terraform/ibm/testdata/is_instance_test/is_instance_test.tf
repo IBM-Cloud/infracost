@@ -104,7 +104,7 @@ resource "ibm_is_instance" "vsi_boot_volume" {
 resource "ibm_is_instance" "vsi_dedicated_host" {
   for_each = toset(local.profiles)
   name     = "vsi-instance-dedicated-host-${random_string.unique_identifier.result}-${each.key}"
-  image = data.ibm_is_image.redhat.id
+  image = data.ibm_is_image.sles.id
   keys  = [ibm_is_ssh_key.ssh_key.id]
   profile        = each.key
   resource_group = ibm_resource_group.resource_group.id
