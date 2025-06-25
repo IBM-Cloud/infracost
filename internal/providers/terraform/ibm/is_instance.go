@@ -4,14 +4,39 @@ import (
 	"github.com/infracost/infracost/internal/resources/ibm"
 	"github.com/infracost/infracost/internal/schema"
 
+	"regexp"
 	"strings"
 )
 
 func getIsInstanceRegistryItem() *schema.RegistryItem {
 	return &schema.RegistryItem{
-		Name:  "ibm_is_instance",
-		RFunc: newIsInstance,
+		Name:                "ibm_is_instance",
+		RFunc:               newIsInstance,
+		ReferenceAttributes: []string{"image"},
 	}
+}
+
+func identifyStockImage(img string) string {
+	redHatPattern := `^ibm-redhat-.*$`
+	susePattern := `^ibm-sles-.*$`
+	windowsPattern := `^ibm-windows-.*$`
+
+	imageType := ""
+
+	redHatRe := regexp.MustCompile(redHatPattern)
+	suseRe := regexp.MustCompile(susePattern)
+	windowsRe := regexp.MustCompile(windowsPattern)
+
+	//still need to add check for windows with SQL server image
+	if redHatRe.MatchString(img) {
+		imageType = "RHEL"
+	} else if suseRe.MatchString(img) {
+		imageType = "SLES"
+	} else if windowsRe.MatchString(img) {
+		imageType = "WNDW"
+	}
+
+	return imageType
 }
 
 // valid profile values https://cloud.ibm.com/docs/vpc?topic=vpc-profiles&interface=ui
@@ -40,21 +65,14 @@ func newIsInstance(d *schema.ResourceData, u *schema.UsageData) *schema.Resource
 			bootVolumeSize = bv[0].Get("size").Int()
 		}
 	}
-	var os int64 = -1
-	if len(image) > 0 {
-		os = identifyOperatingSystem(image)
-		// isLegacyIBMiImageVersion = isIBMiVersionLegacy(imageName)
-		// netweaverImage = isNetweaverImage(imageName)
-	}
 
 	r := &ibm.IsInstance{
-		Address:         d.Address,
-		Region:          region,
-		Profile:         profile,
-		Image:           image,
-		OperatingSystem: os,
-		Zone:            zone,
-		IsDedicated:     isDedicated,
+		Address:     d.Address,
+		Region:      region,
+		Profile:     profile,
+		Image:       image,
+		Zone:        zone,
+		IsDedicated: isDedicated,
 		BootVolume: struct {
 			Name string
 			Size int64
