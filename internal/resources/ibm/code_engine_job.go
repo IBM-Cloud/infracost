@@ -19,10 +19,10 @@ import (
 type CodeEngineJob struct {
 	Address string
 	Region  string
-	CPU string
-	Memory string
+	CPU     string
+	Memory  string
 
-	InstanceHours *float64 `infracost_usage:"instance_hours"`
+	InstanceHours   *float64 `infracost_usage:"instance_hours"`
 	ScaledInstances *float64 `infracost_usage:"scaled_instances"`
 }
 
@@ -37,7 +37,6 @@ var CodeEngineJobUsageSchema = []*schema.UsageItem{
 func (r *CodeEngineJob) PopulateUsage(u *schema.UsageData) {
 	resources.PopulateArgsWithUsage(r, u)
 }
-
 
 func (r *CodeEngineJob) CodeEngineJobVirtualProcessorCoreCostComponent() *schema.CostComponent {
 	var q, err = strconv.ParseFloat(r.CPU, 64)
@@ -56,14 +55,14 @@ func (r *CodeEngineJob) CodeEngineJobVirtualProcessorCoreCostComponent() *schema
 	}
 
 	return &schema.CostComponent{
-		Name:			fmt.Sprintf("Virtual Processor Cores Hours"),
-		Unit:			"vCPU Hours",
-		UnitMultiplier:	decimal.NewFromInt(1),
+		Name:            fmt.Sprintf("Virtual Processor Cores Hours"),
+		Unit:            "vCPU Hours",
+		UnitMultiplier:  decimal.NewFromInt(1),
 		MonthlyQuantity: ih,
 		ProductFilter: &schema.ProductFilter{
 			VendorName: strPtr("ibm"),
-			Region: 	strPtr(r.Region),
-			Service: 	strPtr("codeengine"),
+			Region:     strPtr(r.Region),
+			Service:    strPtr("codeengine"),
 			AttributeFilters: []*schema.AttributeFilter{
 				{
 					Key: "planName", Value: strPtr("standard"),
@@ -99,14 +98,14 @@ func (r *CodeEngineJob) CodeEngineJobRAMCostComponent() *schema.CostComponent {
 	}
 
 	return &schema.CostComponent{
-		Name:			fmt.Sprintf("RAM Hours"),
-		Unit:			"GB Hours",
-		UnitMultiplier:	decimal.NewFromInt(1),
+		Name:            fmt.Sprintf("RAM Hours"),
+		Unit:            "GB Hours",
+		UnitMultiplier:  decimal.NewFromInt(1),
 		MonthlyQuantity: ih,
 		ProductFilter: &schema.ProductFilter{
 			VendorName: strPtr("ibm"),
-			Region: 	strPtr(r.Region),
-			Service: 	strPtr("codeengine"),
+			Region:     strPtr(r.Region),
+			Service:    strPtr("codeengine"),
 			AttributeFilters: []*schema.AttributeFilter{
 				{
 					Key: "planName", Value: strPtr("standard"),

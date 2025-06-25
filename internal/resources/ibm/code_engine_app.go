@@ -1,8 +1,8 @@
 package ibm
 
 import (
-	"math"
 	"fmt"
+	"math"
 	"strconv"
 
 	"github.com/infracost/infracost/internal/resources"
@@ -20,14 +20,14 @@ const CODE_ENGINE_APP_MILLION_HTTP_REQUESTS float64 = 1000000
 // Resource information: https://cloud.ibm.com/docs/codeengine?topic=codeengine-getting-started
 // Pricing information: https://cloud.ibm.com/docs/codeengine?topic=codeengine-pricing
 type CodeEngineApp struct {
-	Address string
-	Region  string
-	CPU string
-	Memory string
+	Address               string
+	Region                string
+	CPU                   string
+	Memory                string
 	ScaleInitialInstances int64
 
 	HttpRequestCalls *float64 `infracost_usage:"http_request_calls"`
-	InstanceHours *float64 `infracost_usage:"instance_hours"`
+	InstanceHours    *float64 `infracost_usage:"instance_hours"`
 }
 
 // CodeEngineAppUsageSchema defines a list which represents the usage schema of CodeEngineApp.
@@ -53,19 +53,19 @@ func (r *CodeEngineApp) CodeEngineAppVirtualProcessorCoreCostComponent() *schema
 	}
 
 	var hours *decimal.Decimal
-	if (r.InstanceHours != nil) {
+	if r.InstanceHours != nil {
 		hours = decimalPtr(decimal.NewFromFloat(*r.InstanceHours * q * float64(instances)))
 	}
-	
+
 	return &schema.CostComponent{
-		Name:			fmt.Sprintf("Virtual Processor Cores (%s initial instances)", strconv.FormatInt(instances, 10)),
-		Unit:			"vCPU Hours",
-		UnitMultiplier:	decimal.NewFromInt(1),
+		Name:            fmt.Sprintf("Virtual Processor Cores (%s initial instances)", strconv.FormatInt(instances, 10)),
+		Unit:            "vCPU Hours",
+		UnitMultiplier:  decimal.NewFromInt(1),
 		MonthlyQuantity: hours,
 		ProductFilter: &schema.ProductFilter{
 			VendorName: strPtr("ibm"),
-			Region: 	strPtr(r.Region),
-			Service: 	strPtr("codeengine"),
+			Region:     strPtr(r.Region),
+			Service:    strPtr("codeengine"),
 			AttributeFilters: []*schema.AttributeFilter{
 				{
 					Key: "planName", Value: strPtr("standard"),
@@ -96,19 +96,19 @@ func (r *CodeEngineApp) CodeEngineAppRAMCostComponent() *schema.CostComponent {
 	}
 
 	var hours *decimal.Decimal
-	if (r.InstanceHours != nil) {
+	if r.InstanceHours != nil {
 		hours = decimalPtr(decimal.NewFromFloat(*r.InstanceHours * memGB * float64(instances)))
 	}
-	
+
 	return &schema.CostComponent{
-		Name:			fmt.Sprintf("RAM (%s initial instances)", strconv.FormatInt(instances, 10)),
-		Unit:			"GB Hours",
-		UnitMultiplier:	decimal.NewFromInt(1),
+		Name:            fmt.Sprintf("RAM (%s initial instances)", strconv.FormatInt(instances, 10)),
+		Unit:            "GB Hours",
+		UnitMultiplier:  decimal.NewFromInt(1),
 		MonthlyQuantity: hours,
 		ProductFilter: &schema.ProductFilter{
 			VendorName: strPtr("ibm"),
-			Region: 	strPtr(r.Region),
-			Service: 	strPtr("codeengine"),
+			Region:     strPtr(r.Region),
+			Service:    strPtr("codeengine"),
 			AttributeFilters: []*schema.AttributeFilter{
 				{
 					Key: "planName", Value: strPtr("standard"),
@@ -129,14 +129,14 @@ func (r *CodeEngineApp) CodeEngineAppHTTPRequestsCostComponent() *schema.CostCom
 	}
 
 	return &schema.CostComponent{
-		Name:			"Million HTTP calls",
-		Unit:			"Million HTTP calls",
-		UnitMultiplier:	decimal.NewFromInt(1),
+		Name:            "Million HTTP calls",
+		Unit:            "Million HTTP calls",
+		UnitMultiplier:  decimal.NewFromInt(1),
 		MonthlyQuantity: q,
 		ProductFilter: &schema.ProductFilter{
 			VendorName: strPtr("ibm"),
-			Region: 	strPtr(r.Region),
-			Service: 	strPtr("codeengine"),
+			Region:     strPtr(r.Region),
+			Service:    strPtr("codeengine"),
 			AttributeFilters: []*schema.AttributeFilter{
 				{
 					Key: "planName", Value: strPtr("standard"),
