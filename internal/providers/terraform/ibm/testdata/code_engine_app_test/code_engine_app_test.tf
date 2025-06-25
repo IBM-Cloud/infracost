@@ -20,34 +20,34 @@ resource "ibm_code_engine_project" "ce_project" {
 }
 
 resource "ibm_code_engine_app" "ce_app" {
-  project_id                    = ibm_code_engine_project.ce_project.id
-  name                          = "ce-app"
-  image_reference               = "icr.io/codeengine/helloworld"
-  scale_initial_instances       = 1
-  scale_memory_limit            = "2G"
-  scale_cpu_limit               = "1"
+  project_id              = ibm_code_engine_project.ce_project.id
+  name                    = "ce-app"
+  image_reference         = "icr.io/codeengine/helloworld"
+  scale_initial_instances = 1
+  scale_memory_limit      = "2G"
+  scale_cpu_limit         = "1"
 }
 
 resource "ibm_code_engine_app" "ce_app2" {
-  project_id                    = ibm_code_engine_project.ce_project.id
-  name                          = "ce-app2"
-  image_reference               = "icr.io/codeengine/helloworld"
+  project_id      = ibm_code_engine_project.ce_project.id
+  name            = "ce-app2"
+  image_reference = "icr.io/codeengine/helloworld"
 }
 
 resource "ibm_code_engine_app" "ce_app3" {
-  project_id                    = ibm_code_engine_project.ce_project.id
-  name                          = "ce-app3"
-  image_reference               = "icr.io/codeengine/helloworld"
-  scale_initial_instances       = 2
-  scale_memory_limit            = "2G"
-  scale_cpu_limit               = "1"
+  project_id              = ibm_code_engine_project.ce_project.id
+  name                    = "ce-app3"
+  image_reference         = "icr.io/codeengine/helloworld"
+  scale_initial_instances = 2
+  scale_memory_limit      = "2G"
+  scale_cpu_limit         = "1"
 }
 
 resource "ibm_code_engine_app" "ce_app4" {
-  project_id                    = ibm_code_engine_project.ce_project.id
-  name                          = "ce-app4"
-  image_reference               = "icr.io/codeengine/helloworld"
-  scale_initial_instances       = 3
-  scale_memory_limit            = "2000M"
-  scale_cpu_limit               = "0.5"
+  project_id              = ibm_code_engine_project.ce_project.id
+  name                    = "ce-app4"
+  image_reference         = "icr.io/codeengine/helloworld"
+  scale_initial_instances = 3
+  scale_memory_limit      = "2000M"
+  scale_cpu_limit         = "0.5"
 }

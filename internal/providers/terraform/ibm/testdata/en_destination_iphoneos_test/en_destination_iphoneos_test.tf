@@ -35,7 +35,7 @@ resource "ibm_en_destination_ios" "destination_ios_lite" {
     params {
       cert_type  = "p8"
       is_sandbox = true
-      pre_prod    = tobool(each.value)
+      pre_prod   = tobool(each.value)
     }
   }
 }
@@ -53,7 +53,7 @@ resource "ibm_en_destination_ios" "destination_ios_standard" {
     params {
       cert_type  = "p8"
       is_sandbox = true
-      pre_prod    = tobool(each.value)
+      pre_prod   = tobool(each.value)
     }
   }
 }
