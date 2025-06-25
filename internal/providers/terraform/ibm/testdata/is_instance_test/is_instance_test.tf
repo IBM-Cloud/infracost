@@ -14,6 +14,22 @@ provider "ibm" {
   region = "us-south"
 }
 
+data "ibm_is_image" "redhat" {
+  name = "ibm-redhat-9-6-minimal-amd64-1"
+}
+
+data "ibm_is_image" "sles" {
+  name = "ibm-sles-15-6-amd64-4"
+}
+
+data "ibm_is_image" "windows" {
+  name = "ibm-windows-server-2022-full-standard-amd64-26"
+}
+
+data "ibm_is_image" "windowssql" {
+  name = "ibm-windows-server-2019-full-sqlsvr-2019-amd64-24"
+}
+
 # Access random string generated with random_string.unique_identifier.result
 resource "random_string" "unique_identifier" {
   length  = 6
@@ -48,7 +64,7 @@ resource "ibm_is_ssh_key" "ssh_key" {
 resource "ibm_is_instance" "vsi" {
   for_each = toset(local.profiles)
   name     = "vsi-instance-${random_string.unique_identifier.result}-${each.key}"
-  image = "r006-f137ea64-0d27-4d81-afe0-353fd0557e81"
+  image = data.ibm_is_image.redhat.id
   keys  = [ibm_is_ssh_key.ssh_key.id]
   profile        = each.key
   resource_group = ibm_resource_group.resource_group.id
@@ -66,7 +82,7 @@ resource "ibm_is_instance" "vsi" {
 resource "ibm_is_instance" "vsi_boot_volume" {
   for_each = toset(local.profiles)
   name     = "vsi-instance-boot-volume-${random_string.unique_identifier.result}-${each.key}"
-  image = "r006-f137ea64-0d27-4d81-afe0-353fd0557e81"
+  image = data.ibm_is_image.windowssql.id
   keys  = [ibm_is_ssh_key.ssh_key.id]
   profile        = each.key
   resource_group = ibm_resource_group.resource_group.id
@@ -88,7 +104,7 @@ resource "ibm_is_instance" "vsi_boot_volume" {
 resource "ibm_is_instance" "vsi_dedicated_host" {
   for_each = toset(local.profiles)
   name     = "vsi-instance-dedicated-host-${random_string.unique_identifier.result}-${each.key}"
-  image = "r006-f137ea64-0d27-4d81-afe0-353fd0557e81"
+  image = data.ibm_is_image.redhat.id
   keys  = [ibm_is_ssh_key.ssh_key.id]
   profile        = each.key
   resource_group = ibm_resource_group.resource_group.id
