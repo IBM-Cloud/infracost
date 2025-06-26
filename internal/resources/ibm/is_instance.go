@@ -3,6 +3,7 @@ package ibm
 import (
 	"fmt"
 	"regexp"
+	"strings"
 
 	"github.com/infracost/infracost/internal/resources"
 	"github.com/infracost/infracost/internal/schema"
@@ -17,7 +18,8 @@ type IsInstance struct {
 	Address         string
 	Region          string
 	OperatingSystem int64
-	Image           string
+	Vendor          string
+	Version         string
 	Profile         string // should be values from CLI 'ibmcloud is instance-profiles'
 	Zone            string
 	IsDedicated     bool // will be true if a dedicated_host or dedicated_host_group is specified
@@ -112,38 +114,56 @@ func (r *IsInstance) bootVolumeCostComponent() *schema.CostComponent {
 
 func (r *IsInstance) imageHoursCostComponent() *schema.CostComponent {
 
-	imageMap := map[string]string{
-		"r006-88da7a09-2f59-4324-ac85-e3165f6323f5": "REDHAT_VCPU_HOURS", //redhat
-		"r006-20ba59a0-19f6-457b-ba6f-80ddc988ef10": "REDHAT_VCPU_HOURS",
-		"r006-3bcf9a79-b5b2-45a8-ae8d-1bbb338836ef": "REDHAT_VCPU_HOURS",
-		"r006-4b854390-a503-4393-8e5d-59e21816e727": "REDHAT_VCPU_HOURS",
-		"r006-3133dc35-e3db-498d-b415-c8145cea2e44": "RHELSAPHANA_VCPU_HOURS", //redhat hana
-		"r006-987002d0-978e-46f3-bc9d-5c44dac7e4ab": "REDHAT_VCPU_HOURS",
-		"r006-33fc9c08-2838-4220-ac26-6591e6e1c73b": "RHELSAPHANA_VCPU_HOURS",
-		"r006-d0af4fc6-23d0-42c8-b5ea-67c61506bf86": "REDHAT_VCPU_HOURS",
-		"r006-14d5062e-d4dc-4af7-9b68-248afefbacd4": "RHELSAPHANA_VCPU_HOURS",
-		"r006-fc0dbd40-b40a-4b54-bc1a-5251f4b5990d": "REDHAT_VCPU_HOURS",
-		"r006-04fe51ed-bcb8-4cd3-8981-637ba174c55a": "RHELSAPHANA_VCPU_HOURS",
-		"r006-95301a19-6b2b-4870-a64b-22f374ab78d6": "REDHAT_VCPU_HOURS",
-		"r006-d06e7f4d-1d53-422f-bd20-ddc13e0741df": "RHELSAPHANA_VCPU_HOURS",
-		"r006-491e1f7f-3193-477b-9e69-2a1839700bd4": "REDHAT_VCPU_HOURS",
-		"r006-f62eaf9e-0a50-47f2-9b0e-b9189c9ba81a": "REDHAT_VCPU_HOURS",
-		"r006-868b9c19-1cc4-4456-a1ef-9be5b801d4af": "RHELSAPHANA_VCPU_HOURS",
-		"r006-5f1399ec-0974-46f3-b466-bed6f843593e": "REDHAT_VCPU_HOURS",
-		"r006-ef09be7b-01af-44cc-9503-8a07a5183964": "SUSE_INSTANCE_HOURS",    //sles
-		"r006-c717e22f-3c6c-4bd3-b8a2-3342aefe6611": "SUSESAP_INSTANCE_HOURS", //sles for sap
-		"r006-e19bf9bf-a454-4ba8-a2b5-86eb30a33b96": "SUSESAP_INSTANCE_HOURS",
-		"r006-7154d75e-adb7-4c7b-99fc-9af25e0b8485": "SUSESAP_INSTANCE_HOURS",
-		"r006-91e4ffcd-292c-4283-a66e-776f3b33a04d": "SUSESAP_INSTANCE_HOURS",
-		"r006-e2f7bfd9-7768-44bf-9f4b-95cdf25b214a": "SUSESAP_INSTANCE_HOURS",
-		"r006-d9a00e92-c04b-4a26-b244-e22cd5fd5b1b": "SUSESAP_INSTANCE_HOURS",
-		"r006-8fe7a011-c636-437c-b5a7-b892581d4788": "SUSESAP_INSTANCE_HOURS",
-		"r006-6f37720a-5a4b-437f-8e5f-6002e95ccbc1": "SUSESAP_INSTANCE_HOURS",
-		"r006-5796a93a-e45d-46e3-ab7c-ac89f3b928f0": "WINDOWS_VCPU_HOURS", //windows
-		"r006-a7e03025-b620-45f1-9094-1be3d0020de3": "WINDOWS_VCPU_HOURS",
-		"r006-c09590a5-8a2c-4699-b682-aebd1e787eb7": "WINDOWS_VCPU_HOURS",
-		"r006-4b0761e6-2510-4ebe-a359-761ca67c07ab": "WINDOWS_VCPU_HOURS",
-		"r006-be892432-a287-4b5b-a249-af30f58d108d": "WINDOWS_VCPU_HOURS", //windows w sql
+	// imageMap := map[string]string{
+	// 	"r006-88da7a09-2f59-4324-ac85-e3165f6323f5": "REDHAT_VCPU_HOURS", //redhat
+	// 	"r006-20ba59a0-19f6-457b-ba6f-80ddc988ef10": "REDHAT_VCPU_HOURS",
+	// 	"r006-3bcf9a79-b5b2-45a8-ae8d-1bbb338836ef": "REDHAT_VCPU_HOURS",
+	// 	"r006-4b854390-a503-4393-8e5d-59e21816e727": "REDHAT_VCPU_HOURS",
+	// 	"r006-3133dc35-e3db-498d-b415-c8145cea2e44": "RHELSAPHANA_VCPU_HOURS", //redhat hana
+	// 	"r006-987002d0-978e-46f3-bc9d-5c44dac7e4ab": "REDHAT_VCPU_HOURS",
+	// 	"r006-33fc9c08-2838-4220-ac26-6591e6e1c73b": "RHELSAPHANA_VCPU_HOURS",
+	// 	"r006-d0af4fc6-23d0-42c8-b5ea-67c61506bf86": "REDHAT_VCPU_HOURS",
+	// 	"r006-14d5062e-d4dc-4af7-9b68-248afefbacd4": "RHELSAPHANA_VCPU_HOURS",
+	// 	"r006-fc0dbd40-b40a-4b54-bc1a-5251f4b5990d": "REDHAT_VCPU_HOURS",
+	// 	"r006-04fe51ed-bcb8-4cd3-8981-637ba174c55a": "RHELSAPHANA_VCPU_HOURS",
+	// 	"r006-95301a19-6b2b-4870-a64b-22f374ab78d6": "REDHAT_VCPU_HOURS",
+	// 	"r006-d06e7f4d-1d53-422f-bd20-ddc13e0741df": "RHELSAPHANA_VCPU_HOURS",
+	// 	"r006-491e1f7f-3193-477b-9e69-2a1839700bd4": "REDHAT_VCPU_HOURS",
+	// 	"r006-f62eaf9e-0a50-47f2-9b0e-b9189c9ba81a": "REDHAT_VCPU_HOURS",
+	// 	"r006-868b9c19-1cc4-4456-a1ef-9be5b801d4af": "RHELSAPHANA_VCPU_HOURS",
+	// 	"r006-5f1399ec-0974-46f3-b466-bed6f843593e": "REDHAT_VCPU_HOURS",
+	// 	"r006-ef09be7b-01af-44cc-9503-8a07a5183964": "SUSE_INSTANCE_HOURS",    //sles
+	// 	"r006-c717e22f-3c6c-4bd3-b8a2-3342aefe6611": "SUSESAP_INSTANCE_HOURS", //sles for sap
+	// 	"r006-e19bf9bf-a454-4ba8-a2b5-86eb30a33b96": "SUSESAP_INSTANCE_HOURS",
+	// 	"r006-7154d75e-adb7-4c7b-99fc-9af25e0b8485": "SUSESAP_INSTANCE_HOURS",
+	// 	"r006-91e4ffcd-292c-4283-a66e-776f3b33a04d": "SUSESAP_INSTANCE_HOURS",
+	// 	"r006-e2f7bfd9-7768-44bf-9f4b-95cdf25b214a": "SUSESAP_INSTANCE_HOURS",
+	// 	"r006-d9a00e92-c04b-4a26-b244-e22cd5fd5b1b": "SUSESAP_INSTANCE_HOURS",
+	// 	"r006-8fe7a011-c636-437c-b5a7-b892581d4788": "SUSESAP_INSTANCE_HOURS",
+	// 	"r006-6f37720a-5a4b-437f-8e5f-6002e95ccbc1": "SUSESAP_INSTANCE_HOURS",
+	// 	"r006-5796a93a-e45d-46e3-ab7c-ac89f3b928f0": "WINDOWS_VCPU_HOURS", //windows
+	// 	"r006-a7e03025-b620-45f1-9094-1be3d0020de3": "WINDOWS_VCPU_HOURS",
+	// 	"r006-c09590a5-8a2c-4699-b682-aebd1e787eb7": "WINDOWS_VCPU_HOURS",
+	// 	"r006-4b0761e6-2510-4ebe-a359-761ca67c07ab": "WINDOWS_VCPU_HOURS",
+	// 	"r006-be892432-a287-4b5b-a249-af30f58d108d": "WINDOWS_VCPU_HOURS", //windows w sql
+	// }
+
+	unit := ""
+
+	if r.Vendor == "Red Hat" {
+		if strings.Contains(r.Version, "SAP HANA") {
+			unit = "RHELSAPHANA_VCPU_HOURS"
+		} else {
+			unit = "REDHAT_VCPU_HOURS"
+		}
+	} else if r.Vendor == "SUSE" {
+		if strings.Contains(r.Version, "SAP") {
+			unit = "SUSESAP_INSTANCE_HOURS"
+		} else {
+			unit = "SUSE_INSTANCE_HOURS"
+		}
+	} else if r.Vendor == "Microsoft" {
+		unit = "WINDOWS_VCPU_HOURS"
 	}
 
 	var q *decimal.Decimal
@@ -152,7 +172,7 @@ func (r *IsInstance) imageHoursCostComponent() *schema.CostComponent {
 		q = decimalPtr(decimal.NewFromFloat(*r.MonthlyInstanceHours))
 	}
 	return &schema.CostComponent{
-		Name:            fmt.Sprintf("Image (%s)", r.Image),
+		Name:            fmt.Sprintf("Image (%s)", r.Vendor),
 		Unit:            "Hours",
 		UnitMultiplier:  decimal.NewFromInt(1),
 		MonthlyQuantity: q,
@@ -166,7 +186,7 @@ func (r *IsInstance) imageHoursCostComponent() *schema.CostComponent {
 			},
 		},
 		PriceFilter: &schema.PriceFilter{
-			Unit: strPtr(imageMap[r.Image]),
+			Unit: strPtr(unit),
 		},
 	}
 }
@@ -179,7 +199,7 @@ func (r *IsInstance) sqlLicenceCostComponent() *schema.CostComponent {
 	}
 
 	return &schema.CostComponent{
-		Name:            fmt.Sprintf("SQL Licence (%s)", r.Image),
+		Name:            fmt.Sprintf("SQL Licence (%s)", r.Vendor),
 		Unit:            "Hours",
 		UnitMultiplier:  decimal.NewFromInt(1),
 		MonthlyQuantity: q,
@@ -207,9 +227,9 @@ func (r *IsInstance) BuildResource() *schema.Resource {
 		r.bootVolumeCostComponent(),
 		r.imageHoursCostComponent(),
 	}
-	if r.Image == "r006-be892432-a287-4b5b-a249-af30f58d108d" {
-		costComponents = append(costComponents, r.sqlLicenceCostComponent())
-	}
+	// if r.Image == "r006-be892432-a287-4b5b-a249-af30f58d108d" {
+	// 	costComponents = append(costComponents, r.sqlLicenceCostComponent())
+	// }
 
 	return &schema.Resource{
 		Name:           r.Address,

@@ -1,27 +1,83 @@
 package ibm
 
 import (
+	"encoding/json"
+	"fmt"
+	"os"
+	"strings"
+
 	"github.com/infracost/infracost/internal/resources/ibm"
 	"github.com/infracost/infracost/internal/schema"
-
-	"strings"
 )
+
+var imageMap map[string]struct {
+	Vendor  string
+	Version string
+}
+
+type Image struct {
+	Href            string          `json:"href"`
+	ID              string          `json:"id"`
+	Name            string          `json:"name"`
+	OperatingSystem OperatingSystem `json:"operating_system"`
+}
+
+type OperatingSystem struct {
+	AllowUserImageCreation bool   `json:"allow_user_image_creation"`
+	Architecture           string `json:"architecture"`
+	DedicatedHostOnly      bool   `json:"dedicated_host_only"`
+	DisplayName            string `json:"display_name"`
+	Family                 string `json:"family"`
+	Href                   string `json:"href"`
+	Name                   string `json:"name"`
+	UserDataFormat         string `json:"user_data_format"`
+	Vendor                 string `json:"vendor"`
+	Version                string `json:"version"`
+}
 
 func getIsInstanceRegistryItem() *schema.RegistryItem {
 	return &schema.RegistryItem{
-		Name:                "ibm_is_instance",
-		RFunc:               newIsInstance,
-		ReferenceAttributes: []string{"image"},
+		Name:  "ibm_is_instance",
+		RFunc: newIsInstance,
 	}
 }
 
 // valid profile values https://cloud.ibm.com/docs/vpc?topic=vpc-profiles&interface=ui
 // profile names in Global Catalog contain dots instead of dashes
 func newIsInstance(d *schema.ResourceData, u *schema.UsageData) *schema.Resource {
+	imagePath := "../../../../images.json"
 
+	byteValue, err := os.ReadFile(imagePath)
+	if err != nil {
+		fmt.Printf("error reading file: %v", err)
+	}
+
+	var images []Image
+	err = json.Unmarshal(byteValue, &images)
+	if err != nil {
+		fmt.Printf("Error unmarshaling json: %v ", err)
+	}
+
+	imageMap = make(map[string]struct {
+		Vendor  string
+		Version string
+	})
+
+	for _, image := range images {
+		imageMap[image.ID] = struct {
+			Vendor  string
+			Version string
+		}{
+			Vendor:  image.OperatingSystem.Vendor,
+			Version: image.OperatingSystem.Version,
+		}
+	}
+
+	imageId := d.Get("image").String()
 	region := d.Get("region").String()
 	profile := d.Get("profile").String()
-	image := d.Get("image").String()
+	vendor := imageMap[imageId].Vendor
+	version := imageMap[imageId].Version
 	zone := d.Get("zone").String()
 	dedicatedHost := strings.TrimSpace(d.Get("dedicated_host").String())
 	dedicatedHostGroup := strings.TrimSpace(d.Get("dedicated_host_group").String())
@@ -46,7 +102,8 @@ func newIsInstance(d *schema.ResourceData, u *schema.UsageData) *schema.Resource
 		Address:     d.Address,
 		Region:      region,
 		Profile:     profile,
-		Image:       image,
+		Vendor:      vendor,
+		Version:     version,
 		Zone:        zone,
 		IsDedicated: isDedicated,
 		BootVolume: struct {
@@ -59,7 +116,6 @@ func newIsInstance(d *schema.ResourceData, u *schema.UsageData) *schema.Resource
 
 	configuration := make(map[string]any)
 	configuration["name"] = name
-	configuration["image"] = image
 	configuration["on_dedicated_host"] = isDedicated
 	configuration["profile"] = profile
 	configuration["region"] = region
