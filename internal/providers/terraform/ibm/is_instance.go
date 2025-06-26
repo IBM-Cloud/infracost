@@ -45,11 +45,14 @@ func getIsInstanceRegistryItem() *schema.RegistryItem {
 // valid profile values https://cloud.ibm.com/docs/vpc?topic=vpc-profiles&interface=ui
 // profile names in Global Catalog contain dots instead of dashes
 func newIsInstance(d *schema.ResourceData, u *schema.UsageData) *schema.Resource {
-	imagePath := "../../../../images.json"
+	imagePath := "./images.json" // path for using infracost excecutable
 
 	byteValue, err := os.ReadFile(imagePath)
 	if err != nil {
-		fmt.Printf("error reading file: %v", err)
+		byteValue, err = os.ReadFile("../../../../images.json") //path for individual testing directly from this file (go test)
+		if err != nil {
+			fmt.Printf("Error reading file: %v", err)
+		}
 	}
 
 	var images []Image
