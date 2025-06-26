@@ -1,11 +1,12 @@
 package ibm
 
 import (
+	_ "embed"
 	"encoding/json"
 	"fmt"
-	"os"
 	"strings"
 
+	"github.com/infracost/infracost"
 	"github.com/infracost/infracost/internal/resources/ibm"
 	"github.com/infracost/infracost/internal/schema"
 )
@@ -45,18 +46,10 @@ func getIsInstanceRegistryItem() *schema.RegistryItem {
 // valid profile values https://cloud.ibm.com/docs/vpc?topic=vpc-profiles&interface=ui
 // profile names in Global Catalog contain dots instead of dashes
 func newIsInstance(d *schema.ResourceData, u *schema.UsageData) *schema.Resource {
-	imagePath := "./images.json" // path for using infracost excecutable
-
-	byteValue, err := os.ReadFile(imagePath)
-	if err != nil {
-		byteValue, err = os.ReadFile("../../../../images.json") //path for individual testing directly from this file (go test)
-		if err != nil {
-			fmt.Printf("Error reading file: %v", err)
-		}
-	}
+	content := infracost.GetImageFileContent()
 
 	var images []Image
-	err = json.Unmarshal(byteValue, &images)
+	err := json.Unmarshal(*content, &images)
 	if err != nil {
 		fmt.Printf("Error unmarshaling json: %v ", err)
 	}
