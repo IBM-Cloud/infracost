@@ -21,11 +21,11 @@ const CODE_ENGINE_FUNCTION_MILLION_HTTP_REQUESTS float64 = 1000000
 type CodeEngineFunction struct {
 	Address string
 	Region  string
-	CPU string
-	Memory string
+	CPU     string
+	Memory  string
 
 	HttpRequestCalls *float64 `infracost_usage:"http_request_calls"`
-	InstanceHours *float64 `infracost_usage:"instance_hours"`
+	InstanceHours    *float64 `infracost_usage:"instance_hours"`
 }
 
 // CodeEngineFunctionUsageSchema defines a list which represents the usage schema of CodeEngineFunction.
@@ -47,19 +47,19 @@ func (r *CodeEngineFunction) CodeEngineFunctionVirtualProcessorCoreCostComponent
 	}
 
 	var hours *decimal.Decimal
-	if (r.InstanceHours != nil) {
+	if r.InstanceHours != nil {
 		hours = decimalPtr(decimal.NewFromFloat(*r.InstanceHours * q))
 	}
-	
+
 	return &schema.CostComponent{
-		Name:			"Virtual Processor Cores",
-		Unit:			"vCPU Hours",
-		UnitMultiplier:	decimal.NewFromInt(1),
+		Name:            "Virtual Processor Cores",
+		Unit:            "vCPU Hours",
+		UnitMultiplier:  decimal.NewFromInt(1),
 		MonthlyQuantity: hours,
 		ProductFilter: &schema.ProductFilter{
 			VendorName: strPtr("ibm"),
-			Region: 	strPtr(r.Region),
-			Service: 	strPtr("codeengine"),
+			Region:     strPtr(r.Region),
+			Service:    strPtr("codeengine"),
 			AttributeFilters: []*schema.AttributeFilter{
 				{
 					Key: "planName", Value: strPtr("standard"),
@@ -85,19 +85,19 @@ func (r *CodeEngineFunction) CodeEngineFunctionRAMCostComponent() *schema.CostCo
 	}
 
 	var hours *decimal.Decimal
-	if (r.InstanceHours != nil) {
+	if r.InstanceHours != nil {
 		hours = decimalPtr(decimal.NewFromFloat(*r.InstanceHours * memGB))
 	}
-	
+
 	return &schema.CostComponent{
-		Name:			"RAM",
-		Unit:			"GB Hours",
-		UnitMultiplier:	decimal.NewFromInt(1),
+		Name:            "RAM",
+		Unit:            "GB Hours",
+		UnitMultiplier:  decimal.NewFromInt(1),
 		MonthlyQuantity: hours,
 		ProductFilter: &schema.ProductFilter{
 			VendorName: strPtr("ibm"),
-			Region: 	strPtr(r.Region),
-			Service: 	strPtr("codeengine"),
+			Region:     strPtr(r.Region),
+			Service:    strPtr("codeengine"),
 			AttributeFilters: []*schema.AttributeFilter{
 				{
 					Key: "planName", Value: strPtr("standard"),
@@ -118,14 +118,14 @@ func (r *CodeEngineFunction) CodeEngineFunctionHTTPRequestsCostComponent() *sche
 	}
 
 	return &schema.CostComponent{
-		Name:			"Million HTTP calls",
-		Unit:			"Million HTTP calls",
-		UnitMultiplier:	decimal.NewFromInt(1),
+		Name:            "Million HTTP calls",
+		Unit:            "Million HTTP calls",
+		UnitMultiplier:  decimal.NewFromInt(1),
 		MonthlyQuantity: q,
 		ProductFilter: &schema.ProductFilter{
 			VendorName: strPtr("ibm"),
-			Region: 	strPtr(r.Region),
-			Service: 	strPtr("codeengine"),
+			Region:     strPtr(r.Region),
+			Service:    strPtr("codeengine"),
 			AttributeFilters: []*schema.AttributeFilter{
 				{
 					Key: "planName", Value: strPtr("standard"),

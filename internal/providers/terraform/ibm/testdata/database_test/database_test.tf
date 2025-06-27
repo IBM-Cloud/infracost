@@ -24,7 +24,7 @@ resource "ibm_database" "rabbitmq_b3c" {
     disk {
       allocation_mb = 4194304
     }
-  } 
+  }
 }
 
 # -------------------------------------------
@@ -32,10 +32,10 @@ resource "ibm_database" "rabbitmq_b3c" {
 # -------------------------------------------
 
 resource "ibm_database" "postgresql_standard_flavor" {
-  name     = "postgres-standard-flavour"
-  service  = "databases-for-postgresql"
-  plan     = "standard"
-  location = "us-south"
+  name              = "postgres-standard-flavour"
+  service           = "databases-for-postgresql"
+  plan              = "standard"
+  location          = "us-south"
   service_endpoints = "private"
   group { # Note: "memory" not allowed when host_flavor is set
     group_id = "member"
@@ -54,10 +54,10 @@ resource "ibm_database" "postgresql_standard_flavor" {
 }
 
 resource "ibm_database" "postgresql_standard_multitenant_flavor" {
-  name     = "postgres-standard-multitenant-flavour"
-  service  = "databases-for-postgresql"
-  plan     = "standard"
-  location = "us-south"
+  name              = "postgres-standard-multitenant-flavour"
+  service           = "databases-for-postgresql"
+  plan              = "standard"
+  location          = "us-south"
   service_endpoints = "private"
   group { # Note: "memory" not allowed when host_flavor is set
     group_id = "member"
@@ -82,10 +82,10 @@ resource "ibm_database" "postgresql_standard_multitenant_flavor" {
 }
 
 resource "ibm_database" "postgresql_standard" {
-  name     = "postgres-standard"
-  service  = "databases-for-postgresql"
-  plan     = "standard"
-  location = "us-south"
+  name              = "postgres-standard"
+  service           = "databases-for-postgresql"
+  plan              = "standard"
+  location          = "us-south"
   service_endpoints = "private"
   group {
     group_id = "member"
@@ -111,10 +111,10 @@ resource "ibm_database" "postgresql_standard" {
 # -------------------------------------------
 
 resource "ibm_database" "elasticsearch_platinum" {
-  name     = "elasticsearch-platinum"
-  service  = "databases-for-elasticsearch"
-  plan     = "platinum"
-  location = "us-south"
+  name              = "elasticsearch-platinum"
+  service           = "databases-for-elasticsearch"
+  plan              = "platinum"
+  location          = "us-south"
   service_endpoints = "private"
   group {
     group_id = "member"
@@ -131,10 +131,10 @@ resource "ibm_database" "elasticsearch_platinum" {
 }
 
 resource "ibm_database" "elasticsearch_platinum_flavor" {
-  name     = "elasticsearch-platinum-flavor"
-  service  = "databases-for-elasticsearch"
-  plan     = "platinum"
-  location = "us-south"
+  name              = "elasticsearch-platinum-flavor"
+  service           = "databases-for-elasticsearch"
+  plan              = "platinum"
+  location          = "us-south"
   service_endpoints = "private"
   group { # Note: "memory" not allowed when host_flavor is set
     group_id = "member"
@@ -148,10 +148,10 @@ resource "ibm_database" "elasticsearch_platinum_flavor" {
 }
 
 resource "ibm_database" "elasticsearch_enterprise" {
-  name     = "elasticsearch-enterprise"
-  service  = "databases-for-elasticsearch"
-  plan     = "enterprise"
-  location = "us-south"
+  name              = "elasticsearch-enterprise"
+  service           = "databases-for-elasticsearch"
+  plan              = "enterprise"
+  location          = "us-south"
   service_endpoints = "private"
   group {
     group_id = "member"
@@ -169,10 +169,10 @@ resource "ibm_database" "elasticsearch_enterprise" {
 }
 
 resource "ibm_database" "elasticsearch_enterprise_flavor" {
-  name     = "elasticsearch-enterprise-flavor"
-  service  = "databases-for-elasticsearch"
-  plan     = "enterprise"
-  location = "us-south"
+  name              = "elasticsearch-enterprise-flavor"
+  service           = "databases-for-elasticsearch"
+  plan              = "enterprise"
+  location          = "us-south"
   service_endpoints = "private"
   group { # Note: "memory" not allowed when host_flavor is set
     group_id = "member"
@@ -186,10 +186,10 @@ resource "ibm_database" "elasticsearch_enterprise_flavor" {
 }
 
 resource "ibm_database" "elasticsearch_enterprise_multitenant_flavor" {
-  name     = "elasticsearch-enterprise-multitenant-flavor"
-  service  = "databases-for-elasticsearch"
-  plan     = "enterprise"
-  location = "us-south"
+  name              = "elasticsearch-enterprise-multitenant-flavor"
+  service           = "databases-for-elasticsearch"
+  plan              = "enterprise"
+  location          = "us-south"
   service_endpoints = "private"
   group {
     group_id = "member"
@@ -211,10 +211,10 @@ resource "ibm_database" "elasticsearch_enterprise_multitenant_flavor" {
 
 # Specifications used by Dev RAG stack
 resource "ibm_database" "elasticsearch_enterprise_multitenant_flavor_auto_cpu_scale" {
-  name     = "elasticsearch-enterprise-multitenant-flavor-auto-cpu-scale"
-  service  = "databases-for-elasticsearch"
-  plan     = "enterprise"
-  location = "us-south"
+  name              = "elasticsearch-enterprise-multitenant-flavor-auto-cpu-scale"
+  service           = "databases-for-elasticsearch"
+  plan              = "enterprise"
+  location          = "us-south"
   service_endpoints = "private"
   group {
     group_id = "member"

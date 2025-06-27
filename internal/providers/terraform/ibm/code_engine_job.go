@@ -19,8 +19,8 @@ func newCodeEngineJob(d *schema.ResourceData, u *schema.UsageData) *schema.Resou
 	r := &ibm.CodeEngineJob{
 		Address: d.Address,
 		Region:  region,
-		CPU:	 cpu,
-		Memory: memory,
+		CPU:     cpu,
+		Memory:  memory,
 	}
 	r.PopulateUsage(u)
 

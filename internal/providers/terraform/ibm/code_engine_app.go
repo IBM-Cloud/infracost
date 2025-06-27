@@ -18,10 +18,10 @@ func newCodeEngineApp(d *schema.ResourceData, u *schema.UsageData) *schema.Resou
 	memory := d.Get("scale_memory_limit").String()
 	scaleinitialinstances := d.Get("scale_initial_instances").Int()
 	r := &ibm.CodeEngineApp{
-		Address: d.Address,
-		Region:  region,
-		CPU:	 cpu,
-		Memory: memory,
+		Address:               d.Address,
+		Region:                region,
+		CPU:                   cpu,
+		Memory:                memory,
 		ScaleInitialInstances: scaleinitialinstances,
 	}
 	r.PopulateUsage(u)

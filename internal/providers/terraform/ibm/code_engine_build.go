@@ -16,8 +16,8 @@ func newCodeEngineBuild(d *schema.ResourceData, u *schema.UsageData) *schema.Res
 	region := d.Get("region").String()
 	strategysize := d.Get("strategy_size").String()
 	r := &ibm.CodeEngineBuild{
-		Address: d.Address,
-		Region:  region,
+		Address:      d.Address,
+		Region:       region,
 		StrategySize: strategysize,
 	}
 	r.PopulateUsage(u)
