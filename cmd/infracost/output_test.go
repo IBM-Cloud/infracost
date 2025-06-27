@@ -1,7 +1,7 @@
 package main_test
 
 import (
-	"io/ioutil"
+	"os"
 	"path"
 	"path/filepath"
 	"testing"
@@ -140,7 +140,7 @@ func TestOutputTerraformOutFileHTML(t *testing.T) {
 
 	GoldenFileCommandTest(t, testdataName, []string{"output", "--path", "./testdata/example_out.json", "--format", "html", "--out-file", outputPath}, nil)
 
-	actual, err := ioutil.ReadFile(outputPath)
+	actual, err := os.ReadFile(outputPath)
 	require.Nil(t, err)
 	actual = stripDynamicValues(actual)
 
@@ -154,7 +154,7 @@ func TestOutputTerraformOutFileJSON(t *testing.T) {
 
 	GoldenFileCommandTest(t, testdataName, []string{"output", "--path", "./testdata/example_out.json", "--format", "json", "--out-file", outputPath}, nil)
 
-	actual, err := ioutil.ReadFile(outputPath)
+	actual, err := os.ReadFile(outputPath)
 	require.Nil(t, err)
 	actual = stripDynamicValues(actual)
 
@@ -168,7 +168,7 @@ func TestOutputTerraformOutFileTable(t *testing.T) {
 
 	GoldenFileCommandTest(t, testdataName, []string{"output", "--path", "./testdata/example_out.json", "--out-file", outputPath}, nil)
 
-	actual, err := ioutil.ReadFile(outputPath)
+	actual, err := os.ReadFile(outputPath)
 	require.Nil(t, err)
 	actual = stripDynamicValues(actual)
 

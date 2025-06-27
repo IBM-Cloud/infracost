@@ -148,7 +148,7 @@ func (r *S3BucketLifecycleConfiguration) BuildResource() *schema.Resource {
 			if err != nil {
 				msg = fmt.Sprintf("%s: %s", msg, err)
 			}
-			log.Debugf(msg)
+			log.Debugf("%s", msg)
 		} else {
 			standardStorageClassUsage := u["standard"].(map[string]interface{})
 

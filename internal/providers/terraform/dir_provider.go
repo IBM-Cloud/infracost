@@ -93,13 +93,13 @@ func (p *DirProvider) checks() error {
 		msg := fmt.Sprintf("Terraform binary '%s' could not be found. You have two options:\n", binary)
 		msg += "1. Set a custom Terraform binary using the environment variable INFRACOST_TERRAFORM_BINARY.\n\n"
 		msg += fmt.Sprintf("2. Set --path to a Terraform plan JSON file. See %s for how to generate this.", ui.LinkString("https://infracost.io/troubleshoot"))
-		return clierror.NewCLIError(errors.Errorf(msg), "Terraform binary could not be found")
+		return clierror.NewCLIError(errors.Errorf("%s", msg), "Terraform binary could not be found")
 	}
 
 	out, err := exec.Command(binary, "-version").Output()
 	if err != nil {
 		msg := fmt.Sprintf("Could not get version of Terraform binary '%s'", binary)
-		return clierror.NewCLIError(errors.Errorf(msg), "Could not get version of Terraform binary")
+		return clierror.NewCLIError(errors.Errorf("%s", msg), "Could not get version of Terraform binary")
 	}
 
 	fullVersion := strings.SplitN(string(out), "\n", 2)[0]

@@ -2,7 +2,6 @@ package main_test
 
 import (
 	"fmt"
-	"io/ioutil"
 	"os"
 	"path"
 	"path/filepath"
@@ -36,7 +35,7 @@ func TestDiffTerraformOutFile(t *testing.T) {
 
 	GoldenFileCommandTest(t, testdataName, []string{"diff", "--path", "./testdata/example_plan.json", "--out-file", outputPath}, nil)
 
-	actual, err := ioutil.ReadFile(outputPath)
+	actual, err := os.ReadFile(outputPath)
 	require.Nil(t, err)
 	actual = stripDynamicValues(actual)
 
@@ -131,7 +130,7 @@ projects:
 		path.Join(dir, "prod"))
 
 	configFilePath := path.Join(dir, "infracost.yml")
-	err := os.WriteFile(configFilePath, []byte(configFile), os.ModePerm)
+	err := os.WriteFile(configFilePath, []byte(configFile), os.ModePerm) //nolint:gosec
 	require.NoError(t, err)
 
 	defer os.Remove(configFilePath)
@@ -158,7 +157,7 @@ projects:
 		path.Join(dir, "prod"))
 
 	configFilePath := path.Join(dir, "infracost.yml")
-	err := os.WriteFile(configFilePath, []byte(configFile), os.ModePerm)
+	err := os.WriteFile(configFilePath, []byte(configFile), os.ModePerm) //nolint:gosec
 	require.NoError(t, err)
 
 	defer os.Remove(configFilePath)

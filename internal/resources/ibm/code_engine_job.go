@@ -1,7 +1,6 @@
 package ibm
 
 import (
-	"fmt"
 	"strconv"
 
 	"github.com/infracost/infracost/internal/resources"
@@ -55,7 +54,7 @@ func (r *CodeEngineJob) CodeEngineJobVirtualProcessorCoreCostComponent() *schema
 	}
 
 	return &schema.CostComponent{
-		Name:            fmt.Sprintf("Virtual Processor Cores Hours"),
+		Name:            "Virtual Processor Cores Hours",
 		Unit:            "vCPU Hours",
 		UnitMultiplier:  decimal.NewFromInt(1),
 		MonthlyQuantity: ih,
@@ -81,7 +80,7 @@ func (r *CodeEngineJob) CodeEngineJobRAMCostComponent() *schema.CostComponent {
 		trimmedMemory := r.Memory[:len(r.Memory)-1]
 		memGB, _ = strconv.ParseFloat(trimmedMemory, 64)
 		if string(r.Memory[len(r.Memory)-1]) == "M" {
-			memGB = memGB / float64(1024)
+			memGB /= float64(1024)
 		}
 	} else {
 		memGB = float64(4) // Default 4GB
@@ -98,7 +97,7 @@ func (r *CodeEngineJob) CodeEngineJobRAMCostComponent() *schema.CostComponent {
 	}
 
 	return &schema.CostComponent{
-		Name:            fmt.Sprintf("RAM Hours"),
+		Name:            "RAM Hours",
 		Unit:            "GB Hours",
 		UnitMultiplier:  decimal.NewFromInt(1),
 		MonthlyQuantity: ih,

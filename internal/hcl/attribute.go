@@ -626,8 +626,6 @@ func (attr *Attribute) findBadVariablesFromExpression(expression hcl.Expression)
 					badVars = append(badVars, traversal)
 					return badVars
 				}
-
-				break
 			}
 
 			return attr.findBadVariables(s.Collection.Variables())

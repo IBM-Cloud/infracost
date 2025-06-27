@@ -28,7 +28,8 @@
                                                                                                                    
  ibm_is_instance.testIsInstance                                                                                    
  ├─ Instance Hours (bx2-2x8)                                  Monthly cost depends on usage: $0.10 per Hours       
- └─ Boot volume (Unnamed boot volume, 100 GB)                 Monthly cost depends on usage: $0.00011495 per Hours 
+ ├─ Boot volume (Unnamed boot volume, 100 GB)                 Monthly cost depends on usage: $0.00011495 per Hours 
+ └─ Free Provided Image                                                      1                               $0.00 
                                                                                                                    
  ibm_is_vpc.testVpc                                                                                                
  ├─ VPC instance                                                             1  Instance                     $0.00 

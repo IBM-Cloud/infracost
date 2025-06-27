@@ -184,7 +184,7 @@ func (a *Instance) computeCostComponent() *schema.CostComponent {
 		}
 		reservedFilter, err := resolver.PriceFilter()
 		if err != nil {
-			log.Warnf(err.Error())
+			log.Warnf("%s", err.Error())
 		} else {
 			priceFilter = reservedFilter
 		}

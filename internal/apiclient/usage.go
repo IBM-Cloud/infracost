@@ -49,7 +49,7 @@ func NewUsageAPIClient(ctx *config.RunContext) *UsageAPIClient {
 		currency = "USD"
 	}
 
-	tlsConfig := tls.Config{} // nolint: gosec
+	tlsConfig := tls.Config{} //nolint:gosec
 
 	if ctx.Config.TLSCACertFile != "" {
 		rootCAs, _ := x509.SystemCertPool()
@@ -74,7 +74,7 @@ func NewUsageAPIClient(ctx *config.RunContext) *UsageAPIClient {
 	}
 
 	if ctx.Config.TLSInsecureSkipVerify != nil {
-		tlsConfig.InsecureSkipVerify = *ctx.Config.TLSInsecureSkipVerify
+		tlsConfig.InsecureSkipVerify = *ctx.Config.TLSInsecureSkipVerify //nolint:gosec
 	}
 
 	return &UsageAPIClient{
