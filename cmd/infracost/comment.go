@@ -64,7 +64,7 @@ func buildCommentBody(cmd *cobra.Command, ctx *config.RunContext, paths []string
 
 	combined, err := output.Combine(inputs)
 	if errors.As(err, &clierror.WarningError{}) {
-		ui.PrintWarningf(cmd.ErrOrStderr(), err.Error())
+		ui.PrintWarningf(cmd.ErrOrStderr(), "%s", err.Error())
 	} else if err != nil {
 		return nil, hasDiff, err
 	}

@@ -3,243 +3,403 @@
                                                                                                               
  ibm_is_instance.vsi["bx2-128x512"]                                                                           
  ├─ Instance Hours (bx2-128x512)                                        730  Hours                  $4,688.06 
- └─ Boot volume (Unnamed boot volume, 100 GB)                        73,000  Hours                      $8.39 
+ ├─ Boot volume (Unnamed boot volume, 100 GB)                        73,000  Hours                      $8.39 
+ └─ Image (Red Hat) (first 8 Hours)                                       8  Hours                      $0.14 
+ └─ Image (Red Hat) (next 119 Hours)                                    119  Hours                      $1.31 
+ └─ Image (Red Hat) (over 127 Hours)                                    603  Hours                      $5.43 
                                                                                                               
  ibm_is_instance.vsi["bx2a-128x512"]                                                                          
  ├─ Instance Hours (bx2a-128x512)                                       730  Hours                  $4,688.06 
- └─ Boot volume (Unnamed boot volume, 100 GB)                        73,000  Hours                      $8.39 
+ ├─ Boot volume (Unnamed boot volume, 100 GB)                        73,000  Hours                      $8.39 
+ └─ Image (Red Hat) (first 8 Hours)                                       8  Hours                      $0.14 
+ └─ Image (Red Hat) (next 119 Hours)                                    119  Hours                      $1.31 
+ └─ Image (Red Hat) (over 127 Hours)                                    603  Hours                      $5.43 
                                                                                                               
  ibm_is_instance.vsi["bx2d-128x512"]                                                                          
  ├─ Instance Hours (bx2d-128x512)                                       730  Hours                  $5,089.56 
- └─ Boot volume (Unnamed boot volume, 100 GB)                        73,000  Hours                      $8.39 
+ ├─ Boot volume (Unnamed boot volume, 100 GB)                        73,000  Hours                      $8.39 
+ └─ Image (Red Hat) (first 8 Hours)                                       8  Hours                      $0.14 
+ └─ Image (Red Hat) (next 119 Hours)                                    119  Hours                      $1.31 
+ └─ Image (Red Hat) (over 127 Hours)                                    603  Hours                      $5.43 
                                                                                                               
  ibm_is_instance.vsi["bx3d-128x640"]                                                                          
  ├─ Instance Hours (bx3d-128x640)                                       730  Hours                  $5,242.13 
- └─ Boot volume (Unnamed boot volume, 100 GB)                        73,000  Hours                      $8.39 
+ ├─ Boot volume (Unnamed boot volume, 100 GB)                        73,000  Hours                      $8.39 
+ └─ Image (Red Hat) (first 8 Hours)                                       8  Hours                      $0.14 
+ └─ Image (Red Hat) (next 119 Hours)                                    119  Hours                      $1.31 
+ └─ Image (Red Hat) (over 127 Hours)                                    603  Hours                      $5.43 
                                                                                                               
  ibm_is_instance.vsi["bx3dc-16x80"]                                                                           
  ├─ Instance Hours (bx3dc-16x80)                                        730  Hours                    $655.54 
- └─ Boot volume (Unnamed boot volume, 100 GB)                        73,000  Hours                      $8.39 
+ ├─ Boot volume (Unnamed boot volume, 100 GB)                        73,000  Hours                      $8.39 
+ └─ Image (Red Hat) (first 8 Hours)                                       8  Hours                      $0.14 
+ └─ Image (Red Hat) (next 119 Hours)                                    119  Hours                      $1.31 
+ └─ Image (Red Hat) (over 127 Hours)                                    603  Hours                      $5.43 
                                                                                                               
  ibm_is_instance.vsi["cx2-128x256"]                                                                           
  ├─ Instance Hours (cx2-128x256)                                        730  Hours                  $4,150.78 
- └─ Boot volume (Unnamed boot volume, 100 GB)                        73,000  Hours                      $8.39 
+ ├─ Boot volume (Unnamed boot volume, 100 GB)                        73,000  Hours                      $8.39 
+ └─ Image (Red Hat) (first 8 Hours)                                       8  Hours                      $0.14 
+ └─ Image (Red Hat) (next 119 Hours)                                    119  Hours                      $1.31 
+ └─ Image (Red Hat) (over 127 Hours)                                    603  Hours                      $5.43 
                                                                                                               
  ibm_is_instance.vsi["cx2-2x4"]                                                                               
  ├─ Instance Hours (cx2-2x4)                                            730  Hours                     $64.97 
- └─ Boot volume (Unnamed boot volume, 100 GB)                        73,000  Hours                      $8.39 
+ ├─ Boot volume (Unnamed boot volume, 100 GB)                        73,000  Hours                      $8.39 
+ └─ Image (Red Hat) (first 8 Hours)                                       8  Hours                      $0.14 
+ └─ Image (Red Hat) (next 119 Hours)                                    119  Hours                      $1.31 
+ └─ Image (Red Hat) (over 127 Hours)                                    603  Hours                      $5.43 
                                                                                                               
  ibm_is_instance.vsi["cx2d-128x256"]                                                                          
  ├─ Instance Hours (cx2d-128x256)                                       730  Hours                  $4,552.28 
- └─ Boot volume (Unnamed boot volume, 100 GB)                        73,000  Hours                      $8.39 
+ ├─ Boot volume (Unnamed boot volume, 100 GB)                        73,000  Hours                      $8.39 
+ └─ Image (Red Hat) (first 8 Hours)                                       8  Hours                      $0.14 
+ └─ Image (Red Hat) (next 119 Hours)                                    119  Hours                      $1.31 
+ └─ Image (Red Hat) (over 127 Hours)                                    603  Hours                      $5.43 
                                                                                                               
  ibm_is_instance.vsi["cx3d-128x320"]                                                                          
  ├─ Instance Hours (cx3d-128x320)                                       730  Hours                  $4,688.79 
- └─ Boot volume (Unnamed boot volume, 100 GB)                        73,000  Hours                      $8.39 
+ ├─ Boot volume (Unnamed boot volume, 100 GB)                        73,000  Hours                      $8.39 
+ └─ Image (Red Hat) (first 8 Hours)                                       8  Hours                      $0.14 
+ └─ Image (Red Hat) (next 119 Hours)                                    119  Hours                      $1.31 
+ └─ Image (Red Hat) (over 127 Hours)                                    603  Hours                      $5.43 
                                                                                                               
  ibm_is_instance.vsi["cx3dc-128x320"]                                                                         
  ├─ Instance Hours (cx3dc-128x320)                                      730  Hours                  $4,688.79 
- └─ Boot volume (Unnamed boot volume, 100 GB)                        73,000  Hours                      $8.39 
+ ├─ Boot volume (Unnamed boot volume, 100 GB)                        73,000  Hours                      $8.39 
+ └─ Image (Red Hat) (first 8 Hours)                                       8  Hours                      $0.14 
+ └─ Image (Red Hat) (next 119 Hours)                                    119  Hours                      $1.31 
+ └─ Image (Red Hat) (over 127 Hours)                                    603  Hours                      $5.43 
                                                                                                               
  ibm_is_instance.vsi["gx2-16x128x1v100"]                                                                      
  ├─ Instance Hours (gx2-16x128x1v100)                                   730  Hours                  $2,283.44 
- └─ Boot volume (Unnamed boot volume, 100 GB)                        73,000  Hours                      $8.39 
+ ├─ Boot volume (Unnamed boot volume, 100 GB)                        73,000  Hours                      $8.39 
+ └─ Image (Red Hat) (first 8 Hours)                                       8  Hours                      $0.14 
+ └─ Image (Red Hat) (next 119 Hours)                                    119  Hours                      $1.31 
+ └─ Image (Red Hat) (over 127 Hours)                                    603  Hours                      $5.43 
                                                                                                               
  ibm_is_instance.vsi["gx3-16x80x1l4"]                                                                         
  ├─ Instance Hours (gx3-16x80x1l4)                                      730  Hours                  $1,124.20 
- └─ Boot volume (Unnamed boot volume, 100 GB)                        73,000  Hours                      $8.39 
+ ├─ Boot volume (Unnamed boot volume, 100 GB)                        73,000  Hours                      $8.39 
+ └─ Image (Red Hat) (first 8 Hours)                                       8  Hours                      $0.14 
+ └─ Image (Red Hat) (next 119 Hours)                                    119  Hours                      $1.31 
+ └─ Image (Red Hat) (over 127 Hours)                                    603  Hours                      $5.43 
                                                                                                               
  ibm_is_instance.vsi["gx3d-160x1792x8h100"]                                                                   
  ├─ Instance Hours (gx3d-160x1792x8h100)                                730  Hours                 $69,350.00 
- └─ Boot volume (Unnamed boot volume, 100 GB)                        73,000  Hours                      $8.39 
+ ├─ Boot volume (Unnamed boot volume, 100 GB)                        73,000  Hours                      $8.39 
+ └─ Image (Red Hat) (first 8 Hours)                                       8  Hours                      $0.14 
+ └─ Image (Red Hat) (next 119 Hours)                                    119  Hours                      $1.31 
+ └─ Image (Red Hat) (over 127 Hours)                                    603  Hours                      $5.43 
                                                                                                               
  ibm_is_instance.vsi["mx2-128x1024"]                                                                          
  ├─ Instance Hours (mx2-128x1024)                                       730  Hours                  $6,063.38 
- └─ Boot volume (Unnamed boot volume, 100 GB)                        73,000  Hours                      $8.39 
+ ├─ Boot volume (Unnamed boot volume, 100 GB)                        73,000  Hours                      $8.39 
+ └─ Image (Red Hat) (first 8 Hours)                                       8  Hours                      $0.14 
+ └─ Image (Red Hat) (next 119 Hours)                                    119  Hours                      $1.31 
+ └─ Image (Red Hat) (over 127 Hours)                                    603  Hours                      $5.43 
                                                                                                               
  ibm_is_instance.vsi["mx2-8x64"]                                                                              
  ├─ Instance Hours (mx2-8x64)                                           730  Hours                    $378.87 
- └─ Boot volume (Unnamed boot volume, 100 GB)                        73,000  Hours                      $8.39 
+ ├─ Boot volume (Unnamed boot volume, 100 GB)                        73,000  Hours                      $8.39 
+ └─ Image (Red Hat) (first 8 Hours)                                       8  Hours                      $0.14 
+ └─ Image (Red Hat) (next 119 Hours)                                    119  Hours                      $1.31 
+ └─ Image (Red Hat) (over 127 Hours)                                    603  Hours                      $5.43 
                                                                                                               
  ibm_is_instance.vsi["mx2d-128x1024"]                                                                         
  ├─ Instance Hours (mx2d-128x1024)                                      730  Hours                  $6,464.88 
- └─ Boot volume (Unnamed boot volume, 100 GB)                        73,000  Hours                      $8.39 
+ ├─ Boot volume (Unnamed boot volume, 100 GB)                        73,000  Hours                      $8.39 
+ └─ Image (Red Hat) (first 8 Hours)                                       8  Hours                      $0.14 
+ └─ Image (Red Hat) (next 119 Hours)                                    119  Hours                      $1.31 
+ └─ Image (Red Hat) (over 127 Hours)                                    603  Hours                      $5.43 
                                                                                                               
  ibm_is_instance.vsi["mx3d-128x1280"]                                                                         
  ├─ Instance Hours (mx3d-128x1280)                                      730  Hours                  $6,659.06 
- └─ Boot volume (Unnamed boot volume, 100 GB)                        73,000  Hours                      $8.39 
+ ├─ Boot volume (Unnamed boot volume, 100 GB)                        73,000  Hours                      $8.39 
+ └─ Image (Red Hat) (first 8 Hours)                                       8  Hours                      $0.14 
+ └─ Image (Red Hat) (next 119 Hours)                                    119  Hours                      $1.31 
+ └─ Image (Red Hat) (over 127 Hours)                                    603  Hours                      $5.43 
                                                                                                               
  ibm_is_instance.vsi["ox2-128x1024"]                                                                          
  ├─ Instance Hours (ox2-128x1024)                                       730  Hours                  $8,070.15 
- └─ Boot volume (Unnamed boot volume, 100 GB)                        73,000  Hours                      $8.39 
+ ├─ Boot volume (Unnamed boot volume, 100 GB)                        73,000  Hours                      $8.39 
+ └─ Image (Red Hat) (first 8 Hours)                                       8  Hours                      $0.14 
+ └─ Image (Red Hat) (next 119 Hours)                                    119  Hours                      $1.31 
+ └─ Image (Red Hat) (over 127 Hours)                                    603  Hours                      $5.43 
                                                                                                               
  ibm_is_instance.vsi["ux2d-100x2800"]                                                                         
  ├─ Instance Hours (ux2d-100x2800)                                      730  Hours                 $14,656.94 
- └─ Boot volume (Unnamed boot volume, 100 GB)                        73,000  Hours                      $8.39 
+ ├─ Boot volume (Unnamed boot volume, 100 GB)                        73,000  Hours                      $8.39 
+ └─ Image (Red Hat) (first 8 Hours)                                       8  Hours                      $0.14 
+ └─ Image (Red Hat) (next 119 Hours)                                    119  Hours                      $1.31 
+ └─ Image (Red Hat) (over 127 Hours)                                    603  Hours                      $5.43 
                                                                                                               
  ibm_is_instance.vsi["vx2d-144x2016"]                                                                         
  ├─ Instance Hours (vx2d-144x2016)                                      730  Hours                 $11,359.53 
- └─ Boot volume (Unnamed boot volume, 100 GB)                        73,000  Hours                      $8.39 
+ ├─ Boot volume (Unnamed boot volume, 100 GB)                        73,000  Hours                      $8.39 
+ └─ Image (Red Hat) (first 8 Hours)                                       8  Hours                      $0.14 
+ └─ Image (Red Hat) (next 119 Hours)                                    119  Hours                      $1.31 
+ └─ Image (Red Hat) (over 127 Hours)                                    603  Hours                      $5.43 
                                                                                                               
  ibm_is_instance.vsi_boot_volume["bx2-128x512"]                                                               
  ├─ Instance Hours (bx2-128x512)                                        730  Hours                  $4,688.06 
- └─ Boot volume (boot-volume-label, 250 GB)                         182,500  Hours                     $20.98 
+ ├─ Boot volume (boot-volume-label, 250 GB)                         182,500  Hours                     $20.98 
+ ├─ Image (Microsoft)                                                   730  Hours                     $37.23 
+ └─ SQL Licence (Microsoft)                                             730  Hours                     $12.41 
                                                                                                               
  ibm_is_instance.vsi_boot_volume["bx2a-128x512"]                                                              
  ├─ Instance Hours (bx2a-128x512)                                       730  Hours                  $4,688.06 
- └─ Boot volume (boot-volume-label, 250 GB)                         182,500  Hours                     $20.98 
+ ├─ Boot volume (boot-volume-label, 250 GB)                         182,500  Hours                     $20.98 
+ ├─ Image (Microsoft)                                                   730  Hours                     $37.23 
+ └─ SQL Licence (Microsoft)                                             730  Hours                     $12.41 
                                                                                                               
  ibm_is_instance.vsi_boot_volume["bx2d-128x512"]                                                              
  ├─ Instance Hours (bx2d-128x512)                                       730  Hours                  $5,089.56 
- └─ Boot volume (boot-volume-label, 250 GB)                         182,500  Hours                     $20.98 
+ ├─ Boot volume (boot-volume-label, 250 GB)                         182,500  Hours                     $20.98 
+ ├─ Image (Microsoft)                                                   730  Hours                     $37.23 
+ └─ SQL Licence (Microsoft)                                             730  Hours                     $12.41 
                                                                                                               
  ibm_is_instance.vsi_boot_volume["bx3d-128x640"]                                                              
  ├─ Instance Hours (bx3d-128x640)                                       730  Hours                  $5,242.13 
- └─ Boot volume (boot-volume-label, 250 GB)                         182,500  Hours                     $20.98 
+ ├─ Boot volume (boot-volume-label, 250 GB)                         182,500  Hours                     $20.98 
+ ├─ Image (Microsoft)                                                   730  Hours                     $37.23 
+ └─ SQL Licence (Microsoft)                                             730  Hours                     $12.41 
                                                                                                               
  ibm_is_instance.vsi_boot_volume["bx3dc-16x80"]                                                               
  ├─ Instance Hours (bx3dc-16x80)                                        730  Hours                    $655.54 
- └─ Boot volume (boot-volume-label, 250 GB)                         182,500  Hours                     $20.98 
+ ├─ Boot volume (boot-volume-label, 250 GB)                         182,500  Hours                     $20.98 
+ ├─ Image (Microsoft)                                                   730  Hours                     $37.23 
+ └─ SQL Licence (Microsoft)                                             730  Hours                     $12.41 
                                                                                                               
  ibm_is_instance.vsi_boot_volume["cx2-128x256"]                                                               
  ├─ Instance Hours (cx2-128x256)                                        730  Hours                  $4,150.78 
- └─ Boot volume (boot-volume-label, 250 GB)                         182,500  Hours                     $20.98 
+ ├─ Boot volume (boot-volume-label, 250 GB)                         182,500  Hours                     $20.98 
+ ├─ Image (Microsoft)                                                   730  Hours                     $37.23 
+ └─ SQL Licence (Microsoft)                                             730  Hours                     $12.41 
                                                                                                               
  ibm_is_instance.vsi_boot_volume["cx2-2x4"]                                                                   
  ├─ Instance Hours (cx2-2x4)                                            730  Hours                     $64.97 
- └─ Boot volume (boot-volume-label, 250 GB)                         182,500  Hours                     $20.98 
+ ├─ Boot volume (boot-volume-label, 250 GB)                         182,500  Hours                     $20.98 
+ ├─ Image (Microsoft)                                                   730  Hours                     $37.23 
+ └─ SQL Licence (Microsoft)                                             730  Hours                     $12.41 
                                                                                                               
  ibm_is_instance.vsi_boot_volume["cx2d-128x256"]                                                              
  ├─ Instance Hours (cx2d-128x256)                                       730  Hours                  $4,552.28 
- └─ Boot volume (boot-volume-label, 250 GB)                         182,500  Hours                     $20.98 
+ ├─ Boot volume (boot-volume-label, 250 GB)                         182,500  Hours                     $20.98 
+ ├─ Image (Microsoft)                                                   730  Hours                     $37.23 
+ └─ SQL Licence (Microsoft)                                             730  Hours                     $12.41 
                                                                                                               
  ibm_is_instance.vsi_boot_volume["cx3d-128x320"]                                                              
  ├─ Instance Hours (cx3d-128x320)                                       730  Hours                  $4,688.79 
- └─ Boot volume (boot-volume-label, 250 GB)                         182,500  Hours                     $20.98 
+ ├─ Boot volume (boot-volume-label, 250 GB)                         182,500  Hours                     $20.98 
+ ├─ Image (Microsoft)                                                   730  Hours                     $37.23 
+ └─ SQL Licence (Microsoft)                                             730  Hours                     $12.41 
                                                                                                               
  ibm_is_instance.vsi_boot_volume["cx3dc-128x320"]                                                             
  ├─ Instance Hours (cx3dc-128x320)                                      730  Hours                  $4,688.79 
- └─ Boot volume (boot-volume-label, 250 GB)                         182,500  Hours                     $20.98 
+ ├─ Boot volume (boot-volume-label, 250 GB)                         182,500  Hours                     $20.98 
+ ├─ Image (Microsoft)                                                   730  Hours                     $37.23 
+ └─ SQL Licence (Microsoft)                                             730  Hours                     $12.41 
                                                                                                               
  ibm_is_instance.vsi_boot_volume["gx2-16x128x1v100"]                                                          
  ├─ Instance Hours (gx2-16x128x1v100)                                   730  Hours                  $2,283.44 
- └─ Boot volume (boot-volume-label, 250 GB)                         182,500  Hours                     $20.98 
+ ├─ Boot volume (boot-volume-label, 250 GB)                         182,500  Hours                     $20.98 
+ ├─ Image (Microsoft)                                                   730  Hours                     $37.23 
+ └─ SQL Licence (Microsoft)                                             730  Hours                     $12.41 
                                                                                                               
  ibm_is_instance.vsi_boot_volume["gx3-16x80x1l4"]                                                             
  ├─ Instance Hours (gx3-16x80x1l4)                                      730  Hours                  $1,124.20 
- └─ Boot volume (boot-volume-label, 250 GB)                         182,500  Hours                     $20.98 
+ ├─ Boot volume (boot-volume-label, 250 GB)                         182,500  Hours                     $20.98 
+ ├─ Image (Microsoft)                                                   730  Hours                     $37.23 
+ └─ SQL Licence (Microsoft)                                             730  Hours                     $12.41 
                                                                                                               
  ibm_is_instance.vsi_boot_volume["gx3d-160x1792x8h100"]                                                       
  ├─ Instance Hours (gx3d-160x1792x8h100)                                730  Hours                 $69,350.00 
- └─ Boot volume (boot-volume-label, 250 GB)                         182,500  Hours                     $20.98 
+ ├─ Boot volume (boot-volume-label, 250 GB)                         182,500  Hours                     $20.98 
+ ├─ Image (Microsoft)                                                   730  Hours                     $37.23 
+ └─ SQL Licence (Microsoft)                                             730  Hours                     $12.41 
                                                                                                               
  ibm_is_instance.vsi_boot_volume["mx2-128x1024"]                                                              
  ├─ Instance Hours (mx2-128x1024)                                       730  Hours                  $6,063.38 
- └─ Boot volume (boot-volume-label, 250 GB)                         182,500  Hours                     $20.98 
+ ├─ Boot volume (boot-volume-label, 250 GB)                         182,500  Hours                     $20.98 
+ ├─ Image (Microsoft)                                                   730  Hours                     $37.23 
+ └─ SQL Licence (Microsoft)                                             730  Hours                     $12.41 
                                                                                                               
  ibm_is_instance.vsi_boot_volume["mx2-8x64"]                                                                  
  ├─ Instance Hours (mx2-8x64)                                           730  Hours                    $378.87 
- └─ Boot volume (boot-volume-label, 250 GB)                         182,500  Hours                     $20.98 
+ ├─ Boot volume (boot-volume-label, 250 GB)                         182,500  Hours                     $20.98 
+ ├─ Image (Microsoft)                                                   730  Hours                     $37.23 
+ └─ SQL Licence (Microsoft)                                             730  Hours                     $12.41 
                                                                                                               
  ibm_is_instance.vsi_boot_volume["mx2d-128x1024"]                                                             
  ├─ Instance Hours (mx2d-128x1024)                                      730  Hours                  $6,464.88 
- └─ Boot volume (boot-volume-label, 250 GB)                         182,500  Hours                     $20.98 
+ ├─ Boot volume (boot-volume-label, 250 GB)                         182,500  Hours                     $20.98 
+ ├─ Image (Microsoft)                                                   730  Hours                     $37.23 
+ └─ SQL Licence (Microsoft)                                             730  Hours                     $12.41 
                                                                                                               
  ibm_is_instance.vsi_boot_volume["mx3d-128x1280"]                                                             
  ├─ Instance Hours (mx3d-128x1280)                                      730  Hours                  $6,659.06 
- └─ Boot volume (boot-volume-label, 250 GB)                         182,500  Hours                     $20.98 
+ ├─ Boot volume (boot-volume-label, 250 GB)                         182,500  Hours                     $20.98 
+ ├─ Image (Microsoft)                                                   730  Hours                     $37.23 
+ └─ SQL Licence (Microsoft)                                             730  Hours                     $12.41 
                                                                                                               
  ibm_is_instance.vsi_boot_volume["ox2-128x1024"]                                                              
  ├─ Instance Hours (ox2-128x1024)                                       730  Hours                  $8,070.15 
- └─ Boot volume (boot-volume-label, 250 GB)                         182,500  Hours                     $20.98 
+ ├─ Boot volume (boot-volume-label, 250 GB)                         182,500  Hours                     $20.98 
+ ├─ Image (Microsoft)                                                   730  Hours                     $37.23 
+ └─ SQL Licence (Microsoft)                                             730  Hours                     $12.41 
                                                                                                               
  ibm_is_instance.vsi_boot_volume["ux2d-100x2800"]                                                             
  ├─ Instance Hours (ux2d-100x2800)                                      730  Hours                 $14,656.94 
- └─ Boot volume (boot-volume-label, 250 GB)                         182,500  Hours                     $20.98 
+ ├─ Boot volume (boot-volume-label, 250 GB)                         182,500  Hours                     $20.98 
+ ├─ Image (Microsoft)                                                   730  Hours                     $37.23 
+ └─ SQL Licence (Microsoft)                                             730  Hours                     $12.41 
                                                                                                               
  ibm_is_instance.vsi_boot_volume["vx2d-144x2016"]                                                             
  ├─ Instance Hours (vx2d-144x2016)                                      730  Hours                 $11,359.53 
- └─ Boot volume (boot-volume-label, 250 GB)                         182,500  Hours                     $20.98 
+ ├─ Boot volume (boot-volume-label, 250 GB)                         182,500  Hours                     $20.98 
+ ├─ Image (Microsoft)                                                   730  Hours                     $37.23 
+ └─ SQL Licence (Microsoft)                                             730  Hours                     $12.41 
                                                                                                               
  ibm_is_instance.vsi_dedicated_host["bx2-128x512"]                                                            
  ├─ Instance Hours (bx2-128x512)                                        730  Hours                  $4,688.06 
- └─ Boot volume (Unnamed boot volume, 100 GB)                        73,000  Hours                      $8.39 
+ ├─ Boot volume (Unnamed boot volume, 100 GB)                        73,000  Hours                      $8.39 
+ └─ Image (SUSE) (first 2 Hours)                                          2  Hours                      $0.22 
+ └─ Image (SUSE) (next 2 Hours)                                           2  Hours                      $0.43 
+ └─ Image (SUSE) (over 4 Hours)                                         726  Hours                    $196.02 
                                                                                                               
  ibm_is_instance.vsi_dedicated_host["bx2a-128x512"]                                                           
  ├─ Instance Hours (bx2a-128x512)                                       730  Hours                  $4,688.06 
- └─ Boot volume (Unnamed boot volume, 100 GB)                        73,000  Hours                      $8.39 
+ ├─ Boot volume (Unnamed boot volume, 100 GB)                        73,000  Hours                      $8.39 
+ └─ Image (SUSE) (first 2 Hours)                                          2  Hours                      $0.22 
+ └─ Image (SUSE) (next 2 Hours)                                           2  Hours                      $0.43 
+ └─ Image (SUSE) (over 4 Hours)                                         726  Hours                    $196.02 
                                                                                                               
  ibm_is_instance.vsi_dedicated_host["bx2d-128x512"]                                                           
  ├─ Instance Hours (bx2d-128x512)                                       730  Hours                  $5,089.56 
- └─ Boot volume (Unnamed boot volume, 100 GB)                        73,000  Hours                      $8.39 
+ ├─ Boot volume (Unnamed boot volume, 100 GB)                        73,000  Hours                      $8.39 
+ └─ Image (SUSE) (first 2 Hours)                                          2  Hours                      $0.22 
+ └─ Image (SUSE) (next 2 Hours)                                           2  Hours                      $0.43 
+ └─ Image (SUSE) (over 4 Hours)                                         726  Hours                    $196.02 
                                                                                                               
  ibm_is_instance.vsi_dedicated_host["bx3d-128x640"]                                                           
  ├─ Instance Hours (bx3d-128x640)                                       730  Hours                  $5,242.13 
- └─ Boot volume (Unnamed boot volume, 100 GB)                        73,000  Hours                      $8.39 
+ ├─ Boot volume (Unnamed boot volume, 100 GB)                        73,000  Hours                      $8.39 
+ └─ Image (SUSE) (first 2 Hours)                                          2  Hours                      $0.22 
+ └─ Image (SUSE) (next 2 Hours)                                           2  Hours                      $0.43 
+ └─ Image (SUSE) (over 4 Hours)                                         726  Hours                    $196.02 
                                                                                                               
  ibm_is_instance.vsi_dedicated_host["bx3dc-16x80"]                                                            
  ├─ Instance Hours (bx3dc-16x80)                                        730  Hours                    $655.54 
- └─ Boot volume (Unnamed boot volume, 100 GB)                        73,000  Hours                      $8.39 
+ ├─ Boot volume (Unnamed boot volume, 100 GB)                        73,000  Hours                      $8.39 
+ └─ Image (SUSE) (first 2 Hours)                                          2  Hours                      $0.22 
+ └─ Image (SUSE) (next 2 Hours)                                           2  Hours                      $0.43 
+ └─ Image (SUSE) (over 4 Hours)                                         726  Hours                    $196.02 
                                                                                                               
  ibm_is_instance.vsi_dedicated_host["cx2-128x256"]                                                            
  ├─ Instance Hours (cx2-128x256)                                        730  Hours                  $4,150.78 
- └─ Boot volume (Unnamed boot volume, 100 GB)                        73,000  Hours                      $8.39 
+ ├─ Boot volume (Unnamed boot volume, 100 GB)                        73,000  Hours                      $8.39 
+ └─ Image (SUSE) (first 2 Hours)                                          2  Hours                      $0.22 
+ └─ Image (SUSE) (next 2 Hours)                                           2  Hours                      $0.43 
+ └─ Image (SUSE) (over 4 Hours)                                         726  Hours                    $196.02 
                                                                                                               
  ibm_is_instance.vsi_dedicated_host["cx2-2x4"]                                                                
  ├─ Instance Hours (cx2-2x4)                                            730  Hours                     $64.97 
- └─ Boot volume (Unnamed boot volume, 100 GB)                        73,000  Hours                      $8.39 
+ ├─ Boot volume (Unnamed boot volume, 100 GB)                        73,000  Hours                      $8.39 
+ └─ Image (SUSE) (first 2 Hours)                                          2  Hours                      $0.22 
+ └─ Image (SUSE) (next 2 Hours)                                           2  Hours                      $0.43 
+ └─ Image (SUSE) (over 4 Hours)                                         726  Hours                    $196.02 
                                                                                                               
  ibm_is_instance.vsi_dedicated_host["cx2d-128x256"]                                                           
  ├─ Instance Hours (cx2d-128x256)                                       730  Hours                  $4,552.28 
- └─ Boot volume (Unnamed boot volume, 100 GB)                        73,000  Hours                      $8.39 
+ ├─ Boot volume (Unnamed boot volume, 100 GB)                        73,000  Hours                      $8.39 
+ └─ Image (SUSE) (first 2 Hours)                                          2  Hours                      $0.22 
+ └─ Image (SUSE) (next 2 Hours)                                           2  Hours                      $0.43 
+ └─ Image (SUSE) (over 4 Hours)                                         726  Hours                    $196.02 
                                                                                                               
  ibm_is_instance.vsi_dedicated_host["cx3d-128x320"]                                                           
  ├─ Instance Hours (cx3d-128x320)                                       730  Hours                  $4,688.79 
- └─ Boot volume (Unnamed boot volume, 100 GB)                        73,000  Hours                      $8.39 
+ ├─ Boot volume (Unnamed boot volume, 100 GB)                        73,000  Hours                      $8.39 
+ └─ Image (SUSE) (first 2 Hours)                                          2  Hours                      $0.22 
+ └─ Image (SUSE) (next 2 Hours)                                           2  Hours                      $0.43 
+ └─ Image (SUSE) (over 4 Hours)                                         726  Hours                    $196.02 
                                                                                                               
  ibm_is_instance.vsi_dedicated_host["cx3dc-128x320"]                                                          
  ├─ Instance Hours (cx3dc-128x320)                                      730  Hours                  $4,688.79 
- └─ Boot volume (Unnamed boot volume, 100 GB)                        73,000  Hours                      $8.39 
+ ├─ Boot volume (Unnamed boot volume, 100 GB)                        73,000  Hours                      $8.39 
+ └─ Image (SUSE) (first 2 Hours)                                          2  Hours                      $0.22 
+ └─ Image (SUSE) (next 2 Hours)                                           2  Hours                      $0.43 
+ └─ Image (SUSE) (over 4 Hours)                                         726  Hours                    $196.02 
                                                                                                               
  ibm_is_instance.vsi_dedicated_host["gx2-16x128x1v100"]                                                       
  ├─ Instance Hours (gx2-16x128x1v100)                                   730  Hours                  $2,283.44 
- └─ Boot volume (Unnamed boot volume, 100 GB)                        73,000  Hours                      $8.39 
+ ├─ Boot volume (Unnamed boot volume, 100 GB)                        73,000  Hours                      $8.39 
+ └─ Image (SUSE) (first 2 Hours)                                          2  Hours                      $0.22 
+ └─ Image (SUSE) (next 2 Hours)                                           2  Hours                      $0.43 
+ └─ Image (SUSE) (over 4 Hours)                                         726  Hours                    $196.02 
                                                                                                               
  ibm_is_instance.vsi_dedicated_host["gx3-16x80x1l4"]                                                          
  ├─ Instance Hours (gx3-16x80x1l4)                                      730  Hours                  $1,124.20 
- └─ Boot volume (Unnamed boot volume, 100 GB)                        73,000  Hours                      $8.39 
+ ├─ Boot volume (Unnamed boot volume, 100 GB)                        73,000  Hours                      $8.39 
+ └─ Image (SUSE) (first 2 Hours)                                          2  Hours                      $0.22 
+ └─ Image (SUSE) (next 2 Hours)                                           2  Hours                      $0.43 
+ └─ Image (SUSE) (over 4 Hours)                                         726  Hours                    $196.02 
                                                                                                               
  ibm_is_instance.vsi_dedicated_host["gx3d-160x1792x8h100"]                                                    
  ├─ Instance Hours (gx3d-160x1792x8h100)                                730  Hours                 $69,350.00 
- └─ Boot volume (Unnamed boot volume, 100 GB)                        73,000  Hours                      $8.39 
+ ├─ Boot volume (Unnamed boot volume, 100 GB)                        73,000  Hours                      $8.39 
+ └─ Image (SUSE) (first 2 Hours)                                          2  Hours                      $0.22 
+ └─ Image (SUSE) (next 2 Hours)                                           2  Hours                      $0.43 
+ └─ Image (SUSE) (over 4 Hours)                                         726  Hours                    $196.02 
                                                                                                               
  ibm_is_instance.vsi_dedicated_host["mx2-128x1024"]                                                           
  ├─ Instance Hours (mx2-128x1024)                                       730  Hours                  $6,063.38 
- └─ Boot volume (Unnamed boot volume, 100 GB)                        73,000  Hours                      $8.39 
+ ├─ Boot volume (Unnamed boot volume, 100 GB)                        73,000  Hours                      $8.39 
+ └─ Image (SUSE) (first 2 Hours)                                          2  Hours                      $0.22 
+ └─ Image (SUSE) (next 2 Hours)                                           2  Hours                      $0.43 
+ └─ Image (SUSE) (over 4 Hours)                                         726  Hours                    $196.02 
                                                                                                               
  ibm_is_instance.vsi_dedicated_host["mx2-8x64"]                                                               
  ├─ Instance Hours (mx2-8x64)                                           730  Hours                    $378.87 
- └─ Boot volume (Unnamed boot volume, 100 GB)                        73,000  Hours                      $8.39 
+ ├─ Boot volume (Unnamed boot volume, 100 GB)                        73,000  Hours                      $8.39 
+ └─ Image (SUSE) (first 2 Hours)                                          2  Hours                      $0.22 
+ └─ Image (SUSE) (next 2 Hours)                                           2  Hours                      $0.43 
+ └─ Image (SUSE) (over 4 Hours)                                         726  Hours                    $196.02 
                                                                                                               
  ibm_is_instance.vsi_dedicated_host["mx2d-128x1024"]                                                          
  ├─ Instance Hours (mx2d-128x1024)                                      730  Hours                  $6,464.88 
- └─ Boot volume (Unnamed boot volume, 100 GB)                        73,000  Hours                      $8.39 
+ ├─ Boot volume (Unnamed boot volume, 100 GB)                        73,000  Hours                      $8.39 
+ └─ Image (SUSE) (first 2 Hours)                                          2  Hours                      $0.22 
+ └─ Image (SUSE) (next 2 Hours)                                           2  Hours                      $0.43 
+ └─ Image (SUSE) (over 4 Hours)                                         726  Hours                    $196.02 
                                                                                                               
  ibm_is_instance.vsi_dedicated_host["mx3d-128x1280"]                                                          
  ├─ Instance Hours (mx3d-128x1280)                                      730  Hours                  $6,659.06 
- └─ Boot volume (Unnamed boot volume, 100 GB)                        73,000  Hours                      $8.39 
+ ├─ Boot volume (Unnamed boot volume, 100 GB)                        73,000  Hours                      $8.39 
+ └─ Image (SUSE) (first 2 Hours)                                          2  Hours                      $0.22 
+ └─ Image (SUSE) (next 2 Hours)                                           2  Hours                      $0.43 
+ └─ Image (SUSE) (over 4 Hours)                                         726  Hours                    $196.02 
                                                                                                               
  ibm_is_instance.vsi_dedicated_host["ox2-128x1024"]                                                           
  ├─ Instance Hours (ox2-128x1024)                                       730  Hours                  $8,070.15 
- └─ Boot volume (Unnamed boot volume, 100 GB)                        73,000  Hours                      $8.39 
+ ├─ Boot volume (Unnamed boot volume, 100 GB)                        73,000  Hours                      $8.39 
+ └─ Image (SUSE) (first 2 Hours)                                          2  Hours                      $0.22 
+ └─ Image (SUSE) (next 2 Hours)                                           2  Hours                      $0.43 
+ └─ Image (SUSE) (over 4 Hours)                                         726  Hours                    $196.02 
                                                                                                               
  ibm_is_instance.vsi_dedicated_host["ux2d-100x2800"]                                                          
  ├─ Instance Hours (ux2d-100x2800)                                      730  Hours                 $14,656.94 
- └─ Boot volume (Unnamed boot volume, 100 GB)                        73,000  Hours                      $8.39 
+ ├─ Boot volume (Unnamed boot volume, 100 GB)                        73,000  Hours                      $8.39 
+ └─ Image (SUSE) (first 2 Hours)                                          2  Hours                      $0.22 
+ └─ Image (SUSE) (next 2 Hours)                                           2  Hours                      $0.43 
+ └─ Image (SUSE) (over 4 Hours)                                         726  Hours                    $196.02 
                                                                                                               
  ibm_is_instance.vsi_dedicated_host["vx2d-144x2016"]                                                          
  ├─ Instance Hours (vx2d-144x2016)                                      730  Hours                 $11,359.53 
- └─ Boot volume (Unnamed boot volume, 100 GB)                        73,000  Hours                      $8.39 
+ ├─ Boot volume (Unnamed boot volume, 100 GB)                        73,000  Hours                      $8.39 
+ └─ Image (SUSE) (first 2 Hours)                                          2  Hours                      $0.22 
+ └─ Image (SUSE) (next 2 Hours)                                           2  Hours                      $0.43 
+ └─ Image (SUSE) (over 4 Hours)                                         726  Hours                    $196.02 
                                                                                                               
  ibm_is_vpc.vpc                                                                                               
  ├─ VPC instance                                                          1  Instance                   $0.00 
@@ -249,7 +409,7 @@
  └─ VPC egress us-south (next 100000 GB)                    Monthly cost depends on usage: $0.07315 per GB    
  └─ VPC egress us-south (over 149995 GB)                    Monthly cost depends on usage: $0.05225 per GB    
                                                                                                               
- OVERALL TOTAL                                                                                    $495,513.45 
+ OVERALL TOTAL                                                                                    $500,577.01 
 ──────────────────────────────────
 66 cloud resources were detected:
 ∙ 61 were estimated, all of which include usage-based costs, see https://infracost.io/usage-file

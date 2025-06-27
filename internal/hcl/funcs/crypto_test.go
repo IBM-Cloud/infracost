@@ -678,6 +678,7 @@ func TestFileSHA512(t *testing.T) {
 	}
 }
 
+// nolint:gosec
 const (
 	CipherBase64 = "eczGaDhXDbOFRZGhjx2etVzWbRqWDlmq0bvNt284JHVbwCgObiuyX9uV0LSAMY707IEgMkExJqXmsB4OWKxvB7epRB9G/3+F+pcrQpODlDuL9oDUAsa65zEpYF0Wbn7Oh7nrMQncyUPpyr9WUlALl0gRWytOA23S+y5joa4M34KFpawFgoqTu/2EEH4Xl1zo+0fy73fEto+nfkUY+meuyGZ1nUx/+DljP7ZqxHBFSlLODmtuTMdswUbHbXbWneW51D7Jm7xB8nSdiA2JQNK5+Sg5x8aNfgvFTt/m2w2+qpsyFa5Wjeu6fZmXSl840CA07aXbk9vN4I81WmJyblD/ZA=="
 	PrivateKey   = `
@@ -708,7 +709,7 @@ OLlRAoGBAIZ5Uv4Z3s8O7WKXXUe/lq6j7vfiVkR1NW/Z/WLKXZpnmvJ7FgxN4e56
 RXT7GwNQHIY8eDjDnsHxzrxd+raOxOZeKcMHj3XyjCX3NHfTscnsBPAGYpY/Wxzh
 T8UYnFu6RzkixElTf2rseEav7rkdKkI3LAeIZy7B0HulKKsmqVQ7
 -----END RSA PRIVATE KEY-----
-`
+` //nolint:gosec
 	OpenSSHPrivateKey = `
 -----BEGIN OPENSSH PRIVATE KEY-----
 b3BlbnNzaC1rZXktdjEAAAAABG5vbmUAAAAEbm9uZQAAAAAAAAABAAABFwAAAAdzc2gtcn
@@ -737,7 +738,7 @@ dA6CXZVPS1nq6V3Gs5SXCHTs/0vUA5kit0Q0E3an08UZq8YmCPSxLJpDpL85Z5zgTKZ2d2
 TlOaiEX6a3nESIt+ygwDh1hp5QtBFhoJeOmC2+/414ln9ABmPg3ySTXfYuk2yA1rvNueP3
 qwEumyjIVv96u39pAAAAAAEC
 -----END OPENSSH PRIVATE KEY-----
-`
+` //nolint:gosec
 	WrongPrivateKey = `
 -----BEGIN RSA PRIVATE KEY-----
 MIIEowIBAAKCAQEAlrCgnEVgmNKCq7KPc+zUU5IrxPu1ClMNJS7RTsTPEkbwe5SB
@@ -766,7 +767,7 @@ CYhwNQKBgGPcLXmjpGtkZvggl0aZr9LsvCTckllSCFSI861kivL/rijdNoCHGxZv
 dfDkLTLcz9Gk41rD9Gxn/3sqodnTAc3Z2PxFnzg1Q/u3+x6YAgBwI/g/jE2xutGW
 H7CurtMwALQ/n/6LUKFmjRZjqbKX9SO2QSaC3grd6sY9Tu+bZjLe
 -----END RSA PRIVATE KEY-----
-`
+` //nolint:gosec
 	BadPrivateKey = `
 -----BEGIN RSA PRIVATE KEY-----
 MIIEowIBAAKCAQEAgUElV5mwqkloIrM8ZNZ72gSCcnSJt7+/Usa5G+D15YQUAdf9
@@ -794,5 +795,5 @@ OLlRAoGBAIZ5Uv4Z3s8O7WKXXUe/lq6j7vfiVkR1NW/Z/WLKXZpnmvJ7FgxN4e56
 RXT7GwNQHIY8eDjDnsHxzrxd+raOxOZeKcMHj3XyjCX3NHfTscnsBPAGYpY/Wxzh
 T8UYnFu6RzkixElTf2rseEav7rkdKkI3LAeIZy7B0HulKKsmqVQ7
 -----END RSA PRIVATE KEY-----
-`
+` //nolint:gosec
 )

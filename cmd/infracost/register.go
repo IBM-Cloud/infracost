@@ -1,37 +1,39 @@
 package main
 
-import (
-	"github.com/spf13/cobra"
+// As of 03,07,2025, commenting out because function is unused in cmd/infracost/main.go
 
-	"github.com/infracost/infracost/internal/config"
-	"github.com/infracost/infracost/internal/ui"
-)
+// import (
+// 	"github.com/spf13/cobra"
 
-func registerCmd(ctx *config.RunContext) *cobra.Command {
-	login := authLoginCmd(ctx)
-	cmd := &cobra.Command{
-		Use:    "register",
-		Hidden: true,
-		Short:  login.Short,
-		Long:   login.Long,
-		RunE: func(cmd *cobra.Command, args []string) error {
-			ui.PrintWarningf(cmd.ErrOrStderr(),
-				"this command has been changed to %s, which does the same thing - we’ll run that for you now.\n",
-				ui.PrimaryString("infracost auth login"),
-			)
+// 	"github.com/infracost/infracost/internal/config"
+// 	"github.com/infracost/infracost/internal/ui"
+// )
 
-			return login.RunE(cmd, args)
-		},
-	}
+// func registerCmd(ctx *config.RunContext) *cobra.Command {
+// 	login := authLoginCmd(ctx)
+// 	cmd := &cobra.Command{
+// 		Use:    "register",
+// 		Hidden: true,
+// 		Short:  login.Short,
+// 		Long:   login.Long,
+// 		RunE: func(cmd *cobra.Command, args []string) error {
+// 			ui.PrintWarningf(cmd.ErrOrStderr(),
+// 				"this command has been changed to %s, which does the same thing - we’ll run that for you now.\n",
+// 				ui.PrimaryString("infracost auth login"),
+// 			)
 
-	cmd.SetHelpFunc(func(cmd *cobra.Command, strings []string) {
-		ui.PrintWarningf(cmd.ErrOrStderr(),
-			"this command has been changed to %s, which does the same thing - showing information for that command.\n",
-			ui.PrimaryString("infracost auth login"),
-		)
+// 			return login.RunE(cmd, args)
+// 		},
+// 	}
 
-		login.HelpFunc()(login, strings)
-	})
+// 	cmd.SetHelpFunc(func(cmd *cobra.Command, strings []string) {
+// 		ui.PrintWarningf(cmd.ErrOrStderr(),
+// 			"this command has been changed to %s, which does the same thing - showing information for that command.\n",
+// 			ui.PrimaryString("infracost auth login"),
+// 		)
 
-	return cmd
-}
+// 		login.HelpFunc()(login, strings)
+// 	})
+
+// 	return cmd
+// }

@@ -295,8 +295,7 @@ func loadResources(t *testing.T, pName string, tfProject TerraformProject, runCt
 
 	tfdir := createTerraformProject(t, tfProject)
 	runCtx.Config.RootPath = tfdir
-	var provider schema.Provider
-	provider = terraform.NewDirProvider(config.NewProjectContext(runCtx, &config.Project{
+	var provider = terraform.NewDirProvider(config.NewProjectContext(runCtx, &config.Project{
 		Path: tfdir,
 	}, log.Fields{}), false)
 
@@ -435,7 +434,7 @@ func copyInitCacheToPath(source, destination string) error {
 						return err
 					}
 
-					if err := os.WriteFile(destPath, srcData, os.ModePerm); err != nil {
+					if err := os.WriteFile(destPath, srcData, os.ModePerm); err != nil { //nolint:gosec
 						return err
 					}
 				}

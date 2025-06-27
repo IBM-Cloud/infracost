@@ -2,7 +2,6 @@ package hcl
 
 import (
 	"io"
-	"io/ioutil"
 	"os"
 	"path/filepath"
 	"sort"
@@ -731,19 +730,19 @@ func TestOptionWithRawCtyInput(t *testing.T) {
 }
 
 func createTestFile(filename, contents string) string {
-	dir, err := ioutil.TempDir(os.TempDir(), "infracost")
+	dir, err := os.MkdirTemp(os.TempDir(), "infracost")
 	if err != nil {
 		panic(err)
 	}
 	path := filepath.Join(dir, filename)
-	if err := os.WriteFile(path, []byte(contents), os.ModePerm); err != nil {
+	if err := os.WriteFile(path, []byte(contents), os.ModePerm); err != nil { //nolint:gosec
 		panic(err)
 	}
 	return path
 }
 
 func createTestFileWithModule(contents string, moduleContents string, moduleName string) string {
-	dir, err := ioutil.TempDir(os.TempDir(), "infracost")
+	dir, err := os.MkdirTemp(os.TempDir(), "infracost")
 	if err != nil {
 		panic(err)
 	}
@@ -764,11 +763,11 @@ func createTestFileWithModule(contents string, moduleContents string, moduleName
 		}
 	}
 
-	if err := os.WriteFile(filepath.Join(rootPath, "main.tf"), []byte(contents), os.ModePerm); err != nil {
+	if err := os.WriteFile(filepath.Join(rootPath, "main.tf"), []byte(contents), os.ModePerm); err != nil { //nolint:gosec
 		panic(err)
 	}
 
-	if err := os.WriteFile(filepath.Join(modulePath, "main.tf"), []byte(moduleContents), os.ModePerm); err != nil {
+	if err := os.WriteFile(filepath.Join(modulePath, "main.tf"), []byte(moduleContents), os.ModePerm); err != nil { //nolint:gosec
 		panic(err)
 	}
 

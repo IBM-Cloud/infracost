@@ -112,7 +112,7 @@ func (r *IsShare) transmittedDataCostComponent() *schema.CostComponent {
 	}
 
 	return &schema.CostComponent{
-		Name:            fmt.Sprintf("Transmitted data"),
+		Name:            "Transmitted data",
 		Unit:            "GB",
 		UnitMultiplier:  decimal.NewFromInt(1),
 		MonthlyQuantity: transmittedQ,

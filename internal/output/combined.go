@@ -113,7 +113,7 @@ func CompareTo(current, prior Root) (Root, error) {
 	priorProjects := make(map[string]*schema.Project)
 	for _, p := range prior.Projects {
 		if _, ok := priorProjects[p.LabelWithMetadata()]; ok {
-			return Root{}, fmt.Errorf("Invalid --compare-to Infracost JSON, found duplicate project name %s", p.LabelWithMetadata())
+			return Root{}, fmt.Errorf("invalid --compare-to Infracost JSON, found duplicate project name %s", p.LabelWithMetadata())
 		}
 
 		priorProjects[p.LabelWithMetadata()] = p.ToSchemaProject()
@@ -270,7 +270,7 @@ func checkCurrency(inputCurrency, fileCurrency string) (string, error) {
 	}
 
 	if inputCurrency != fileCurrency {
-		return "", fmt.Errorf("Invalid Infracost JSON file currency mismatch.  Can't combine %s and %s", inputCurrency, fileCurrency)
+		return "", fmt.Errorf("invalid Infracost JSON file currency mismatch.  Can't combine %s and %s", inputCurrency, fileCurrency)
 	}
 
 	return inputCurrency, nil

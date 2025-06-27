@@ -200,8 +200,8 @@ func diffCostComponents(past *CostComponent, current *CostComponent) (bool, *Cos
 	// - Tier parameters changed - diff for every field
 	// - Tiered -> not tiered - should be already handled by the code above
 	// - Not tiered -> tiered
-	if current.priceTiers != nil && len(current.priceTiers) > 0 {
-		if past.priceTiers != nil && len(past.priceTiers) > 0 {
+	if len(current.priceTiers) > 0 {
+		if len(past.priceTiers) > 0 {
 			tiersLen := len(current.priceTiers)
 			if len(past.priceTiers) > tiersLen {
 				tiersLen = len(past.priceTiers)

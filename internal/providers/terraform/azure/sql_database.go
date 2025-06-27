@@ -79,7 +79,7 @@ func newSQLDatabase(d *schema.ResourceData, u *schema.UsageData) *schema.Resourc
 		var err error
 		config, err = parseSKU(d.Address, sku)
 		if err != nil {
-			log.Warnf(err.Error())
+			log.Warnf("%s", err.Error())
 			return nil
 		}
 	}

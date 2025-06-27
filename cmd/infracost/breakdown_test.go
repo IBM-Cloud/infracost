@@ -2,7 +2,7 @@ package main_test
 
 import (
 	"fmt"
-	"io/ioutil"
+	"io"
 	"net/http"
 	"net/http/httptest"
 	"os"
@@ -206,7 +206,7 @@ func TestBreakdownTerraformOutFileHTML(t *testing.T) {
 
 	GoldenFileCommandTest(t, testdataName, []string{"breakdown", "--path", "./testdata/example_plan.json", "--format", "html", "--out-file", outputPath}, nil)
 
-	actual, err := ioutil.ReadFile(outputPath)
+	actual, err := os.ReadFile(outputPath)
 	require.Nil(t, err)
 	actual = stripDynamicValues(actual)
 
@@ -220,7 +220,7 @@ func TestBreakdownTerraformOutFileJSON(t *testing.T) {
 
 	GoldenFileCommandTest(t, testdataName, []string{"breakdown", "--path", "./testdata/example_plan.json", "--format", "json", "--out-file", outputPath}, nil)
 
-	actual, err := ioutil.ReadFile(outputPath)
+	actual, err := os.ReadFile(outputPath)
 	require.Nil(t, err)
 	actual = stripDynamicValues(actual)
 
@@ -234,7 +234,7 @@ func TestBreakdownTerraformOutFileTable(t *testing.T) {
 
 	GoldenFileCommandTest(t, testdataName, []string{"breakdown", "--path", "./testdata/example_plan.json", "--out-file", outputPath}, nil)
 
-	actual, err := ioutil.ReadFile(outputPath)
+	actual, err := os.ReadFile(outputPath)
 	require.Nil(t, err)
 	actual = stripDynamicValues(actual)
 
@@ -248,7 +248,7 @@ func TestBreakdownTerraformSyncUsageFile(t *testing.T) {
 
 	GoldenFileCommandTest(t, testdataName, []string{"breakdown", "--path", "testdata/breakdown_terraform_sync_usage_file/sync_usage_file.json", "--usage-file", usageFilePath, "--sync-usage-file"}, nil)
 
-	actual, err := ioutil.ReadFile(usageFilePath)
+	actual, err := os.ReadFile(usageFilePath)
 	require.Nil(t, err)
 	actual = stripDynamicValues(actual)
 
@@ -423,7 +423,7 @@ func TestBreakdownWithWorkspace(t *testing.T) {
 
 func TestBreakdownWithActualCosts(t *testing.T) {
 	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		bodyBytes, _ := ioutil.ReadAll(r.Body)
+		bodyBytes, _ := io.ReadAll(r.Body)
 		graphqlQuery := string(bodyBytes)
 
 		if strings.Contains(graphqlQuery, "actualCostsList") {
