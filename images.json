@@ -1,0 +1,2134 @@
+[
+    {
+        "catalog_offering": {
+            "managed": false
+        },
+        "created_at": "2025-06-24T17:21:53.000Z",
+        "crn": "crn:v1:bluemix:public:is:us-south:a/811f8abfbd32425597dc7ba40da98fa6::image:r006-618b224d-eb88-492f-9825-dc246bb5211a",
+        "encryption": "none",
+        "file": {
+            "checksums": {
+                "sha256": "0176d83e92bfc43f0f892ae8b89b3f24fc72a915462795f96810fff81302c5dd"
+            },
+            "size": 2
+        },
+        "href": "https://us-south.iaas.cloud.ibm.com/v1/images/r006-618b224d-eb88-492f-9825-dc246bb5211a",
+        "id": "r006-618b224d-eb88-492f-9825-dc246bb5211a",
+        "minimum_provisioned_size": 100,
+        "name": "ibm-centos-stream-10-amd64-3",
+        "operating_system": {
+            "allow_user_image_creation": true,
+            "architecture": "amd64",
+            "dedicated_host_only": false,
+            "display_name": "CentOS Stream 10 - Minimal Install (amd64)",
+            "family": "CentOS Stream",
+            "href": "https://us-south.iaas.cloud.ibm.com/v1/operating_systems/centos-stream-10-amd64",
+            "name": "centos-stream-10-amd64",
+            "user_data_format": "cloud_init",
+            "vendor": "CentOS",
+            "version": "10"
+        },
+        "owner_type": "provider",
+        "resource_group": {
+            "href": "https://resource-controller.cloud.ibm.com/v1/resource_groups/5807b5832a8741179b2e06ca2d2b3b96",
+            "id": "5807b5832a8741179b2e06ca2d2b3b96",
+            "name": "Default"
+        },
+        "resource_type": "image",
+        "status": "available",
+        "status_reasons": [],
+        "user_data_format": "cloud_init",
+        "visibility": "public"
+    },
+    {
+        "catalog_offering": {
+            "managed": false
+        },
+        "created_at": "2025-06-24T17:21:12.000Z",
+        "crn": "crn:v1:bluemix:public:is:us-south:a/811f8abfbd32425597dc7ba40da98fa6::image:r006-ab99a406-f1fe-492e-9036-d402e585c630",
+        "encryption": "none",
+        "file": {
+            "checksums": {
+                "sha256": "b6472b441579a2db82a361519593f4de36c6c03880730b1a794f28b4123f994e"
+            },
+            "size": 2
+        },
+        "href": "https://us-south.iaas.cloud.ibm.com/v1/images/r006-ab99a406-f1fe-492e-9036-d402e585c630",
+        "id": "r006-ab99a406-f1fe-492e-9036-d402e585c630",
+        "minimum_provisioned_size": 100,
+        "name": "ibm-centos-stream-9-amd64-11",
+        "operating_system": {
+            "allow_user_image_creation": true,
+            "architecture": "amd64",
+            "dedicated_host_only": false,
+            "display_name": "CentOS Stream 9 - Minimal Install (amd64)",
+            "family": "CentOS Stream",
+            "href": "https://us-south.iaas.cloud.ibm.com/v1/operating_systems/centos-stream-9-amd64",
+            "name": "centos-stream-9-amd64",
+            "user_data_format": "cloud_init",
+            "vendor": "CentOS",
+            "version": "9"
+        },
+        "owner_type": "provider",
+        "resource_group": {
+            "href": "https://resource-controller.cloud.ibm.com/v1/resource_groups/5807b5832a8741179b2e06ca2d2b3b96",
+            "id": "5807b5832a8741179b2e06ca2d2b3b96",
+            "name": "Default"
+        },
+        "resource_type": "image",
+        "status": "available",
+        "status_reasons": [],
+        "user_data_format": "cloud_init",
+        "visibility": "public"
+    },
+    {
+        "catalog_offering": {
+            "managed": false
+        },
+        "created_at": "2025-05-19T11:14:50.000Z",
+        "crn": "crn:v1:bluemix:public:is:us-south:a/811f8abfbd32425597dc7ba40da98fa6::image:r006-8d174ad6-a942-4e29-b276-e2d98f2c669b",
+        "encryption": "none",
+        "file": {
+            "checksums": {
+                "sha256": "fd1042c5f1a761bb3f0062ef05f2aa97e7ecf25f7e99b4f3828b86fe63398623"
+            },
+            "size": 1
+        },
+        "href": "https://us-south.iaas.cloud.ibm.com/v1/images/r006-8d174ad6-a942-4e29-b276-e2d98f2c669b",
+        "id": "r006-8d174ad6-a942-4e29-b276-e2d98f2c669b",
+        "minimum_provisioned_size": 100,
+        "name": "ibm-debian-11-11-minimal-amd64-3",
+        "operating_system": {
+            "allow_user_image_creation": true,
+            "architecture": "amd64",
+            "dedicated_host_only": false,
+            "display_name": "Debian GNU/Linux 11.x Bullseye/Stable - Minimal Install (amd64)",
+            "family": "Debian GNU/Linux",
+            "href": "https://us-south.iaas.cloud.ibm.com/v1/operating_systems/debian-11-amd64",
+            "name": "debian-11-amd64",
+            "user_data_format": "cloud_init",
+            "vendor": "Debian",
+            "version": "11.x Bullseye/Stable - Minimal Install"
+        },
+        "owner_type": "provider",
+        "resource_group": {
+            "href": "https://resource-controller.cloud.ibm.com/v1/resource_groups/5807b5832a8741179b2e06ca2d2b3b96",
+            "id": "5807b5832a8741179b2e06ca2d2b3b96",
+            "name": "Default"
+        },
+        "resource_type": "image",
+        "status": "available",
+        "status_reasons": [],
+        "user_data_format": "cloud_init",
+        "visibility": "public"
+    },
+    {
+        "catalog_offering": {
+            "managed": false
+        },
+        "created_at": "2025-05-19T11:15:40.000Z",
+        "crn": "crn:v1:bluemix:public:is:us-south:a/811f8abfbd32425597dc7ba40da98fa6::image:r006-ca75f893-8675-47b0-b35d-9f847abc95e3",
+        "encryption": "none",
+        "file": {
+            "checksums": {
+                "sha256": "81842ada1129ca463ce6858d65418761b146b846df5b06f3c5b6b3ff6fb23248"
+            },
+            "size": 1
+        },
+        "href": "https://us-south.iaas.cloud.ibm.com/v1/images/r006-ca75f893-8675-47b0-b35d-9f847abc95e3",
+        "id": "r006-ca75f893-8675-47b0-b35d-9f847abc95e3",
+        "minimum_provisioned_size": 100,
+        "name": "ibm-debian-12-10-minimal-amd64-1",
+        "operating_system": {
+            "allow_user_image_creation": true,
+            "architecture": "amd64",
+            "dedicated_host_only": false,
+            "display_name": "Debian GNU/Linux 12.x Bookworm/Stable - Minimal Install (amd64)",
+            "family": "Debian GNU/Linux",
+            "href": "https://us-south.iaas.cloud.ibm.com/v1/operating_systems/debian-12-amd64",
+            "name": "debian-12-amd64",
+            "user_data_format": "cloud_init",
+            "vendor": "Debian",
+            "version": "12.x Bookworm/Stable - Minimal Install"
+        },
+        "owner_type": "provider",
+        "resource_group": {
+            "href": "https://resource-controller.cloud.ibm.com/v1/resource_groups/5807b5832a8741179b2e06ca2d2b3b96",
+            "id": "5807b5832a8741179b2e06ca2d2b3b96",
+            "name": "Default"
+        },
+        "resource_type": "image",
+        "status": "available",
+        "status_reasons": [],
+        "user_data_format": "cloud_init",
+        "visibility": "public"
+    },
+    {
+        "catalog_offering": {
+            "managed": false
+        },
+        "created_at": "2025-05-02T13:23:46.000Z",
+        "crn": "crn:v1:bluemix:public:is:us-south:a/811f8abfbd32425597dc7ba40da98fa6::image:r006-b9b89457-9f3d-4088-9960-e53deeb0b43f",
+        "encryption": "none",
+        "file": {
+            "checksums": {
+                "sha256": "09e0d61c081908e0d700166f2a780ac395319c23d5fc79050379d0ae04570d21"
+            },
+            "size": 2
+        },
+        "href": "https://us-south.iaas.cloud.ibm.com/v1/images/r006-b9b89457-9f3d-4088-9960-e53deeb0b43f",
+        "id": "r006-b9b89457-9f3d-4088-9960-e53deeb0b43f",
+        "minimum_provisioned_size": 100,
+        "name": "ibm-fedora-coreos-42-stable-1",
+        "operating_system": {
+            "allow_user_image_creation": true,
+            "architecture": "amd64",
+            "dedicated_host_only": false,
+            "display_name": "Fedora CoreOS stable - Minimal Install (amd64)",
+            "family": "Fedora CoreOS",
+            "href": "https://us-south.iaas.cloud.ibm.com/v1/operating_systems/fedora-coreos-stable-amd64",
+            "name": "fedora-coreos-stable-amd64",
+            "user_data_format": "cloud_init",
+            "vendor": "Fedora",
+            "version": "stable"
+        },
+        "owner_type": "provider",
+        "resource_group": {
+            "href": "https://resource-controller.cloud.ibm.com/v1/resource_groups/5807b5832a8741179b2e06ca2d2b3b96",
+            "id": "5807b5832a8741179b2e06ca2d2b3b96",
+            "name": "Default"
+        },
+        "resource_type": "image",
+        "status": "available",
+        "status_reasons": [],
+        "user_data_format": "cloud_init",
+        "visibility": "public"
+    },
+    {
+        "catalog_offering": {
+            "managed": false
+        },
+        "created_at": "2025-05-02T13:24:38.000Z",
+        "crn": "crn:v1:bluemix:public:is:us-south:a/811f8abfbd32425597dc7ba40da98fa6::image:r006-c2570d69-96d1-4560-b6ae-2123372a7d08",
+        "encryption": "none",
+        "file": {
+            "checksums": {
+                "sha256": "3ce60b12ffc14eb8f90ef16ff6b01fd67236436a81a7c06683da045c3a07b676"
+            },
+            "size": 2
+        },
+        "href": "https://us-south.iaas.cloud.ibm.com/v1/images/r006-c2570d69-96d1-4560-b6ae-2123372a7d08",
+        "id": "r006-c2570d69-96d1-4560-b6ae-2123372a7d08",
+        "minimum_provisioned_size": 100,
+        "name": "ibm-fedora-coreos-42-testing-1",
+        "operating_system": {
+            "allow_user_image_creation": true,
+            "architecture": "amd64",
+            "dedicated_host_only": false,
+            "display_name": "Fedora CoreOS testing - Minimal Install (amd64)",
+            "family": "Fedora CoreOS",
+            "href": "https://us-south.iaas.cloud.ibm.com/v1/operating_systems/fedora-coreos-testing-amd64",
+            "name": "fedora-coreos-testing-amd64",
+            "user_data_format": "cloud_init",
+            "vendor": "Fedora",
+            "version": "testing"
+        },
+        "owner_type": "provider",
+        "resource_group": {
+            "href": "https://resource-controller.cloud.ibm.com/v1/resource_groups/5807b5832a8741179b2e06ca2d2b3b96",
+            "id": "5807b5832a8741179b2e06ca2d2b3b96",
+            "name": "Default"
+        },
+        "resource_type": "image",
+        "status": "available",
+        "status_reasons": [],
+        "user_data_format": "cloud_init",
+        "visibility": "public"
+    },
+    {
+        "catalog_offering": {
+            "managed": false
+        },
+        "created_at": "2024-03-28T16:19:04.000Z",
+        "crn": "crn:v1:bluemix:public:is:us-south:a/811f8abfbd32425597dc7ba40da98fa6::image:r006-bfef819d-11af-4252-9bd3-bae1d9dd8e1d",
+        "encryption": "none",
+        "file": {
+            "checksums": {
+                "sha256": "e36a114887f78a5c896b329b9e3705cbf66dd8b56cdb41cdca8304f4abe8ae4f"
+            },
+            "size": 1
+        },
+        "href": "https://us-south.iaas.cloud.ibm.com/v1/images/r006-bfef819d-11af-4252-9bd3-bae1d9dd8e1d",
+        "id": "r006-bfef819d-11af-4252-9bd3-bae1d9dd8e1d",
+        "minimum_provisioned_size": 10,
+        "name": "ibm-ipxe-20240326-amd64-1",
+        "operating_system": {
+            "allow_user_image_creation": false,
+            "architecture": "amd64",
+            "dedicated_host_only": false,
+            "display_name": "Generic operating system (amd64)",
+            "family": "Generic",
+            "href": "https://us-south.iaas.cloud.ibm.com/v1/operating_systems/generic-operating-system-amd64-ipxe",
+            "name": "generic-operating-system-amd64-ipxe",
+            "user_data_format": "ipxe",
+            "vendor": "generic",
+            "version": "unknown"
+        },
+        "owner_type": "provider",
+        "resource_group": {
+            "href": "https://resource-controller.cloud.ibm.com/v1/resource_groups/5807b5832a8741179b2e06ca2d2b3b96",
+            "id": "5807b5832a8741179b2e06ca2d2b3b96",
+            "name": "Default"
+        },
+        "resource_type": "image",
+        "status": "available",
+        "status_reasons": [],
+        "user_data_format": "ipxe",
+        "visibility": "public"
+    },
+    {
+        "catalog_offering": {
+            "managed": false
+        },
+        "created_at": "2025-04-11T13:20:19.000Z",
+        "crn": "crn:v1:bluemix:public:is:us-south:a/811f8abfbd32425597dc7ba40da98fa6::image:r006-5f1399ec-0974-46f3-b466-bed6f843593e",
+        "encryption": "none",
+        "file": {
+            "checksums": {
+                "sha256": "2beba5ef49cadc8e4338f5f8c5768da8d4a63627478783219ba5c1092cc4891f"
+            },
+            "size": 2
+        },
+        "href": "https://us-south.iaas.cloud.ibm.com/v1/images/r006-5f1399ec-0974-46f3-b466-bed6f843593e",
+        "id": "r006-5f1399ec-0974-46f3-b466-bed6f843593e",
+        "minimum_provisioned_size": 100,
+        "name": "ibm-redhat-8-10-amd64-sap-applications-4",
+        "operating_system": {
+            "allow_user_image_creation": true,
+            "architecture": "amd64",
+            "dedicated_host_only": false,
+            "display_name": "Red Hat Enterprise Linux 8.10 for SAP Applications (amd64)",
+            "family": "Red Hat Enterprise Linux",
+            "href": "https://us-south.iaas.cloud.ibm.com/v1/operating_systems/red-8-10-amd64-sap-applications",
+            "name": "red-8-10-amd64-sap-applications",
+            "user_data_format": "cloud_init",
+            "vendor": "Red Hat",
+            "version": "8.10 for SAP Applications"
+        },
+        "owner_type": "provider",
+        "resource_group": {
+            "href": "https://resource-controller.cloud.ibm.com/v1/resource_groups/5807b5832a8741179b2e06ca2d2b3b96",
+            "id": "5807b5832a8741179b2e06ca2d2b3b96",
+            "name": "Default"
+        },
+        "resource_type": "image",
+        "status": "available",
+        "status_reasons": [],
+        "user_data_format": "cloud_init",
+        "visibility": "public"
+    },
+    {
+        "catalog_offering": {
+            "managed": false
+        },
+        "created_at": "2025-04-11T13:20:55.000Z",
+        "crn": "crn:v1:bluemix:public:is:us-south:a/811f8abfbd32425597dc7ba40da98fa6::image:r006-868b9c19-1cc4-4456-a1ef-9be5b801d4af",
+        "encryption": "none",
+        "file": {
+            "checksums": {
+                "sha256": "9096203097a88215075ff75b2767de163ed9f73d6be0f4d8db2041278eac275f"
+            },
+            "size": 2
+        },
+        "href": "https://us-south.iaas.cloud.ibm.com/v1/images/r006-868b9c19-1cc4-4456-a1ef-9be5b801d4af",
+        "id": "r006-868b9c19-1cc4-4456-a1ef-9be5b801d4af",
+        "minimum_provisioned_size": 100,
+        "name": "ibm-redhat-8-10-amd64-sap-hana-4",
+        "operating_system": {
+            "allow_user_image_creation": true,
+            "architecture": "amd64",
+            "dedicated_host_only": false,
+            "display_name": "Red Hat Enterprise Linux 8.10 for SAP HANA (amd64)",
+            "family": "Red Hat Enterprise Linux",
+            "href": "https://us-south.iaas.cloud.ibm.com/v1/operating_systems/red-8-10-amd64-sap-hana",
+            "name": "red-8-10-amd64-sap-hana",
+            "user_data_format": "cloud_init",
+            "vendor": "Red Hat",
+            "version": "8.10 for SAP HANA"
+        },
+        "owner_type": "provider",
+        "resource_group": {
+            "href": "https://resource-controller.cloud.ibm.com/v1/resource_groups/5807b5832a8741179b2e06ca2d2b3b96",
+            "id": "5807b5832a8741179b2e06ca2d2b3b96",
+            "name": "Default"
+        },
+        "resource_type": "image",
+        "status": "available",
+        "status_reasons": [],
+        "user_data_format": "cloud_init",
+        "visibility": "public"
+    },
+    {
+        "catalog_offering": {
+            "managed": false
+        },
+        "created_at": "2025-04-11T13:19:39.000Z",
+        "crn": "crn:v1:bluemix:public:is:us-south:a/811f8abfbd32425597dc7ba40da98fa6::image:r006-3bcf9a79-b5b2-45a8-ae8d-1bbb338836ef",
+        "encryption": "none",
+        "file": {
+            "checksums": {
+                "sha256": "786cc8dc0dd3fd93137430e5070ef09c45dc7caa0e1f8399f68634e48e581519"
+            },
+            "size": 2
+        },
+        "href": "https://us-south.iaas.cloud.ibm.com/v1/images/r006-3bcf9a79-b5b2-45a8-ae8d-1bbb338836ef",
+        "id": "r006-3bcf9a79-b5b2-45a8-ae8d-1bbb338836ef",
+        "minimum_provisioned_size": 100,
+        "name": "ibm-redhat-8-10-minimal-amd64-5",
+        "operating_system": {
+            "allow_user_image_creation": true,
+            "architecture": "amd64",
+            "dedicated_host_only": false,
+            "display_name": "Red Hat Enterprise Linux 8.x - Minimal Install (amd64)",
+            "family": "Red Hat Enterprise Linux",
+            "href": "https://us-south.iaas.cloud.ibm.com/v1/operating_systems/red-8-amd64",
+            "name": "red-8-amd64",
+            "user_data_format": "cloud_init",
+            "vendor": "Red Hat",
+            "version": "8.x - Minimal Install"
+        },
+        "owner_type": "provider",
+        "resource_group": {
+            "href": "https://resource-controller.cloud.ibm.com/v1/resource_groups/5807b5832a8741179b2e06ca2d2b3b96",
+            "id": "5807b5832a8741179b2e06ca2d2b3b96",
+            "name": "Default"
+        },
+        "resource_type": "image",
+        "status": "available",
+        "status_reasons": [],
+        "user_data_format": "cloud_init",
+        "visibility": "public"
+    },
+    {
+        "catalog_offering": {
+            "managed": false
+        },
+        "created_at": "2025-06-24T18:24:36.000Z",
+        "crn": "crn:v1:bluemix:public:is:us-south:a/811f8abfbd32425597dc7ba40da98fa6::image:r006-14d82112-5401-495e-a344-9d7326c8d505",
+        "encryption": "none",
+        "file": {
+            "checksums": {
+                "sha256": "ea6914d03f023560d5a2af091ddbe9b9bada69893cff24e755bcf73494cee496"
+            },
+            "size": 2
+        },
+        "href": "https://us-south.iaas.cloud.ibm.com/v1/images/r006-14d82112-5401-495e-a344-9d7326c8d505",
+        "id": "r006-14d82112-5401-495e-a344-9d7326c8d505",
+        "minimum_provisioned_size": 100,
+        "name": "ibm-redhat-8-6-amd64-sap-applications-9",
+        "operating_system": {
+            "allow_user_image_creation": true,
+            "architecture": "amd64",
+            "dedicated_host_only": false,
+            "display_name": "Red Hat Enterprise Linux 8.6 for SAP Applications (amd64)",
+            "family": "Red Hat Enterprise Linux",
+            "href": "https://us-south.iaas.cloud.ibm.com/v1/operating_systems/red-8-6-amd64-sap-applications",
+            "name": "red-8-6-amd64-sap-applications",
+            "user_data_format": "cloud_init",
+            "vendor": "Red Hat",
+            "version": "8.6 for SAP Applications"
+        },
+        "owner_type": "provider",
+        "resource_group": {
+            "href": "https://resource-controller.cloud.ibm.com/v1/resource_groups/5807b5832a8741179b2e06ca2d2b3b96",
+            "id": "5807b5832a8741179b2e06ca2d2b3b96",
+            "name": "Default"
+        },
+        "resource_type": "image",
+        "status": "available",
+        "status_reasons": [],
+        "user_data_format": "cloud_init",
+        "visibility": "public"
+    },
+    {
+        "catalog_offering": {
+            "managed": false
+        },
+        "created_at": "2025-06-24T18:25:26.000Z",
+        "crn": "crn:v1:bluemix:public:is:us-south:a/811f8abfbd32425597dc7ba40da98fa6::image:r006-d06e7f4d-1d53-422f-bd20-ddc13e0741df",
+        "encryption": "none",
+        "file": {
+            "checksums": {
+                "sha256": "a98680cef0a0e7998f3ea3049560f6c74ad9fa9c6de3e0f1f5db61f2d5cca8be"
+            },
+            "size": 2
+        },
+        "href": "https://us-south.iaas.cloud.ibm.com/v1/images/r006-d06e7f4d-1d53-422f-bd20-ddc13e0741df",
+        "id": "r006-d06e7f4d-1d53-422f-bd20-ddc13e0741df",
+        "minimum_provisioned_size": 100,
+        "name": "ibm-redhat-8-6-amd64-sap-hana-9",
+        "operating_system": {
+            "allow_user_image_creation": true,
+            "architecture": "amd64",
+            "dedicated_host_only": false,
+            "display_name": "Red Hat Enterprise Linux 8.6 for SAP HANA (amd64)",
+            "family": "Red Hat Enterprise Linux",
+            "href": "https://us-south.iaas.cloud.ibm.com/v1/operating_systems/red-8-6-amd64-sap-hana",
+            "name": "red-8-6-amd64-sap-hana",
+            "user_data_format": "cloud_init",
+            "vendor": "Red Hat",
+            "version": "8.6 for SAP HANA"
+        },
+        "owner_type": "provider",
+        "resource_group": {
+            "href": "https://resource-controller.cloud.ibm.com/v1/resource_groups/5807b5832a8741179b2e06ca2d2b3b96",
+            "id": "5807b5832a8741179b2e06ca2d2b3b96",
+            "name": "Default"
+        },
+        "resource_type": "image",
+        "status": "available",
+        "status_reasons": [],
+        "user_data_format": "cloud_init",
+        "visibility": "public"
+    },
+    {
+        "catalog_offering": {
+            "managed": false
+        },
+        "created_at": "2025-04-11T13:18:05.000Z",
+        "crn": "crn:v1:bluemix:public:is:us-south:a/811f8abfbd32425597dc7ba40da98fa6::image:r006-95301a19-6b2b-4870-a64b-22f374ab78d6",
+        "encryption": "none",
+        "file": {
+            "checksums": {
+                "sha256": "3ac47424c3d9446d2f7171272ca76c06cfb76b9feb6d2cf4a2c9976e84b3b8bc"
+            },
+            "size": 2
+        },
+        "href": "https://us-south.iaas.cloud.ibm.com/v1/images/r006-95301a19-6b2b-4870-a64b-22f374ab78d6",
+        "id": "r006-95301a19-6b2b-4870-a64b-22f374ab78d6",
+        "minimum_provisioned_size": 100,
+        "name": "ibm-redhat-8-8-amd64-sap-applications-8",
+        "operating_system": {
+            "allow_user_image_creation": true,
+            "architecture": "amd64",
+            "dedicated_host_only": false,
+            "display_name": "Red Hat Enterprise Linux 8.8 for SAP Applications (amd64)",
+            "family": "Red Hat Enterprise Linux",
+            "href": "https://us-south.iaas.cloud.ibm.com/v1/operating_systems/red-8-8-amd64-sap-applications",
+            "name": "red-8-8-amd64-sap-applications",
+            "user_data_format": "cloud_init",
+            "vendor": "Red Hat",
+            "version": "8.8 for SAP Applications"
+        },
+        "owner_type": "provider",
+        "resource_group": {
+            "href": "https://resource-controller.cloud.ibm.com/v1/resource_groups/5807b5832a8741179b2e06ca2d2b3b96",
+            "id": "5807b5832a8741179b2e06ca2d2b3b96",
+            "name": "Default"
+        },
+        "resource_type": "image",
+        "status": "available",
+        "status_reasons": [],
+        "user_data_format": "cloud_init",
+        "visibility": "public"
+    },
+    {
+        "catalog_offering": {
+            "managed": false
+        },
+        "created_at": "2025-04-11T13:18:54.000Z",
+        "crn": "crn:v1:bluemix:public:is:us-south:a/811f8abfbd32425597dc7ba40da98fa6::image:r006-04fe51ed-bcb8-4cd3-8981-637ba174c55a",
+        "encryption": "none",
+        "file": {
+            "checksums": {
+                "sha256": "656e7bf895723bfd8837e0c3b109e5521f26803db01a4809a5eb001d0b1da80b"
+            },
+            "size": 2
+        },
+        "href": "https://us-south.iaas.cloud.ibm.com/v1/images/r006-04fe51ed-bcb8-4cd3-8981-637ba174c55a",
+        "id": "r006-04fe51ed-bcb8-4cd3-8981-637ba174c55a",
+        "minimum_provisioned_size": 100,
+        "name": "ibm-redhat-8-8-amd64-sap-hana-8",
+        "operating_system": {
+            "allow_user_image_creation": true,
+            "architecture": "amd64",
+            "dedicated_host_only": false,
+            "display_name": "Red Hat Enterprise Linux 8.8 for SAP HANA (amd64)",
+            "family": "Red Hat Enterprise Linux",
+            "href": "https://us-south.iaas.cloud.ibm.com/v1/operating_systems/red-8-8-amd64-sap-hana",
+            "name": "red-8-8-amd64-sap-hana",
+            "user_data_format": "cloud_init",
+            "vendor": "Red Hat",
+            "version": "8.8 for SAP HANA"
+        },
+        "owner_type": "provider",
+        "resource_group": {
+            "href": "https://resource-controller.cloud.ibm.com/v1/resource_groups/5807b5832a8741179b2e06ca2d2b3b96",
+            "id": "5807b5832a8741179b2e06ca2d2b3b96",
+            "name": "Default"
+        },
+        "resource_type": "image",
+        "status": "available",
+        "status_reasons": [],
+        "user_data_format": "cloud_init",
+        "visibility": "public"
+    },
+    {
+        "catalog_offering": {
+            "managed": false
+        },
+        "created_at": "2025-04-08T16:08:30.000Z",
+        "crn": "crn:v1:bluemix:public:is:us-south:a/811f8abfbd32425597dc7ba40da98fa6::image:r006-fc0dbd40-b40a-4b54-bc1a-5251f4b5990d",
+        "encryption": "none",
+        "file": {
+            "checksums": {
+                "sha256": "f12dcff6684844a159f0c7a456059e19aff7e36a84dea7949789ec8638483844"
+            },
+            "size": 1
+        },
+        "href": "https://us-south.iaas.cloud.ibm.com/v1/images/r006-fc0dbd40-b40a-4b54-bc1a-5251f4b5990d",
+        "id": "r006-fc0dbd40-b40a-4b54-bc1a-5251f4b5990d",
+        "minimum_provisioned_size": 100,
+        "name": "ibm-redhat-9-0-amd64-sap-applications-8",
+        "operating_system": {
+            "allow_user_image_creation": true,
+            "architecture": "amd64",
+            "dedicated_host_only": false,
+            "display_name": "Red Hat Enterprise Linux 9.x for SAP Applications (amd64)",
+            "family": "Red Hat Enterprise Linux",
+            "href": "https://us-south.iaas.cloud.ibm.com/v1/operating_systems/red-9-amd64-sap-applications",
+            "name": "red-9-amd64-sap-applications",
+            "user_data_format": "cloud_init",
+            "vendor": "Red Hat",
+            "version": "9.x for SAP Applications"
+        },
+        "owner_type": "provider",
+        "resource_group": {
+            "href": "https://resource-controller.cloud.ibm.com/v1/resource_groups/5807b5832a8741179b2e06ca2d2b3b96",
+            "id": "5807b5832a8741179b2e06ca2d2b3b96",
+            "name": "Default"
+        },
+        "resource_type": "image",
+        "status": "available",
+        "status_reasons": [],
+        "user_data_format": "cloud_init",
+        "visibility": "public"
+    },
+    {
+        "catalog_offering": {
+            "managed": false
+        },
+        "created_at": "2025-04-08T16:09:22.000Z",
+        "crn": "crn:v1:bluemix:public:is:us-south:a/811f8abfbd32425597dc7ba40da98fa6::image:r006-14d5062e-d4dc-4af7-9b68-248afefbacd4",
+        "encryption": "none",
+        "file": {
+            "checksums": {
+                "sha256": "d4d0515706754bdf96a561fde4514d2295dfb98620311dfeaaac2784719387e2"
+            },
+            "size": 1
+        },
+        "href": "https://us-south.iaas.cloud.ibm.com/v1/images/r006-14d5062e-d4dc-4af7-9b68-248afefbacd4",
+        "id": "r006-14d5062e-d4dc-4af7-9b68-248afefbacd4",
+        "minimum_provisioned_size": 100,
+        "name": "ibm-redhat-9-0-amd64-sap-hana-8",
+        "operating_system": {
+            "allow_user_image_creation": true,
+            "architecture": "amd64",
+            "dedicated_host_only": false,
+            "display_name": "Red Hat Enterprise Linux 9.x for SAP HANA (amd64)",
+            "family": "Red Hat Enterprise Linux",
+            "href": "https://us-south.iaas.cloud.ibm.com/v1/operating_systems/red-9-amd64-sap-hana",
+            "name": "red-9-amd64-sap-hana",
+            "user_data_format": "cloud_init",
+            "vendor": "Red Hat",
+            "version": "9.x for SAP HANA"
+        },
+        "owner_type": "provider",
+        "resource_group": {
+            "href": "https://resource-controller.cloud.ibm.com/v1/resource_groups/5807b5832a8741179b2e06ca2d2b3b96",
+            "id": "5807b5832a8741179b2e06ca2d2b3b96",
+            "name": "Default"
+        },
+        "resource_type": "image",
+        "status": "available",
+        "status_reasons": [],
+        "user_data_format": "cloud_init",
+        "visibility": "public"
+    },
+    {
+        "catalog_offering": {
+            "managed": false
+        },
+        "created_at": "2025-04-08T16:10:58.000Z",
+        "crn": "crn:v1:bluemix:public:is:us-south:a/811f8abfbd32425597dc7ba40da98fa6::image:r006-d0af4fc6-23d0-42c8-b5ea-67c61506bf86",
+        "encryption": "none",
+        "file": {
+            "checksums": {
+                "sha256": "2e8f5ac1cdcb15c9af4ad774318ff8faab59dc792f0d338171a3cdcea8f55bfd"
+            },
+            "size": 2
+        },
+        "href": "https://us-south.iaas.cloud.ibm.com/v1/images/r006-d0af4fc6-23d0-42c8-b5ea-67c61506bf86",
+        "id": "r006-d0af4fc6-23d0-42c8-b5ea-67c61506bf86",
+        "minimum_provisioned_size": 100,
+        "name": "ibm-redhat-9-2-amd64-sap-applications-6",
+        "operating_system": {
+            "allow_user_image_creation": true,
+            "architecture": "amd64",
+            "dedicated_host_only": false,
+            "display_name": "Red Hat Enterprise Linux 9.x for SAP Applications (amd64)",
+            "family": "Red Hat Enterprise Linux",
+            "href": "https://us-south.iaas.cloud.ibm.com/v1/operating_systems/red-9-amd64-sap-applications",
+            "name": "red-9-amd64-sap-applications",
+            "user_data_format": "cloud_init",
+            "vendor": "Red Hat",
+            "version": "9.x for SAP Applications"
+        },
+        "owner_type": "provider",
+        "resource_group": {
+            "href": "https://resource-controller.cloud.ibm.com/v1/resource_groups/5807b5832a8741179b2e06ca2d2b3b96",
+            "id": "5807b5832a8741179b2e06ca2d2b3b96",
+            "name": "Default"
+        },
+        "resource_type": "image",
+        "status": "available",
+        "status_reasons": [],
+        "user_data_format": "cloud_init",
+        "visibility": "public"
+    },
+    {
+        "catalog_offering": {
+            "managed": false
+        },
+        "created_at": "2025-04-08T16:11:38.000Z",
+        "crn": "crn:v1:bluemix:public:is:us-south:a/811f8abfbd32425597dc7ba40da98fa6::image:r006-33fc9c08-2838-4220-ac26-6591e6e1c73b",
+        "encryption": "none",
+        "file": {
+            "checksums": {
+                "sha256": "531cc02fb478a258bd032abf269a8af15fe332567aaf36565803b0ab3f18b913"
+            },
+            "size": 2
+        },
+        "href": "https://us-south.iaas.cloud.ibm.com/v1/images/r006-33fc9c08-2838-4220-ac26-6591e6e1c73b",
+        "id": "r006-33fc9c08-2838-4220-ac26-6591e6e1c73b",
+        "minimum_provisioned_size": 100,
+        "name": "ibm-redhat-9-2-amd64-sap-hana-6",
+        "operating_system": {
+            "allow_user_image_creation": true,
+            "architecture": "amd64",
+            "dedicated_host_only": false,
+            "display_name": "Red Hat Enterprise Linux 9.x for SAP HANA (amd64)",
+            "family": "Red Hat Enterprise Linux",
+            "href": "https://us-south.iaas.cloud.ibm.com/v1/operating_systems/red-9-amd64-sap-hana",
+            "name": "red-9-amd64-sap-hana",
+            "user_data_format": "cloud_init",
+            "vendor": "Red Hat",
+            "version": "9.x for SAP HANA"
+        },
+        "owner_type": "provider",
+        "resource_group": {
+            "href": "https://resource-controller.cloud.ibm.com/v1/resource_groups/5807b5832a8741179b2e06ca2d2b3b96",
+            "id": "5807b5832a8741179b2e06ca2d2b3b96",
+            "name": "Default"
+        },
+        "resource_type": "image",
+        "status": "available",
+        "status_reasons": [],
+        "user_data_format": "cloud_init",
+        "visibility": "public"
+    },
+    {
+        "catalog_offering": {
+            "managed": false
+        },
+        "created_at": "2025-04-08T16:12:56.000Z",
+        "crn": "crn:v1:bluemix:public:is:us-south:a/811f8abfbd32425597dc7ba40da98fa6::image:r006-987002d0-978e-46f3-bc9d-5c44dac7e4ab",
+        "encryption": "none",
+        "file": {
+            "checksums": {
+                "sha256": "7822a99f1f9553ec9025049ae54cfd943fceb56b17671b1e077f75d7d64dc11c"
+            },
+            "size": 2
+        },
+        "href": "https://us-south.iaas.cloud.ibm.com/v1/images/r006-987002d0-978e-46f3-bc9d-5c44dac7e4ab",
+        "id": "r006-987002d0-978e-46f3-bc9d-5c44dac7e4ab",
+        "minimum_provisioned_size": 100,
+        "name": "ibm-redhat-9-4-amd64-sap-applications-5",
+        "operating_system": {
+            "allow_user_image_creation": true,
+            "architecture": "amd64",
+            "dedicated_host_only": false,
+            "display_name": "Red Hat Enterprise Linux 9.x for SAP Applications (amd64)",
+            "family": "Red Hat Enterprise Linux",
+            "href": "https://us-south.iaas.cloud.ibm.com/v1/operating_systems/red-9-amd64-sap-applications",
+            "name": "red-9-amd64-sap-applications",
+            "user_data_format": "cloud_init",
+            "vendor": "Red Hat",
+            "version": "9.x for SAP Applications"
+        },
+        "owner_type": "provider",
+        "resource_group": {
+            "href": "https://resource-controller.cloud.ibm.com/v1/resource_groups/5807b5832a8741179b2e06ca2d2b3b96",
+            "id": "5807b5832a8741179b2e06ca2d2b3b96",
+            "name": "Default"
+        },
+        "resource_type": "image",
+        "status": "available",
+        "status_reasons": [],
+        "user_data_format": "cloud_init",
+        "visibility": "public"
+    },
+    {
+        "catalog_offering": {
+            "managed": false
+        },
+        "created_at": "2025-04-08T16:13:35.000Z",
+        "crn": "crn:v1:bluemix:public:is:us-south:a/811f8abfbd32425597dc7ba40da98fa6::image:r006-3133dc35-e3db-498d-b415-c8145cea2e44",
+        "encryption": "none",
+        "file": {
+            "checksums": {
+                "sha256": "209e42b3fa784f50714f5cf24afeed6f07d0a37c5f5f1ded7c892f86d394f909"
+            },
+            "size": 2
+        },
+        "href": "https://us-south.iaas.cloud.ibm.com/v1/images/r006-3133dc35-e3db-498d-b415-c8145cea2e44",
+        "id": "r006-3133dc35-e3db-498d-b415-c8145cea2e44",
+        "minimum_provisioned_size": 100,
+        "name": "ibm-redhat-9-4-amd64-sap-hana-5",
+        "operating_system": {
+            "allow_user_image_creation": true,
+            "architecture": "amd64",
+            "dedicated_host_only": false,
+            "display_name": "Red Hat Enterprise Linux 9.x for SAP HANA (amd64)",
+            "family": "Red Hat Enterprise Linux",
+            "href": "https://us-south.iaas.cloud.ibm.com/v1/operating_systems/red-9-amd64-sap-hana",
+            "name": "red-9-amd64-sap-hana",
+            "user_data_format": "cloud_init",
+            "vendor": "Red Hat",
+            "version": "9.x for SAP HANA"
+        },
+        "owner_type": "provider",
+        "resource_group": {
+            "href": "https://resource-controller.cloud.ibm.com/v1/resource_groups/5807b5832a8741179b2e06ca2d2b3b96",
+            "id": "5807b5832a8741179b2e06ca2d2b3b96",
+            "name": "Default"
+        },
+        "resource_type": "image",
+        "status": "available",
+        "status_reasons": [],
+        "user_data_format": "cloud_init",
+        "visibility": "public"
+    },
+    {
+        "catalog_offering": {
+            "managed": false
+        },
+        "created_at": "2025-04-08T16:12:17.000Z",
+        "crn": "crn:v1:bluemix:public:is:us-south:a/811f8abfbd32425597dc7ba40da98fa6::image:r006-20ba59a0-19f6-457b-ba6f-80ddc988ef10",
+        "encryption": "none",
+        "file": {
+            "checksums": {
+                "sha256": "c46e2cb236f7e86ee8b8e6603b8bb82ba7d3dc1bb2fbb8a99816bac075606d19"
+            },
+            "size": 2
+        },
+        "href": "https://us-south.iaas.cloud.ibm.com/v1/images/r006-20ba59a0-19f6-457b-ba6f-80ddc988ef10",
+        "id": "r006-20ba59a0-19f6-457b-ba6f-80ddc988ef10",
+        "minimum_provisioned_size": 100,
+        "name": "ibm-redhat-9-4-minimal-amd64-7",
+        "operating_system": {
+            "allow_user_image_creation": true,
+            "architecture": "amd64",
+            "dedicated_host_only": false,
+            "display_name": "Red Hat Enterprise Linux 9.x - Minimal Install (amd64)",
+            "family": "Red Hat Enterprise Linux",
+            "href": "https://us-south.iaas.cloud.ibm.com/v1/operating_systems/red-9-amd64",
+            "name": "red-9-amd64",
+            "user_data_format": "cloud_init",
+            "vendor": "Red Hat",
+            "version": "9.x - Minimal Install"
+        },
+        "owner_type": "provider",
+        "resource_group": {
+            "href": "https://resource-controller.cloud.ibm.com/v1/resource_groups/5807b5832a8741179b2e06ca2d2b3b96",
+            "id": "5807b5832a8741179b2e06ca2d2b3b96",
+            "name": "Default"
+        },
+        "resource_type": "image",
+        "status": "available",
+        "status_reasons": [],
+        "user_data_format": "cloud_init",
+        "visibility": "public"
+    },
+    {
+        "catalog_offering": {
+            "managed": false
+        },
+        "created_at": "2025-06-11T13:43:33.000Z",
+        "crn": "crn:v1:bluemix:public:is:us-south:a/811f8abfbd32425597dc7ba40da98fa6::image:r006-88da7a09-2f59-4324-ac85-e3165f6323f5",
+        "encryption": "none",
+        "file": {
+            "checksums": {
+                "sha256": "ed96a208710317018c426af5d24f4a372b1fbd912d43566aadef966f92e3c9e5"
+            },
+            "size": 2
+        },
+        "href": "https://us-south.iaas.cloud.ibm.com/v1/images/r006-88da7a09-2f59-4324-ac85-e3165f6323f5",
+        "id": "r006-88da7a09-2f59-4324-ac85-e3165f6323f5",
+        "minimum_provisioned_size": 100,
+        "name": "ibm-redhat-9-6-minimal-amd64-1",
+        "operating_system": {
+            "allow_user_image_creation": true,
+            "architecture": "amd64",
+            "dedicated_host_only": false,
+            "display_name": "Red Hat Enterprise Linux 9.x - Minimal Install (amd64)",
+            "family": "Red Hat Enterprise Linux",
+            "href": "https://us-south.iaas.cloud.ibm.com/v1/operating_systems/red-9-amd64",
+            "name": "red-9-amd64",
+            "user_data_format": "cloud_init",
+            "vendor": "Red Hat",
+            "version": "9.x - Minimal Install"
+        },
+        "owner_type": "provider",
+        "resource_group": {
+            "href": "https://resource-controller.cloud.ibm.com/v1/resource_groups/5807b5832a8741179b2e06ca2d2b3b96",
+            "id": "5807b5832a8741179b2e06ca2d2b3b96",
+            "name": "Default"
+        },
+        "resource_type": "image",
+        "status": "available",
+        "status_reasons": [],
+        "user_data_format": "cloud_init",
+        "visibility": "public"
+    },
+    {
+        "catalog_offering": {
+            "managed": false
+        },
+        "created_at": "2025-06-19T13:54:52.000Z",
+        "crn": "crn:v1:bluemix:public:is:us-south:a/811f8abfbd32425597dc7ba40da98fa6::image:r006-325459c7-a6c2-4c3a-a98a-ff70efaef215",
+        "encryption": "none",
+        "file": {
+            "checksums": {
+                "sha256": "f7dc49d369465abebb6aebf60a9962f49af854a4960d61ff6aa1f02325cee26d"
+            },
+            "size": 7
+        },
+        "href": "https://us-south.iaas.cloud.ibm.com/v1/images/r006-325459c7-a6c2-4c3a-a98a-ff70efaef215",
+        "id": "r006-325459c7-a6c2-4c3a-a98a-ff70efaef215",
+        "minimum_provisioned_size": 34,
+        "name": "ibm-redhat-ai-intel-1-5-1-amd64-1",
+        "operating_system": {
+            "allow_user_image_creation": false,
+            "architecture": "amd64",
+            "dedicated_host_only": false,
+            "display_name": "Red Hat Enterprise Linux AI for systems with Intel accelerators (amd64)",
+            "family": "Red Hat Enterprise Linux AI",
+            "href": "https://us-south.iaas.cloud.ibm.com/v1/operating_systems/red-ai-9-amd64-intel",
+            "name": "red-ai-9-amd64-intel",
+            "user_data_format": "cloud_init",
+            "vendor": "Red Hat",
+            "version": "9 Intel bundle"
+        },
+        "owner_type": "provider",
+        "resource_group": {
+            "href": "https://resource-controller.cloud.ibm.com/v1/resource_groups/5807b5832a8741179b2e06ca2d2b3b96",
+            "id": "5807b5832a8741179b2e06ca2d2b3b96",
+            "name": "Default"
+        },
+        "resource_type": "image",
+        "status": "available",
+        "status_reasons": [],
+        "user_data_format": "cloud_init",
+        "visibility": "public"
+    },
+    {
+        "catalog_offering": {
+            "managed": false
+        },
+        "created_at": "2025-05-21T11:10:21.000Z",
+        "crn": "crn:v1:bluemix:public:is:us-south:a/811f8abfbd32425597dc7ba40da98fa6::image:r006-4b854390-a503-4393-8e5d-59e21816e727",
+        "encryption": "none",
+        "file": {
+            "checksums": {
+                "sha256": "8c92a393db2cbbef5c795b9a8eecdf76e31c584a5095d3787594a12ff4f034d0"
+            },
+            "size": 15
+        },
+        "href": "https://us-south.iaas.cloud.ibm.com/v1/images/r006-4b854390-a503-4393-8e5d-59e21816e727",
+        "id": "r006-4b854390-a503-4393-8e5d-59e21816e727",
+        "minimum_provisioned_size": 61,
+        "name": "ibm-redhat-ai-nvidia-1-5-amd64-1",
+        "operating_system": {
+            "allow_user_image_creation": false,
+            "architecture": "amd64",
+            "dedicated_host_only": false,
+            "display_name": "Red Hat Enterprise Linux AI for systems with Nvidia accelerators (amd64)",
+            "family": "Red Hat Enterprise Linux AI",
+            "href": "https://us-south.iaas.cloud.ibm.com/v1/operating_systems/red-ai-9-amd64-nvidia",
+            "name": "red-ai-9-amd64-nvidia",
+            "user_data_format": "cloud_init",
+            "vendor": "Red Hat",
+            "version": "9 Nvidia bundle"
+        },
+        "owner_type": "provider",
+        "resource_group": {
+            "href": "https://resource-controller.cloud.ibm.com/v1/resource_groups/5807b5832a8741179b2e06ca2d2b3b96",
+            "id": "5807b5832a8741179b2e06ca2d2b3b96",
+            "name": "Default"
+        },
+        "resource_type": "image",
+        "status": "available",
+        "status_reasons": [],
+        "user_data_format": "cloud_init",
+        "visibility": "public"
+    },
+    {
+        "catalog_offering": {
+            "managed": false
+        },
+        "created_at": "2025-06-24T17:19:37.000Z",
+        "crn": "crn:v1:bluemix:public:is:us-south:a/811f8abfbd32425597dc7ba40da98fa6::image:r006-62a51f40-5633-41cd-b43e-95449e955f2b",
+        "encryption": "none",
+        "file": {
+            "checksums": {
+                "sha256": "c70c3c39e01636b29460aabb8ef86ae22938f1934c62d002a6d8630d4bfc75ad"
+            },
+            "size": 3
+        },
+        "href": "https://us-south.iaas.cloud.ibm.com/v1/images/r006-62a51f40-5633-41cd-b43e-95449e955f2b",
+        "id": "r006-62a51f40-5633-41cd-b43e-95449e955f2b",
+        "minimum_provisioned_size": 100,
+        "name": "ibm-rocky-linux-8-10-minimal-amd64-5",
+        "operating_system": {
+            "allow_user_image_creation": true,
+            "architecture": "amd64",
+            "dedicated_host_only": false,
+            "display_name": "Rocky Linux 8 - Minimal Install (amd64)",
+            "family": "Rocky Linux",
+            "href": "https://us-south.iaas.cloud.ibm.com/v1/operating_systems/rocky-linux-8-amd64",
+            "name": "rocky-linux-8-amd64",
+            "user_data_format": "cloud_init",
+            "vendor": "Rocky Linux",
+            "version": "8 - Minimal Install"
+        },
+        "owner_type": "provider",
+        "resource_group": {
+            "href": "https://resource-controller.cloud.ibm.com/v1/resource_groups/5807b5832a8741179b2e06ca2d2b3b96",
+            "id": "5807b5832a8741179b2e06ca2d2b3b96",
+            "name": "Default"
+        },
+        "resource_type": "image",
+        "status": "available",
+        "status_reasons": [],
+        "user_data_format": "cloud_init",
+        "visibility": "public"
+    },
+    {
+        "catalog_offering": {
+            "managed": false
+        },
+        "created_at": "2025-06-24T17:20:27.000Z",
+        "crn": "crn:v1:bluemix:public:is:us-south:a/811f8abfbd32425597dc7ba40da98fa6::image:r006-c0d83dc6-845f-4b05-b945-9e2dc0ac06d0",
+        "encryption": "none",
+        "file": {
+            "checksums": {
+                "sha256": "69823f473153b1bd2bbb8bb7619d8764abd541b72ba7ba71ec435432707051b4"
+            },
+            "size": 2
+        },
+        "href": "https://us-south.iaas.cloud.ibm.com/v1/images/r006-c0d83dc6-845f-4b05-b945-9e2dc0ac06d0",
+        "id": "r006-c0d83dc6-845f-4b05-b945-9e2dc0ac06d0",
+        "minimum_provisioned_size": 100,
+        "name": "ibm-rocky-linux-9-6-minimal-amd64-1",
+        "operating_system": {
+            "allow_user_image_creation": true,
+            "architecture": "amd64",
+            "dedicated_host_only": false,
+            "display_name": "Rocky Linux 9 - Minimal Install (amd64)",
+            "family": "Rocky Linux",
+            "href": "https://us-south.iaas.cloud.ibm.com/v1/operating_systems/rocky-linux-9-amd64",
+            "name": "rocky-linux-9-amd64",
+            "user_data_format": "cloud_init",
+            "vendor": "Rocky Linux",
+            "version": "9 - Minimal Install"
+        },
+        "owner_type": "provider",
+        "resource_group": {
+            "href": "https://resource-controller.cloud.ibm.com/v1/resource_groups/5807b5832a8741179b2e06ca2d2b3b96",
+            "id": "5807b5832a8741179b2e06ca2d2b3b96",
+            "name": "Default"
+        },
+        "resource_type": "image",
+        "status": "available",
+        "status_reasons": [],
+        "user_data_format": "cloud_init",
+        "visibility": "public"
+    },
+    {
+        "catalog_offering": {
+            "managed": false
+        },
+        "created_at": "2025-04-28T12:52:43.000Z",
+        "crn": "crn:v1:bluemix:public:is:us-south:a/811f8abfbd32425597dc7ba40da98fa6::image:r006-6f37720a-5a4b-437f-8e5f-6002e95ccbc1",
+        "encryption": "none",
+        "file": {
+            "checksums": {
+                "sha256": "170e3b975dbaf6ebb000d3415250295dbdc38a4a968374851cdba9c9a404a808"
+            },
+            "size": 1
+        },
+        "href": "https://us-south.iaas.cloud.ibm.com/v1/images/r006-6f37720a-5a4b-437f-8e5f-6002e95ccbc1",
+        "id": "r006-6f37720a-5a4b-437f-8e5f-6002e95ccbc1",
+        "minimum_provisioned_size": 100,
+        "name": "ibm-sles-15-3-amd64-sap-applications-14",
+        "operating_system": {
+            "allow_user_image_creation": true,
+            "architecture": "amd64",
+            "dedicated_host_only": false,
+            "display_name": "SUSE Linux Enterprise Server 15 SP3 for SAP Applications (amd64)",
+            "family": "SUSE Linux Enterprise Server",
+            "href": "https://us-south.iaas.cloud.ibm.com/v1/operating_systems/sles-15-sp3-amd64-sap-applications",
+            "name": "sles-15-sp3-amd64-sap-applications",
+            "user_data_format": "cloud_init",
+            "vendor": "SUSE",
+            "version": "15 SP3 for SAP Applications"
+        },
+        "owner_type": "provider",
+        "resource_group": {
+            "href": "https://resource-controller.cloud.ibm.com/v1/resource_groups/5807b5832a8741179b2e06ca2d2b3b96",
+            "id": "5807b5832a8741179b2e06ca2d2b3b96",
+            "name": "Default"
+        },
+        "resource_type": "image",
+        "status": "available",
+        "status_reasons": [],
+        "user_data_format": "cloud_init",
+        "visibility": "public"
+    },
+    {
+        "catalog_offering": {
+            "managed": false
+        },
+        "created_at": "2025-04-28T12:53:35.000Z",
+        "crn": "crn:v1:bluemix:public:is:us-south:a/811f8abfbd32425597dc7ba40da98fa6::image:r006-8fe7a011-c636-437c-b5a7-b892581d4788",
+        "encryption": "none",
+        "file": {
+            "checksums": {
+                "sha256": "bb1e3a4aefdade0fb17c47bad934dd61975f567a18a46c2026e3c424a29d1e8e"
+            },
+            "size": 1
+        },
+        "href": "https://us-south.iaas.cloud.ibm.com/v1/images/r006-8fe7a011-c636-437c-b5a7-b892581d4788",
+        "id": "r006-8fe7a011-c636-437c-b5a7-b892581d4788",
+        "minimum_provisioned_size": 100,
+        "name": "ibm-sles-15-3-amd64-sap-hana-13",
+        "operating_system": {
+            "allow_user_image_creation": true,
+            "architecture": "amd64",
+            "dedicated_host_only": false,
+            "display_name": "SUSE Linux Enterprise Server 15 SP3 for SAP HANA (amd64)",
+            "family": "SUSE Linux Enterprise Server",
+            "href": "https://us-south.iaas.cloud.ibm.com/v1/operating_systems/sles-15-sp3-amd64-sap-hana",
+            "name": "sles-15-sp3-amd64-sap-hana",
+            "user_data_format": "cloud_init",
+            "vendor": "SUSE",
+            "version": "15 SP3 for SAP HANA"
+        },
+        "owner_type": "provider",
+        "resource_group": {
+            "href": "https://resource-controller.cloud.ibm.com/v1/resource_groups/5807b5832a8741179b2e06ca2d2b3b96",
+            "id": "5807b5832a8741179b2e06ca2d2b3b96",
+            "name": "Default"
+        },
+        "resource_type": "image",
+        "status": "available",
+        "status_reasons": [],
+        "user_data_format": "cloud_init",
+        "visibility": "public"
+    },
+    {
+        "catalog_offering": {
+            "managed": false
+        },
+        "created_at": "2025-04-28T12:54:22.000Z",
+        "crn": "crn:v1:bluemix:public:is:us-south:a/811f8abfbd32425597dc7ba40da98fa6::image:r006-d9a00e92-c04b-4a26-b244-e22cd5fd5b1b",
+        "encryption": "none",
+        "file": {
+            "checksums": {
+                "sha256": "f5d9706186ef1a18b6f0716a9713811ab89704623e80d245ccec8f5dcd98f57d"
+            },
+            "size": 1
+        },
+        "href": "https://us-south.iaas.cloud.ibm.com/v1/images/r006-d9a00e92-c04b-4a26-b244-e22cd5fd5b1b",
+        "id": "r006-d9a00e92-c04b-4a26-b244-e22cd5fd5b1b",
+        "minimum_provisioned_size": 100,
+        "name": "ibm-sles-15-4-amd64-sap-applications-11",
+        "operating_system": {
+            "allow_user_image_creation": true,
+            "architecture": "amd64",
+            "dedicated_host_only": false,
+            "display_name": "SUSE Linux Enterprise Server 15 SP4 for SAP Applications (amd64)",
+            "family": "SUSE Linux Enterprise Server",
+            "href": "https://us-south.iaas.cloud.ibm.com/v1/operating_systems/sles-15-sp4-amd64-sap-applications",
+            "name": "sles-15-sp4-amd64-sap-applications",
+            "user_data_format": "cloud_init",
+            "vendor": "SUSE",
+            "version": "15 SP4 for SAP Applications"
+        },
+        "owner_type": "provider",
+        "resource_group": {
+            "href": "https://resource-controller.cloud.ibm.com/v1/resource_groups/5807b5832a8741179b2e06ca2d2b3b96",
+            "id": "5807b5832a8741179b2e06ca2d2b3b96",
+            "name": "Default"
+        },
+        "resource_type": "image",
+        "status": "available",
+        "status_reasons": [],
+        "user_data_format": "cloud_init",
+        "visibility": "public"
+    },
+    {
+        "catalog_offering": {
+            "managed": false
+        },
+        "created_at": "2025-04-28T12:55:07.000Z",
+        "crn": "crn:v1:bluemix:public:is:us-south:a/811f8abfbd32425597dc7ba40da98fa6::image:r006-e2f7bfd9-7768-44bf-9f4b-95cdf25b214a",
+        "encryption": "none",
+        "file": {
+            "checksums": {
+                "sha256": "d972f918fca9902c102da0ab5b6336f416ace9c89b8fc18afd3e1aa1af1c0248"
+            },
+            "size": 1
+        },
+        "href": "https://us-south.iaas.cloud.ibm.com/v1/images/r006-e2f7bfd9-7768-44bf-9f4b-95cdf25b214a",
+        "id": "r006-e2f7bfd9-7768-44bf-9f4b-95cdf25b214a",
+        "minimum_provisioned_size": 100,
+        "name": "ibm-sles-15-4-amd64-sap-hana-10",
+        "operating_system": {
+            "allow_user_image_creation": true,
+            "architecture": "amd64",
+            "dedicated_host_only": false,
+            "display_name": "SUSE Linux Enterprise Server 15 SP4 for SAP HANA (amd64)",
+            "family": "SUSE Linux Enterprise Server",
+            "href": "https://us-south.iaas.cloud.ibm.com/v1/operating_systems/sles-15-sp4-amd64-sap-hana",
+            "name": "sles-15-sp4-amd64-sap-hana",
+            "user_data_format": "cloud_init",
+            "vendor": "SUSE",
+            "version": "15 SP4 for SAP HANA"
+        },
+        "owner_type": "provider",
+        "resource_group": {
+            "href": "https://resource-controller.cloud.ibm.com/v1/resource_groups/5807b5832a8741179b2e06ca2d2b3b96",
+            "id": "5807b5832a8741179b2e06ca2d2b3b96",
+            "name": "Default"
+        },
+        "resource_type": "image",
+        "status": "available",
+        "status_reasons": [],
+        "user_data_format": "cloud_init",
+        "visibility": "public"
+    },
+    {
+        "catalog_offering": {
+            "managed": false
+        },
+        "created_at": "2025-04-28T12:55:42.000Z",
+        "crn": "crn:v1:bluemix:public:is:us-south:a/811f8abfbd32425597dc7ba40da98fa6::image:r006-91e4ffcd-292c-4283-a66e-776f3b33a04d",
+        "encryption": "none",
+        "file": {
+            "checksums": {
+                "sha256": "a70d4048c224c02d1f4c94fe935cc9144a060c71d3fe281ee0e8439ee423e220"
+            },
+            "size": 1
+        },
+        "href": "https://us-south.iaas.cloud.ibm.com/v1/images/r006-91e4ffcd-292c-4283-a66e-776f3b33a04d",
+        "id": "r006-91e4ffcd-292c-4283-a66e-776f3b33a04d",
+        "minimum_provisioned_size": 100,
+        "name": "ibm-sles-15-5-amd64-sap-applications-6",
+        "operating_system": {
+            "allow_user_image_creation": true,
+            "architecture": "amd64",
+            "dedicated_host_only": false,
+            "display_name": "SUSE Linux Enterprise Server 15 SP5 for SAP Applications (amd64)",
+            "family": "SUSE Linux Enterprise Server",
+            "href": "https://us-south.iaas.cloud.ibm.com/v1/operating_systems/sles-15-sp5-amd64-sap-applications",
+            "name": "sles-15-sp5-amd64-sap-applications",
+            "user_data_format": "cloud_init",
+            "vendor": "SUSE",
+            "version": "15 SP5 for SAP Applications"
+        },
+        "owner_type": "provider",
+        "resource_group": {
+            "href": "https://resource-controller.cloud.ibm.com/v1/resource_groups/5807b5832a8741179b2e06ca2d2b3b96",
+            "id": "5807b5832a8741179b2e06ca2d2b3b96",
+            "name": "Default"
+        },
+        "resource_type": "image",
+        "status": "available",
+        "status_reasons": [],
+        "user_data_format": "cloud_init",
+        "visibility": "public"
+    },
+    {
+        "catalog_offering": {
+            "managed": false
+        },
+        "created_at": "2025-04-28T12:56:22.000Z",
+        "crn": "crn:v1:bluemix:public:is:us-south:a/811f8abfbd32425597dc7ba40da98fa6::image:r006-7154d75e-adb7-4c7b-99fc-9af25e0b8485",
+        "encryption": "none",
+        "file": {
+            "checksums": {
+                "sha256": "d972f918fca9902c102da0ab5b6336f416ace9c89b8fc18afd3e1aa1af1c0248"
+            },
+            "size": 1
+        },
+        "href": "https://us-south.iaas.cloud.ibm.com/v1/images/r006-7154d75e-adb7-4c7b-99fc-9af25e0b8485",
+        "id": "r006-7154d75e-adb7-4c7b-99fc-9af25e0b8485",
+        "minimum_provisioned_size": 100,
+        "name": "ibm-sles-15-5-amd64-sap-hana-6",
+        "operating_system": {
+            "allow_user_image_creation": true,
+            "architecture": "amd64",
+            "dedicated_host_only": false,
+            "display_name": "SUSE Linux Enterprise Server 15 SP5 for SAP HANA (amd64)",
+            "family": "SUSE Linux Enterprise Server",
+            "href": "https://us-south.iaas.cloud.ibm.com/v1/operating_systems/sles-15-sp5-amd64-sap-hana",
+            "name": "sles-15-sp5-amd64-sap-hana",
+            "user_data_format": "cloud_init",
+            "vendor": "SUSE",
+            "version": "15 SP5 for SAP HANA"
+        },
+        "owner_type": "provider",
+        "resource_group": {
+            "href": "https://resource-controller.cloud.ibm.com/v1/resource_groups/5807b5832a8741179b2e06ca2d2b3b96",
+            "id": "5807b5832a8741179b2e06ca2d2b3b96",
+            "name": "Default"
+        },
+        "resource_type": "image",
+        "status": "available",
+        "status_reasons": [],
+        "user_data_format": "cloud_init",
+        "visibility": "public"
+    },
+    {
+        "catalog_offering": {
+            "managed": false
+        },
+        "created_at": "2025-04-28T12:56:59.000Z",
+        "crn": "crn:v1:bluemix:public:is:us-south:a/811f8abfbd32425597dc7ba40da98fa6::image:r006-ef09be7b-01af-44cc-9503-8a07a5183964",
+        "encryption": "none",
+        "file": {
+            "checksums": {
+                "sha256": "4e5b894017ed8061f1e6224bb3b0912e71faaf9beded1bdfd8e0805e57739b56"
+            },
+            "size": 1
+        },
+        "href": "https://us-south.iaas.cloud.ibm.com/v1/images/r006-ef09be7b-01af-44cc-9503-8a07a5183964",
+        "id": "r006-ef09be7b-01af-44cc-9503-8a07a5183964",
+        "minimum_provisioned_size": 100,
+        "name": "ibm-sles-15-6-amd64-4",
+        "operating_system": {
+            "allow_user_image_creation": true,
+            "architecture": "amd64",
+            "dedicated_host_only": false,
+            "display_name": "SUSE Linux Enterprise Server 15 (amd64)",
+            "family": "SUSE Linux Enterprise Server",
+            "href": "https://us-south.iaas.cloud.ibm.com/v1/operating_systems/sles-15-amd64",
+            "name": "sles-15-amd64",
+            "user_data_format": "cloud_init",
+            "vendor": "SUSE",
+            "version": "15"
+        },
+        "owner_type": "provider",
+        "resource_group": {
+            "href": "https://resource-controller.cloud.ibm.com/v1/resource_groups/5807b5832a8741179b2e06ca2d2b3b96",
+            "id": "5807b5832a8741179b2e06ca2d2b3b96",
+            "name": "Default"
+        },
+        "resource_type": "image",
+        "status": "available",
+        "status_reasons": [],
+        "user_data_format": "cloud_init",
+        "visibility": "public"
+    },
+    {
+        "catalog_offering": {
+            "managed": false
+        },
+        "created_at": "2025-04-28T12:57:38.000Z",
+        "crn": "crn:v1:bluemix:public:is:us-south:a/811f8abfbd32425597dc7ba40da98fa6::image:r006-e19bf9bf-a454-4ba8-a2b5-86eb30a33b96",
+        "encryption": "none",
+        "file": {
+            "checksums": {
+                "sha256": "9f2c3b86422578b00f37c4114511d3bf9603f2a7b5d84a6f382b694bd5fecb33"
+            },
+            "size": 2
+        },
+        "href": "https://us-south.iaas.cloud.ibm.com/v1/images/r006-e19bf9bf-a454-4ba8-a2b5-86eb30a33b96",
+        "id": "r006-e19bf9bf-a454-4ba8-a2b5-86eb30a33b96",
+        "minimum_provisioned_size": 100,
+        "name": "ibm-sles-15-6-amd64-sap-applications-3",
+        "operating_system": {
+            "allow_user_image_creation": true,
+            "architecture": "amd64",
+            "dedicated_host_only": false,
+            "display_name": "SUSE Linux Enterprise Server 15 SP6 for SAP Applications (amd64)",
+            "family": "SUSE Linux Enterprise Server",
+            "href": "https://us-south.iaas.cloud.ibm.com/v1/operating_systems/sles-15-sp6-amd64-sap-applications",
+            "name": "sles-15-sp6-amd64-sap-applications",
+            "user_data_format": "cloud_init",
+            "vendor": "SUSE",
+            "version": "15 SP6 for SAP Applications"
+        },
+        "owner_type": "provider",
+        "resource_group": {
+            "href": "https://resource-controller.cloud.ibm.com/v1/resource_groups/5807b5832a8741179b2e06ca2d2b3b96",
+            "id": "5807b5832a8741179b2e06ca2d2b3b96",
+            "name": "Default"
+        },
+        "resource_type": "image",
+        "status": "available",
+        "status_reasons": [],
+        "user_data_format": "cloud_init",
+        "visibility": "public"
+    },
+    {
+        "catalog_offering": {
+            "managed": false
+        },
+        "created_at": "2025-04-28T12:58:15.000Z",
+        "crn": "crn:v1:bluemix:public:is:us-south:a/811f8abfbd32425597dc7ba40da98fa6::image:r006-c717e22f-3c6c-4bd3-b8a2-3342aefe6611",
+        "encryption": "none",
+        "file": {
+            "checksums": {
+                "sha256": "fc5732c3321f3a1270ea8d36300d76ff4067b563371cedf5d30d72f767a35006"
+            },
+            "size": 2
+        },
+        "href": "https://us-south.iaas.cloud.ibm.com/v1/images/r006-c717e22f-3c6c-4bd3-b8a2-3342aefe6611",
+        "id": "r006-c717e22f-3c6c-4bd3-b8a2-3342aefe6611",
+        "minimum_provisioned_size": 100,
+        "name": "ibm-sles-15-6-amd64-sap-hana-3",
+        "operating_system": {
+            "allow_user_image_creation": true,
+            "architecture": "amd64",
+            "dedicated_host_only": false,
+            "display_name": "SUSE Linux Enterprise Server 15 SP6 for SAP HANA (amd64)",
+            "family": "SUSE Linux Enterprise Server",
+            "href": "https://us-south.iaas.cloud.ibm.com/v1/operating_systems/sles-15-sp6-amd64-sap-hana",
+            "name": "sles-15-sp6-amd64-sap-hana",
+            "user_data_format": "cloud_init",
+            "vendor": "SUSE",
+            "version": "15 SP6 for SAP HANA"
+        },
+        "owner_type": "provider",
+        "resource_group": {
+            "href": "https://resource-controller.cloud.ibm.com/v1/resource_groups/5807b5832a8741179b2e06ca2d2b3b96",
+            "id": "5807b5832a8741179b2e06ca2d2b3b96",
+            "name": "Default"
+        },
+        "resource_type": "image",
+        "status": "available",
+        "status_reasons": [],
+        "user_data_format": "cloud_init",
+        "visibility": "public"
+    },
+    {
+        "catalog_offering": {
+            "managed": false
+        },
+        "created_at": "2025-06-20T12:59:15.000Z",
+        "crn": "crn:v1:bluemix:public:is:us-south:a/811f8abfbd32425597dc7ba40da98fa6::image:r006-cec640a3-615e-4364-bae7-d3642d9f9e34",
+        "encryption": "none",
+        "file": {
+            "checksums": {
+                "sha256": "c7500b9d0b341cf2e44282f8fbdd7daa22dc34b9e8a4c547c574b27f389663aa"
+            },
+            "size": 1
+        },
+        "href": "https://us-south.iaas.cloud.ibm.com/v1/images/r006-cec640a3-615e-4364-bae7-d3642d9f9e34",
+        "id": "r006-cec640a3-615e-4364-bae7-d3642d9f9e34",
+        "minimum_provisioned_size": 100,
+        "name": "ibm-ubuntu-22-04-5-minimal-amd64-4",
+        "operating_system": {
+            "allow_user_image_creation": true,
+            "architecture": "amd64",
+            "dedicated_host_only": false,
+            "display_name": "Ubuntu Linux 22.04 LTS Jammy Jellyfish Minimal Install (amd64)",
+            "family": "Ubuntu Linux",
+            "href": "https://us-south.iaas.cloud.ibm.com/v1/operating_systems/ubuntu-22-04-amd64",
+            "name": "ubuntu-22-04-amd64",
+            "user_data_format": "cloud_init",
+            "vendor": "Canonical",
+            "version": "22.04 LTS Jammy Jellyfish Minimal Install"
+        },
+        "owner_type": "provider",
+        "resource_group": {
+            "href": "https://resource-controller.cloud.ibm.com/v1/resource_groups/5807b5832a8741179b2e06ca2d2b3b96",
+            "id": "5807b5832a8741179b2e06ca2d2b3b96",
+            "name": "Default"
+        },
+        "resource_type": "image",
+        "status": "available",
+        "status_reasons": [],
+        "user_data_format": "cloud_init",
+        "visibility": "public"
+    },
+    {
+        "catalog_offering": {
+            "managed": false
+        },
+        "created_at": "2025-06-20T13:00:09.000Z",
+        "crn": "crn:v1:bluemix:public:is:us-south:a/811f8abfbd32425597dc7ba40da98fa6::image:r006-e1a644b8-c961-4388-9a82-fedcb73ad1f1",
+        "encryption": "none",
+        "file": {
+            "checksums": {
+                "sha256": "8f1aac5e7fc49e7967963211a3b97d32b42ef339e0da57b988bb6dc6ec907432"
+            },
+            "size": 2
+        },
+        "href": "https://us-south.iaas.cloud.ibm.com/v1/images/r006-e1a644b8-c961-4388-9a82-fedcb73ad1f1",
+        "id": "r006-e1a644b8-c961-4388-9a82-fedcb73ad1f1",
+        "minimum_provisioned_size": 100,
+        "name": "ibm-ubuntu-24-04-2-minimal-amd64-4",
+        "operating_system": {
+            "allow_user_image_creation": true,
+            "architecture": "amd64",
+            "dedicated_host_only": false,
+            "display_name": "Ubuntu Linux 24.04 LTS Noble Numbat Minimal Install (amd64)",
+            "family": "Ubuntu Linux",
+            "href": "https://us-south.iaas.cloud.ibm.com/v1/operating_systems/ubuntu-24-04-amd64",
+            "name": "ubuntu-24-04-amd64",
+            "user_data_format": "cloud_init",
+            "vendor": "Canonical",
+            "version": "24.04 LTS Noble Numbat Minimal Install"
+        },
+        "owner_type": "provider",
+        "resource_group": {
+            "href": "https://resource-controller.cloud.ibm.com/v1/resource_groups/5807b5832a8741179b2e06ca2d2b3b96",
+            "id": "5807b5832a8741179b2e06ca2d2b3b96",
+            "name": "Default"
+        },
+        "resource_type": "image",
+        "status": "available",
+        "status_reasons": [],
+        "user_data_format": "cloud_init",
+        "visibility": "public"
+    },
+    {
+        "catalog_offering": {
+            "managed": false
+        },
+        "created_at": "2025-06-17T11:21:49.000Z",
+        "crn": "crn:v1:bluemix:public:is:us-south:a/811f8abfbd32425597dc7ba40da98fa6::image:r006-4b0761e6-2510-4ebe-a359-761ca67c07ab",
+        "encryption": "none",
+        "file": {
+            "checksums": {
+                "sha256": "acfcdcca9b903c9f19da69c2b05c3628b13407b5fad08748bfb9c806d15fe793"
+            },
+            "size": 13
+        },
+        "href": "https://us-south.iaas.cloud.ibm.com/v1/images/r006-4b0761e6-2510-4ebe-a359-761ca67c07ab",
+        "id": "r006-4b0761e6-2510-4ebe-a359-761ca67c07ab",
+        "minimum_provisioned_size": 100,
+        "name": "ibm-windows-server-2016-core-amd64-29",
+        "operating_system": {
+            "allow_user_image_creation": true,
+            "architecture": "amd64",
+            "dedicated_host_only": false,
+            "display_name": "Windows Server 2016 Standard Edition - Core (amd64)",
+            "family": "Windows Server",
+            "href": "https://us-south.iaas.cloud.ibm.com/v1/operating_systems/windows-2016-amd64-core",
+            "name": "windows-2016-amd64-core",
+            "user_data_format": "cloud_init",
+            "vendor": "Microsoft",
+            "version": "2016 Standard Edition"
+        },
+        "owner_type": "provider",
+        "resource_group": {
+            "href": "https://resource-controller.cloud.ibm.com/v1/resource_groups/5807b5832a8741179b2e06ca2d2b3b96",
+            "id": "5807b5832a8741179b2e06ca2d2b3b96",
+            "name": "Default"
+        },
+        "resource_type": "image",
+        "status": "available",
+        "status_reasons": [],
+        "user_data_format": "cloud_init",
+        "visibility": "public"
+    },
+    {
+        "catalog_offering": {
+            "managed": false
+        },
+        "created_at": "2025-06-17T11:02:12.000Z",
+        "crn": "crn:v1:bluemix:public:is:us-south:a/811f8abfbd32425597dc7ba40da98fa6::image:r006-c09590a5-8a2c-4699-b682-aebd1e787eb7",
+        "encryption": "none",
+        "file": {
+            "checksums": {
+                "sha256": "03bca9f518e94b5b8d66df6086569dbf01daca7d8a4693c562fef47e59ffac36"
+            },
+            "size": 14
+        },
+        "href": "https://us-south.iaas.cloud.ibm.com/v1/images/r006-c09590a5-8a2c-4699-b682-aebd1e787eb7",
+        "id": "r006-c09590a5-8a2c-4699-b682-aebd1e787eb7",
+        "minimum_provisioned_size": 100,
+        "name": "ibm-windows-server-2016-full-standard-amd64-32",
+        "operating_system": {
+            "allow_user_image_creation": true,
+            "architecture": "amd64",
+            "dedicated_host_only": false,
+            "display_name": "Windows Server 2016 Standard Edition (amd64)",
+            "family": "Windows Server",
+            "href": "https://us-south.iaas.cloud.ibm.com/v1/operating_systems/windows-2016-amd64",
+            "name": "windows-2016-amd64",
+            "user_data_format": "cloud_init",
+            "vendor": "Microsoft",
+            "version": "2016 Standard Edition"
+        },
+        "owner_type": "provider",
+        "resource_group": {
+            "href": "https://resource-controller.cloud.ibm.com/v1/resource_groups/5807b5832a8741179b2e06ca2d2b3b96",
+            "id": "5807b5832a8741179b2e06ca2d2b3b96",
+            "name": "Default"
+        },
+        "resource_type": "image",
+        "status": "available",
+        "status_reasons": [],
+        "user_data_format": "cloud_init",
+        "visibility": "public"
+    },
+    {
+        "catalog_offering": {
+            "managed": false
+        },
+        "created_at": "2025-06-17T11:23:22.000Z",
+        "crn": "crn:v1:bluemix:public:is:us-south:a/811f8abfbd32425597dc7ba40da98fa6::image:r006-a7e03025-b620-45f1-9094-1be3d0020de3",
+        "encryption": "none",
+        "file": {
+            "checksums": {
+                "sha256": "62901dad1f5d7b98e737187d4fb0085fe7fdfb5fba683dcbe9a1f7ceb14be3af"
+            },
+            "size": 24
+        },
+        "href": "https://us-south.iaas.cloud.ibm.com/v1/images/r006-a7e03025-b620-45f1-9094-1be3d0020de3",
+        "id": "r006-a7e03025-b620-45f1-9094-1be3d0020de3",
+        "minimum_provisioned_size": 100,
+        "name": "ibm-windows-server-2019-core-amd64-28",
+        "operating_system": {
+            "allow_user_image_creation": true,
+            "architecture": "amd64",
+            "dedicated_host_only": false,
+            "display_name": "Windows Server 2019 Standard Edition - Core (amd64)",
+            "family": "Windows Server",
+            "href": "https://us-south.iaas.cloud.ibm.com/v1/operating_systems/windows-2019-amd64-core",
+            "name": "windows-2019-amd64-core",
+            "user_data_format": "cloud_init",
+            "vendor": "Microsoft",
+            "version": "2019 Standard Edition"
+        },
+        "owner_type": "provider",
+        "resource_group": {
+            "href": "https://resource-controller.cloud.ibm.com/v1/resource_groups/5807b5832a8741179b2e06ca2d2b3b96",
+            "id": "5807b5832a8741179b2e06ca2d2b3b96",
+            "name": "Default"
+        },
+        "resource_type": "image",
+        "status": "available",
+        "status_reasons": [],
+        "user_data_format": "cloud_init",
+        "visibility": "public"
+    },
+    {
+        "catalog_offering": {
+            "managed": false
+        },
+        "created_at": "2025-06-17T11:24:05.000Z",
+        "crn": "crn:v1:bluemix:public:is:us-south:a/811f8abfbd32425597dc7ba40da98fa6::image:r006-be892432-a287-4b5b-a249-af30f58d108d",
+        "encryption": "none",
+        "file": {
+            "checksums": {
+                "sha256": "b5c49af6c23695d4561ddc503a8d18fc87cedd628f37c39e6cda9ebb5af72b1a"
+            },
+            "size": 39
+        },
+        "href": "https://us-south.iaas.cloud.ibm.com/v1/images/r006-be892432-a287-4b5b-a249-af30f58d108d",
+        "id": "r006-be892432-a287-4b5b-a249-af30f58d108d",
+        "minimum_provisioned_size": 250,
+        "name": "ibm-windows-server-2019-full-sqlsvr-2019-amd64-24",
+        "operating_system": {
+            "allow_user_image_creation": true,
+            "architecture": "amd64",
+            "dedicated_host_only": false,
+            "display_name": "Windows Server 2019 Standard Edition with SQL Server 2019 Web Edition (amd64)",
+            "family": "Windows Server",
+            "href": "https://us-south.iaas.cloud.ibm.com/v1/operating_systems/windows-2019-amd64-sqlsvr2019web",
+            "name": "windows-2019-amd64-sqlsvr2019web",
+            "user_data_format": "cloud_init",
+            "vendor": "Microsoft",
+            "version": "2019 Standard Edition with SQL Server 2019 Web Edition"
+        },
+        "owner_type": "provider",
+        "resource_group": {
+            "href": "https://resource-controller.cloud.ibm.com/v1/resource_groups/5807b5832a8741179b2e06ca2d2b3b96",
+            "id": "5807b5832a8741179b2e06ca2d2b3b96",
+            "name": "Default"
+        },
+        "resource_type": "image",
+        "status": "available",
+        "status_reasons": [],
+        "user_data_format": "cloud_init",
+        "visibility": "public"
+    },
+    {
+        "catalog_offering": {
+            "managed": false
+        },
+        "created_at": "2025-06-17T11:22:40.000Z",
+        "crn": "crn:v1:bluemix:public:is:us-south:a/811f8abfbd32425597dc7ba40da98fa6::image:r006-ace09e5b-22ca-4257-a24d-40e21cba840e",
+        "encryption": "none",
+        "file": {
+            "checksums": {
+                "sha256": "52f3f6bfaf55949fcfa65804dee3600f537e2e14ed324bc6db85b44ae97dbc3f"
+            },
+            "size": 21
+        },
+        "href": "https://us-south.iaas.cloud.ibm.com/v1/images/r006-ace09e5b-22ca-4257-a24d-40e21cba840e",
+        "id": "r006-ace09e5b-22ca-4257-a24d-40e21cba840e",
+        "minimum_provisioned_size": 100,
+        "name": "ibm-windows-server-2019-full-standard-amd64-32",
+        "operating_system": {
+            "allow_user_image_creation": true,
+            "architecture": "amd64",
+            "dedicated_host_only": false,
+            "display_name": "Windows Server 2019 Standard Edition (amd64)",
+            "family": "Windows Server",
+            "href": "https://us-south.iaas.cloud.ibm.com/v1/operating_systems/windows-2019-amd64",
+            "name": "windows-2019-amd64",
+            "user_data_format": "cloud_init",
+            "vendor": "Microsoft",
+            "version": "2019 Standard Edition"
+        },
+        "owner_type": "provider",
+        "resource_group": {
+            "href": "https://resource-controller.cloud.ibm.com/v1/resource_groups/5807b5832a8741179b2e06ca2d2b3b96",
+            "id": "5807b5832a8741179b2e06ca2d2b3b96",
+            "name": "Default"
+        },
+        "resource_type": "image",
+        "status": "available",
+        "status_reasons": [],
+        "user_data_format": "cloud_init",
+        "visibility": "public"
+    },
+    {
+        "catalog_offering": {
+            "managed": false
+        },
+        "created_at": "2025-06-17T11:24:47.000Z",
+        "crn": "crn:v1:bluemix:public:is:us-south:a/811f8abfbd32425597dc7ba40da98fa6::image:r006-5796a93a-e45d-46e3-ab7c-ac89f3b928f0",
+        "encryption": "none",
+        "file": {
+            "checksums": {
+                "sha256": "4272826b6d97ad450be4a5ab90ee076e932455a4529f3a447e0d78026bf167e3"
+            },
+            "size": 11
+        },
+        "href": "https://us-south.iaas.cloud.ibm.com/v1/images/r006-5796a93a-e45d-46e3-ab7c-ac89f3b928f0",
+        "id": "r006-5796a93a-e45d-46e3-ab7c-ac89f3b928f0",
+        "minimum_provisioned_size": 100,
+        "name": "ibm-windows-server-2022-full-standard-amd64-26",
+        "operating_system": {
+            "allow_user_image_creation": true,
+            "architecture": "amd64",
+            "dedicated_host_only": false,
+            "display_name": "Windows Server 2022 Standard Edition (amd64)",
+            "family": "Windows Server",
+            "href": "https://us-south.iaas.cloud.ibm.com/v1/operating_systems/windows-2022-amd64",
+            "name": "windows-2022-amd64",
+            "user_data_format": "cloud_init",
+            "vendor": "Microsoft",
+            "version": "2022 Standard Edition"
+        },
+        "owner_type": "provider",
+        "resource_group": {
+            "href": "https://resource-controller.cloud.ibm.com/v1/resource_groups/5807b5832a8741179b2e06ca2d2b3b96",
+            "id": "5807b5832a8741179b2e06ca2d2b3b96",
+            "name": "Default"
+        },
+        "resource_type": "image",
+        "status": "available",
+        "status_reasons": [],
+        "user_data_format": "cloud_init",
+        "visibility": "public"
+    },
+    {
+        "catalog_offering": {
+            "managed": false
+        },
+        "created_at": "2024-09-20T19:49:20.000Z",
+        "crn": "crn:v1:bluemix:public:is:us-south:a/811f8abfbd32425597dc7ba40da98fa6::image:r006-46a81ace-2ec4-4d28-860d-cbdd4c474103",
+        "encryption": "none",
+        "file": {
+            "checksums": {
+                "sha256": "4a4fe94dd4f7f9815bce9893f27075d0708cda0b0dcaf0b51f25f1d027e89144"
+            },
+            "size": 1
+        },
+        "href": "https://us-south.iaas.cloud.ibm.com/v1/images/r006-46a81ace-2ec4-4d28-860d-cbdd4c474103",
+        "id": "r006-46a81ace-2ec4-4d28-860d-cbdd4c474103",
+        "minimum_provisioned_size": 100,
+        "name": "ibm-hyper-protect-container-runtime-1-0-s390x-19",
+        "operating_system": {
+            "allow_user_image_creation": true,
+            "architecture": "s390x",
+            "dedicated_host_only": false,
+            "display_name": "IBM Hyper Protect Container Runtime 1.0 with Secure Execution (s390x)",
+            "family": "Hyper Protect",
+            "href": "https://us-south.iaas.cloud.ibm.com/v1/operating_systems/hyper-protect-1-0-s390x-hpcr",
+            "name": "hyper-protect-1-0-s390x-hpcr",
+            "user_data_format": "cloud_init",
+            "vendor": "IBM",
+            "version": "1.0 for Hyper Protect Container Runtime"
+        },
+        "owner_type": "provider",
+        "resource_group": {
+            "href": "https://resource-controller.cloud.ibm.com/v1/resource_groups/5807b5832a8741179b2e06ca2d2b3b96",
+            "id": "5807b5832a8741179b2e06ca2d2b3b96",
+            "name": "Default"
+        },
+        "resource_type": "image",
+        "status": "available",
+        "status_reasons": [],
+        "user_data_format": "cloud_init",
+        "visibility": "public"
+    },
+    {
+        "catalog_offering": {
+            "managed": false
+        },
+        "created_at": "2024-12-05T16:54:46.000Z",
+        "crn": "crn:v1:bluemix:public:is:us-south:a/811f8abfbd32425597dc7ba40da98fa6::image:r006-62641867-be95-43fa-bc6a-77f5f239b60a",
+        "encryption": "none",
+        "file": {
+            "checksums": {
+                "sha256": "3b7231fa7496426ea91d464d4232f7ce89fdcc01e25658ae13c59602fa897ebf"
+            },
+            "size": 1
+        },
+        "href": "https://us-south.iaas.cloud.ibm.com/v1/images/r006-62641867-be95-43fa-bc6a-77f5f239b60a",
+        "id": "r006-62641867-be95-43fa-bc6a-77f5f239b60a",
+        "minimum_provisioned_size": 100,
+        "name": "ibm-hyper-protect-container-runtime-1-0-s390x-20",
+        "operating_system": {
+            "allow_user_image_creation": true,
+            "architecture": "s390x",
+            "dedicated_host_only": false,
+            "display_name": "IBM Hyper Protect Container Runtime 1.0 with Secure Execution (s390x)",
+            "family": "Hyper Protect",
+            "href": "https://us-south.iaas.cloud.ibm.com/v1/operating_systems/hyper-protect-1-0-s390x-hpcr",
+            "name": "hyper-protect-1-0-s390x-hpcr",
+            "user_data_format": "cloud_init",
+            "vendor": "IBM",
+            "version": "1.0 for Hyper Protect Container Runtime"
+        },
+        "owner_type": "provider",
+        "resource_group": {
+            "href": "https://resource-controller.cloud.ibm.com/v1/resource_groups/5807b5832a8741179b2e06ca2d2b3b96",
+            "id": "5807b5832a8741179b2e06ca2d2b3b96",
+            "name": "Default"
+        },
+        "resource_type": "image",
+        "status": "available",
+        "status_reasons": [],
+        "user_data_format": "cloud_init",
+        "visibility": "public"
+    },
+    {
+        "catalog_offering": {
+            "managed": false
+        },
+        "created_at": "2025-03-14T15:38:56.000Z",
+        "crn": "crn:v1:bluemix:public:is:us-south:a/811f8abfbd32425597dc7ba40da98fa6::image:r006-ad389a05-d7b0-4c92-ba6c-0934c4457d91",
+        "encryption": "none",
+        "file": {
+            "checksums": {
+                "sha256": "6d2eb0bea66d4ae8a4ccf6afdfe4f1336e98cda004963e60a8b0ae7fb7a4d396"
+            },
+            "size": 1
+        },
+        "href": "https://us-south.iaas.cloud.ibm.com/v1/images/r006-ad389a05-d7b0-4c92-ba6c-0934c4457d91",
+        "id": "r006-ad389a05-d7b0-4c92-ba6c-0934c4457d91",
+        "minimum_provisioned_size": 100,
+        "name": "ibm-hyper-protect-container-runtime-1-0-s390x-21",
+        "operating_system": {
+            "allow_user_image_creation": true,
+            "architecture": "s390x",
+            "dedicated_host_only": false,
+            "display_name": "IBM Hyper Protect Container Runtime 1.0 with Secure Execution (s390x)",
+            "family": "Hyper Protect",
+            "href": "https://us-south.iaas.cloud.ibm.com/v1/operating_systems/hyper-protect-1-0-s390x-hpcr",
+            "name": "hyper-protect-1-0-s390x-hpcr",
+            "user_data_format": "cloud_init",
+            "vendor": "IBM",
+            "version": "1.0 for Hyper Protect Container Runtime"
+        },
+        "owner_type": "provider",
+        "resource_group": {
+            "href": "https://resource-controller.cloud.ibm.com/v1/resource_groups/5807b5832a8741179b2e06ca2d2b3b96",
+            "id": "5807b5832a8741179b2e06ca2d2b3b96",
+            "name": "Default"
+        },
+        "resource_type": "image",
+        "status": "available",
+        "status_reasons": [],
+        "user_data_format": "cloud_init",
+        "visibility": "public"
+    },
+    {
+        "catalog_offering": {
+            "managed": false
+        },
+        "created_at": "2025-03-25T17:58:35.000Z",
+        "crn": "crn:v1:bluemix:public:is:us-south:a/811f8abfbd32425597dc7ba40da98fa6::image:r006-2b8ba093-c8a3-4ed9-9b73-f6f0bb18d6f9",
+        "encryption": "none",
+        "file": {
+            "checksums": {
+                "sha256": "489a0c4b84a7bd1aa3f06cd1280717bd1eb91fccbf85e77b0b7c6a8374bab2c7"
+            },
+            "size": 1
+        },
+        "href": "https://us-south.iaas.cloud.ibm.com/v1/images/r006-2b8ba093-c8a3-4ed9-9b73-f6f0bb18d6f9",
+        "id": "r006-2b8ba093-c8a3-4ed9-9b73-f6f0bb18d6f9",
+        "minimum_provisioned_size": 100,
+        "name": "ibm-hyper-protect-container-runtime-1-0-s390x-22",
+        "operating_system": {
+            "allow_user_image_creation": true,
+            "architecture": "s390x",
+            "dedicated_host_only": false,
+            "display_name": "IBM Hyper Protect Container Runtime 1.0 with Secure Execution (s390x)",
+            "family": "Hyper Protect",
+            "href": "https://us-south.iaas.cloud.ibm.com/v1/operating_systems/hyper-protect-1-0-s390x-hpcr",
+            "name": "hyper-protect-1-0-s390x-hpcr",
+            "user_data_format": "cloud_init",
+            "vendor": "IBM",
+            "version": "1.0 for Hyper Protect Container Runtime"
+        },
+        "owner_type": "provider",
+        "resource_group": {
+            "href": "https://resource-controller.cloud.ibm.com/v1/resource_groups/5807b5832a8741179b2e06ca2d2b3b96",
+            "id": "5807b5832a8741179b2e06ca2d2b3b96",
+            "name": "Default"
+        },
+        "resource_type": "image",
+        "status": "available",
+        "status_reasons": [],
+        "user_data_format": "cloud_init",
+        "visibility": "public"
+    },
+    {
+        "catalog_offering": {
+            "managed": false
+        },
+        "created_at": "2025-05-12T11:29:57.000Z",
+        "crn": "crn:v1:bluemix:public:is:us-south:a/811f8abfbd32425597dc7ba40da98fa6::image:r006-4a4d6b3d-4cbd-4130-b345-559bd27b524e",
+        "encryption": "none",
+        "file": {
+            "checksums": {
+                "sha256": "68281331e3a72ad12c78fcf8c1aaa5dc653a5f52db768fcc4e5d3f810fb7d434"
+            },
+            "size": 1
+        },
+        "href": "https://us-south.iaas.cloud.ibm.com/v1/images/r006-4a4d6b3d-4cbd-4130-b345-559bd27b524e",
+        "id": "r006-4a4d6b3d-4cbd-4130-b345-559bd27b524e",
+        "minimum_provisioned_size": 100,
+        "name": "ibm-hyper-protect-container-runtime-1-0-s390x-23",
+        "operating_system": {
+            "allow_user_image_creation": true,
+            "architecture": "s390x",
+            "dedicated_host_only": false,
+            "display_name": "IBM Hyper Protect Container Runtime 1.0 with Secure Execution (s390x)",
+            "family": "Hyper Protect",
+            "href": "https://us-south.iaas.cloud.ibm.com/v1/operating_systems/hyper-protect-1-0-s390x-hpcr",
+            "name": "hyper-protect-1-0-s390x-hpcr",
+            "user_data_format": "cloud_init",
+            "vendor": "IBM",
+            "version": "1.0 for Hyper Protect Container Runtime"
+        },
+        "owner_type": "provider",
+        "resource_group": {
+            "href": "https://resource-controller.cloud.ibm.com/v1/resource_groups/5807b5832a8741179b2e06ca2d2b3b96",
+            "id": "5807b5832a8741179b2e06ca2d2b3b96",
+            "name": "Default"
+        },
+        "resource_type": "image",
+        "status": "available",
+        "status_reasons": [],
+        "user_data_format": "cloud_init",
+        "visibility": "public"
+    },
+    {
+        "catalog_offering": {
+            "managed": false
+        },
+        "created_at": "2025-04-30T13:55:45.000Z",
+        "crn": "crn:v1:bluemix:public:is:us-south:a/811f8abfbd32425597dc7ba40da98fa6::image:r006-426b4df5-a6c8-4166-86fe-b4c9c495f2f7",
+        "encryption": "none",
+        "file": {
+            "checksums": {
+                "sha256": "07e9d39703c24b84a40f13cb6a9245643e6895f68b116d5320a45dec4e21e231"
+            },
+            "size": 1
+        },
+        "href": "https://us-south.iaas.cloud.ibm.com/v1/images/r006-426b4df5-a6c8-4166-86fe-b4c9c495f2f7",
+        "id": "r006-426b4df5-a6c8-4166-86fe-b4c9c495f2f7",
+        "minimum_provisioned_size": 100,
+        "name": "ibm-sles-15-6-s390x-2",
+        "operating_system": {
+            "allow_user_image_creation": true,
+            "architecture": "s390x",
+            "dedicated_host_only": false,
+            "display_name": "SUSE Linux Enterprise Server 15 (s390x)",
+            "family": "SUSE Linux Enterprise Server",
+            "href": "https://us-south.iaas.cloud.ibm.com/v1/operating_systems/sles-15-s390x",
+            "name": "sles-15-s390x",
+            "user_data_format": "cloud_init",
+            "vendor": "SUSE",
+            "version": "15"
+        },
+        "owner_type": "provider",
+        "resource_group": {
+            "href": "https://resource-controller.cloud.ibm.com/v1/resource_groups/5807b5832a8741179b2e06ca2d2b3b96",
+            "id": "5807b5832a8741179b2e06ca2d2b3b96",
+            "name": "Default"
+        },
+        "resource_type": "image",
+        "status": "available",
+        "status_reasons": [],
+        "user_data_format": "cloud_init",
+        "visibility": "public"
+    },
+    {
+        "catalog_offering": {
+            "managed": false
+        },
+        "created_at": "2025-04-30T13:55:07.000Z",
+        "crn": "crn:v1:bluemix:public:is:us-south:a/811f8abfbd32425597dc7ba40da98fa6::image:r006-777198bf-5994-49a3-bc4a-938d3e1ac09a",
+        "encryption": "none",
+        "file": {
+            "checksums": {
+                "sha256": "31b2fa2576355ce7a678c4ec57efebd221da6b2b4e681ac55dd4c8e5794e7f01"
+            },
+            "size": 2
+        },
+        "href": "https://us-south.iaas.cloud.ibm.com/v1/images/r006-777198bf-5994-49a3-bc4a-938d3e1ac09a",
+        "id": "r006-777198bf-5994-49a3-bc4a-938d3e1ac09a",
+        "minimum_provisioned_size": 100,
+        "name": "ibm-ubuntu-22-04-5-minimal-s390x-5",
+        "operating_system": {
+            "allow_user_image_creation": true,
+            "architecture": "s390x",
+            "dedicated_host_only": false,
+            "display_name": "Ubuntu Linux 22.04 Jammy Jellyfish Minimal Install (s390x)",
+            "family": "Ubuntu Linux",
+            "href": "https://us-south.iaas.cloud.ibm.com/v1/operating_systems/ubuntu-22-04-s390x",
+            "name": "ubuntu-22-04-s390x",
+            "user_data_format": "cloud_init",
+            "vendor": "Canonical",
+            "version": "22.04 Jammy Jellyfish Minimal Install"
+        },
+        "owner_type": "provider",
+        "resource_group": {
+            "href": "https://resource-controller.cloud.ibm.com/v1/resource_groups/5807b5832a8741179b2e06ca2d2b3b96",
+            "id": "5807b5832a8741179b2e06ca2d2b3b96",
+            "name": "Default"
+        },
+        "resource_type": "image",
+        "status": "available",
+        "status_reasons": [],
+        "user_data_format": "cloud_init",
+        "visibility": "public"
+    },
+    {
+        "catalog_offering": {
+            "managed": false
+        },
+        "created_at": "2024-03-20T21:20:44.000Z",
+        "crn": "crn:v1:bluemix:public:is:us-south:a/811f8abfbd32425597dc7ba40da98fa6::image:r006-9dc8bf91-117d-41f8-893f-5c14170aab57",
+        "encryption": "none",
+        "file": {
+            "checksums": {
+                "sha256": "2282ca174edf31692ec0e08dc14c56cde2d21e1e5a23f96b5aec956974884ccd"
+            },
+            "size": 56
+        },
+        "href": "https://us-south.iaas.cloud.ibm.com/v1/images/r006-9dc8bf91-117d-41f8-893f-5c14170aab57",
+        "id": "r006-9dc8bf91-117d-41f8-893f-5c14170aab57",
+        "minimum_provisioned_size": 185,
+        "name": "ibm-zos-2-5-s390x-dev-test-wazi-7",
+        "operating_system": {
+            "allow_user_image_creation": true,
+            "architecture": "s390x",
+            "dedicated_host_only": false,
+            "display_name": "IBM z/OS 2.5 for Development and Test (s390x)",
+            "family": "IBM z/OS",
+            "href": "https://us-south.iaas.cloud.ibm.com/v1/operating_systems/zos-2-5-s390x-dev-test",
+            "name": "zos-2-5-s390x-dev-test",
+            "user_data_format": "cloud_init",
+            "vendor": "IBM",
+            "version": "2.5 for Development and Test"
+        },
+        "owner_type": "provider",
+        "resource_group": {
+            "href": "https://resource-controller.cloud.ibm.com/v1/resource_groups/5807b5832a8741179b2e06ca2d2b3b96",
+            "id": "5807b5832a8741179b2e06ca2d2b3b96",
+            "name": "Default"
+        },
+        "resource_type": "image",
+        "status": "available",
+        "status_reasons": [],
+        "user_data_format": "cloud_init",
+        "visibility": "public"
+    },
+    {
+        "catalog_offering": {
+            "managed": false
+        },
+        "created_at": "2025-06-09T11:11:58.000Z",
+        "crn": "crn:v1:bluemix:public:is:us-south:a/811f8abfbd32425597dc7ba40da98fa6::image:r006-4360612b-e860-491f-9418-c8e665c6b0ed",
+        "encryption": "none",
+        "file": {
+            "checksums": {
+                "sha256": "50c2483dc74213eeb32f16aa4f5b70908ca5c4e132a8e97cd5c560c7b9d8aa30"
+            },
+            "size": 50
+        },
+        "href": "https://us-south.iaas.cloud.ibm.com/v1/images/r006-4360612b-e860-491f-9418-c8e665c6b0ed",
+        "id": "r006-4360612b-e860-491f-9418-c8e665c6b0ed",
+        "minimum_provisioned_size": 245,
+        "name": "ibm-zos-3-1-s390x-dev-test-wazi-6",
+        "operating_system": {
+            "allow_user_image_creation": true,
+            "architecture": "s390x",
+            "dedicated_host_only": false,
+            "display_name": "IBM z/OS 3.1 for Development and Test (s390x)",
+            "family": "IBM z/OS",
+            "href": "https://us-south.iaas.cloud.ibm.com/v1/operating_systems/zos-3-1-s390x-dev-test",
+            "name": "zos-3-1-s390x-dev-test",
+            "user_data_format": "cloud_init",
+            "vendor": "IBM",
+            "version": "3.1 for Development and Test"
+        },
+        "owner_type": "provider",
+        "resource_group": {
+            "href": "https://resource-controller.cloud.ibm.com/v1/resource_groups/5807b5832a8741179b2e06ca2d2b3b96",
+            "id": "5807b5832a8741179b2e06ca2d2b3b96",
+            "name": "Default"
+        },
+        "resource_type": "image",
+        "status": "available",
+        "status_reasons": [],
+        "user_data_format": "cloud_init",
+        "visibility": "public"
+    }
+]

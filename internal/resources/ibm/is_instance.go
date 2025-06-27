@@ -3,6 +3,7 @@ package ibm
 import (
 	"fmt"
 	"regexp"
+	"strings"
 
 	"github.com/infracost/infracost/internal/resources"
 	"github.com/infracost/infracost/internal/schema"
@@ -14,12 +15,15 @@ import (
 // Pricing information: https://cloud.ibm.com/kubernetes/catalog/about
 
 type IsInstance struct {
-	Address     string
-	Region      string
-	Profile     string // should be values from CLI 'ibmcloud is instance-profiles'
-	Zone        string
-	IsDedicated bool // will be true if a dedicated_host or dedicated_host_group is specified
-	BootVolume  struct {
+	Address         string
+	Region          string
+	OperatingSystem int64
+	Vendor          string
+	Version         string
+	Profile         string // should be values from CLI 'ibmcloud is instance-profiles'
+	Zone            string
+	IsDedicated     bool // will be true if a dedicated_host or dedicated_host_group is specified
+	BootVolume      struct {
 		Name string
 		Size int64
 	}
@@ -108,6 +112,77 @@ func (r *IsInstance) bootVolumeCostComponent() *schema.CostComponent {
 	}
 }
 
+func (r *IsInstance) imageHoursCostComponent() *schema.CostComponent {
+	unit := ""
+
+	if r.Vendor == "Red Hat" {
+		if strings.Contains(r.Version, "SAP HANA") {
+			unit = "RHELSAPHANA_VCPU_HOURS"
+		} else {
+			unit = "REDHAT_VCPU_HOURS"
+		}
+	} else if r.Vendor == "SUSE" {
+		if strings.Contains(r.Version, "SAP") {
+			unit = "SUSESAP_INSTANCE_HOURS"
+		} else {
+			unit = "SUSE_INSTANCE_HOURS"
+		}
+	} else if r.Vendor == "Microsoft" {
+		unit = "WINDOWS_VCPU_HOURS"
+	}
+
+	var q *decimal.Decimal
+
+	if r.MonthlyInstanceHours != nil {
+		q = decimalPtr(decimal.NewFromFloat(*r.MonthlyInstanceHours))
+	}
+	return &schema.CostComponent{
+		Name:            fmt.Sprintf("Image (%s)", r.Vendor),
+		Unit:            "Hours",
+		UnitMultiplier:  decimal.NewFromInt(1),
+		MonthlyQuantity: q,
+		ProductFilter: &schema.ProductFilter{
+			VendorName:    strPtr("ibm"),
+			Region:        strPtr(r.Region),
+			Service:       strPtr("is.instance"),
+			ProductFamily: strPtr("service"),
+			AttributeFilters: []*schema.AttributeFilter{
+				{Key: "planName", Value: strPtr("gen2-instance-dedicated-host")},
+			},
+		},
+		PriceFilter: &schema.PriceFilter{
+			Unit: strPtr(unit),
+		},
+	}
+}
+
+func (r *IsInstance) sqlLicenceCostComponent() *schema.CostComponent {
+	var q *decimal.Decimal
+
+	if r.MonthlyInstanceHours != nil {
+		q = decimalPtr(decimal.NewFromFloat(*r.MonthlyInstanceHours))
+	}
+
+	return &schema.CostComponent{
+		Name:            fmt.Sprintf("SQL Licence (%s)", r.Vendor),
+		Unit:            "Hours",
+		UnitMultiplier:  decimal.NewFromInt(1),
+		MonthlyQuantity: q,
+		ProductFilter: &schema.ProductFilter{
+			VendorName:    strPtr("ibm"),
+			Region:        strPtr(r.Region),
+			Service:       strPtr("is.instance"),
+			ProductFamily: strPtr("service"),
+			AttributeFilters: []*schema.AttributeFilter{
+				{Key: "planName", Value: strPtr("gen2-instance-dedicated-host")},
+			},
+		},
+		PriceFilter: &schema.PriceFilter{
+			Unit: strPtr("MSSQL_LICENSE_HOURS"),
+		},
+	}
+}
+
 // BuildResource builds a schema.Resource from a valid IsShare struct.
 // This method is called after the resource is initialised by an IaC provider.
 // See providers folder for more information.
@@ -115,6 +190,10 @@ func (r *IsInstance) BuildResource() *schema.Resource {
 	costComponents := []*schema.CostComponent{
 		r.instanceHoursCostComponent(),
 		r.bootVolumeCostComponent(),
+		r.imageHoursCostComponent(),
+	}
+	if r.Vendor == "Microsoft" && strings.Contains(r.Version, "SQL") {
+		costComponents = append(costComponents, r.sqlLicenceCostComponent())
 	}
 
 	return &schema.Resource{
