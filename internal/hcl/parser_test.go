@@ -736,7 +736,7 @@ func createTestFile(filename, contents string) string {
 		panic(err)
 	}
 	path := filepath.Join(dir, filename)
-	if err := os.WriteFile(path, []byte(contents), os.ModePerm); err != nil {
+	if err := os.WriteFile(path, []byte(contents), os.ModePerm); err != nil { // nolint: gosec
 		panic(err)
 	}
 	return path
@@ -764,7 +764,7 @@ func createTestFileWithModule(contents string, moduleContents string, moduleName
 		}
 	}
 
-	if err := os.WriteFile(filepath.Join(rootPath, "main.tf"), []byte(contents), os.ModePerm); err != nil {
+	if err := os.WriteFile(filepath.Join(rootPath, "main.tf"), []byte(contents), os.ModePerm); err != nil { // nolint: gosec
 		panic(err)
 	}
 
