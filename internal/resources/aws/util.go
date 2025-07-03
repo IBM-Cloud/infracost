@@ -728,14 +728,14 @@ func (r rdsReservationResolver) PriceFilter() (*schema.PriceFilter, error) {
 	purchaseOption := reservedPaymentOptionMapping[r.paymentOption]
 	validTerms := sliceOfKeysFromMap(reservedTermsMapping)
 	if !stringInSlice(validTerms, r.term) {
-		return def, fmt.Errorf("invalid reserved_instance_term, ignoring reserved options. Expected: %s. Got: %s", strings.Join(validTerms, ", "), r.term)
+		return def, fmt.Errorf("Invalid reserved_instance_term, ignoring reserved options. Expected: %s. Got: %s", strings.Join(validTerms, ", "), r.term)
 	}
 	validOptions := sliceOfKeysFromMap(reservedPaymentOptionMapping)
 	if r.term == "3_year" {
 		validOptions = []string{"partial_upfront", "all_upfront"}
 	}
 	if !stringInSlice(validOptions, r.paymentOption) {
-		return def, fmt.Errorf("invalid reserved_instance_payment_option, ignoring reserved options. Expected: %s. Got: %s", strings.Join(validOptions, ", "), r.paymentOption)
+		return def, fmt.Errorf("Invalid reserved_instance_payment_option, ignoring reserved options. Expected: %s. Got: %s", strings.Join(validOptions, ", "), r.paymentOption)
 	}
 	return &schema.PriceFilter{
 		PurchaseOption:     strPtr(purchaseOptionLabel),
