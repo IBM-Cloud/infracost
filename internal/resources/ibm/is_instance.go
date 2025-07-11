@@ -159,7 +159,7 @@ func (r *IsInstance) imageHoursCostComponent() *schema.CostComponent {
 		}
 	} else {
 		costComponent := schema.CostComponent{
-			Name:            "Free Provided Image",
+			Name:            "Custom Image",
 			UnitMultiplier:  decimal.NewFromInt(1),
 			MonthlyQuantity: decimalPtr(decimal.NewFromInt(1)),
 			ProductFilter: &schema.ProductFilter{
