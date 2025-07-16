@@ -44,7 +44,7 @@ func NewPricingAPIClient(ctx *config.RunContext) *PricingAPIClient {
 
 	tlsConfig := tls.Config{
 		MinVersion: tls.VersionTLS12,
-	} // nolint: gosec
+	} //nolint:gosec
 
 	if ctx.Config.TLSCACertFile != "" {
 		rootCAs, _ := x509.SystemCertPool()

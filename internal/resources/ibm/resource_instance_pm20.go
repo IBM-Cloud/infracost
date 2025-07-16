@@ -88,7 +88,8 @@ func GetWMLCostComponents(r *ResourceInstance) []*schema.CostComponent {
 			WMLEssentialsCapacityUnitHoursCostComponent(r),
 			WMLMistralLargeOutputResourceUnitsCostComponent(r),
 			WMLTextExtractionCatOneResourceUnitsCostComponent(r),
-			WMLTextExtractionCatTwoResourceUnitsCostComponent(r, "PAGES_CATAGORY_TWO"),
+			// the unit name is spelled wrong for the standard plan
+			WMLTextExtractionCatTwoResourceUnitsCostComponent(r, "PAGES_CATAGORY_TWO"), //nolint:misspell
 			WMLIBMModelResourceUnitsCostComponent(r),
 			WML3rdPartyModelResourceUnitsCostComponent(r),
 			WMLMistralLargeInputResourceUnitsCostComponent(r),

@@ -136,23 +136,44 @@ func (r *IsInstance) imageHoursCostComponent() *schema.CostComponent {
 	if r.MonthlyInstanceHours != nil {
 		q = decimalPtr(decimal.NewFromFloat(*r.MonthlyInstanceHours))
 	}
-	return &schema.CostComponent{
-		Name:            fmt.Sprintf("Image (%s)", r.Vendor),
-		Unit:            "Hours",
-		UnitMultiplier:  decimal.NewFromInt(1),
-		MonthlyQuantity: q,
-		ProductFilter: &schema.ProductFilter{
-			VendorName:    strPtr("ibm"),
-			Region:        strPtr(r.Region),
-			Service:       strPtr("is.instance"),
-			ProductFamily: strPtr("service"),
-			AttributeFilters: []*schema.AttributeFilter{
-				{Key: "planName", Value: strPtr("gen2-instance-dedicated-host")},
+
+	// If the unit is one of the Vendors above, then look into our database and grab the price
+	if unit != "" {
+		return &schema.CostComponent{
+			Name:            fmt.Sprintf("Image (%s)", r.Vendor),
+			Unit:            "Hours",
+			UnitMultiplier:  decimal.NewFromInt(1),
+			MonthlyQuantity: q,
+			ProductFilter: &schema.ProductFilter{
+				VendorName:    strPtr("ibm"),
+				Region:        strPtr(r.Region),
+				Service:       strPtr("is.instance"),
+				ProductFamily: strPtr("service"),
+				AttributeFilters: []*schema.AttributeFilter{
+					{Key: "planName", Value: strPtr("gen2-instance-dedicated-host")},
+				},
 			},
-		},
-		PriceFilter: &schema.PriceFilter{
-			Unit: strPtr(unit),
-		},
+			PriceFilter: &schema.PriceFilter{
+				Unit: strPtr(unit),
+			},
+		}
+	} else {
+		costComponent := schema.CostComponent{
+			Name:            "Custom Image",
+			UnitMultiplier:  decimal.NewFromInt(1),
+			MonthlyQuantity: decimalPtr(decimal.NewFromInt(1)),
+			ProductFilter: &schema.ProductFilter{
+				VendorName:    strPtr("ibm"),
+				Region:        strPtr(r.Region),
+				Service:       strPtr("is.instance"),
+				ProductFamily: strPtr("service"),
+				AttributeFilters: []*schema.AttributeFilter{
+					{Key: "planName", Value: strPtr("provided_image")},
+				},
+			},
+		}
+		costComponent.SetCustomPrice(decimalPtr(decimal.NewFromInt(0)))
+		return &costComponent
 	}
 }
 

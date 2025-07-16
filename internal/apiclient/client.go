@@ -96,7 +96,7 @@ func (c *APIClient) doRequest(method string, path string, d interface{}) ([]byte
 
 		err = json.Unmarshal(respBody, &r)
 		if err != nil {
-			return []byte{}, &APIError{fmt.Errorf(resp.Status), "Invalid API response"}
+			return []byte{}, &APIError{fmt.Errorf("%s", resp.Status), "Invalid API response"}
 		}
 
 		if r.Error == "Invalid API key" {

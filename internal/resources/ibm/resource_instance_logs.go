@@ -7,7 +7,7 @@ import (
 
 func GetLogsCostComponents(r *ResourceInstance) []*schema.CostComponent {
 	return []*schema.CostComponent{
-		//cost component functions go here
+		// Cost component functions go here
 		LogsStoreNSearchCostComponent(r),
 		LogsAnalyzeNAlertCostComponent(r),
 		LogsPriorityInsightsCostComponent(r, "PRIORITY_INSIGHTS_RETENTION_SEVEN_DAYS", "7"),

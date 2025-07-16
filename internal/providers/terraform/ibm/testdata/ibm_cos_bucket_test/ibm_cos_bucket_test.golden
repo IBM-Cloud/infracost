@@ -40,7 +40,11 @@
  └─ Lite Plan Bucket                                           1  Instance                         $0.00 
                                                                                                          
  ibm_cos_bucket.one-rate-us-south                                                                        
- ├─ Storage Capacity                          Monthly cost depends on usage: $0.0418 per GB              
+ ├─ Storage Capacity (first 1 GB)             Monthly cost depends on usage: $0.0418 per GB              
+ ├─ Storage Capacity (next 49999 GB)          Monthly cost depends on usage: $0.02 per GB                
+ ├─ Storage Capacity (next 150000 GB)         Monthly cost depends on usage: $0.017 per GB               
+ ├─ Storage Capacity (next 300000 GB)         Monthly cost depends on usage: $0.015 per GB               
+ ├─ Storage Capacity (over 499999 GB)         Monthly cost depends on usage: $0.012 per GB               
  ├─ Free Class A requests                     Monthly cost depends on usage: $0.00 per 1k API calls      
  ├─ Class A requests                          Monthly cost depends on usage: $0.005225 per 1k API calls  
  ├─ Free Class B requests                     Monthly cost depends on usage: $0.00 per 10k API calls     
@@ -49,7 +53,11 @@
  └─ Public Egress                             Monthly cost depends on usage: $0.05 per GB                
                                                                                                          
  ibm_cos_bucket.one-rate-us-south-usage                                                                  
- ├─ Storage Capacity                                       1,000  GB                              $41.80 
+ ├─ Storage Capacity (first 1 GB)                              1  GB                               $0.04 
+ ├─ Storage Capacity (next 49999 GB)                       1,000  GB                              $20.00 
+ ├─ Storage Capacity (next 150000 GB)                          0  GB                               $0.00 
+ ├─ Storage Capacity (next 300000 GB)                          0  GB                               $0.00 
+ ├─ Storage Capacity (over 499999 GB)                          0  GB                               $0.00 
  ├─ Free Class A requests                                    100  1k API calls                     $0.00 
  ├─ Class A requests                                         900  1k API calls                     $4.70 
  ├─ Free Class B requests                                     10  10k API calls                    $0.00 
@@ -93,7 +101,7 @@
  └─ Public Standard Egress (next 100000 GB)                    0  GB                               $0.00 
  └─ Public Standard Egress (over 150000 GB)                    0  GB                               $0.00 
                                                                                                          
- OVERALL TOTAL                                                                                   $495.39 
+ OVERALL TOTAL                                                                                   $473.64 
 ──────────────────────────────────
 14 cloud resources were detected:
 ∙ 13 were estimated, all of which include usage-based costs, see https://infracost.io/usage-file

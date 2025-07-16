@@ -161,7 +161,7 @@ func (r *DBInstance) BuildResource() *schema.Resource {
 		}
 		priceFilter, err = resolver.PriceFilter()
 		if err != nil {
-			log.Warnf(err.Error())
+			log.Warnf("%s", err.Error())
 		}
 		purchaseOptionLabel = "reserved"
 	}

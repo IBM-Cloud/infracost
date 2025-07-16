@@ -198,7 +198,6 @@ type Parser struct {
 	blockBuilder          BlockBuilder
 	newSpinner            ui.SpinnerFunc
 	remoteVariablesLoader *RemoteVariablesLoader
-	credentialsSource     *modules.CredentialsSource
 	logger                *logrus.Entry
 	hasChanges            bool
 }

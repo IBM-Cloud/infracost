@@ -96,7 +96,7 @@ func outputCmd(ctx *config.RunContext) *cobra.Command {
 			combined, err := output.Combine(inputs)
 			if errors.As(err, &clierror.WarningError{}) {
 				if format == "json" {
-					ui.PrintWarningf(cmd.ErrOrStderr(), err.Error())
+					ui.PrintWarningf(cmd.ErrOrStderr(), "%s", err.Error())
 				}
 			} else if err != nil {
 				return err

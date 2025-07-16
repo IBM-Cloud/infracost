@@ -6,7 +6,7 @@ import (
 	"encoding/base64"
 	"encoding/json"
 	"fmt"
-	"io/ioutil"
+	"io"
 
 	"net/http"
 	"strconv"
@@ -193,7 +193,7 @@ func (h *bitbucketPRHandler) CallFindMatchingComments(ctx context.Context, tag s
 			defer res.Body.Close()
 		}
 
-		resBody, err := ioutil.ReadAll(res.Body)
+		resBody, err := io.ReadAll(res.Body)
 		if err != nil {
 			return []Comment{}, errors.Wrap(err, "Error reading response body")
 		}
@@ -263,7 +263,7 @@ func (h *bitbucketPRHandler) CallCreateComment(ctx context.Context, body string)
 		defer res.Body.Close()
 	}
 
-	resBody, err := ioutil.ReadAll(res.Body)
+	resBody, err := io.ReadAll(res.Body)
 	if err != nil {
 		return nil, errors.Wrap(err, "Error reading response body")
 	}
@@ -398,7 +398,7 @@ func (h *bitbucketCommitHandler) CallFindMatchingComments(ctx context.Context, t
 			defer res.Body.Close()
 		}
 
-		resBody, err := ioutil.ReadAll(res.Body)
+		resBody, err := io.ReadAll(res.Body)
 		if err != nil {
 			return []Comment{}, errors.Wrap(err, "Error reading response body")
 		}
@@ -468,7 +468,7 @@ func (h *bitbucketCommitHandler) CallCreateComment(ctx context.Context, body str
 		defer res.Body.Close()
 	}
 
-	resBody, err := ioutil.ReadAll(res.Body)
+	resBody, err := io.ReadAll(res.Body)
 	if err != nil {
 		return nil, errors.Wrap(err, "Error reading response body")
 	}
@@ -609,7 +609,7 @@ func (h *bitbucketServerPRHandler) CallFindMatchingComments(ctx context.Context,
 			defer res.Body.Close()
 		}
 
-		resBody, err := ioutil.ReadAll(res.Body)
+		resBody, err := io.ReadAll(res.Body)
 		if err != nil {
 			return []Comment{}, errors.Wrap(err, "Error reading response body")
 		}
@@ -680,7 +680,7 @@ func (h *bitbucketServerPRHandler) CallCreateComment(ctx context.Context, body s
 		defer res.Body.Close()
 	}
 
-	resBody, err := ioutil.ReadAll(res.Body)
+	resBody, err := io.ReadAll(res.Body)
 	if err != nil {
 		return nil, errors.Wrap(err, "Error reading response body")
 	}
@@ -782,7 +782,7 @@ func (h *bitbucketServerPRHandler) fetchServerComment(commentURL string) (*bitbu
 	if res.Body != nil {
 		defer res.Body.Close()
 	}
-	resBody, err := ioutil.ReadAll(res.Body)
+	resBody, err := io.ReadAll(res.Body)
 	if err != nil {
 		return nil, errors.Wrap(err, "Error reading response body")
 	}

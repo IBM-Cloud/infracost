@@ -7,6 +7,10 @@ terraform {
     random = {
       source = "hashicorp/random"
     }
+    tls = {
+      source  = "hashicorp/tls"
+      version = "~> 4.0" # Specify a version constraint
+    }
   }
 }
 
@@ -28,6 +32,11 @@ data "ibm_is_image" "windows" {
 
 data "ibm_is_image" "windowssql" {
   name = "ibm-windows-server-2019-full-sqlsvr-2019-amd64-24"
+}
+
+resource "tls_private_key" "unit_test_key" {
+  algorithm = "RSA"
+  rsa_bits  = 2048
 }
 
 # Access random string generated with random_string.unique_identifier.result
@@ -56,16 +65,16 @@ resource "ibm_is_subnet" "subnet" {
 
 resource "ibm_is_ssh_key" "ssh_key" {
   name           = "ssh-key-${random_string.unique_identifier.result}"
-  public_key     = file("~/.ssh/id_ed25519.pub")
+  public_key     = tls_private_key.unit_test_key.public_key_openssh
   resource_group = ibm_resource_group.resource_group.id
   type           = "ed25519"
 }
 
 resource "ibm_is_instance" "vsi" {
-  for_each = toset(local.profiles)
-  name     = "vsi-instance-${random_string.unique_identifier.result}-${each.key}"
-  image = data.ibm_is_image.redhat.id
-  keys  = [ibm_is_ssh_key.ssh_key.id]
+  for_each       = toset(local.profiles)
+  name           = "vsi-instance-${random_string.unique_identifier.result}-${each.key}"
+  image          = data.ibm_is_image.redhat.id
+  keys           = [ibm_is_ssh_key.ssh_key.id]
   profile        = each.key
   resource_group = ibm_resource_group.resource_group.id
   vpc            = ibm_is_vpc.vpc.id
@@ -80,10 +89,10 @@ resource "ibm_is_instance" "vsi" {
 }
 
 resource "ibm_is_instance" "vsi_boot_volume" {
-  for_each = toset(local.profiles)
-  name     = "vsi-instance-boot-volume-${random_string.unique_identifier.result}-${each.key}"
-  image = data.ibm_is_image.windowssql.id
-  keys  = [ibm_is_ssh_key.ssh_key.id]
+  for_each       = toset(local.profiles)
+  name           = "vsi-instance-boot-volume-${random_string.unique_identifier.result}-${each.key}"
+  image          = data.ibm_is_image.windowssql.id
+  keys           = [ibm_is_ssh_key.ssh_key.id]
   profile        = each.key
   resource_group = ibm_resource_group.resource_group.id
   vpc            = ibm_is_vpc.vpc.id
@@ -102,10 +111,10 @@ resource "ibm_is_instance" "vsi_boot_volume" {
 }
 
 resource "ibm_is_instance" "vsi_dedicated_host" {
-  for_each = toset(local.profiles)
-  name     = "vsi-instance-dedicated-host-${random_string.unique_identifier.result}-${each.key}"
-  image = data.ibm_is_image.sles.id
-  keys  = [ibm_is_ssh_key.ssh_key.id]
+  for_each       = toset(local.profiles)
+  name           = "vsi-instance-dedicated-host-${random_string.unique_identifier.result}-${each.key}"
+  image          = data.ibm_is_image.sles.id
+  keys           = [ibm_is_ssh_key.ssh_key.id]
   profile        = each.key
   resource_group = ibm_resource_group.resource_group.id
   vpc            = ibm_is_vpc.vpc.id

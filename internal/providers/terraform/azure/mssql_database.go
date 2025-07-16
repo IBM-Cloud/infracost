@@ -92,7 +92,7 @@ func newAzureRMMSSQLDatabase(d *schema.ResourceData, u *schema.UsageData) *schem
 	if !dtuMap.usesDTUUnits(sku) {
 		c, err := parseMSSQLSku(d.Address, sku)
 		if err != nil {
-			log.Warnf(err.Error())
+			log.Warnf("%s", err.Error())
 			return nil
 		}
 
