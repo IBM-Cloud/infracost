@@ -7,6 +7,9 @@
  ibm_container_vpc_worker_pool.cluster_pool_without_usage                                                                        
  └─ VPC Container Work Zone flavor: (bx2.2x8) region: (eu-de) name: (eu-de-2) x(3) workers             3  hours            $0.44 
                                                                                                                                  
+ ibm_container_vpc_worker_pool.roks_worker_pool                                                                                  
+ └─ VPC Container Work Zone flavor: (bx2.2x8) region: (eu-de) name: (eu-de-2) x(3) workers             3  hours            $0.44 
+                                                                                                                                 
  ibm_is_vpc.vpc1                                                                                                                 
  ├─ VPC instance                                                                                       1  Instance         $0.00 
  ├─ VPC egress free allowance (first 5GB)                                                              5  GB               $0.00 
@@ -18,9 +21,9 @@
  mycluster                                                                                                                       
  └─ VPC Container Work Zone flavor: (bx2.4x16) region: (eu-de) name: (eu-de-1) x(3) workers        2,190  hours          $665.19 
                                                                                                                                  
- OVERALL TOTAL                                                                                                         $5,799.01 
+ OVERALL TOTAL                                                                                                         $5,799.45 
 ──────────────────────────────────
-7 cloud resources were detected:
-∙ 5 were estimated, 4 of which include usage-based costs, see https://infracost.io/usage-file
+8 cloud resources were detected:
+∙ 6 were estimated, 5 of which include usage-based costs, see https://infracost.io/usage-file
 ∙ 2 were free:
   ∙ 2 x ibm_is_subnet

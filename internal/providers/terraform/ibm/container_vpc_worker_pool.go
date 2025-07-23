@@ -35,23 +35,30 @@ func newContainerVpcWorkerPool(d *schema.ResourceData, u *schema.UsageData) *sch
 	flavor := d.Get("flavor").String()
 	workerCount := d.Get("worker_count").Int()
 	name := d.Get("worker_pool_name").String()
+	operatingSystem := d.Get("operating_system").String()
 
 	r := &ibm.ContainerVpcWorkerPool{
-		Address:     d.Address,
-		Region:      region,
-		KubeVersion: kubeVersion,
-		Flavor:      flavor,
-		WorkerCount: workerCount,
-		Zones:       zones,
-		Entitlement: entitlement,
-		Name:        name,
+		Address:         d.Address,
+		Region:          region,
+		KubeVersion:     kubeVersion,
+		Flavor:          flavor,
+		WorkerCount:     workerCount,
+		Zones:           zones,
+		Entitlement:     entitlement,
+		Name:            name,
+		OperatingSystem: operatingSystem,
 	}
 	r.PopulateUsage(u)
 
 	configuration := make(map[string]any)
 	configuration["region"] = region
 	configuration["flavor"] = flavor
-	configuration["kube_version"] = kubeVersion
+	if kubeVersion != "" {
+		configuration["kube_version"] = kubeVersion
+	}
+	if operatingSystem != "" {
+		configuration["operating_system"] = operatingSystem
+	}
 	configuration["worker_count"] = workerCount
 	configuration["zones_count"] = len(zones)
 	configuration["ocp_entitlement"] = entitlement
