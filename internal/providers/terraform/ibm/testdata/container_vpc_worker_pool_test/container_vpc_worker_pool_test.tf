@@ -64,3 +64,15 @@ resource "ibm_container_vpc_worker_pool" "cluster_pool_without_usage" {
     subnet_id = ibm_is_subnet.subnet2.id
   }
 }
+
+resource "ibm_container_vpc_worker_pool" "default_cluster_pool" {
+  cluster          = ibm_container_vpc_cluster.cluster.id
+  worker_pool_name = "default"
+  flavor           = "bx2.2x8"
+  vpc_id           = ibm_is_vpc.vpc1.id
+  worker_count     = 3
+  zones {
+    name      = "eu-de-2"
+    subnet_id = ibm_is_subnet.subnet2.id
+  }
+}

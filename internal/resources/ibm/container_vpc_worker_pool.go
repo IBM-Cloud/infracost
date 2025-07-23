@@ -30,6 +30,7 @@ type ContainerVpcWorkerPool struct {
 	Zones                []Zone
 	Entitlement          bool
 	MonthlyInstanceHours *float64 `infracost_usage:"monthly_instance_hours"`
+	Name                 string
 }
 
 // ContainerVpcWorkerPoolUsageSchema defines a list which represents the usage schema of ContainerVpcWorkerPool.
@@ -88,19 +89,24 @@ func (r *ContainerVpcWorkerPool) BuildResource() *schema.Resource {
 	quantity := WorkerCount.Mul(*instanceHours)
 
 	costComponents := []*schema.CostComponent{}
-	for _, zone := range r.Zones {
-		zoneCostComponent := &schema.CostComponent{
-			Name:            fmt.Sprintf("VPC Container Work Zone flavor: (%s) region: (%s) name: (%s) x(%d) workers", r.Flavor, r.Region, zone.Name, r.WorkerCount),
-			Unit:            "hours",
-			UnitMultiplier:  decimal.NewFromInt(1),
-			MonthlyQuantity: decimalPtr(quantity),
-			ProductFilter: &schema.ProductFilter{
-				VendorName:       strPtr("ibm"),
-				Service:          strPtr("containers-kubernetes"),
-				AttributeFilters: attributeFilters,
-			},
+
+	// If this is for a "default" workerpool, then the cost will already be covered by the cluster creation
+	// so do not include it
+	if r.Name != "default" {
+		for _, zone := range r.Zones {
+			zoneCostComponent := &schema.CostComponent{
+				Name:            fmt.Sprintf("VPC Container Work Zone flavor: (%s) region: (%s) name: (%s) x(%d) workers", r.Flavor, r.Region, zone.Name, r.WorkerCount),
+				Unit:            "hours",
+				UnitMultiplier:  decimal.NewFromInt(1),
+				MonthlyQuantity: decimalPtr(quantity),
+				ProductFilter: &schema.ProductFilter{
+					VendorName:       strPtr("ibm"),
+					Service:          strPtr("containers-kubernetes"),
+					AttributeFilters: attributeFilters,
+				},
+			}
+			costComponents = append(costComponents, zoneCostComponent)
 		}
-		costComponents = append(costComponents, zoneCostComponent)
 	}
 
 	return &schema.Resource{
