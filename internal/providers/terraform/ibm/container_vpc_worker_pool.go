@@ -34,6 +34,7 @@ func newContainerVpcWorkerPool(d *schema.ResourceData, u *schema.UsageData) *sch
 	region := d.Get("region").String()
 	flavor := d.Get("flavor").String()
 	workerCount := d.Get("worker_count").Int()
+	name := d.Get("worker_pool_name").String()
 
 	r := &ibm.ContainerVpcWorkerPool{
 		Address:     d.Address,
@@ -43,6 +44,7 @@ func newContainerVpcWorkerPool(d *schema.ResourceData, u *schema.UsageData) *sch
 		WorkerCount: workerCount,
 		Zones:       zones,
 		Entitlement: entitlement,
+		Name:        name,
 	}
 	r.PopulateUsage(u)
 
@@ -53,6 +55,7 @@ func newContainerVpcWorkerPool(d *schema.ResourceData, u *schema.UsageData) *sch
 	configuration["worker_count"] = workerCount
 	configuration["zones_count"] = len(zones)
 	configuration["ocp_entitlement"] = entitlement
+	configuration["name"] = name
 
 	resourceType := d.Type
 	isRoks, _ := regexp.MatchString("(?i)openshift", kubeVersion)
