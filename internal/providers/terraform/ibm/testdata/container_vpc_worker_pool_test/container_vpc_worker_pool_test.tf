@@ -80,8 +80,21 @@ resource "ibm_container_vpc_worker_pool" "default_cluster_pool" {
 resource "ibm_container_vpc_worker_pool" "roks_worker_pool" {
   cluster          = ibm_container_vpc_cluster.cluster.id
   worker_pool_name = "workerpool-roks"
-  flavor           = "bx2.2x8"
+  flavor           = "bx2.4x16"
   operating_system = "RHEL_9_64"
+  vpc_id           = ibm_is_vpc.vpc1.id
+  worker_count     = 3
+  zones {
+    name      = "eu-de-2"
+    subnet_id = ibm_is_subnet.subnet2.id
+  }
+}
+
+resource "ibm_container_vpc_worker_pool" "ubuntu_worker_pool" {
+  cluster          = ibm_container_vpc_cluster.cluster.id
+  worker_pool_name = "workerpool-ubuntu"
+  flavor           = "bx2.4x16"
+  operating_system = "UBUNTU_24_64"
   vpc_id           = ibm_is_vpc.vpc1.id
   worker_count     = 3
   zones {

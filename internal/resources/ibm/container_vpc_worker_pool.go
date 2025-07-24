@@ -54,7 +54,7 @@ func (r *ContainerVpcWorkerPool) BuildResource() *schema.Resource {
 	useOcpPrices := false
 	// An additional check for optional property for OS, if specified will be used instead of KubeVersion
 	if r.OperatingSystem != "" {
-		isOpenshift = strings.HasPrefix(strings.ToLower(r.OperatingSystem), "rh")
+		isOpenshift = strings.HasPrefix(strings.ToLower(r.OperatingSystem), "rh") || strings.HasPrefix(strings.ToLower(r.OperatingSystem), "red")
 	}
 	if isOpenshift {
 		operatingSystem = "RHEL"
