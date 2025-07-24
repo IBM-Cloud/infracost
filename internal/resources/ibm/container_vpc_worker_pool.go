@@ -31,6 +31,7 @@ type ContainerVpcWorkerPool struct {
 	Entitlement          bool
 	MonthlyInstanceHours *float64 `infracost_usage:"monthly_instance_hours"`
 	Name                 string
+	OperatingSystem      string
 }
 
 // ContainerVpcWorkerPoolUsageSchema defines a list which represents the usage schema of ContainerVpcWorkerPool.
@@ -51,6 +52,10 @@ func (r *ContainerVpcWorkerPool) BuildResource() *schema.Resource {
 	isOpenshift := strings.HasSuffix(strings.ToLower(r.KubeVersion), "openshift")
 	operatingSystem := "UBUNTU"
 	useOcpPrices := false
+	// An additional check for optional property for OS, if specified will be used instead of KubeVersion
+	if r.OperatingSystem != "" {
+		isOpenshift = strings.HasPrefix(strings.ToLower(r.OperatingSystem), "rh") || strings.HasPrefix(strings.ToLower(r.OperatingSystem), "red")
+	}
 	if isOpenshift {
 		operatingSystem = "RHEL"
 		// if an entitlement is specified, then ocp licensing is already covered. use pricing that
