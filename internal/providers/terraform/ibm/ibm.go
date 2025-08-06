@@ -87,6 +87,7 @@ var globalCatalogServiceId = map[string]catalogMetadata{
 	"kms":                           {"ee41347f-b18e-4ca6-bf80-b5467c63f9a6", []string{}, nil, "https://cloud.ibm.com/catalog/services/key-protect"},
 	"logdna":                        {"e13e1860-959c-11e8-871e-ad157af61ad7", []string{}, nil, "https://cloud.ibm.com/catalog/services/logdna"},
 	"logdnaat":                      {"dcc46a60-e13b-11e8-a015-757410dab16b", []string{}, nil, "https://cloud.ibm.com/catalog/services/logdnaat"},
+	"logs":                          {"cd515180-d78a-11ec-b396-db7d306c4f73", []string{}, nil, "https://cloud.ibm.com/catalog/services/cloud-logs"},
 	"messagehub":                    {"6a7f4e38-f218-48ef-9dd2-df408747568e", []string{}, nil, "https://cloud.ibm.com/eventstreams-provisioning/6a7f4e38-f218-48ef-9dd2-df408747568e/create"},
 	"pm-20":                         {"51c53b72-918f-4869-b834-2d99eb28422a", []string{}, nil, "https://cloud.ibm.com/catalog/services/watson-machine-learning"},
 	"power-iaas":                    {"abd259f0-9990-11e8-acc8-b9f54a8f1661", []string{}, nil, "https://cloud.ibm.com/docs/power-iaas?topic=power-iaas-pricing-virtual-server"},
@@ -94,8 +95,8 @@ var globalCatalogServiceId = map[string]catalogMetadata{
 	"secrets-manager":               {"ebc0cdb0-af2a-11ea-98c7-29e5db822649", []string{}, nil, "https://cloud.ibm.com/catalog/services/secrets-manager"},
 	"sysdig-monitor":                {"090c2c10-8c38-11e8-bec2-493df9c49eb8", []string{}, nil, "https://cloud.ibm.com/observe/catalog/ibm-cloud-monitoring"},
 	"sysdig-secure":                 {"e831e900-82d6-11ec-95c5-c12c5a5d9687", []string{}, nil, "https://cloud.ibm.com/workload-protection/catalog/security-and-compliance-center-workload-protection"},
-	"wx":                            {"51c53b72-918f-4869-b834-2d99eb28422a", []string{}, nil, "https://cloud.ibm.com/watsonx/overview"},
 	"watsonx-orchestrate":           {"b69f78c0-11d7-11ef-9bdf-c92eb40d1838", []string{}, nil, "https://cloud.ibm.com/catalog/services/watsonx-orchestrate"},
+	"wx":                            {"51c53b72-918f-4869-b834-2d99eb28422a", []string{}, nil, "https://cloud.ibm.com/watsonx/overview"},
 }
 
 func SetCatalogMetadata(d *schema.ResourceData, resourceType string, config map[string]any) {
