@@ -97,7 +97,7 @@ require (
 	github.com/awslabs/goformation/v7 v7.2.5
 	github.com/dave/dst v0.27.3
 	github.com/go-git/go-billy/v5 v5.6.2
-	github.com/go-git/go-git/v5 v5.14.0
+	github.com/go-git/go-git/v5 v5.16.2
 	github.com/google/go-github/v41 v41.0.0
 	github.com/hashicorp/go-terraform-address v0.0.0-20210506203813-2cc4f0f34da8
 	github.com/hashicorp/terraform-svchost v0.0.1
