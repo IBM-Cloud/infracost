@@ -488,6 +488,7 @@ func (r *parallelRunner) runProjectConfig(ctx *config.ProjectContext) (*projectO
 
 	r.buildResources(projects)
 
+	/* DISABLED to reduce noise in logs
 	spinnerOpts := ui.SpinnerOptions{
 		EnableLogging: r.runCtx.Config.IsLogging(),
 		NoColor:       r.runCtx.Config.NoColor,
@@ -495,10 +496,11 @@ func (r *parallelRunner) runProjectConfig(ctx *config.ProjectContext) (*projectO
 	}
 	spinner := ui.NewSpinner("Retrieving cloud prices to calculate costs", spinnerOpts)
 	defer spinner.Fail()
+	*/
 
 	for _, project := range projects {
 		if err := prices.PopulatePrices(r.runCtx, project); err != nil {
-			spinner.Fail()
+			// spinner.Fail()
 			r.cmd.PrintErrln()
 
 			if e := unwrapped(err); errors.Is(e, apiclient.ErrInvalidAPIKey) {
@@ -535,7 +537,7 @@ func (r *parallelRunner) runProjectConfig(ctx *config.ProjectContext) (*projectO
 	// wait for the hcl provider to finish if it hasn't already
 	wg.Wait()
 
-	spinner.Success()
+	// spinner.Success()
 
 	if r.runCtx.Config.UsageActualCosts {
 		r.populateActualCosts(projects)

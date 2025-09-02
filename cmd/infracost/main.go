@@ -76,8 +76,6 @@ func Run(modifyCtx func(*config.RunContext), args *[]string) {
 		}
 	}()
 
-	startUpdateCheck(ctx, updateMessageChan)
-
 	rootCmd := newRootCmd(ctx)
 	if args != nil {
 		rootCmd.SetArgs(*args)
@@ -226,17 +224,6 @@ Use "{{.CommandPath}} [command] --help" for more information about a command.{{e
 	return rootCmd
 }
 
-func startUpdateCheck(ctx *config.RunContext, c chan *update.Info) {
-	go func() {
-		updateInfo, err := update.CheckForUpdate(ctx)
-		if err != nil {
-			logging.Logger.WithError(err).Debug("error checking for Infracost CLI update")
-		}
-		c <- updateInfo
-		close(c)
-	}()
-}
-
 func loadCloudSettings(ctx *config.RunContext) {
 	if ctx.Config.IsSelfHosted() || (ctx.Config.EnableCloud != nil && !*ctx.Config.EnableCloud) {
 		return
@@ -294,17 +281,8 @@ func handleUnexpectedErr(ctx *config.RunContext, err error) {
 }
 
 func handleUpdateMessage(updateMessageChan chan *update.Info) {
-	updateInfo := <-updateMessageChan
-	if updateInfo != nil {
-		msg := fmt.Sprintf("\n%s %s %s → %s\n%s\n",
-			ui.WarningString("Update:"),
-			"A new version of Infracost is available:",
-			ui.PrimaryString(version.Version),
-			ui.PrimaryString(updateInfo.LatestVersion),
-			ui.Indent(updateInfo.Cmd, "  "),
-		)
-		fmt.Fprint(os.Stderr, msg)
-	}
+	msg := fmt.Sprintf("\n%s %s", "version:", ui.PrimaryString(version.Version))
+	fmt.Fprint(os.Stderr, msg)
 }
 
 func loadGlobalFlags(ctx *config.RunContext, cmd *cobra.Command) error {
