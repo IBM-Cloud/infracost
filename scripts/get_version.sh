@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 COMMITISH=${1:-HEAD}
-NO_DIRTY=${2:-false}
+NO_DIRTY=${2:-true}
 TAG=""
 BUILD=""
 DIRTY_SUFFIX=""
