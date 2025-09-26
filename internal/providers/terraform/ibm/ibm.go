@@ -54,6 +54,7 @@ var globalCatalogServiceId = map[string]catalogMetadata{
 	"aiopenscale":                   {"2ad019f3-0fd6-4c25-966d-f3952481a870", []string{}, nil, "https://cloud.ibm.com/catalog/services/watsonxgovernance"},
 	"appconnect":                    {"96a0ebf2-2a02-4e32-815f-7c09a1268c78", []string{}, nil, "https://www.ibm.com/products/app-connect/pricing"},
 	"appid":                         {"AdvancedMobileAccess-d6aece47-d840-45b0-8ab9-ad15354deeea", []string{}, nil, "https://cloud.ibm.com/catalog/services/appid"},
+	"apprapp":                       {"apprapp-d6aece47-d840-45b0-8ab9-ad15354deeea", []string{}, nil, "https://cloud.ibm.com/catalog/services/app-configuration"},
 	"cloud-object-storage":          {"dff97f5c-bc5e-4455-b470-411c3edbe49c", []string{}, nil, "https://cloud.ibm.com/objectstorage/create#pricing"},
 	"compliance":                    {"compliance", []string{}, nil, "https://cloud.ibm.com/catalog/services/security-and-compliance-center"},
 	"continuous-delivery":           {"59b735ee-5938-4ebd-a6b2-541aef2d1f68", []string{}, nil, "https://cloud.ibm.com/catalog/services/continuous-delivery"},

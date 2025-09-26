@@ -10,6 +10,10 @@ provider "ibm" {
   region = "us-south"
 }
 
+# ----------------------------------------------------------------------
+# Key Protect
+# ----------------------------------------------------------------------
+
 resource "ibm_resource_instance" "resource_instance_kms" {
   name              = "test"
   service           = "kms"
@@ -17,6 +21,10 @@ resource "ibm_resource_instance" "resource_instance_kms" {
   location          = "us-south"
   resource_group_id = "default"
 }
+
+# ----------------------------------------------------------------------
+# Secrets Manager
+# ----------------------------------------------------------------------
 
 resource "ibm_resource_instance" "resource_instance_secrets_manager_standard" {
   name              = "test"
@@ -34,6 +42,10 @@ resource "ibm_resource_instance" "resource_instance_secrets_manager_trial" {
   resource_group_id = "default"
 }
 
+# ----------------------------------------------------------------------
+# App ID
+# ----------------------------------------------------------------------
+
 resource "ibm_resource_instance" "resource_instance_appid" {
   name              = "test"
   service           = "appid"
@@ -42,6 +54,10 @@ resource "ibm_resource_instance" "resource_instance_appid" {
   resource_group_id = "default"
 }
 
+# ----------------------------------------------------------------------
+# Power Virtual Server Workspace
+# ----------------------------------------------------------------------
+
 resource "ibm_resource_instance" "resource_instance_power_iaas" {
   name              = "test"
   service           = "power-iaas"
@@ -49,6 +65,10 @@ resource "ibm_resource_instance" "resource_instance_power_iaas" {
   location          = "us-south"
   resource_group_id = "default"
 }
+
+# ----------------------------------------------------------------------
+# Log Analysis
+# ----------------------------------------------------------------------
 
 resource "ibm_resource_instance" "resource_instance_logdna_lite" {
   name     = "logdna-lite"
@@ -91,6 +111,10 @@ resource "ibm_resource_instance" "resource_instance_logdna_hipaa30day" {
   location = "us-south"
 }
 
+# ----------------------------------------------------------------------
+# Activity Tracker
+# ----------------------------------------------------------------------
+
 resource "ibm_resource_instance" "resource_instance_activity_tracker_lite" {
   name     = "activity-tracker-lite"
   service  = "logdnaat"
@@ -111,6 +135,10 @@ resource "ibm_resource_instance" "resource_instance_activity_tracker_7day_no_usa
   plan     = "7-day"
   location = "us-south"
 }
+
+# ----------------------------------------------------------------------
+# Cloud Monitoring
+# ----------------------------------------------------------------------
 
 resource "ibm_resource_instance" "resource_instance_monitoring_lite" {
   name     = "sysdig-lite"
@@ -140,6 +168,10 @@ resource "ibm_resource_instance" "resource_instance_monitoring_graduated_secure"
   location = "us-south"
 }
 
+# ----------------------------------------------------------------------
+# Continuous Delivery
+# ----------------------------------------------------------------------
+
 resource "ibm_resource_instance" "cd_instance_professional" {
   name              = "cd_professional"
   service           = "continuous-delivery"
@@ -155,6 +187,10 @@ resource "ibm_resource_instance" "cd_instance_lite" {
   location          = "us-south"
   resource_group_id = "default"
 }
+
+# ----------------------------------------------------------------------
+# watsonx.ai Runtime
+# ----------------------------------------------------------------------
 
 resource "ibm_resource_instance" "wml_instance_lite" {
   name              = "wml_lite"
@@ -196,6 +232,10 @@ resource "ibm_resource_instance" "wml_instance_standard_no_quantity" {
   resource_group_id = "default"
 }
 
+# ----------------------------------------------------------------------
+# watsonx Assistant
+# ----------------------------------------------------------------------
+
 resource "ibm_resource_instance" "wa_instance_lite" {
   name              = "wa_lite"
   service           = "conversation"
@@ -228,7 +268,10 @@ resource "ibm_resource_instance" "wa_instance_enterprise" {
   resource_group_id = "default"
 }
 
+# ----------------------------------------------------------------------
 # Watson Discovery
+# ----------------------------------------------------------------------
+
 resource "ibm_resource_instance" "watson_discovery_plus" {
   name              = "wd_plus"
   service           = "discovery"
@@ -245,7 +288,10 @@ resource "ibm_resource_instance" "watson_discovery_enterprise" {
   resource_group_id = "default"
 }
 
+# ----------------------------------------------------------------------
 # Security and Compliance Center (SCC)
+# ----------------------------------------------------------------------
+
 resource "ibm_resource_instance" "scc_standard" {
   name              = "scc_standard"
   service           = "compliance"
@@ -262,7 +308,9 @@ resource "ibm_resource_instance" "scc_trial" {
   resource_group_id = "default"
 }
 
-# Watson Studio
+# ----------------------------------------------------------------------
+# watsonx.ai Studio
+# ----------------------------------------------------------------------
 resource "ibm_resource_instance" "watson_studio_professional" {
   name              = "ws_professional"
   service           = "data-science-experience"
@@ -279,7 +327,10 @@ resource "ibm_resource_instance" "watson_studio_lite" {
   resource_group_id = "default"
 }
 
+# ----------------------------------------------------------------------
 # Security and Compliance Center (SCC) Workload Protection
+# ----------------------------------------------------------------------
+
 resource "ibm_resource_instance" "sccwp_graduated_tier" {
   name              = "sccwp_graduated_tier"
   service           = "sysdig-secure"
@@ -288,7 +339,10 @@ resource "ibm_resource_instance" "sccwp_graduated_tier" {
   resource_group_id = "default"
 }
 
-# Watsonx.governance
+# ----------------------------------------------------------------------
+# watsonx.governance
+# ----------------------------------------------------------------------
+
 resource "ibm_resource_instance" "watson_governance_lite" {
   name              = "wgov_lite"
   service           = "aiopenscale"
@@ -313,6 +367,10 @@ resource "ibm_resource_instance" "watson_governance_standard_v2" {
   resource_group_id = "default"
 }
 
+# ----------------------------------------------------------------------
+# DNS Services
+# ----------------------------------------------------------------------
+
 resource "ibm_resource_instance" "dns_svcs_standard" {
   name              = "dns_svcs_standard"
   service           = "dns-svcs"
@@ -320,6 +378,10 @@ resource "ibm_resource_instance" "dns_svcs_standard" {
   location          = "global"
   resource_group_id = "default"
 }
+
+# ----------------------------------------------------------------------
+# Event Streams
+# ----------------------------------------------------------------------
 
 resource "ibm_resource_instance" "messagehub_lite" {
   name              = "messagehub_lite"
@@ -353,6 +415,10 @@ resource "ibm_resource_instance" "messagehub_satellite" {
   resource_group_id = "default"
 }
 
+# ----------------------------------------------------------------------
+# Event Notifications
+# ----------------------------------------------------------------------
+
 locals {
   event_notifications = {
     plans : ["lite", "standard"]
@@ -375,6 +441,10 @@ resource "ibm_resource_instance" "event_notifications_no_usage" {
   service           = "event-notifications"
 }
 
+# ----------------------------------------------------------------------
+# Cloud Logs
+# ----------------------------------------------------------------------
+
 resource "ibm_resource_instance" "resource_instance_logs" {
   name              = "test"
   service           = "logs"
@@ -383,6 +453,9 @@ resource "ibm_resource_instance" "resource_instance_logs" {
   resource_group_id = "default"
 }
 
+# ----------------------------------------------------------------------
+# watsonx Orchestrate
+# ----------------------------------------------------------------------
 
 resource "ibm_resource_instance" "wx_orchestrate_trial" {
   name              = "watsonx-orchestrate-trial"
@@ -422,4 +495,37 @@ resource "ibm_resource_instance" "wx_orchestrate_standard_no_usage" {
   plan              = "standard"
   resource_group_id = "default"
   service           = "watsonx-orchestrate"
+}
+
+# ----------------------------------------------------------------------
+# App Configuration
+# ----------------------------------------------------------------------
+
+# Based on the App Config Da, the calid plans are: lite, basic, standardv2, and enterprise.
+
+locals {
+  apprapp = {
+    plans : ["lite", "basic", "standardv2", "enterprise"],
+    region : "us-south",
+    resource_group : "default"
+    service_name : "apprapp",
+  }
+}
+
+resource "ibm_resource_instance" "apprapp" {
+  for_each          = toset(local.apprapp.plans)
+  name              = "apprapp-${each.value}"
+  location          = local.apprapp.region
+  plan              = each.value
+  resource_group_id = local.apprapp.resource_group
+  service           = local.apprapp.service_name
+}
+
+resource "ibm_resource_instance" "apprapp_no_usage" {
+  for_each          = toset(local.apprapp.plans)
+  name              = "apprapp-${each.value}-no-usage"
+  location          = local.apprapp.region
+  plan              = each.value
+  resource_group_id = local.apprapp.resource_group
+  service           = local.apprapp.service_name
 }
