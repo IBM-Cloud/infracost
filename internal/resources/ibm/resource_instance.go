@@ -126,6 +126,9 @@ type ResourceInstance struct {
 	// Event Notifications
 	EventNotifications_InboundIngestedEvents *float64 `infracost_usage:"event-notifications_MILLION_INGESTED_EVENTS"`
 	Logs_Hours                               *float64 `infracost_usage:"logs_hours"`
+	// App Configuration
+	AppRapp_Active_Entity_IDs *int64 `infracost_usage:"apprapp_active_entity_ids"`
+	AppRapp_API_Calls         *int64 `infracost_usage:"apprapp_api_calls"`
 }
 
 type ResourceCostComponentsFunc func(*ResourceInstance) []*schema.CostComponent
@@ -209,6 +212,8 @@ var ResourceInstanceUsageSchema = []*schema.UsageItem{
 	{Key: "messagehub_TERABYTE_HOURS", DefaultValue: 1, ValueType: schema.Float64},
 	{Key: "messagehub_qty_terabytes", DefaultValue: 1, ValueType: schema.Float64},
 	{Key: "event-notifications_MILLION_INGESTED_EVENTS", DefaultValue: 0, ValueType: schema.Float64},
+	{Key: "apprapp_active_entity_ids", DefaultValue: 0, ValueType: schema.Int64},
+	{Key: "apprapp_api_calls", DefaultValue: 0, ValueType: schema.Int64},
 }
 
 var ResourceInstanceCostMap map[string]ResourceCostComponentsFunc = map[string]ResourceCostComponentsFunc{
@@ -233,6 +238,7 @@ var ResourceInstanceCostMap map[string]ResourceCostComponentsFunc = map[string]R
 	"sysdig-secure":           GetSCCWPCostComponents,
 	"watsonx-orchestrate":     GetWOCostComponents,
 	"logs":                    GetLogsCostComponents,
+	"apprapp":                 GetAppRappCostComponents,
 }
 
 func KMSKeyVersionsFreeCostComponent(r *ResourceInstance) *schema.CostComponent {

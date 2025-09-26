@@ -130,6 +130,8 @@ resource_type_default_usage:
     event-notifications_RESOURCE_UNITS_NUMBER_MONTHLY: 1
     event-notifications_RESOURCE_UNITS_NUMBER_SETUP: 1
     logs_hours: 34
+    apprapp_active_entity_ids: 1
+    apprapp_api_calls: 1
 
   ibm_tg_gateway:
     connection: 3
@@ -1407,13 +1409,13 @@ resource_usage:
     dns-svcs_qty_pools: 1 # Number of pools
 
   ibm_resource_instance.watsonx_orchestrate:
-    wo_instance: 1                # The number of instances per month
+    wo_instance: 1 # The number of instances per month
     wo_monthly_active_users: 5000 # The number of monthly active users
-    wo_monthly_voice_users: 1000  # The number of monthly active voice users
-    wo_skill_runs: 10             # The number of sill runs
-    wo_class1_ru: 1               # The number of class 1 resource units used (in blocks of 1000)
-    wo_class2_ru: 1               # The number of class 2 resource units used (in blocks of 1000)
-    wo_class3_ru: 1               # The number of class 4 resource units used (in blocks of 1000)
+    wo_monthly_voice_users: 1000 # The number of monthly active voice users
+    wo_skill_runs: 10 # The number of sill runs
+    wo_class1_ru: 1 # The number of class 1 resource units used (in blocks of 1000)
+    wo_class2_ru: 1 # The number of class 2 resource units used (in blocks of 1000)
+    wo_class3_ru: 1 # The number of class 4 resource units used (in blocks of 1000)
 
   ibm_resource_instance.event_streams:
     messagehub_CAPACITY_UNIT_HOURS: 1
