@@ -190,6 +190,7 @@ type CostComponent struct {
 	Price           decimal.Decimal    `json:"price"`
 	HourlyCost      *decimal.Decimal   `json:"hourlyCost"`
 	MonthlyCost     *decimal.Decimal   `json:"monthlyCost"`
+	Metric          string             `json:"metric"`
 	TierData        []schema.PriceTier `json:"tiers,omitempty"`
 }
 
@@ -386,6 +387,10 @@ func outputResource(r *schema.Resource) Resource {
 func outputCostComponents(costComponents []*schema.CostComponent) []CostComponent {
 	comps := make([]CostComponent, 0, len(costComponents))
 	for _, c := range costComponents {
+		price_metric := ""
+		if c.PriceFilter != nil && c.PriceFilter.Unit != nil {
+			price_metric = *c.PriceFilter.Unit
+		}
 		comps = append(comps, CostComponent{
 			Name:            c.Name,
 			Unit:            c.Unit,
@@ -394,6 +399,7 @@ func outputCostComponents(costComponents []*schema.CostComponent) []CostComponen
 			Price:           c.UnitMultiplierPrice(),
 			HourlyCost:      c.HourlyCost,
 			MonthlyCost:     c.MonthlyCost,
+			Metric:          price_metric,
 			TierData:        c.PriceTiers(),
 		})
 	}
