@@ -2,6 +2,7 @@ package ibm
 
 import (
 	"fmt"
+	"regexp"
 	"strings"
 
 	"github.com/infracost/infracost/internal/resources"
@@ -54,22 +55,33 @@ func (r *ContainerVpcCluster) PopulateUsage(u *schema.UsageData) {
 func (r *ContainerVpcCluster) BuildResource() *schema.Resource {
 	isOpenshift := strings.HasSuffix(strings.ToLower(r.KubeVersion), "openshift")
 	operatingSystem := "UBUNTU"
+	serverType := "virtual"
+	isolation := "public"
 	useOcpPrices := false
 	if isOpenshift {
-		operatingSystem = "RHEL"
+		operatingSystem = "^R"
 		// if an entitlement is specified, then ocp licensing is already covered. use pricing that
 		// does not include ocp charges.
 		if !r.Entitlement {
 			useOcpPrices = true
 		}
 	}
+
+	// A new flavor type introduced containing the keyword 'metal' indicates bare metal servers in the
+	// cluster.
+	pattern := "metal"
+	if regexp.MustCompile(pattern).MatchString(r.Flavor) {
+		serverType = "physical"
+		isolation = "private"
+	}
+
 	// filter on the catalogRegion in the product attribute instead of the region column because
 	// some regions (like eu-de) are recorded under eu-central instead, which isn't used in provisioning
 	var attributeFilters = []*schema.AttributeFilter{
 		{Key: "provider", Value: strPtr("vpc-gen2")},
 		{Key: "flavor", Value: strPtr(r.Flavor)},
-		{Key: "serverType", Value: strPtr("virtual")},
-		{Key: "isolation", Value: strPtr("public")},
+		{Key: "serverType", Value: strPtr(serverType)},
+		{Key: "isolation", Value: strPtr(isolation)},
 		{Key: "operatingSystem", ValueRegex: strPtr(fmt.Sprintf("/%s/i", operatingSystem))},
 		{Key: "catalogRegion", Value: strPtr(r.Region)},
 	}
