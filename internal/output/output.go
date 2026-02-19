@@ -15,7 +15,7 @@ import (
 	"github.com/infracost/infracost/internal/usage"
 )
 
-var outputVersion = "0.2"
+var outputVersion = "0.9"
 
 type Root struct {
 	Version              string           `json:"version"`
