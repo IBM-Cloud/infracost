@@ -489,10 +489,50 @@ resource "ibm_resource_instance" "wx_orchestrate_standard" {
   service           = "watsonx-orchestrate"
 }
 
-resource "ibm_resource_instance" "wx_orchestrate_standard_no_usage" {
-  name              = "watsonx-orchestrate-standard-no-usage"
+resource "ibm_resource_instance" "wx_orchestrate_essentials_agentic_no_usage" {
+  name              = "wx-orchestrate-essentials-agentic-mau-no-usage"
   location          = "us-south"
-  plan              = "standard"
+  plan              = "essentials-agentic-mau"
+  resource_group_id = "default"
+  service           = "watsonx-orchestrate"
+}
+
+resource "ibm_resource_instance" "wx_orchestrate_essentials_agentic_usage" {
+  name              = "wx-orchestrate-essentials-agentic-mau-usage"
+  location          = "us-south"
+  plan              = "essentials-agentic-mau"
+  resource_group_id = "default"
+  service           = "watsonx-orchestrate"
+}
+
+resource "ibm_resource_instance" "wx_orchestrate_standard_agentic_no_usage" {
+  name              = "wx-orchestrate-standard-agentic-mau-no-usage"
+  location          = "us-south"
+  plan              = "standard-agentic-mau"
+  resource_group_id = "default"
+  service           = "watsonx-orchestrate"
+}
+
+resource "ibm_resource_instance" "wx_orchestrate_standard_agentic_usage" {
+  name              = "wx-orchestrate-standard-agentic-mau-usage"
+  location          = "us-south"
+  plan              = "standard-agentic-mau"
+  resource_group_id = "default"
+  service           = "watsonx-orchestrate"
+}
+
+resource "ibm_resource_instance" "wx_orchestrate_premium_agentic_no_usage" {
+  name              = "wx-orchestrate-premium-agentic-mau-no-usage"
+  location          = "us-south"
+  plan              = "premium-agentic-mau"
+  resource_group_id = "default"
+  service           = "watsonx-orchestrate"
+}
+
+resource "ibm_resource_instance" "wx_orchestrate_premium_agentic_usage" {
+  name              = "wx-orchestrate-premium-agentic-mau-usage"
+  location          = "us-south"
+  plan              = "premium-agentic-mau"
   resource_group_id = "default"
   service           = "watsonx-orchestrate"
 }

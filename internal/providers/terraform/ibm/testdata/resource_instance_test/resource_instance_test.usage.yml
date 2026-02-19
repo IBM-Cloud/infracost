@@ -175,6 +175,32 @@ resource_usage:
         wo_class2_ru: 1
         wo_class3_ru: 1
 
+    ibm_resource_instance.wx_orchestrate_essentials_agentic_usage:
+        wo_instance: 1
+        wo_monthly_active_users: 41000
+        wo_monthly_voice_users: 1
+        wo_oracle_hcm_agents: 1
+        wo_workday_hcm_agents: 1
+        wo_sap_success_factors_agents: 1
+        wo_sourcing_contract_agents: 1
+        wo_learning_dev_oracle_agents: 1
+        wo_purchasing_agents: 1
+        wo_invoice_mgmt_agents: 1
+        wo_supplier_mgmt_agents: 1
+        wo_sales_prospecting_agents: 1
+
+    ibm_resource_instance.wx_orchestrate_standard_agentic_usage:
+        wo_instance: 1
+        wo_monthly_active_users: 41000
+        wo_monthly_voice_users: 1
+
+
+    ibm_resource_instance.wx_orchestrate_premium_agentic_usage:
+        wo_instance: 1
+        wo_monthly_active_users: 51000
+        wo_monthly_voice_users: 1
+
+
     ibm_resource_instance.resource_instance_logs:
         logs_hours: 34
 

@@ -9,14 +9,14 @@
  └─ Outbound Chrome Push Messages (Standard plan) (over 100 Messages)                  10,000  Messages                       $0.01 
                                                                                                                                     
  ibm_en_subscription_chrome.subscription_chrome_standard_no_usage                                                                   
- └─ Outbound Chrome Push Messages (Standard plan) (first 100 Messages)      Monthly cost depends on usage: $0.000001 per Messages   
- └─ Outbound Chrome Push Messages (Standard plan) (over 100 Messages)       Monthly cost depends on usage: $0.0000005 per Messages  
+ └─ Outbound Chrome Push Messages (Standard plan) (first 100 Messages)      Monthly cost depends on usage: $0.00000101 per Messages 
+ └─ Outbound Chrome Push Messages (Standard plan) (over 100 Messages)       Monthly cost depends on usage: $0.00000051 per Messages 
                                                                                                                                     
  ibm_resource_instance.event_notifications["lite"]                                                                                  
  └─ Lite Plan                                                                               1  Instance                       $0.00 
                                                                                                                                     
  ibm_resource_instance.event_notifications["standard"]                                                                              
- └─ Ingested Events                                                         Monthly cost depends on usage: $1.08 per Million Events 
+ └─ Ingested Events                                                         Monthly cost depends on usage: $1.09 per Million Events 
                                                                                                                                     
  OVERALL TOTAL                                                                                                                $0.01 
 ──────────────────────────────────

@@ -2,19 +2,19 @@
  Name                                         Monthly Qty  Unit                    Monthly Cost 
                                                                                                 
  ibm_is_volume.custom_volume                                                                    
- ├─ Gigabyte Hours (200 GB)                       146,000  GB Hours                      $20.90 
- └─ IOPS Hours (1000 IOPS)                        730,000  IOPS                          $73.23 
+ ├─ Gigabyte Hours (200 GB)                       146,000  GB Hours                      $24.03 
+ └─ IOPS Hours (1000 IOPS)                        730,000  IOPS                          $84.13 
                                                                                                 
  ibm_is_volume.general_purpose_5iops                                                            
- └─ Gigabyte Hours (400 GB)                       292,000  GB Hours                      $58.59 
+ └─ Gigabyte Hours (400 GB)                       292,000  GB Hours                      $61.45 
                                                                                                 
  ibm_is_volume.general_purpose_volume                                                           
- └─ Gigabyte Hours (200 GB)                       146,000  GB Hours                      $16.78 
+ └─ Gigabyte Hours (200 GB)                       146,000  GB Hours                      $17.56 
                                                                                                 
  ibm_is_volume.general_purpose_volume2                                                          
- └─ Gigabyte Hours (200 GB)             Monthly cost depends on usage: $0.00011495 per GB Hours 
+ └─ Gigabyte Hours (200 GB)             Monthly cost depends on usage: $0.00012025 per GB Hours 
                                                                                                 
- OVERALL TOTAL                                                                          $169.51 
+ OVERALL TOTAL                                                                          $187.16 
 ──────────────────────────────────
 4 cloud resources were detected:
 ∙ 4 were estimated, all of which include usage-based costs, see https://infracost.io/usage-file

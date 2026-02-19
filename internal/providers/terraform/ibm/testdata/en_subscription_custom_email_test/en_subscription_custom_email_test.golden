@@ -10,14 +10,14 @@
  └─ Outbound Transmitted E-mail Messages (Standard plan)                                       1  GB                             $0.12 
                                                                                                                                        
  ibm_en_subscription_custom_email.subscription_custom_email_standard_no_usage                                                          
- ├─ Outbound Custom Domain E-mail Messages (Standard plan)                     Monthly cost depends on usage: $0.00015 per Messages    
+ ├─ Outbound Custom Domain E-mail Messages (Standard plan)                     Monthly cost depends on usage: $0.000152 per Messages   
  └─ Outbound Transmitted E-mail Messages (Standard plan)                       Monthly cost depends on usage: $0.12 per GB             
                                                                                                                                        
  ibm_resource_instance.event_notifications["lite"]                                                                                     
  └─ Lite Plan                                                                                  1  Instance                       $0.00 
                                                                                                                                        
  ibm_resource_instance.event_notifications["standard"]                                                                                 
- └─ Ingested Events                                                            Monthly cost depends on usage: $1.08 per Million Events 
+ └─ Ingested Events                                                            Monthly cost depends on usage: $1.09 per Million Events 
                                                                                                                                        
  OVERALL TOTAL                                                                                                                   $0.27 
 ──────────────────────────────────

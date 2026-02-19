@@ -2,32 +2,32 @@
  Name                                                     Monthly Qty  Unit             Monthly Cost 
                                                                                                      
  Cloudant - dedicated-cloudant - Dedicated-Hardware                                                  
- └─ Dedicated Hardware                                              1  instance            $5,920.00 
+ └─ Dedicated Hardware                                              1  instance            $5,980.00 
                                                                                                      
  Cloudant - lite-cloudant - Lite                                                                     
  └─ Lite Cloudant                                                   1  instance                $0.00 
                                                                                                      
  Cloudant - standard-cloudant - Standard                                                             
- ├─ Reads (capacity: 1)                                           100  reads/second           $29.60 
- ├─ Writes (capacity: 1)                                           50  writes/second          $29.60 
- ├─ Global Queries (capacity: 1)                                    5  queries/second         $29.60 
+ ├─ Reads (capacity: 1)                                           100  reads/second           $29.90 
+ ├─ Writes (capacity: 1)                                           50  writes/second          $29.90 
+ ├─ Global Queries (capacity: 1)                                    5  queries/second         $29.90 
  └─ Free Estimated Storage (first 20GB)                            20  GB                      $0.00 
                                                                                                      
  Cloudant - standard-cloudant-without-usage - Standard                                               
- ├─ Reads (capacity: 1)                                           100  reads/second           $29.60 
- ├─ Writes (capacity: 1)                                           50  writes/second          $29.60 
- ├─ Global Queries (capacity: 1)                                    5  queries/second         $29.60 
+ ├─ Reads (capacity: 1)                                           100  reads/second           $29.90 
+ ├─ Writes (capacity: 1)                                           50  writes/second          $29.90 
+ ├─ Global Queries (capacity: 1)                                    5  queries/second         $29.90 
  ├─ Free Estimated Storage (first 20GB)                 Monthly cost depends on usage: $0.00 per GB  
- └─ Estimated Storage                                   Monthly cost depends on usage: $1.18 per GB  
+ └─ Estimated Storage                                   Monthly cost depends on usage: $1.19 per GB  
                                                                                                      
  Cloudant - standard-exceeded-storage - Standard                                                     
- ├─ Reads (capacity: 1)                                           100  reads/second           $29.60 
- ├─ Writes (capacity: 1)                                           50  writes/second          $29.60 
- ├─ Global Queries (capacity: 1)                                    5  queries/second         $29.60 
+ ├─ Reads (capacity: 1)                                           100  reads/second           $29.90 
+ ├─ Writes (capacity: 1)                                           50  writes/second          $29.90 
+ ├─ Global Queries (capacity: 1)                                    5  queries/second         $29.90 
  ├─ Free Estimated Storage (first 20GB)                            20  GB                      $0.00 
- └─ Estimated Storage                                              20  GB                     $23.60 
+ └─ Estimated Storage                                              20  GB                     $23.80 
                                                                                                      
- OVERALL TOTAL                                                                             $6,210.00 
+ OVERALL TOTAL                                                                             $6,272.90 
 ──────────────────────────────────
 5 cloud resources were detected:
 ∙ 5 were estimated
