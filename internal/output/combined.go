@@ -23,7 +23,7 @@ import (
 
 var (
 	minOutputVersion     = "0.2"
-	maxOutputVersion     = "0.2"
+	maxOutputVersion     = "0.9"
 	GitHubMaxMessageSize = 262144 // bytes
 )
 
