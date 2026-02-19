@@ -1416,6 +1416,15 @@ resource_usage:
     wo_class1_ru: 1 # The number of class 1 resource units used (in blocks of 1000)
     wo_class2_ru: 1 # The number of class 2 resource units used (in blocks of 1000)
     wo_class3_ru: 1 # The number of class 4 resource units used (in blocks of 1000)
+    wo_oracle_hcm_agents: 1 # Number of domain agents with Oracle HCM access
+    wo_workday_hcm_agents: 1 # Number of domain agents with Workday HCM access
+    wo_sap_success_factors_agents: 1 # Number of domain agents with SAP SuccessFactors access
+    wo_sourcing_contract_agents: 1 # Number of domain agents with Sourcing and Contract Management access
+    wo_learning_dev_oracle_agents: 1 # Number of domain agents with Learning and development for Oracle HCM access
+    wo_purchasing_agents: 1 # Number of domain agents with Purchasing with Coupa access
+    wo_invoice_mgmt_agents: 1 # Number of domain agents with Invoice Management with Coupa access
+    wo_supplier_mgmt_agents: 1 # Number of domain agents with Supplier Management with Coupa access
+    wo_sales_prospecting_agents: 1 # Number of domain agents with Sales Prospecting access
 
   ibm_resource_instance.event_streams:
     messagehub_CAPACITY_UNIT_HOURS: 1
