@@ -38,7 +38,7 @@ require (
 	github.com/spf13/pflag v1.0.6
 	github.com/stretchr/testify v1.10.0
 	github.com/tidwall/gjson v1.14.3
-	github.com/zclconf/go-cty v1.15.0
+	github.com/zclconf/go-cty v1.16.4
 	golang.org/x/crypto v0.45.0
 	golang.org/x/mod v0.29.0
 	gopkg.in/go-playground/assert.v1 v1.2.1
@@ -100,14 +100,14 @@ require (
 	github.com/go-git/go-git/v5 v5.14.0
 	github.com/google/go-github/v41 v41.0.0
 	github.com/hashicorp/go-terraform-address v0.0.0-20210506203813-2cc4f0f34da8
-	github.com/hashicorp/terraform-svchost v0.0.1
+	github.com/hashicorp/terraform-svchost v0.2.0
 	github.com/maruel/panicparse/v2 v2.3.1
 	github.com/pkg/browser v0.0.0-20201207095918-0426ae3fba23
 	github.com/pterm/pterm v0.12.50
 	github.com/shurcooL/githubv4 v0.0.0-20220115235240-a14260e6f8a2
 	github.com/shurcooL/graphql v0.0.0-20200928012149-18c5c3165e3a
 	github.com/withfig/autocomplete-tools/packages/cobra v1.2.0
-	golang.org/x/oauth2 v0.27.0
+	golang.org/x/oauth2 v0.30.0
 )
 
 require (
@@ -216,7 +216,7 @@ require (
 	github.com/hashicorp/go-getter v1.7.9
 	github.com/hashicorp/go-safetemp v1.0.0 // indirect
 	github.com/hashicorp/go-uuid v1.0.3
-	github.com/hashicorp/go-version v1.6.0
+	github.com/hashicorp/go-version v1.7.0
 	github.com/iancoleman/orderedmap v0.2.0 // indirect
 	github.com/klauspost/compress v1.18.0 // indirect
 	github.com/open-policy-agent/opa v1.4.2
