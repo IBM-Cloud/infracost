@@ -94,7 +94,7 @@ require (
 require (
 	github.com/IBM/go-sdk-core/v5 v5.17.5
 	github.com/alecthomas/jsonschema v0.0.0-20211209230136-e2b41affa5c1
-	github.com/awslabs/goformation/v7 v7.2.5
+	github.com/awslabs/goformation/v7 v7.14.9
 	github.com/dave/dst v0.27.3
 	github.com/go-git/go-billy/v5 v5.6.2
 	github.com/go-git/go-git/v5 v5.14.0
@@ -178,7 +178,6 @@ require (
 	github.com/spiffe/go-spiffe/v2 v2.5.0 // indirect
 	github.com/tchap/go-patricia/v2 v2.3.2 // indirect
 	github.com/xanzy/ssh-agent v0.3.3 // indirect
-	github.com/xeipuuv/gojsonschema v1.2.0 // indirect
 	github.com/xo/terminfo v0.0.0-20220910002029-abceb7e1c41e // indirect
 	github.com/zeebo/errs v1.4.0 // indirect
 	go.mongodb.org/mongo-driver v1.14.0 // indirect
