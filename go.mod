@@ -16,7 +16,7 @@ require (
 	github.com/aws/aws-sdk-go-v2/service/dynamodb v1.17.3
 	github.com/aws/aws-sdk-go-v2/service/ec2 v1.74.1
 	github.com/aws/aws-sdk-go-v2/service/s3 v1.29.5
-	github.com/briandowns/spinner v1.15.0
+	github.com/briandowns/spinner v1.23.2
 	github.com/dustin/go-humanize v1.0.1
 	github.com/fatih/color v1.18.0
 	github.com/google/go-cmp v0.7.0
