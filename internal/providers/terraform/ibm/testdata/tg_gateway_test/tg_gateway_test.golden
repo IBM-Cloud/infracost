@@ -3,12 +3,10 @@
                                                                                            
  ibm_tg_gateway.new_tg_gw                                                                  
  ├─ Connections Free allowance (first 2 Connection)            2  Connection         $0.00 
- ├─ Additional Connections (first 10 Connection)              10  Connection       $209.00 
- ├─ Additional Connections (next 30 Connection)               13  Connection       $203.78 
- ├─ Additional Connections (over 40 Connection)                0  Connection         $0.00 
+ ├─ Additional Connections                                    23  Connection       $920.00 
  └─ Data Transfer Global                                   2,500  GB                $52.25 
                                                                                            
- OVERALL TOTAL                                                                     $465.03 
+ OVERALL TOTAL                                                                     $972.25 
 ──────────────────────────────────
 1 cloud resource was detected:
 ∙ 1 was estimated, it includes usage-based costs, see https://infracost.io/usage-file

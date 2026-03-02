@@ -81,13 +81,22 @@ type ResourceInstance struct {
 	WD_CustomModels *float64 `infracost_usage:"wd_custom_models"`
 	WD_Collections  *float64 `infracost_usage:"wd_collections"`
 	// watsonx Orchestrate
-	WO_Instance  *float64 `infracost_usage:"wo_instance"`
-	WO_mau       *float64 `infracost_usage:"wo_monthly_active_users"`
-	WO_vu        *float64 `infracost_usage:"wo_monthly_voice_users"`
-	WO_skillruns *float64 `infracost_usage:"wo_skill_runs"`
-	WO_Class1RU  *float64 `infracost_usage:"wo_class1_ru"`
-	WO_Class2RU  *float64 `infracost_usage:"wo_class2_ru"`
-	WO_Class3RU  *float64 `infracost_usage:"wo_class3_ru"`
+	WO_Instance               *float64 `infracost_usage:"wo_instance"`
+	WO_mau                    *float64 `infracost_usage:"wo_monthly_active_users"`
+	WO_vu                     *float64 `infracost_usage:"wo_monthly_voice_users"`
+	WO_skillruns              *float64 `infracost_usage:"wo_skill_runs"`
+	WO_Class1RU               *float64 `infracost_usage:"wo_class1_ru"`
+	WO_Class2RU               *float64 `infracost_usage:"wo_class2_ru"`
+	WO_Class3RU               *float64 `infracost_usage:"wo_class3_ru"`
+	WO_AgentOracleHCM         *float64 `infracost_usage:"wo_oracle_hcm_agents"`
+	WO_AgentWorkdayHCM        *float64 `infracost_usage:"wo_workday_hcm_agents"`
+	WO_AgentSAPSuccessFactors *float64 `infracost_usage:"wo_sap_success_factors_agents"`
+	WO_AgentSourcingContract  *float64 `infracost_usage:"wo_sourcing_contract_agents"`
+	WO_AgentLearningDev       *float64 `infracost_usage:"wo_learning_dev_oracle_agents"`
+	WO_AgentPurchasing        *float64 `infracost_usage:"wo_purchasing_agents"`
+	WO_AgentInvoiceMgmt       *float64 `infracost_usage:"wo_invoice_mgmt_agents"`
+	WO_AgentSupplierMgmt      *float64 `infracost_usage:"wo_supplier_mgmt_agents"`
+	WO_AgentSalesProspecting  *float64 `infracost_usage:"wo_sales_prospecting_agents"`
 
 	// Security and Compliance Center (SCC)
 	SCC_Evaluations *float64 `infracost_usage:"scc_evaluations"`

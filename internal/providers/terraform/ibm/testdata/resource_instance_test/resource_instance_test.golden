@@ -2,36 +2,36 @@
  Name                                                                              Monthly Qty  Unit                            Monthly Cost 
                                                                                                                                              
  ibm_resource_instance.apprapp["basic"]                                                                                                      
- ├─ Active Entity IDs                                                                   10,001  Active Entity IDss                   $104.51 
- └─ API Calls                                                                               15  100k API Calls                       $156.75 
+ ├─ Active Entity IDs                                                                   10,001  Active Entity IDss                   $105.51 
+ └─ API Calls                                                                               15  100k API Calls                       $158.25 
                                                                                                                                              
  ibm_resource_instance.apprapp["enterprise"]                                                                                                 
- ├─ Instance                                                                                 1  Instance                             $523.00 
+ ├─ Instance                                                                                 1  Instance                             $528.00 
  ├─ Additional Active Entity IDs (first 10000 included)                                      1  Active Entity IDs                      $0.01 
- └─ Additional API Calls (first 1000000 included)                                            5  100k API Calls                        $52.25 
+ └─ Additional API Calls (first 1000000 included)                                            5  100k API Calls                        $52.75 
                                                                                                                                              
  ibm_resource_instance.apprapp["lite"]                                                                                                       
  └─ Lite plan                                                                                1                                         $0.00 
                                                                                                                                              
  ibm_resource_instance.apprapp["standardv2"]                                                                                                 
- ├─ Instance                                                                                 1  Instance                             $261.00 
- ├─ Additional Active Entity IDs (first 1000 included)                                   9,001  Active Entity IDss                    $94.06 
- └─ Additional API Calls (first 100000 included)                                            14  100k API Calls                       $146.30 
+ ├─ Instance                                                                                 1  Instance                             $264.00 
+ ├─ Additional Active Entity IDs (first 1000 included)                                   9,001  Active Entity IDss                    $94.96 
+ └─ Additional API Calls (first 100000 included)                                            14  100k API Calls                       $147.70 
                                                                                                                                              
  ibm_resource_instance.apprapp_no_usage["enterprise"]                                                                                        
- └─ Instance                                                                                 1  Instance                             $523.00 
+ └─ Instance                                                                                 1  Instance                             $528.00 
                                                                                                                                              
  ibm_resource_instance.apprapp_no_usage["lite"]                                                                                              
  └─ Lite plan                                                                                1                                         $0.00 
                                                                                                                                              
  ibm_resource_instance.apprapp_no_usage["standardv2"]                                                                                        
- └─ Instance                                                                                 1  Instance                             $261.00 
+ └─ Instance                                                                                 1  Instance                             $264.00 
                                                                                                                                              
  ibm_resource_instance.cd_instance_lite                                                                                                      
  └─ Lite plan                                                                                1                                         $0.00 
                                                                                                                                              
  ibm_resource_instance.cd_instance_professional                                                                                              
- └─ Authorized Users                                                                         2  Authorized Users                      $75.40 
+ └─ Authorized Users                                                                         2  Authorized Users                      $76.20 
                                                                                                                                              
  ibm_resource_instance.dns_svcs_standard                                                                                                     
  ├─ Additional Zones                                                                         1  Zones                                  $0.54 
@@ -50,28 +50,28 @@
  └─ Lite Plan                                                                                1  Instance                               $0.00 
                                                                                                                                              
  ibm_resource_instance.event_notifications["standard"]                                                                                       
- └─ Ingested Events                                                                          1  Million Events                         $1.08 
+ └─ Ingested Events                                                                          1  Million Events                         $1.09 
                                                                                                                                              
  ibm_resource_instance.event_notifications_no_usage                                                                                          
- └─ Ingested Events                                                      Monthly cost depends on usage: $1.08 per Million Events             
+ └─ Ingested Events                                                      Monthly cost depends on usage: $1.09 per Million Events             
                                                                                                                                              
  ibm_resource_instance.messagehub_enterprise                                                                                                 
- ├─ Base Capacity Unit-Hour                                                                  1  Hours                                  $7.37 
- ├─ Additional Capacity Unit-Hour                                                            1  Hours                                  $7.37 
- ├─ Additional Storage Terabyte per Hour                                                    10  Hours                                  $6.46 
- ├─ Gigabyte Transmitted Outbound                                                          100  GB                                     $8.61 
- └─ Mirroring Capacity Unit-Hour                                                             1  Hours                                  $1.47 
+ ├─ Base Capacity Unit-Hour                                                                  1  Hours                                  $7.44 
+ ├─ Additional Capacity Unit-Hour                                                            1  Hours                                  $7.44 
+ ├─ Additional Storage Terabyte per Hour                                                    10  Hours                                  $6.52 
+ ├─ Gigabyte Transmitted Outbound                                                          100  GB                                     $8.70 
+ └─ Mirroring Capacity Unit-Hour                                                             1  Hours                                  $1.48 
                                                                                                                                              
  ibm_resource_instance.messagehub_lite                                                                                                       
  └─ Lite plan                                                                                1                                         $0.00 
                                                                                                                                              
  ibm_resource_instance.messagehub_satellite                                                                                                  
- ├─ Base Capacity Unit-Hour                                                                  1  Hours                                  $7.37 
- └─ Additional Capacity Unit-Hour                                                            1  Hours                                  $7.37 
+ ├─ Base Capacity Unit-Hour                                                                  1  Hours                                  $7.44 
+ └─ Additional Capacity Unit-Hour                                                            1  Hours                                  $7.44 
                                                                                                                                              
  ibm_resource_instance.messagehub_standard                                                                                                   
- ├─ Partition Hours                                                                        100  Hours                                  $1.50 
- └─ Gigabyte Transmitted Outbound                                                          100  GB                                     $8.61 
+ ├─ Partition Hours                                                                        100  Hours                                  $1.52 
+ └─ Gigabyte Transmitted Outbound                                                          100  GB                                     $8.70 
                                                                                                                                              
  ibm_resource_instance.resource_instance_activity_tracker_7day                                                                               
  └─ Gigabyte Months                                                                         10  Gigabyte Months                       $16.15 
@@ -101,7 +101,7 @@
                                                                                                                                              
  ibm_resource_instance.resource_instance_kms                                                                                                 
  ├─ Key versions free allowance (first 5 Key Versions)                                       5  Key Versions                           $0.00 
- └─ Key versions                                                                           295  Key Versions                         $317.52 
+ └─ Key versions                                                                           295  Key Versions                         $320.70 
                                                                                                                                              
  ibm_resource_instance.resource_instance_logdna_14day                                                                                        
  └─ Gigabyte Months (14-day)                                                                 1  Gigabyte Months                        $2.15 
@@ -122,31 +122,31 @@
  └─ Lite plan                                                                                1                                         $0.00 
                                                                                                                                              
  ibm_resource_instance.resource_instance_logs                                                                                                
- ├─ Store and Search                                                                        34  GB/Hour                               $16.32 
- ├─ Analyze and Alert                                                                       34  GB/Hour                               $25.50 
- ├─ Priority Insights (Retention 7 days)                                                    34  GB/Hour                               $40.80 
- ├─ Priority Insights (Retention 14 days)                                                   34  GB/Hour                               $59.50 
- ├─ Priority Insights (Retention 30 days)                                                   34  GB/Hour                               $76.50 
- ├─ Priority Insights (Retention 60 days)                                                   34  GB/Hour                               $93.50 
- └─ Priority Insights (Retention 90 days)                                                   34  GB/Hour                              $110.50 
+ ├─ Store and Search                                                                        34  GB/Hour                               $16.48 
+ ├─ Analyze and Alert                                                                       34  GB/Hour                               $25.84 
+ ├─ Priority Insights (Retention 7 days)                                                    34  GB/Hour                               $41.21 
+ ├─ Priority Insights (Retention 14 days)                                                   34  GB/Hour                               $60.18 
+ ├─ Priority Insights (Retention 30 days)                                                   34  GB/Hour                               $77.18 
+ ├─ Priority Insights (Retention 60 days)                                                   34  GB/Hour                               $94.52 
+ └─ Priority Insights (Retention 90 days)                                                   34  GB/Hour                              $111.52 
                                                                                                                                              
  ibm_resource_instance.resource_instance_monitoring_graduated                                                                                
  ├─ Additional Time series (first 1000 Time series hour)                                   100  Time series hour                       $0.01 
  ├─ Additional Time series (next 9000 Time series hour)                                      0  Time series hour                       $0.00 
  ├─ Additional Time series (next 90000 Time series hour)                                     0  Time series hour                       $0.00 
  ├─ Additional Time series (over 100000 Time series hour)                                    0  Time series hour                       $0.00 
- ├─ Additional Container Hours                                                           1,460  Container Hours                        $1.09 
- ├─ Additional API Calls                                                               100,000  API Calls                              $1.08 
- └─ Node Hours                                                                             730  Node Hours                            $37.72 
+ ├─ Additional Container Hours                                                           1,460  Container Hours                        $1.10 
+ ├─ Additional API Calls                                                               100,000  API Calls                              $1.09 
+ └─ Node Hours                                                                             730  Node Hours                            $38.09 
                                                                                                                                              
  ibm_resource_instance.resource_instance_monitoring_graduated_no_usage                                                                       
- ├─ Additional Time series (first 1000 Time series hour)                 Monthly cost depends on usage: $0.0001195944 per Time series hour   
- ├─ Additional Time series (next 9000 Time series hour)                  Monthly cost depends on usage: $0.0000747465 per Time series hour   
- ├─ Additional Time series (next 90000 Time series hour)                 Monthly cost depends on usage: $0.0000448479 per Time series hour   
- ├─ Additional Time series (over 100000 Time series hour)                Monthly cost depends on usage: $0.0000298986 per Time series hour   
- ├─ Additional Container Hours                                           Monthly cost depends on usage: $0.0007474653 per Container Hours    
- ├─ Additional API Calls                                                 Monthly cost depends on usage: $0.0000107635 per API Calls          
- └─ Node Hours                                                           Monthly cost depends on usage: $0.0516648 per Node Hours            
+ ├─ Additional Time series (first 1000 Time series hour)                 Monthly cost depends on usage: $0.000095675 per Time series hour    
+ ├─ Additional Time series (next 9000 Time series hour)                  Monthly cost depends on usage: $0.0000597972 per Time series hour   
+ ├─ Additional Time series (next 90000 Time series hour)                 Monthly cost depends on usage: $0.0000358778 per Time series hour   
+ ├─ Additional Time series (over 100000 Time series hour)                Monthly cost depends on usage: $0.0000239181 per Time series hour   
+ ├─ Additional Container Hours                                           Monthly cost depends on usage: $0.0007549403 per Container Hours    
+ ├─ Additional API Calls                                                 Monthly cost depends on usage: $0.0000108711 per API Calls          
+ └─ Node Hours                                                           Monthly cost depends on usage: $0.0521814 per Node Hours            
                                                                                                                                              
  ibm_resource_instance.resource_instance_monitoring_lite                                                                                     
  └─ Lite plan                                                                                1                                         $0.00 
@@ -155,8 +155,8 @@
  └─ Workspace for Power Virtual Server                                                       1  Workspace                              $0.00 
                                                                                                                                              
  ibm_resource_instance.resource_instance_secrets_manager_standard                                                                            
- ├─ Instance                                                                                 1  Instance                             $321.00 
- └─ Active Secrets                                                                         400  Secrets                               $86.00 
+ ├─ Instance                                                                                 1  Instance                             $324.00 
+ └─ Active Secrets                                                                         400  Secrets                               $86.80 
                                                                                                                                              
  ibm_resource_instance.resource_instance_secrets_manager_trial                                                                               
  └─ Trial plan                                                                               1                                         $0.00 
@@ -168,109 +168,109 @@
  └─ Trial                                                                                    1                                         $0.00 
                                                                                                                                              
  ibm_resource_instance.sccwp_graduated_tier                                                                                                  
- ├─ Multi-Cloud CSPM Compute Instance Hours (first 25 Instance-Hours)                       25  Instance-Hours                       $450.00 
- ├─ Multi-Cloud CSPM Compute Instance Hours (next 25 Instance-Hours)                        25  Instance-Hours                       $382.50 
- ├─ Multi-Cloud CSPM Compute Instance Hours (next 50 Instance-Hours)                        50  Instance-Hours                       $675.00 
- ├─ Multi-Cloud CSPM Compute Instance Hours (next 150 Instance-Hours)                      150  Instance-Hours                     $1,890.00 
- ├─ Multi-Cloud CSPM Compute Instance Hours (next 250 Instance-Hours)                      250  Instance-Hours                     $2,700.00 
- ├─ Multi-Cloud CSPM Compute Instance Hours (over 500 Instance-Hours)                        1  Instance-Hours                         $9.90 
- ├─ Node Hours (first 3 Instance-Hours)                                                      3  Instance-Hours                         $0.19 
+ ├─ Multi-Cloud CSPM Compute Instance Hours (first 25 Instance-Hours)                       25  Instance-Hours                       $454.50 
+ ├─ Multi-Cloud CSPM Compute Instance Hours (next 25 Instance-Hours)                        25  Instance-Hours                       $386.33 
+ ├─ Multi-Cloud CSPM Compute Instance Hours (next 50 Instance-Hours)                        50  Instance-Hours                       $681.75 
+ ├─ Multi-Cloud CSPM Compute Instance Hours (next 150 Instance-Hours)                      150  Instance-Hours                     $1,908.90 
+ ├─ Multi-Cloud CSPM Compute Instance Hours (next 250 Instance-Hours)                      250  Instance-Hours                     $2,727.00 
+ ├─ Multi-Cloud CSPM Compute Instance Hours (over 500 Instance-Hours)                        1  Instance-Hours                        $10.00 
+ ├─ Node Hours (first 3 Instance-Hours)                                                      3  Instance-Hours                         $0.20 
  ├─ Node Hours (next 2 Instance-Hours)                                                       2  Instance-Hours                         $0.11 
  ├─ Node Hours (next 5 Instance-Hours)                                                       5  Instance-Hours                         $0.24 
  ├─ Node Hours (next 15 Instance-Hours)                                                     15  Instance-Hours                         $0.68 
- ├─ Node Hours (next 25 Instance-Hours)                                                     25  Instance-Hours                         $0.97 
+ ├─ Node Hours (next 25 Instance-Hours)                                                     25  Instance-Hours                         $0.98 
  ├─ Node Hours (over 50 Instance-Hours)                                                      1  Instance-Hours                         $0.04 
  └─ VM Node Hours (first 25 Instance-Hours)                                                 25  Instance-Hours                         $0.56 
- └─ VM Node Hours (next 25 Instance-Hours)                                                  25  Instance-Hours                         $0.47 
- └─ VM Node Hours (next 50 Instance-Hours)                                                  50  Instance-Hours                         $0.83 
- └─ VM Node Hours (next 150 Instance-Hours)                                                150  Instance-Hours                         $2.33 
- └─ VM Node Hours (next 250 Instance-Hours)                                                250  Instance-Hours                         $3.33 
+ └─ VM Node Hours (next 25 Instance-Hours)                                                  25  Instance-Hours                         $0.48 
+ └─ VM Node Hours (next 50 Instance-Hours)                                                  50  Instance-Hours                         $0.84 
+ └─ VM Node Hours (next 150 Instance-Hours)                                                150  Instance-Hours                         $2.36 
+ └─ VM Node Hours (next 250 Instance-Hours)                                                250  Instance-Hours                         $3.37 
  └─ VM Node Hours (over 500 Instance-Hours)                                                  1  Instance-Hours                         $0.01 
                                                                                                                                              
  ibm_resource_instance.wa_instance_enterprise                                                                                                
- ├─ Instance (50000 MAU included)                                                            1  Instance                           $6,000.00 
- ├─ Additional Monthly Active Users                                                          1  1K MAU                               $120.00 
- └─ Monthly Active Users using voice                                                         1  1K MAU                                $90.00 
+ ├─ Instance (50000 MAU included)                                                            1  Instance                           $6,360.00 
+ ├─ Additional Monthly Active Users                                                          1  1K MAU                               $127.00 
+ └─ Monthly Active Users using voice                                                         1  1K MAU                                $95.40 
                                                                                                                                              
  ibm_resource_instance.wa_instance_lite                                                                                                      
  └─ Lite plan                                                                                1                                         $0.00 
                                                                                                                                              
  ibm_resource_instance.wa_instance_plus                                                                                                      
- ├─ Instance (1000 MAU included)                                                             1  Instance                             $140.00 
- ├─ Additional Monthly Active Users                                                         10  100 MAU                              $140.00 
- └─ Monthly Active Users using voice                                                         1  100 MAU                                $9.00 
+ ├─ Instance (1000 MAU included)                                                             1  Instance                             $148.00 
+ ├─ Additional Monthly Active Users                                                         10  100 MAU                              $148.50 
+ └─ Monthly Active Users using voice                                                         1  100 MAU                                $9.54 
                                                                                                                                              
  ibm_resource_instance.wa_instance_trial                                                                                                     
  └─ Trial                                                                                    1                                         $0.00 
                                                                                                                                              
  ibm_resource_instance.watson_discovery_enterprise                                                                                           
- ├─ Instance                                                                                 1  Instance                           $5,000.00 
- ├─ Additional Monthly Documents                                                         1,000  Documents                              $5.00 
- ├─ Additional Monthly Queries                                                           1,000  Queries                                $5.00 
- ├─ Additional Monthly Custom Models                                                         1  Custom Models                        $500.00 
- └─ Additional Monthly Collections                                                           1  Hundred Collections                  $500.00 
+ ├─ Instance                                                                                 1  Instance                           $5,300.00 
+ ├─ Additional Monthly Documents                                                         1,000  Documents                              $5.30 
+ ├─ Additional Monthly Queries                                                           1,000  Queries                                $5.30 
+ ├─ Additional Monthly Custom Models                                                         1  Custom Models                        $530.00 
+ └─ Additional Monthly Collections                                                           1  Hundred Collections                  $530.00 
                                                                                                                                              
  ibm_resource_instance.watson_discovery_plus                                                                                                 
- ├─ Instance                                                                                 1  Instance                             $500.00 
- ├─ Additional Monthly Documents                                                         1,000  Documents                             $50.00 
- └─ Additional Monthly Queries                                                           1,000  Queries                               $20.00 
+ ├─ Instance                                                                                 1  Instance                             $530.00 
+ ├─ Additional Monthly Documents                                                         1,000  Documents                             $53.00 
+ └─ Additional Monthly Queries                                                           1,000  Queries                               $21.20 
                                                                                                                                              
  ibm_resource_instance.watson_governance_essentials                                                                                          
- └─ Resource Units                                                                         100  RU                                    $60.00 
+ └─ Resource Units                                                                         100  RU                                    $64.00 
                                                                                                                                              
  ibm_resource_instance.watson_governance_lite                                                                                                
  └─ Lite plan                                                                                1                                         $0.00 
                                                                                                                                              
  ibm_resource_instance.watson_governance_standard_v2                                                                                         
- └─ Deployed Models                                                                          1  Model                                $261.00 
+ └─ Deployed Models                                                                          1  Model                                $277.00 
                                                                                                                                              
  ibm_resource_instance.watson_studio_lite                                                                                                    
  └─ Lite plan                                                                                1                                         $0.00 
                                                                                                                                              
  ibm_resource_instance.watson_studio_professional                                                                                            
- └─ Capacity Unit-Hours                                                                      1  CUH                                    $1.02 
+ └─ Capacity Unit-Hours                                                                      1  CUH                                    $1.08 
                                                                                                                                              
  ibm_resource_instance.wml_instance_essentials                                                                                               
- ├─ Capacity Unit-Hours                                                                     20  CUH                                   $10.40 
+ ├─ Capacity Unit-Hours                                                                     20  CUH                                   $11.00 
  ├─ Mistral Large Output Resource Unit                                                      10  RU                                     $0.10 
- ├─ Text Extraction Category 1                                                              10  Pages                                  $0.38 
- ├─ Text Extraction Category 2                                                              10  Pages                                  $0.19 
+ ├─ Text Extraction Category 1                                                              10  Pages                                  $0.40 
+ ├─ Text Extraction Category 2                                                              10  Pages                                  $0.20 
  ├─ Resource Units (IBM Models)                                                            500  RU                                     $0.05 
  ├─ Resource Units (Third Party Models)                                                    500  RU                                     $0.05 
  └─ Mistral Large Input Resource Unit                                                       10  RU                                     $0.03 
                                                                                                                                              
  ibm_resource_instance.wml_instance_essentials_no_quantity                                                                                   
- ├─ Capacity Unit-Hours                                                  Monthly cost depends on usage: $0.52 per CUH                        
- ├─ Mistral Large Output Resource Unit                                   Monthly cost depends on usage: $0.01 per RU                         
- ├─ Text Extraction Category 1                                           Monthly cost depends on usage: $0.038 per Pages                     
- ├─ Text Extraction Category 2                                           Monthly cost depends on usage: $0.019 per Pages                     
- ├─ Resource Units (IBM Models)                                          Monthly cost depends on usage: $0.0001 per RU                       
- ├─ Resource Units (Third Party Models)                                  Monthly cost depends on usage: $0.0001 per RU                       
- └─ Mistral Large Input Resource Unit                                    Monthly cost depends on usage: $0.003 per RU                        
+ ├─ Capacity Unit-Hours                                                  Monthly cost depends on usage: $0.55 per CUH                        
+ ├─ Mistral Large Output Resource Unit                                   Monthly cost depends on usage: $0.0095 per RU                       
+ ├─ Text Extraction Category 1                                           Monthly cost depends on usage: $0.0403 per Pages                    
+ ├─ Text Extraction Category 2                                           Monthly cost depends on usage: $0.02015 per Pages                   
+ ├─ Resource Units (IBM Models)                                          Monthly cost depends on usage: $0.000106 per RU                     
+ ├─ Resource Units (Third Party Models)                                  Monthly cost depends on usage: $0.000106 per RU                     
+ └─ Mistral Large Input Resource Unit                                    Monthly cost depends on usage: $0.00318 per RU                      
                                                                                                                                              
  ibm_resource_instance.wml_instance_lite                                                                                                     
  └─ Lite plan                                                                                1                                         $0.00 
                                                                                                                                              
  ibm_resource_instance.wml_instance_standard                                                                                                 
- ├─ Instance (2500 CUH included)                                                             1  Instance                           $1,050.00 
- ├─ Additional Capacity Unit-Hours                                                         500  CUH                                  $210.00 
+ ├─ Instance (2500 CUH included)                                                             1  Instance                           $1,110.00 
+ ├─ Additional Capacity Unit-Hours                                                         500  CUH                                  $225.00 
  ├─ Mistral Large Output Resource Unit                                                      10  RU                                     $0.10 
- ├─ Text Extraction Category 1                                                              10  Pages                                  $0.30 
- ├─ Text Extraction Category 2                                                              10  Pages                                  $0.15 
+ ├─ Text Extraction Category 1                                                              10  Pages                                  $0.32 
+ ├─ Text Extraction Category 2                                                              10  Pages                                  $0.16 
  ├─ Resource Units (IBM Models)                                                            500  RU                                     $0.05 
  ├─ Resource Units (Third Party Models)                                                    500  RU                                     $0.05 
  ├─ Mistral Large Input Resource Unit                                                       10  RU                                     $0.03 
- ├─ InstructLab Data                                                                        10  RU                                     $0.06 
+ ├─ InstructLab Data                                                                        10  RU                                     $0.07 
  ├─ InstructLab Tuning                                                                      10  RU                                     $0.07 
- ├─ Mistral Large Model Hosting Access                                                       1  Hours                                 $34.30 
- ├─ Mistral 1 GPU Model Hosting Access                                                       1  Hours                                  $8.60 
- ├─ Mistral 2 GPU Model Hosting Access                                                       1  Hours                                 $17.20 
- ├─ Small Model Hosting                                                                      1  Hours                                  $5.22 
- ├─ Medium Model Hosting                                                                     1  Hours                                 $10.40 
- ├─ Large Model Hosting                                                                      1  Hours                                 $20.85 
- ├─ Extra Large Model Hosting                                                                1  Hours                                 $41.70 
- ├─ Extra Small Model Hosting                                                                1  Hours                                  $4.43 
- ├─ Very Large Model Hosting                                                                 1  Hours                                 $83.50 
+ ├─ Mistral Large Model Hosting Access                                                       1  Hours                                 $36.40 
+ ├─ Mistral 1 GPU Model Hosting Access                                                       1  Hours                                  $9.12 
+ ├─ Mistral 2 GPU Model Hosting Access                                                       1  Hours                                 $18.25 
+ ├─ Small Model Hosting                                                                      1  Hours                                  $5.53 
+ ├─ Medium Model Hosting                                                                     1  Hours                                 $11.00 
+ ├─ Large Model Hosting                                                                      1  Hours                                 $22.10 
+ ├─ Extra Large Model Hosting                                                                1  Hours                                 $44.20 
+ ├─ Extra Small Model Hosting                                                                1  Hours                                  $4.70 
+ ├─ Very Large Model Hosting                                                                 1  Hours                                 $88.50 
  ├─ Model Hosting 1 L40S                                                                     1  Hours                                  $4.43 
  ├─ Model Hosting 2 L40S                                                                     1  Hours                                  $8.86 
  ├─ Model Hosting 1 A100                                                                     1  Hours                                  $5.80 
@@ -287,25 +287,25 @@
  └─ Model Hosting 8 H200                                                                     1  Hours                                $128.00 
                                                                                                                                              
  ibm_resource_instance.wml_instance_standard_no_quantity                                                                                     
- ├─ Instance (2500 CUH included)                                                             1  Instance                           $1,050.00 
- ├─ Additional Capacity Unit-Hours                                       Monthly cost depends on usage: $0.42 per CUH                        
- ├─ Mistral Large Output Resource Unit                                   Monthly cost depends on usage: $0.01 per RU                         
- ├─ Text Extraction Category 1                                           Monthly cost depends on usage: $0.03 per Pages                      
- ├─ Text Extraction Category 2                                           Monthly cost depends on usage: $0.015 per Pages                     
- ├─ Resource Units (IBM Models)                                          Monthly cost depends on usage: $0.0001 per RU                       
- ├─ Resource Units (Third Party Models)                                  Monthly cost depends on usage: $0.0001 per RU                       
- ├─ Mistral Large Input Resource Unit                                    Monthly cost depends on usage: $0.003 per RU                        
- ├─ InstructLab Data                                                     Monthly cost depends on usage: $0.00625 per RU                      
- ├─ InstructLab Tuning                                                   Monthly cost depends on usage: $0.007 per RU                        
- ├─ Mistral Large Model Hosting Access                                   Monthly cost depends on usage: $34.30 per Hours                     
- ├─ Mistral 1 GPU Model Hosting Access                                   Monthly cost depends on usage: $8.60 per Hours                      
- ├─ Mistral 2 GPU Model Hosting Access                                   Monthly cost depends on usage: $17.20 per Hours                     
- ├─ Small Model Hosting                                                  Monthly cost depends on usage: $5.22 per Hours                      
- ├─ Medium Model Hosting                                                 Monthly cost depends on usage: $10.40 per Hours                     
- ├─ Large Model Hosting                                                  Monthly cost depends on usage: $20.85 per Hours                     
- ├─ Extra Large Model Hosting                                            Monthly cost depends on usage: $41.70 per Hours                     
- ├─ Extra Small Model Hosting                                            Monthly cost depends on usage: $4.43 per Hours                      
- ├─ Very Large Model Hosting                                             Monthly cost depends on usage: $83.50 per Hours                     
+ ├─ Instance (2500 CUH included)                                                             1  Instance                           $1,110.00 
+ ├─ Additional Capacity Unit-Hours                                       Monthly cost depends on usage: $0.45 per CUH                        
+ ├─ Mistral Large Output Resource Unit                                   Monthly cost depends on usage: $0.0095 per RU                       
+ ├─ Text Extraction Category 1                                           Monthly cost depends on usage: $0.0318 per Pages                    
+ ├─ Text Extraction Category 2                                           Monthly cost depends on usage: $0.0159 per Pages                    
+ ├─ Resource Units (IBM Models)                                          Monthly cost depends on usage: $0.000106 per RU                     
+ ├─ Resource Units (Third Party Models)                                  Monthly cost depends on usage: $0.000106 per RU                     
+ ├─ Mistral Large Input Resource Unit                                    Monthly cost depends on usage: $0.00318 per RU                      
+ ├─ InstructLab Data                                                     Monthly cost depends on usage: $0.00663 per RU                      
+ ├─ InstructLab Tuning                                                   Monthly cost depends on usage: $0.00742 per RU                      
+ ├─ Mistral Large Model Hosting Access                                   Monthly cost depends on usage: $36.40 per Hours                     
+ ├─ Mistral 1 GPU Model Hosting Access                                   Monthly cost depends on usage: $9.12 per Hours                      
+ ├─ Mistral 2 GPU Model Hosting Access                                   Monthly cost depends on usage: $18.25 per Hours                     
+ ├─ Small Model Hosting                                                  Monthly cost depends on usage: $5.53 per Hours                      
+ ├─ Medium Model Hosting                                                 Monthly cost depends on usage: $11.00 per Hours                     
+ ├─ Large Model Hosting                                                  Monthly cost depends on usage: $22.10 per Hours                     
+ ├─ Extra Large Model Hosting                                            Monthly cost depends on usage: $44.20 per Hours                     
+ ├─ Extra Small Model Hosting                                            Monthly cost depends on usage: $4.70 per Hours                      
+ ├─ Very Large Model Hosting                                             Monthly cost depends on usage: $88.50 per Hours                     
  ├─ Model Hosting 1 L40S                                                 Monthly cost depends on usage: $4.43 per Hours                      
  ├─ Model Hosting 2 L40S                                                 Monthly cost depends on usage: $8.86 per Hours                      
  ├─ Model Hosting 1 A100                                                 Monthly cost depends on usage: $5.80 per Hours                      
@@ -330,6 +330,34 @@
  ├─ Class 2 Resource Units                                                                   1  1K RU                                  $1.91 
  └─ Class 3 Resource Units                                                                   1  1K RU                                  $5.29 
                                                                                                                                              
+ ibm_resource_instance.wx_orchestrate_essentials_agentic_no_usage                                                                            
+ ├─ Instance (4000 MAUs included)                                                            1  Instance                             $530.00 
+ ├─ Additional Monthly Active Users                                      Monthly cost depends on usage: $150.00 per 1K MAU                   
+ ├─ Monthly Active Users using voice                                     Monthly cost depends on usage: $100.00 per 1K MAU                   
+ ├─ Oracle HCM Access                                                    Monthly cost depends on usage: $100.00 per Domain Agent             
+ ├─ Workday HCM Access                                                   Monthly cost depends on usage: $100.00 per Domain Agent             
+ ├─ SAP SuccessFactors Access                                            Monthly cost depends on usage: $100.00 per Domain Agent             
+ ├─ Sourcing and Contract Management Access                              Monthly cost depends on usage: $100.00 per Domain Agent             
+ ├─ Learning and Development for Oracle HCM Access                       Monthly cost depends on usage: $100.00 per Domain Agent             
+ ├─ Purchasing with Coupa Access                                         Monthly cost depends on usage: $100.00 per Domain Agent             
+ ├─ Invoice Management with Coupa Access                                 Monthly cost depends on usage: $100.00 per Domain Agent             
+ ├─ Supplier Management with Coupa Access                                Monthly cost depends on usage: $100.00 per Domain Agent             
+ └─ Sales Prospecting Access                                             Monthly cost depends on usage: $100.00 per Domain Agent             
+                                                                                                                                             
+ ibm_resource_instance.wx_orchestrate_essentials_agentic_usage                                                                               
+ ├─ Instance (4000 MAUs included)                                                            1  Instance                             $530.00 
+ ├─ Additional Monthly Active Users                                                         37  1K MAU                             $5,550.00 
+ ├─ Monthly Active Users using voice                                                         1  1K MAU                               $100.00 
+ ├─ Oracle HCM Access                                                                        1  Domain Agent                         $100.00 
+ ├─ Workday HCM Access                                                                       1  Domain Agent                         $100.00 
+ ├─ SAP SuccessFactors Access                                                                1  Domain Agent                         $100.00 
+ ├─ Sourcing and Contract Management Access                                                  1  Domain Agent                         $100.00 
+ ├─ Learning and Development for Oracle HCM Access                                           1  Domain Agent                         $100.00 
+ ├─ Purchasing with Coupa Access                                                             1  Domain Agent                         $100.00 
+ ├─ Invoice Management with Coupa Access                                                     1  Domain Agent                         $100.00 
+ ├─ Supplier Management with Coupa Access                                                    1  Domain Agent                         $100.00 
+ └─ Sales Prospecting Access                                                                 1  Domain Agent                         $100.00 
+                                                                                                                                             
  ibm_resource_instance.wx_orchestrate_essentials_no_usage                                                                                    
  ├─ Instance (4000 MAUs included)                                                            1  Instance                             $500.00 
  ├─ Additional Monthly Active Users                                      Monthly cost depends on usage: $100.00 per 1K MAU                   
@@ -338,6 +366,16 @@
  ├─ Class 1 Resource Units                                               Monthly cost depends on usage: $0.60 per 1K RU                      
  ├─ Class 2 Resource Units                                               Monthly cost depends on usage: $1.91 per 1K RU                      
  └─ Class 3 Resource Units                                               Monthly cost depends on usage: $5.29 per 1K RU                      
+                                                                                                                                             
+ ibm_resource_instance.wx_orchestrate_premium_agentic_no_usage                                                                               
+ ├─ Instance (50000 MAUs included)                                                           1  Instance                          $18,000.00 
+ ├─ Additional Monthly Active Users                                      Monthly cost depends on usage: $150.00 per 1K MAU                   
+ └─ Monthly Active Users using voice                                     Monthly cost depends on usage: $100.00 per 1K MAU                   
+                                                                                                                                             
+ ibm_resource_instance.wx_orchestrate_premium_agentic_usage                                                                                  
+ ├─ Instance (50000 MAUs included)                                                           1  Instance                          $18,000.00 
+ ├─ Additional Monthly Active Users                                                          1  1K MAU                               $150.00 
+ └─ Monthly Active Users using voice                                                         1  1K MAU                               $100.00 
                                                                                                                                              
  ibm_resource_instance.wx_orchestrate_standard                                                                                               
  ├─ Instance (40000 MAUs included)                                                           1  Instance                           $6,000.00 
@@ -348,19 +386,20 @@
  ├─ Class 2 Resource Units                                                                   1  1K RU                                  $1.91 
  └─ Class 3 Resource Units                                                                   1  1K RU                                  $5.29 
                                                                                                                                              
- ibm_resource_instance.wx_orchestrate_standard_no_usage                                                                                      
- ├─ Instance (40000 MAUs included)                                                           1  Instance                           $6,000.00 
- ├─ Additional Monthly Active Users                                      Monthly cost depends on usage: $100.00 per 1K MAU                   
- ├─ Monthly Active Users using voice                                     Monthly cost depends on usage: $100.00 per 1K MAU                   
- ├─ Skill Runs                                                           Monthly cost depends on usage: $100.00 per 10K Skill Runs           
- ├─ Class 1 Resource Units                                               Monthly cost depends on usage: $0.60 per 1K RU                      
- ├─ Class 2 Resource Units                                               Monthly cost depends on usage: $1.91 per 1K RU                      
- └─ Class 3 Resource Units                                               Monthly cost depends on usage: $5.29 per 1K RU                      
+ ibm_resource_instance.wx_orchestrate_standard_agentic_no_usage                                                                              
+ ├─ Instance (40000 MAUs included)                                                           1  Instance                           $6,360.00 
+ ├─ Additional Monthly Active Users                                      Monthly cost depends on usage: $150.00 per 1K MAU                   
+ └─ Monthly Active Users using voice                                     Monthly cost depends on usage: $100.00 per 1K MAU                   
+                                                                                                                                             
+ ibm_resource_instance.wx_orchestrate_standard_agentic_usage                                                                                 
+ ├─ Instance (40000 MAUs included)                                                           1  Instance                           $6,360.00 
+ ├─ Additional Monthly Active Users                                                          1  1K MAU                               $150.00 
+ └─ Monthly Active Users using voice                                                         1  1K MAU                               $100.00 
                                                                                                                                              
  ibm_resource_instance.wx_orchestrate_trial                                                                                                  
  └─ Trial plan                                                                               1                                         $0.00 
                                                                                                                                              
- OVERALL TOTAL                                                                                                                    $40,823.81 
+ OVERALL TOTAL                                                                                                                    $92,702.90 
 ──────────────────────────────────
-61 cloud resources were detected:
-∙ 61 were estimated, all of which include usage-based costs, see https://infracost.io/usage-file
+66 cloud resources were detected:
+∙ 66 were estimated, all of which include usage-based costs, see https://infracost.io/usage-file

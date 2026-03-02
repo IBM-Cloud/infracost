@@ -44,7 +44,9 @@
  ├─ Storage Capacity (next 49999 GB)          Monthly cost depends on usage: $0.02 per GB                
  ├─ Storage Capacity (next 150000 GB)         Monthly cost depends on usage: $0.017 per GB               
  ├─ Storage Capacity (next 300000 GB)         Monthly cost depends on usage: $0.015 per GB               
- ├─ Storage Capacity (over 499999 GB)         Monthly cost depends on usage: $0.012 per GB               
+ ├─ Storage Capacity (next 999500000 GB)      Monthly cost depends on usage: $0.012 per GB               
+ ├─ Storage Capacity (next 1500000 GB)        Monthly cost depends on usage: $0.012 per GB               
+ ├─ Storage Capacity (over 1999999 GB)        Monthly cost depends on usage: $0.01 per GB                
  ├─ Free Class A requests                     Monthly cost depends on usage: $0.00 per 1k API calls      
  ├─ Class A requests                          Monthly cost depends on usage: $0.005225 per 1k API calls  
  ├─ Free Class B requests                     Monthly cost depends on usage: $0.00 per 10k API calls     
@@ -57,7 +59,9 @@
  ├─ Storage Capacity (next 49999 GB)                       1,000  GB                              $20.00 
  ├─ Storage Capacity (next 150000 GB)                          0  GB                               $0.00 
  ├─ Storage Capacity (next 300000 GB)                          0  GB                               $0.00 
- ├─ Storage Capacity (over 499999 GB)                          0  GB                               $0.00 
+ ├─ Storage Capacity (next 999500000 GB)                       0  GB                               $0.00 
+ ├─ Storage Capacity (next 1500000 GB)                         0  GB                               $0.00 
+ ├─ Storage Capacity (over 1999999 GB)                         0  GB                               $0.00 
  ├─ Free Class A requests                                    100  1k API calls                     $0.00 
  ├─ Class A requests                                         900  1k API calls                     $4.70 
  ├─ Free Class B requests                                     10  10k API calls                    $0.00 
