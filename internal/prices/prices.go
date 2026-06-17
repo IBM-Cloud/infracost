@@ -159,6 +159,10 @@ func setCostComponentPrice(ctx *config.RunContext, currency string, r *schema.Re
 		} else {
 			c.SetPrice(p)
 		}
+		// Store the unit from the price response
+		if prices[0].Get("unit").Exists() {
+			c.SetPriceUnit(prices[0].Get("unit").String())
+		}
 	} else {
 		// Both volume and tier pricing will have "tiers"
 		// For volume pricing we have to select to appropriate tier
@@ -208,6 +212,10 @@ func setCostComponentPrice(ctx *config.RunContext, currency string, r *schema.Re
 			priceTiers[i].Name = name
 		}
 		c.SetPriceTiers(priceTiers)
+		// Store the unit from the price response for tiered pricing
+		if prices[0].Get("unit").Exists() {
+			c.SetPriceUnit(prices[0].Get("unit").String())
+		}
 	}
 	c.SetPriceHash(prices[0].Get("priceHash").String())
 }

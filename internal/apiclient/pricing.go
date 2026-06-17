@@ -164,6 +164,7 @@ func (c *PricingAPIClient) buildQuery(product *schema.ProductFilter, price *sche
 				prices(filter: $priceFilter) {
 					priceHash
 					%s
+					unit
 					startUsageAmount
 					endUsageAmount
 				}
