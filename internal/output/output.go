@@ -390,6 +390,9 @@ func outputCostComponents(costComponents []*schema.CostComponent) []CostComponen
 		price_metric := ""
 		if c.PriceFilter != nil && c.PriceFilter.Unit != nil {
 			price_metric = *c.PriceFilter.Unit
+		} else if c.PriceUnit() != "" {
+			// Fallback to unit from price response if PriceFilter.Unit is not set
+			price_metric = c.PriceUnit()
 		}
 		comps = append(comps, CostComponent{
 			Name:            c.Name,
