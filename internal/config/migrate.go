@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"os"
 	"path"
+	"path/filepath"
 	"time"
 
 	"github.com/pkg/errors"
@@ -29,7 +30,7 @@ func (c *Config) migrateCredentials() error {
 			Version string `yaml:"version"`
 		}
 
-		data, err := os.ReadFile(credPath)
+		data, err := os.ReadFile(filepath.Clean(credPath))
 		if err != nil {
 			return err
 		}
@@ -50,7 +51,7 @@ func (c *Config) migrateCredentials() error {
 func (c *Config) migrateV0_7_17(oldPath string, newPath string) error {
 	log.Debugf("Migrating old credentials from %s to %s", oldPath, newPath)
 
-	data, err := os.ReadFile(oldPath)
+	data, err := os.ReadFile(filepath.Clean(oldPath))
 	if err != nil {
 		return err
 	}
@@ -90,7 +91,7 @@ func (c *Config) migrateV0_9_4(credPath string) error {
 	// Use MapSlice to keep the order of the items, so we can always use the first one
 	var oldCreds yaml.MapSlice
 
-	data, err := os.ReadFile(credPath)
+	data, err := os.ReadFile(filepath.Clean(credPath))
 	if err != nil {
 		return err
 	}

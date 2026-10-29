@@ -159,7 +159,7 @@ func AssertGoldenFile(t *testing.T, goldenFilePath string, actual []byte) {
 	expected := []byte("")
 	if _, err := os.Stat(goldenFilePath); err == nil || !os.IsNotExist(err) {
 		// golden file exists, load the data
-		expected, err = os.ReadFile(goldenFilePath)
+		expected, err = os.ReadFile(filepath.Clean(goldenFilePath))
 		assert.NoError(t, err)
 	}
 
@@ -169,7 +169,7 @@ func AssertGoldenFile(t *testing.T, goldenFilePath string, actual []byte) {
 			goldenFileDir := filepath.Dir(goldenFilePath)
 			if _, err := os.Stat(goldenFileDir); err != nil {
 				if os.IsNotExist(err) {
-					_ = os.MkdirAll(goldenFileDir, 0755)
+					_ = os.MkdirAll(goldenFileDir, 0600)
 				}
 			}
 

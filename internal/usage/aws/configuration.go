@@ -3,10 +3,12 @@ package aws
 
 import (
 	"context"
-	"github.com/infracost/infracost/internal/usage"
+	"log"
 	"os"
 	"strings"
 	"sync"
+
+	"github.com/infracost/infracost/internal/usage"
 
 	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/config"
@@ -40,7 +42,10 @@ func getConfig(ctx context.Context, region string) (aws.Config, error) {
 	if hasEnv {
 		oldEnv = os.Environ()
 		for k, v := range env {
-			os.Setenv(k, v)
+			err := os.Setenv(k, v)
+			if err != nil {
+				log.Println(err)
+			}
 		}
 	}
 
@@ -54,7 +59,10 @@ func resetEnv(items []string) {
 	for _, item := range items {
 		parts := strings.SplitN(item, "=", 2)
 		if len(parts) == 2 {
-			os.Setenv(parts[0], parts[1])
+			err := os.Setenv(parts[0], parts[1])
+			if err != nil {
+				log.Println(err)
+			}
 		}
 	}
 }
