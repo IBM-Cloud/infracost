@@ -2,6 +2,7 @@ package docs
 
 import (
 	"os"
+	"path/filepath"
 	"text/template"
 
 	"github.com/infracost/infracost/internal/providers/terraform"
@@ -12,7 +13,7 @@ func generateSupportedResourcesDocs(docsTemplatesPath string, outputPath string)
 	if err != nil {
 		return err
 	}
-	f, err := os.Create(outputPath + "/supported_resources.md")
+	f, err := os.Create(filepath.Clean(outputPath + "/supported_resources.md"))
 	if err != nil {
 		return err
 	}

@@ -127,7 +127,7 @@ func newRootCmd(ctx *config.RunContext) *cobra.Command {
 				var err error
 
 				if _, serr := os.Stat(debugFile); serr != nil {
-					f, err = os.OpenFile(debugFile, os.O_RDWR|os.O_CREATE|os.O_TRUNC, 0755)
+					f, err = os.OpenFile(debugFile, os.O_RDWR|os.O_CREATE|os.O_TRUNC, 0600)
 				} else {
 					f, err = os.Create(debugFile)
 				}

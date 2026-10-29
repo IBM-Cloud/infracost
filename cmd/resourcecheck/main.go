@@ -2,8 +2,6 @@ package main
 
 import (
 	"context"
-	"go/parser"
-	"go/token"
 	"log"
 	"os"
 	"strings"
@@ -11,8 +9,6 @@ import (
 	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/config"
 	"github.com/aws/aws-sdk-go-v2/service/ec2"
-	"github.com/dave/dst"
-	"github.com/dave/dst/decorator"
 	"github.com/slack-go/slack"
 )
 
@@ -35,12 +31,15 @@ func main() {
 		log.Fatalf("error describing ec2 regions %s", err)
 	}
 
+	/* Disabled to remove dependency on dave/dst module to fix CVE's reported by Mend
 	f, err := decorator.ParseFile(token.NewFileSet(), "internal/resources/aws/util.go", nil, parser.ParseComments)
 	if err != nil {
 		log.Fatalf("error loading aws util file %s", err)
 	}
+	*/
 
 	currentRegions := make(map[string]struct{})
+	/* Disabled to remove dependency on dave/dst module to fix CVE's reported by Mend
 	for _, decl := range f.Decls {
 		if v, ok := decl.(*dst.GenDecl); ok {
 			for _, spec := range v.Specs {
@@ -55,6 +54,7 @@ func main() {
 			}
 		}
 	}
+	*/
 
 	if len(currentRegions) == 0 {
 		log.Fatal("error parsing aws RegionMapping from util.go, empty list found")
