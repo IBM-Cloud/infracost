@@ -88,7 +88,7 @@ func credFromHCL(filename string, host string) (string, error) {
 }
 
 func credFromJSON(filename, host string) (string, error) {
-	data, err := os.ReadFile(filename)
+	data, err := os.ReadFile(filepath.Clean(filename))
 	if err != nil {
 		return "", err
 	}

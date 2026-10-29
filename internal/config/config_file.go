@@ -3,6 +3,7 @@ package config
 import (
 	"fmt"
 	"os"
+	"path/filepath"
 	"reflect"
 	"sort"
 	"strings"
@@ -213,7 +214,7 @@ func loadConfigFile(path string) (fileSpec, error) {
 		return cfgFile, fmt.Errorf("config file does not exist at %s", path)
 	}
 
-	content, err := os.ReadFile(path)
+	content, err := os.ReadFile(filepath.Clean(path))
 	if err != nil {
 		return cfgFile, fmt.Errorf("%w: %s", ErrorInvalidConfigFile, err)
 	}

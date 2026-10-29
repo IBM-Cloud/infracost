@@ -41,7 +41,7 @@ type ManifestModule struct {
 func readManifest(path string) (*Manifest, error) {
 	var manifest Manifest
 
-	data, err := os.ReadFile(path)
+	data, err := os.ReadFile(filepath.Clean(path))
 	if err != nil {
 		return &manifest, fmt.Errorf("Failed to read module manifest: %w", err)
 	}
@@ -67,7 +67,7 @@ func writeManifest(manifest *Manifest, path string) error {
 		return fmt.Errorf("failed to create directories for manifest: %w", err)
 	}
 
-	err = os.WriteFile(path, b, 0644) // nolint:gosec
+	err = os.WriteFile(path, b, 0600) // nolint:gosec
 	if err != nil {
 		return fmt.Errorf("failed to write manifest: %w", err)
 	}
