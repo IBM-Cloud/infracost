@@ -2,9 +2,18 @@ package ibm
 
 import (
 	"fmt"
+	"strings"
 
 	"github.com/shopspring/decimal"
 )
+
+func CleanRegion(region string) string {
+	parts := strings.Split(region, "-")
+	if len(parts) > 2 {
+		return strings.Join(parts[:2], "-")
+	}
+	return region
+}
 
 func strPtr(s string) *string {
 	return &s

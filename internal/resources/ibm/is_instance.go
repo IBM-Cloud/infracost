@@ -42,15 +42,17 @@ func (r *IsInstance) PopulateUsage(u *schema.UsageData) {
 
 func (r *IsInstance) instanceHoursCostComponent() *schema.CostComponent {
 
-	service := "is.reservation"
-	planNamePrefix := "instance-"
-	unit := "RESERVATION_HOURS_HOURLY"
+	service := "is.instance"
+	planNamePrefix := ""
+	unit := "INSTANCE_HOURS_MULTI_TENANT"
 
-	isConfidentialProfile, _ := regexp.MatchString("^.*c-.*$", r.Profile)
-	if isConfidentialProfile {
-		service = "is.instance"
-		planNamePrefix = ""
-		unit = "INSTANCE_HOURS_MULTI_TENANT"
+	// Gen2 profiles (bx2, bx2a, bx2d, cx2, cx2d, mx2, mx2d, gx2, ox2, ux2d, vx2d, l-*)
+	// are only priced as reservations. All newer profiles are priced under is.instance.
+	isLegacyProfile, _ := regexp.MatchString("^(l|[a-z]+2[a-z]?)-", r.Profile)
+	if isLegacyProfile {
+		service = "is.reservation"
+		planNamePrefix = "instance-"
+		unit = "RESERVATION_HOURS_HOURLY"
 	}
 
 	planName := fmt.Sprintf("%s%s", planNamePrefix, r.Profile)
@@ -72,7 +74,7 @@ func (r *IsInstance) instanceHoursCostComponent() *schema.CostComponent {
 		MonthlyQuantity: q,
 		ProductFilter: &schema.ProductFilter{
 			VendorName:    strPtr("ibm"),
-			Region:        strPtr(r.Region),
+			Region:        strPtr(CleanRegion(r.Region)),
 			Service:       strPtr(service),
 			ProductFamily: strPtr("service"),
 			AttributeFilters: []*schema.AttributeFilter{
@@ -101,7 +103,7 @@ func (r *IsInstance) bootVolumeCostComponent() *schema.CostComponent {
 			VendorName:    strPtr("ibm"),
 			ProductFamily: strPtr("service"),
 			Service:       strPtr("is.volume"),
-			Region:        strPtr(r.Region),
+			Region:        strPtr(CleanRegion(r.Region)),
 			AttributeFilters: []*schema.AttributeFilter{
 				{Key: "planName", ValueRegex: regexPtr(("gen2-volume-general-purpose"))},
 			},
@@ -146,7 +148,7 @@ func (r *IsInstance) imageHoursCostComponent() *schema.CostComponent {
 			MonthlyQuantity: q,
 			ProductFilter: &schema.ProductFilter{
 				VendorName:    strPtr("ibm"),
-				Region:        strPtr(r.Region),
+				Region:        strPtr(CleanRegion(r.Region)),
 				Service:       strPtr("is.instance"),
 				ProductFamily: strPtr("service"),
 				AttributeFilters: []*schema.AttributeFilter{
@@ -164,7 +166,7 @@ func (r *IsInstance) imageHoursCostComponent() *schema.CostComponent {
 			MonthlyQuantity: decimalPtr(decimal.NewFromInt(1)),
 			ProductFilter: &schema.ProductFilter{
 				VendorName:    strPtr("ibm"),
-				Region:        strPtr(r.Region),
+				Region:        strPtr(CleanRegion(r.Region)),
 				Service:       strPtr("is.instance"),
 				ProductFamily: strPtr("service"),
 				AttributeFilters: []*schema.AttributeFilter{
@@ -191,7 +193,7 @@ func (r *IsInstance) sqlLicenceCostComponent() *schema.CostComponent {
 		MonthlyQuantity: q,
 		ProductFilter: &schema.ProductFilter{
 			VendorName:    strPtr("ibm"),
-			Region:        strPtr(r.Region),
+			Region:        strPtr(CleanRegion(r.Region)),
 			Service:       strPtr("is.instance"),
 			ProductFamily: strPtr("service"),
 			AttributeFilters: []*schema.AttributeFilter{

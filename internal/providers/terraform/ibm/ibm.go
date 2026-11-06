@@ -4,11 +4,16 @@ import (
 	"encoding/json"
 	"fmt"
 
+	"github.com/infracost/infracost/internal/resources/ibm"
 	"github.com/infracost/infracost/internal/schema"
 	"github.com/tidwall/gjson"
 )
 
 var DefaultProviderRegion = "us-south"
+
+func CleanRegion(region string) string {
+	return ibm.CleanRegion(region)
+}
 
 func GetDefaultRefIDFunc(d *schema.ResourceData) []string {
 
@@ -30,6 +35,15 @@ func GetSpecialContext(d *schema.ResourceData) map[string]interface{} {
 }
 
 func GetResourceRegion(resourceType string, v gjson.Result) string {
+	if v.Get("region").Exists() && v.Get("region").String() != "" {
+		return v.Get("region").String()
+	}
+	if v.Get("location").Exists() && v.Get("location").String() != "" {
+		return v.Get("location").String()
+	}
+	if v.Get("zone").Exists() && v.Get("zone").String() != "" {
+		return v.Get("zone").String()
+	}
 	return ""
 }
 
