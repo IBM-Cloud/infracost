@@ -8,7 +8,7 @@
  └─ VPC Container Work Zone flavor: (bx2.2x8) region: (eu-de) name: (eu-de-2) x(3) workers             3  hours            $0.47 
                                                                                                                                  
  ibm_container_vpc_worker_pool.roks_worker_pool                                                                                  
- └─ VPC Container Work Zone flavor: (bx2.4x16) region: (eu-de) name: (eu-de-2) x(3) workers            3  hours            $1.42 
+ └─ VPC Container Work Zone flavor: (bx2.4x16) region: (eu-de) name: (eu-de-2) x(3) workers            3  hours            $1.48 
                                                                                                                                  
  ibm_container_vpc_worker_pool.ubuntu_worker_pool                                                                                
  └─ VPC Container Work Zone flavor: (bx2.4x16) region: (eu-de) name: (eu-de-2) x(3) workers            3  hours            $0.97 
@@ -24,7 +24,7 @@
  mycluster                                                                                                                       
  └─ VPC Container Work Zone flavor: (bx2.4x16) region: (eu-de) name: (eu-de-1) x(3) workers        2,190  hours          $705.96 
                                                                                                                                  
- OVERALL TOTAL                                                                                                         $5,912.13 
+ OVERALL TOTAL                                                                                                         $5,912.19 
 ──────────────────────────────────
 9 cloud resources were detected:
 ∙ 7 were estimated, 6 of which include usage-based costs, see https://infracost.io/usage-file

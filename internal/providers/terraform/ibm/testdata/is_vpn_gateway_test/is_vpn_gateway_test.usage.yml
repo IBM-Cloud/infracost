@@ -3,3 +3,9 @@ resource_usage:
   ibm_is_vpn_gateway.test_vpc_vpn:
     monthly_connection_hours: 730
     monthly_instance_hours: 730
+  ibm_is_vpn_gateway.test_vpc_vpn_zonal:
+    monthly_connection_hours: 730
+    monthly_instance_hours: 730
+  ibm_is_vpn_gateway.test_vpc_vpn_regional:
+    monthly_connection_hours: 730
+    monthly_instance_hours: 730

@@ -6,7 +6,9 @@ resource_usage:
     class_a_request_count: 10
     class_b_request_count: 10
   ibm_cos_bucket.smart-us-south:
-    monthly_average_capacity: 1000
+    smart_hot_capacity: 500
+    smart_cool_capacity: 300
+    smart_cold_capacity: 200
     public_standard_egress: 1000
     monthly_data_retrieval: 1000
     class_a_request_count: 10

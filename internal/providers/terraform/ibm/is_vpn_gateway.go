@@ -14,14 +14,19 @@ func getIsVpnGatewayRegistryItem() *schema.RegistryItem {
 
 func newIsVpnGateway(d *schema.ResourceData, u *schema.UsageData) *schema.Resource {
 	region := d.Get("region").String()
+	availabilityMode := d.Get("availability_mode").String()
 	r := &ibm.IsVpnGateway{
-		Address: d.Address,
-		Region:  region,
+		Address:          d.Address,
+		Region:           region,
+		AvailabilityMode: availabilityMode,
 	}
 	r.PopulateUsage(u)
 
 	configuration := make(map[string]any)
 	configuration["region"] = region
+	if availabilityMode != "" {
+		configuration["availability_mode"] = availabilityMode
+	}
 
 	SetCatalogMetadata(d, d.Type, configuration)
 

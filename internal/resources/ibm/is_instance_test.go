@@ -25,7 +25,7 @@ func TestIsInstance_BuildResource(t *testing.T) {
 		assert.Equal(t, "ibm", *instanceHoursComponent.ProductFilter.VendorName)
 		assert.Equal(t, "eu-de", *instanceHoursComponent.ProductFilter.Region)
 		assert.Equal(t, "is.reservation", *instanceHoursComponent.ProductFilter.Service)
-		assert.Equal(t, "bx2-2x8", *instanceHoursComponent.ProductFilter.AttributeFilters[0].Value)
+		assert.Equal(t, "instance-bx2-2x8", *instanceHoursComponent.ProductFilter.AttributeFilters[0].Value)
 		assert.Equal(t, "RESERVATION_HOURS_HOURLY", *instanceHoursComponent.PriceFilter.Unit)
 	})
 

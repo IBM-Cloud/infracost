@@ -36,6 +36,13 @@ resource "ibm_cos_bucket" "smart-us-south" {
   region_location      = "us-south"
 }
 
+resource "ibm_cos_bucket" "smart-us-south-without-usage" {
+  bucket_name          = "smart-bucket-at-us-south-without-usage"
+  resource_instance_id = ibm_resource_instance.cos_instance.id
+  storage_class        = "smart"
+  region_location      = "us-south"
+}
+
 resource "ibm_cos_bucket" "aspera-us" {
   bucket_name           = "aspera-bucket-at-us"
   resource_instance_id  = ibm_resource_instance.cos_instance.id
