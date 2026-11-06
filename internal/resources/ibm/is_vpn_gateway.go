@@ -2,6 +2,7 @@ package ibm
 
 import (
 	"fmt"
+	"strings"
 
 	"github.com/infracost/infracost/internal/resources"
 	"github.com/infracost/infracost/internal/schema"
@@ -16,6 +17,8 @@ import (
 type IsVpnGateway struct {
 	Address string
 	Region  string
+	// AvailabilityMode is "zonal" (default) or "regional".
+	AvailabilityMode string
 
 	MonthlyConnectionHours *float64 `infracost_usage:"monthly_connection_hours"`
 	MonthlyInstanceHours   *float64 `infracost_usage:"monthly_instance_hours"`
@@ -33,6 +36,14 @@ func (r *IsVpnGateway) PopulateUsage(u *schema.UsageData) {
 	resources.PopulateArgsWithUsage(r, u)
 }
 
+// planName returns the pricing plan for the gateway's availability mode.
+func (r *IsVpnGateway) planName() string {
+	if strings.EqualFold(r.AvailabilityMode, "regional") {
+		return "gen2-vpn-regional"
+	}
+	return "gen2-vpn"
+}
+
 func (r *IsVpnGateway) connectionHoursCostComponent() *schema.CostComponent {
 	var quantity *decimal.Decimal
 	if r.MonthlyConnectionHours != nil {
@@ -48,7 +59,7 @@ func (r *IsVpnGateway) connectionHoursCostComponent() *schema.CostComponent {
 			Region:     strPtr(r.Region),
 			Service:    strPtr("is.vpn"),
 			AttributeFilters: []*schema.AttributeFilter{
-				{Key: "planName", ValueRegex: strPtr(fmt.Sprintf("/%s/i", "gen2-vpn"))},
+				{Key: "planName", Value: strPtr(r.planName())},
 			},
 		},
 		PriceFilter: &schema.PriceFilter{
@@ -72,7 +83,7 @@ func (r *IsVpnGateway) instanceHoursCostComponent() *schema.CostComponent {
 			Region:     strPtr(r.Region),
 			Service:    strPtr("is.vpn"),
 			AttributeFilters: []*schema.AttributeFilter{
-				{Key: "planName", ValueRegex: strPtr(fmt.Sprintf("/%s/i", "gen2-vpn"))},
+				{Key: "planName", Value: strPtr(r.planName())},
 			},
 		},
 		PriceFilter: &schema.PriceFilter{
