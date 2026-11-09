@@ -101,7 +101,8 @@
                                                                                                                                              
  ibm_resource_instance.resource_instance_kms                                                                                                 
  ├─ Key versions free allowance (first 5 Key Versions)                                       5  Key Versions                           $0.00 
- └─ Key versions                                                                           295  Key Versions                         $320.70 
+ └─ Key versions (first 1 Key Versions)                                                      1  Key Versions                           $1.09 
+ └─ Key versions (over 0 Key Versions)                                                       1  Key Versions                         $100.00 
                                                                                                                                              
  ibm_resource_instance.resource_instance_logdna_14day                                                                                        
  └─ Gigabyte Months (14-day)                                                                 1  Gigabyte Months                        $2.15 
@@ -137,7 +138,7 @@
  ├─ Additional Time series (over 100000 Time series hour)                                    0  Time series hour                       $0.00 
  ├─ Additional Container Hours                                                           1,460  Container Hours                        $1.10 
  ├─ Additional API Calls                                                               100,000  API Calls                              $1.09 
- └─ Node Hours                                                                             730  Node Hours                            $38.09 
+ └─ Node Hours                                                                             730  Node Hours                            $30.47 
                                                                                                                                              
  ibm_resource_instance.resource_instance_monitoring_graduated_no_usage                                                                       
  ├─ Additional Time series (first 1000 Time series hour)                 Monthly cost depends on usage: $0.000095675 per Time series hour    
@@ -146,7 +147,7 @@
  ├─ Additional Time series (over 100000 Time series hour)                Monthly cost depends on usage: $0.0000239181 per Time series hour   
  ├─ Additional Container Hours                                           Monthly cost depends on usage: $0.0007549403 per Container Hours    
  ├─ Additional API Calls                                                 Monthly cost depends on usage: $0.0000108711 per API Calls          
- └─ Node Hours                                                           Monthly cost depends on usage: $0.0521814 per Node Hours            
+ └─ Node Hours                                                           Monthly cost depends on usage: $0.0417451 per Node Hours            
                                                                                                                                              
  ibm_resource_instance.resource_instance_monitoring_lite                                                                                     
  └─ Lite plan                                                                                1                                         $0.00 
@@ -174,12 +175,12 @@
  ├─ Multi-Cloud CSPM Compute Instance Hours (next 150 Instance-Hours)                      150  Instance-Hours                     $1,908.90 
  ├─ Multi-Cloud CSPM Compute Instance Hours (next 250 Instance-Hours)                      250  Instance-Hours                     $2,727.00 
  ├─ Multi-Cloud CSPM Compute Instance Hours (over 500 Instance-Hours)                        1  Instance-Hours                        $10.00 
- ├─ Node Hours (first 3 Instance-Hours)                                                      3  Instance-Hours                         $0.20 
- ├─ Node Hours (next 2 Instance-Hours)                                                       2  Instance-Hours                         $0.11 
- ├─ Node Hours (next 5 Instance-Hours)                                                       5  Instance-Hours                         $0.24 
- ├─ Node Hours (next 15 Instance-Hours)                                                     15  Instance-Hours                         $0.68 
- ├─ Node Hours (next 25 Instance-Hours)                                                     25  Instance-Hours                         $0.98 
- ├─ Node Hours (over 50 Instance-Hours)                                                      1  Instance-Hours                         $0.04 
+ ├─ Node Hours (first 3 Instance-Hours)                                                      3  Instance-Hours                         $0.19 
+ ├─ Node Hours (next 3 Instance-Hours)                                                       3  Instance-Hours                         $0.16 
+ ├─ Node Hours (next 6 Instance-Hours)                                                       6  Instance-Hours                         $0.28 
+ ├─ Node Hours (next 18 Instance-Hours)                                                     18  Instance-Hours                         $0.80 
+ ├─ Node Hours (next 30 Instance-Hours)                                                     21  Instance-Hours                         $0.80 
+ ├─ Node Hours (over 60 Instance-Hours)                                                      0  Instance-Hours                         $0.00 
  └─ VM Node Hours (first 25 Instance-Hours)                                                 25  Instance-Hours                         $0.56 
  └─ VM Node Hours (next 25 Instance-Hours)                                                  25  Instance-Hours                         $0.48 
  └─ VM Node Hours (next 50 Instance-Hours)                                                  50  Instance-Hours                         $0.84 
@@ -260,8 +261,8 @@
  ├─ Resource Units (IBM Models)                                                            500  RU                                     $0.05 
  ├─ Resource Units (Third Party Models)                                                    500  RU                                     $0.05 
  ├─ Mistral Large Input Resource Unit                                                       10  RU                                     $0.03 
- ├─ InstructLab Data                                                                        10  RU                                     $0.07 
- ├─ InstructLab Tuning                                                                      10  RU                                     $0.07 
+ ├─ InstructLab Data                                                                        10  RU                                     $0.00 
+ ├─ InstructLab Tuning                                                                      10  RU                                     $0.00 
  ├─ Mistral Large Model Hosting Access                                                       1  Hours                                 $36.40 
  ├─ Mistral 1 GPU Model Hosting Access                                                       1  Hours                                  $9.12 
  ├─ Mistral 2 GPU Model Hosting Access                                                       1  Hours                                 $18.25 
@@ -295,8 +296,8 @@
  ├─ Resource Units (IBM Models)                                          Monthly cost depends on usage: $0.000106 per RU                     
  ├─ Resource Units (Third Party Models)                                  Monthly cost depends on usage: $0.000106 per RU                     
  ├─ Mistral Large Input Resource Unit                                    Monthly cost depends on usage: $0.00318 per RU                      
- ├─ InstructLab Data                                                     Monthly cost depends on usage: $0.00663 per RU                      
- ├─ InstructLab Tuning                                                   Monthly cost depends on usage: $0.00742 per RU                      
+ ├─ InstructLab Data                                                     Monthly cost depends on usage: $0.00 per RU                         
+ ├─ InstructLab Tuning                                                   Monthly cost depends on usage: $0.00 per RU                         
  ├─ Mistral Large Model Hosting Access                                   Monthly cost depends on usage: $36.40 per Hours                     
  ├─ Mistral 1 GPU Model Hosting Access                                   Monthly cost depends on usage: $9.12 per Hours                      
  ├─ Mistral 2 GPU Model Hosting Access                                   Monthly cost depends on usage: $18.25 per Hours                     
@@ -322,50 +323,50 @@
  └─ Model Hosting 8 H200                                                 Monthly cost depends on usage: $128.00 per Hours                    
                                                                                                                                              
  ibm_resource_instance.wx_orchestrate_essentials                                                                                             
- ├─ Instance (4000 MAUs included)                                                            1  Instance                             $500.00 
- ├─ Additional Monthly Active Users                                                          1  1K MAU                               $100.00 
- ├─ Monthly Active Users using voice                                                         1  1K MAU                               $100.00 
- ├─ Skill Runs                                                                               1  10K Skill Runs                       $100.00 
- ├─ Class 1 Resource Units                                                                   1  1K RU                                  $0.60 
- ├─ Class 2 Resource Units                                                                   1  1K RU                                  $1.91 
- └─ Class 3 Resource Units                                                                   1  1K RU                                  $5.29 
+ ├─ Instance (4000 MAUs included)                                                            1  Instance                               $0.00 
+ ├─ Additional Monthly Active Users                                                          1  1K MAU                                 $0.00 
+ ├─ Monthly Active Users using voice                                                         1  1K MAU                                 $0.00 
+ ├─ Skill Runs                                                                               1  10K Skill Runs                         $0.00 
+ ├─ Class 1 Resource Units                                                                   1  1K RU                                  $0.00 
+ ├─ Class 2 Resource Units                                                                   1  1K RU                                  $0.00 
+ └─ Class 3 Resource Units                                                                   1  1K RU                                  $0.00 
                                                                                                                                              
  ibm_resource_instance.wx_orchestrate_essentials_agentic_no_usage                                                                            
  ├─ Instance (4000 MAUs included)                                                            1  Instance                             $530.00 
  ├─ Additional Monthly Active Users                                      Monthly cost depends on usage: $150.00 per 1K MAU                   
  ├─ Monthly Active Users using voice                                     Monthly cost depends on usage: $100.00 per 1K MAU                   
- ├─ Oracle HCM Access                                                    Monthly cost depends on usage: $100.00 per Domain Agent             
- ├─ Workday HCM Access                                                   Monthly cost depends on usage: $100.00 per Domain Agent             
- ├─ SAP SuccessFactors Access                                            Monthly cost depends on usage: $100.00 per Domain Agent             
- ├─ Sourcing and Contract Management Access                              Monthly cost depends on usage: $100.00 per Domain Agent             
- ├─ Learning and Development for Oracle HCM Access                       Monthly cost depends on usage: $100.00 per Domain Agent             
- ├─ Purchasing with Coupa Access                                         Monthly cost depends on usage: $100.00 per Domain Agent             
- ├─ Invoice Management with Coupa Access                                 Monthly cost depends on usage: $100.00 per Domain Agent             
- ├─ Supplier Management with Coupa Access                                Monthly cost depends on usage: $100.00 per Domain Agent             
- └─ Sales Prospecting Access                                             Monthly cost depends on usage: $100.00 per Domain Agent             
+ ├─ Oracle HCM Access                                                    Monthly cost depends on usage: $0.00 per Domain Agent               
+ ├─ Workday HCM Access                                                   Monthly cost depends on usage: $0.00 per Domain Agent               
+ ├─ SAP SuccessFactors Access                                            Monthly cost depends on usage: $0.00 per Domain Agent               
+ ├─ Sourcing and Contract Management Access                              Monthly cost depends on usage: $0.00 per Domain Agent               
+ ├─ Learning and Development for Oracle HCM Access                       Monthly cost depends on usage: $0.00 per Domain Agent               
+ ├─ Purchasing with Coupa Access                                         Monthly cost depends on usage: $0.00 per Domain Agent               
+ ├─ Invoice Management with Coupa Access                                 Monthly cost depends on usage: $0.00 per Domain Agent               
+ ├─ Supplier Management with Coupa Access                                Monthly cost depends on usage: $0.00 per Domain Agent               
+ └─ Sales Prospecting Access                                             Monthly cost depends on usage: $0.00 per Domain Agent               
                                                                                                                                              
  ibm_resource_instance.wx_orchestrate_essentials_agentic_usage                                                                               
  ├─ Instance (4000 MAUs included)                                                            1  Instance                             $530.00 
  ├─ Additional Monthly Active Users                                                         37  1K MAU                             $5,550.00 
  ├─ Monthly Active Users using voice                                                         1  1K MAU                               $100.00 
- ├─ Oracle HCM Access                                                                        1  Domain Agent                         $100.00 
- ├─ Workday HCM Access                                                                       1  Domain Agent                         $100.00 
- ├─ SAP SuccessFactors Access                                                                1  Domain Agent                         $100.00 
- ├─ Sourcing and Contract Management Access                                                  1  Domain Agent                         $100.00 
- ├─ Learning and Development for Oracle HCM Access                                           1  Domain Agent                         $100.00 
- ├─ Purchasing with Coupa Access                                                             1  Domain Agent                         $100.00 
- ├─ Invoice Management with Coupa Access                                                     1  Domain Agent                         $100.00 
- ├─ Supplier Management with Coupa Access                                                    1  Domain Agent                         $100.00 
- └─ Sales Prospecting Access                                                                 1  Domain Agent                         $100.00 
+ ├─ Oracle HCM Access                                                                        1  Domain Agent                           $0.00 
+ ├─ Workday HCM Access                                                                       1  Domain Agent                           $0.00 
+ ├─ SAP SuccessFactors Access                                                                1  Domain Agent                           $0.00 
+ ├─ Sourcing and Contract Management Access                                                  1  Domain Agent                           $0.00 
+ ├─ Learning and Development for Oracle HCM Access                                           1  Domain Agent                           $0.00 
+ ├─ Purchasing with Coupa Access                                                             1  Domain Agent                           $0.00 
+ ├─ Invoice Management with Coupa Access                                                     1  Domain Agent                           $0.00 
+ ├─ Supplier Management with Coupa Access                                                    1  Domain Agent                           $0.00 
+ └─ Sales Prospecting Access                                                                 1  Domain Agent                           $0.00 
                                                                                                                                              
  ibm_resource_instance.wx_orchestrate_essentials_no_usage                                                                                    
- ├─ Instance (4000 MAUs included)                                                            1  Instance                             $500.00 
- ├─ Additional Monthly Active Users                                      Monthly cost depends on usage: $100.00 per 1K MAU                   
- ├─ Monthly Active Users using voice                                     Monthly cost depends on usage: $100.00 per 1K MAU                   
- ├─ Skill Runs                                                           Monthly cost depends on usage: $100.00 per 10K Skill Runs           
- ├─ Class 1 Resource Units                                               Monthly cost depends on usage: $0.60 per 1K RU                      
- ├─ Class 2 Resource Units                                               Monthly cost depends on usage: $1.91 per 1K RU                      
- └─ Class 3 Resource Units                                               Monthly cost depends on usage: $5.29 per 1K RU                      
+ ├─ Instance (4000 MAUs included)                                                            1  Instance                               $0.00 
+ ├─ Additional Monthly Active Users                                      Monthly cost depends on usage: $0.00 per 1K MAU                     
+ ├─ Monthly Active Users using voice                                     Monthly cost depends on usage: $0.00 per 1K MAU                     
+ ├─ Skill Runs                                                           Monthly cost depends on usage: $0.00 per 10K Skill Runs             
+ ├─ Class 1 Resource Units                                               Monthly cost depends on usage: $0.00 per 1K RU                      
+ ├─ Class 2 Resource Units                                               Monthly cost depends on usage: $0.00 per 1K RU                      
+ └─ Class 3 Resource Units                                               Monthly cost depends on usage: $0.00 per 1K RU                      
                                                                                                                                              
  ibm_resource_instance.wx_orchestrate_premium_agentic_no_usage                                                                               
  ├─ Instance (50000 MAUs included)                                                           1  Instance                          $18,000.00 
@@ -378,13 +379,13 @@
  └─ Monthly Active Users using voice                                                         1  1K MAU                               $100.00 
                                                                                                                                              
  ibm_resource_instance.wx_orchestrate_standard                                                                                               
- ├─ Instance (40000 MAUs included)                                                           1  Instance                           $6,000.00 
- ├─ Additional Monthly Active Users                                                          1  1K MAU                               $100.00 
- ├─ Monthly Active Users using voice                                                         1  1K MAU                               $100.00 
- ├─ Skill Runs                                                                               1  10K Skill Runs                       $100.00 
- ├─ Class 1 Resource Units                                                                   1  1K RU                                  $0.60 
- ├─ Class 2 Resource Units                                                                   1  1K RU                                  $1.91 
- └─ Class 3 Resource Units                                                                   1  1K RU                                  $5.29 
+ ├─ Instance (40000 MAUs included)                                                           1  Instance                               $0.00 
+ ├─ Additional Monthly Active Users                                                          1  1K MAU                                 $0.00 
+ ├─ Monthly Active Users using voice                                                         1  1K MAU                                 $0.00 
+ ├─ Skill Runs                                                                               1  10K Skill Runs                         $0.00 
+ ├─ Class 1 Resource Units                                                                   1  1K RU                                  $0.00 
+ ├─ Class 2 Resource Units                                                                   1  1K RU                                  $0.00 
+ └─ Class 3 Resource Units                                                                   1  1K RU                                  $0.00 
                                                                                                                                              
  ibm_resource_instance.wx_orchestrate_standard_agentic_no_usage                                                                              
  ├─ Instance (40000 MAUs included)                                                           1  Instance                           $6,360.00 
@@ -399,7 +400,7 @@
  ibm_resource_instance.wx_orchestrate_trial                                                                                                  
  └─ Trial plan                                                                               1                                         $0.00 
                                                                                                                                              
- OVERALL TOTAL                                                                                                                    $92,702.90 
+ OVERALL TOTAL                                                                                                                    $83,959.91 
 ──────────────────────────────────
 66 cloud resources were detected:
 ∙ 66 were estimated, all of which include usage-based costs, see https://infracost.io/usage-file

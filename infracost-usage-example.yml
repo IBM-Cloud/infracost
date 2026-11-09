@@ -23,6 +23,9 @@ resource_type_default_usage:
     monthly_average_capacity: 1000
     monthly_data_retrieval: 1000
     public_standard_egress: 1
+    smart_cold_capacity: 200
+    smart_cool_capacity: 300
+    smart_hot_capacity: 500
   ibm_is_flow_log:
     transmitted_gb: 100
   ibm_is_instance:
@@ -1298,7 +1301,10 @@ resource_usage:
     aspera_egress: 1000 # Amount of data downloaded with Aspera in GB
     class_a_request_count: 10 # Monthly number of Class A requests, 1k
     class_b_request_count: 10 # Monthly number of Class B requests 10k
-    monthly_average_capacity: 1000 # Average amount of data stored in GB
+    monthly_average_capacity: 1000 # Average amount of data stored in GB, for all storage classes except smart
+    smart_hot_capacity: 500 # Amount of hot data stored in a Smart Tier bucket in GB
+    smart_cool_capacity: 300 # Amount of cool data stored in a Smart Tier bucket in GB
+    smart_cold_capacity: 200 # Amount of cold data stored in a Smart Tier bucket in GB
     monthly_data_retrieval: 1000 # Amount of data retrieved in GB
     public_standard_egress: 1000 # Amount of data downloaded in GB
 

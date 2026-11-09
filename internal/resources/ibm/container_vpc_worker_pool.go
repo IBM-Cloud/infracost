@@ -60,7 +60,12 @@ func (r *ContainerVpcWorkerPool) BuildResource() *schema.Resource {
 		isOpenshift = strings.HasPrefix(strings.ToLower(r.OperatingSystem), "rh") || strings.HasPrefix(strings.ToLower(r.OperatingSystem), "red")
 	}
 	if isOpenshift {
-		operatingSystem = "^R"
+		// Both RHEL and RHCOS products exist with identical prices, so pick one
+		// to avoid matching multiple products. Default to RHEL.
+		operatingSystem = "^RHEL"
+		if strings.Contains(strings.ToLower(r.OperatingSystem), "rhcos") {
+			operatingSystem = "^RHCOS"
+		}
 		// if an entitlement is specified, then ocp licensing is already covered. use pricing that
 		// does not include ocp charges.
 		if !r.Entitlement {

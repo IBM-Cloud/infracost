@@ -23,6 +23,9 @@ type IbmCosBucket struct {
 	Plan               string
 
 	MonthlyAverageCapacity     *float64 `infracost_usage:"monthly_average_capacity"`
+	SmartHotCapacity           *float64 `infracost_usage:"smart_hot_capacity"`
+	SmartCoolCapacity          *float64 `infracost_usage:"smart_cool_capacity"`
+	SmartColdCapacity          *float64 `infracost_usage:"smart_cold_capacity"`
 	PublicStandardEgress       *float64 `infracost_usage:"public_standard_egress"`
 	AsperaIngress              *float64 `infracost_usage:"aspera_ingress"`
 	AsperaEgress               *float64 `infracost_usage:"aspera_egress"`
@@ -38,6 +41,9 @@ type IbmCosBucket struct {
 // IbmCosBucketUsageSchema defines a list which represents the usage schema of IbmCosBucket.
 var IbmCosBucketUsageSchema = []*schema.UsageItem{
 	{Key: "monthly_average_capacity", ValueType: schema.Float64, DefaultValue: 0},
+	{Key: "smart_hot_capacity", ValueType: schema.Float64, DefaultValue: 0},
+	{Key: "smart_cool_capacity", ValueType: schema.Float64, DefaultValue: 0},
+	{Key: "smart_cold_capacity", ValueType: schema.Float64, DefaultValue: 0},
 	{Key: "public_standard_egress", ValueType: schema.Float64, DefaultValue: 0},
 	{Key: "aspera_ingress", ValueType: schema.Float64, DefaultValue: 0},
 	{Key: "aspera_egress", ValueType: schema.Float64, DefaultValue: 0},
@@ -75,6 +81,49 @@ func (r *IbmCosBucket) PopulateUsage(u *schema.UsageData) {
 	resources.PopulateArgsWithUsage(r, u)
 }
 
+// SmartCapacityCostComponents returns the capacity cost components for the Smart Tier
+// storage class. Smart Tier bills the hot, cool and cold capacity at separate rates.
+func (r *IbmCosBucket) SmartCapacityCostComponents() []*schema.CostComponent {
+	tiers := []struct {
+		name     string
+		unit     string
+		capacity *float64
+	}{
+		{"Smart Tier hot capacity", "SMARTHOT_SMART", r.SmartHotCapacity},
+		{"Smart Tier cool capacity", "SMARTCOOL_SMART", r.SmartCoolCapacity},
+		{"Smart Tier cold capacity", "SMARTCOLD_SMART", r.SmartColdCapacity},
+	}
+
+	costComponents := make([]*schema.CostComponent, 0, len(tiers))
+	for _, t := range tiers {
+		var q *decimal.Decimal
+		if t.capacity != nil {
+			q = decimalPtr(decimal.NewFromFloat(*t.capacity))
+		}
+
+		costComponents = append(costComponents, &schema.CostComponent{
+			Name:            t.name,
+			Unit:            "GB",
+			UnitMultiplier:  decimal.NewFromInt(1),
+			MonthlyQuantity: q,
+			ProductFilter: &schema.ProductFilter{
+				VendorName:    strPtr("ibm"),
+				Region:        strPtr(r.Location),
+				Service:       strPtr("cloud-object-storage"),
+				ProductFamily: strPtr("iaas"),
+				AttributeFilters: []*schema.AttributeFilter{
+					{Key: "planName", Value: strPtr(r.Plan)},
+				},
+			},
+			PriceFilter: &schema.PriceFilter{
+				Unit: strPtr(t.unit),
+			},
+		})
+	}
+
+	return costComponents
+}
+
 func (r *IbmCosBucket) StandardMonthlyAverageCapacityCostComponent() *schema.CostComponent {
 	var q *decimal.Decimal
 
@@ -91,8 +140,6 @@ func (r *IbmCosBucket) StandardMonthlyAverageCapacityCostComponent() *schema.Cos
 		u = "STORAGE_STANDARD"
 	case "cold":
 		u = "STORAGE_COLD"
-	case "smart":
-		u = "SMARTSTORAGE_SMART"
 	}
 
 	return &schema.CostComponent{
@@ -765,9 +812,14 @@ func (r *IbmCosBucket) BuildResource() *schema.Resource {
 			costComponents = append(costComponents, r.AsperaEgressCostComponent(), r.AsperaIngressCostComponent())
 		}
 
+		if r.StorageClass == "smart" {
+			costComponents = append(costComponents, r.SmartCapacityCostComponents()...)
+		} else {
+			costComponents = append(costComponents, r.StandardMonthlyAverageCapacityCostComponent())
+		}
+
 		costComponents = append(
 			costComponents,
-			r.StandardMonthlyAverageCapacityCostComponent(),
 			r.StandardClassARequestCountCostComponent(),
 			r.StandardClassBRequestCountCostComponent(),
 			r.StandardEgressCostComponent(),

@@ -8,6 +8,7 @@ import (
 
 	"github.com/IBM/go-sdk-core/v5/core"
 	"github.com/infracost/infracost/internal/config"
+	"github.com/infracost/infracost/internal/resources/ibm"
 	"github.com/infracost/infracost/internal/schema"
 
 	log "github.com/sirupsen/logrus"
@@ -153,9 +154,44 @@ func (c *PricingAPIClient) RunQueries(r *schema.Resource) ([]PriceQueryResult, e
 	return c.zipQueryResults(keys, results), nil
 }
 
+// ibmRegionAttributeKeys are attribute filter keys whose values hold a region.
+var ibmRegionAttributeKeys = map[string]bool{"region": true, "catalogRegion": true}
+
+// cleanIBMProductFilter returns a copy of the filter with zone-suffixed regions
+// (e.g. us-south-1) normalized to their region (us-south), both in the Region
+// field and in region-valued attribute filters. The original filter is not modified.
+func cleanIBMProductFilter(product *schema.ProductFilter) *schema.ProductFilter {
+	if product == nil || product.VendorName == nil || *product.VendorName != "ibm" {
+		return product
+	}
+
+	pf := *product
+	if product.Region != nil {
+		cleaned := ibm.CleanRegion(*product.Region)
+		pf.Region = &cleaned
+	}
+
+	if len(product.AttributeFilters) > 0 {
+		pf.AttributeFilters = make([]*schema.AttributeFilter, len(product.AttributeFilters))
+		for i, af := range product.AttributeFilters {
+			if af != nil && af.Value != nil && ibmRegionAttributeKeys[af.Key] {
+				cleaned := ibm.CleanRegion(*af.Value)
+				afCopy := *af
+				afCopy.Value = &cleaned
+				af = &afCopy
+			}
+			pf.AttributeFilters[i] = af
+		}
+	}
+
+	return &pf
+}
+
 func (c *PricingAPIClient) buildQuery(product *schema.ProductFilter, price *schema.PriceFilter) GraphQLQuery {
+	pf := cleanIBMProductFilter(product)
+
 	v := map[string]interface{}{}
-	v["productFilter"] = product
+	v["productFilter"] = pf
 	v["priceFilter"] = price
 
 	query := fmt.Sprintf(`

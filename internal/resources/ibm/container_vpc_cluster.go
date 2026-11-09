@@ -59,7 +59,9 @@ func (r *ContainerVpcCluster) BuildResource() *schema.Resource {
 	isolation := "public"
 	useOcpPrices := false
 	if isOpenshift {
-		operatingSystem = "^R"
+		// Both RHEL and RHCOS products exist with identical prices, so pick one
+		// to avoid matching multiple products.
+		operatingSystem = "^RHEL"
 		// if an entitlement is specified, then ocp licensing is already covered. use pricing that
 		// does not include ocp charges.
 		if !r.Entitlement {
