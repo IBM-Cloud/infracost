@@ -157,49 +157,37 @@ resource_usage:
     ibm_resource_instance.event_notifications[*]:
         event-notifications_MILLION_INGESTED_EVENTS: 1
 
-    ibm_resource_instance.wx_orchestrate_essentials:
+    ibm_resource_instance.wx_orchestrate_essentials_agentic_usage:
         wo_instance: 1
         wo_monthly_active_users: 5000
         wo_monthly_voice_users: 1
-        wo_skill_runs: 1
-        wo_class1_ru: 1
-        wo_class2_ru: 1
-        wo_class3_ru: 1
-
-    ibm_resource_instance.wx_orchestrate_standard:
-        wo_instance: 1
-        wo_monthly_active_users: 41000
-        wo_monthly_voice_users: 1
-        wo_skill_runs: 1
-        wo_class1_ru: 1
-        wo_class2_ru: 1
-        wo_class3_ru: 1
-
-    ibm_resource_instance.wx_orchestrate_essentials_agentic_usage:
-        wo_instance: 1
-        wo_monthly_active_users: 41000
-        wo_monthly_voice_users: 1
-        wo_oracle_hcm_agents: 1
-        wo_workday_hcm_agents: 1
-        wo_sap_success_factors_agents: 1
-        wo_sourcing_contract_agents: 1
-        wo_learning_dev_oracle_agents: 1
-        wo_purchasing_agents: 1
-        wo_invoice_mgmt_agents: 1
-        wo_supplier_mgmt_agents: 1
-        wo_sales_prospecting_agents: 1
+        wo_premier_voice_users: 1
+        wo_premier_llm_messages: 10001
+        wo_third_party_minutes: 100
+        wo_third_party_characters: 1001
 
     ibm_resource_instance.wx_orchestrate_standard_agentic_usage:
         wo_instance: 1
         wo_monthly_active_users: 41000
         wo_monthly_voice_users: 1
-
+        wo_premier_voice_users: 1
+        wo_premier_llm_messages: 10001
+        wo_third_party_minutes: 100
+        wo_third_party_characters: 1001
 
     ibm_resource_instance.wx_orchestrate_premium_agentic_usage:
         wo_instance: 1
         wo_monthly_active_users: 51000
         wo_monthly_voice_users: 1
+        wo_premier_voice_users: 1
+        wo_premier_llm_messages: 10001
+        wo_third_party_minutes: 100
+        wo_third_party_characters: 1001
 
+    ibm_resource_instance.wx_orchestrate_premium_agentic_messages_usage:
+        wo_instance: 1
+        wo_messages: 10001
+        wo_minutes: 100
 
     ibm_resource_instance.resource_instance_logs:
         logs_hours: 34

@@ -465,30 +465,6 @@ resource "ibm_resource_instance" "wx_orchestrate_trial" {
   service           = "watsonx-orchestrate"
 }
 
-resource "ibm_resource_instance" "wx_orchestrate_essentials_no_usage" {
-  name              = "watsonx-orchestrate-essentials-no-usage"
-  location          = "us-south"
-  plan              = "essentials"
-  resource_group_id = "default"
-  service           = "watsonx-orchestrate"
-}
-
-resource "ibm_resource_instance" "wx_orchestrate_essentials" {
-  name              = "watsonx-orchestrate-essentials-usage"
-  location          = "us-south"
-  plan              = "essentials"
-  resource_group_id = "default"
-  service           = "watsonx-orchestrate"
-}
-
-resource "ibm_resource_instance" "wx_orchestrate_standard" {
-  name              = "wx-orchestrate-standard"
-  location          = "us-south"
-  plan              = "standard"
-  resource_group_id = "default"
-  service           = "watsonx-orchestrate"
-}
-
 resource "ibm_resource_instance" "wx_orchestrate_essentials_agentic_no_usage" {
   name              = "wx-orchestrate-essentials-agentic-mau-no-usage"
   location          = "us-south"
@@ -533,6 +509,22 @@ resource "ibm_resource_instance" "wx_orchestrate_premium_agentic_usage" {
   name              = "wx-orchestrate-premium-agentic-mau-usage"
   location          = "us-south"
   plan              = "premium-agentic-mau"
+  resource_group_id = "default"
+  service           = "watsonx-orchestrate"
+}
+
+resource "ibm_resource_instance" "wx_orchestrate_premium_agentic_messages_no_usage" {
+  name              = "wx-orchestrate-premium-agentic-messages-no-usage"
+  location          = "us-south"
+  plan              = "premium-agentic-messages"
+  resource_group_id = "default"
+  service           = "watsonx-orchestrate"
+}
+
+resource "ibm_resource_instance" "wx_orchestrate_premium_agentic_messages_usage" {
+  name              = "wx-orchestrate-premium-agentic-messages-usage"
+  location          = "us-south"
+  plan              = "premium-agentic-messages"
   resource_group_id = "default"
   service           = "watsonx-orchestrate"
 }
