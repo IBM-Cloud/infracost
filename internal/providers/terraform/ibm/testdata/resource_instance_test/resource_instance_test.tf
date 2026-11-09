@@ -233,6 +233,26 @@ resource "ibm_resource_instance" "wml_instance_standard_no_quantity" {
 }
 
 # ----------------------------------------------------------------------
+# InstructLab (Red Hat AI Inference)
+# ----------------------------------------------------------------------
+
+resource "ibm_resource_instance" "instructlab_standard" {
+  name              = "instructlab_standard"
+  service           = "instructlab"
+  plan              = "instructlab-pricing-plan"
+  location          = "us-east"
+  resource_group_id = "default"
+}
+
+resource "ibm_resource_instance" "instructlab_standard_no_quantity" {
+  name              = "instructlab_standard_no_quantity"
+  service           = "instructlab"
+  plan              = "instructlab-pricing-plan"
+  location          = "us-east"
+  resource_group_id = "default"
+}
+
+# ----------------------------------------------------------------------
 # watsonx Assistant
 # ----------------------------------------------------------------------
 

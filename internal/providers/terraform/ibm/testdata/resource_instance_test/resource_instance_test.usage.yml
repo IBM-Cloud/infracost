@@ -60,9 +60,33 @@ resource_usage:
         wml_text_extract_cat_2_pages: 10
         wml_ibm_model_ru: 500
         wml_3rd_party_model_ru: 500
-        wml_instructlab_data_ru: 10
-        wml_instructlab_tuning_ru: 10
         wml_model_hosting_hours: 1
+    ibm_resource_instance.instructlab_standard:
+        instructlab_syn_data_tokens: 10
+        instructlab_syn_data_tokens_2e: 10
+        instructlab_syn_data_tokens_4e: 10
+        instructlab_model_train_tokens: 10
+        instructlab_model_train_tokens_2e: 10
+        instructlab_model_train_tokens_4e: 10
+        instructlab_model_test_input_tokens: 10
+        instructlab_model_test_output_tokens: 10
+        instructlab_qwen3_8b_input_tokens: 100
+        instructlab_qwen3_8b_output_tokens: 100
+        instructlab_gpt_oss_120b_input_tokens: 100
+        instructlab_gpt_oss_120b_output_tokens: 100
+        instructlab_gemma_4_31b_it_input_tokens: 100
+        instructlab_gemma_4_31b_it_output_tokens: 100
+        instructlab_granite_4_0_small_input_tokens: 100
+        instructlab_granite_4_0_small_output_tokens: 100
+        instructlab_granite_4_1_30b_input_tokens: 100
+        instructlab_granite_4_1_30b_output_tokens: 100
+        instructlab_granite_embedding_278m_input_tokens: 100
+        instructlab_llama_3_3_70b_input_tokens: 100
+        instructlab_llama_3_3_70b_output_tokens: 100
+        instructlab_mistral_small_3_2_24b_input_tokens: 100
+        instructlab_mistral_small_3_2_24b_output_tokens: 100
+        instructlab_nemotron3_nano_30b_input_tokens: 100
+        instructlab_nemotron3_nano_30b_output_tokens: 100
     ibm_resource_instance.wa_instance_plus:
         wa_instance: 1
         wa_monthly_active_users: 2000

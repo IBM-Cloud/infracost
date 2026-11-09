@@ -75,8 +75,6 @@ resource_type_default_usage:
     wml_text_extract_cat_2_pages: 10
     wml_ibm_model_ru: 500
     wml_3rd_party_model_ru: 500
-    wml_instructlab_data_ru: 10
-    wml_instructlab_tuning_ru: 10
     wml_model_hosting_hours: 1
     wa_instance: 1
     wa_monthly_active_users: 1001
@@ -1388,8 +1386,6 @@ resource_usage:
     wml_text_extract_cat_2_pages: 10 # Number of pages for text extraction category 2
     wml_ibm_model_ru: 500 # Number of resource units for IBM models
     wml_3rd_party_model_ru: 500 # Number of resource units for third party models
-    wml_instructlab_data_ru: 10 # Number of resource units for InstructLab data
-    wml_instructlab_tuning_ru: 10 # Number of resource units for InstructLab tuning
     wml_model_hosting_hours: 1 # Number of hours for model hosting
     wa_instance: 1 # The number of instances used per month where each instance includes 1000 monthly active users
     wa_monthly_active_users: 1100 # The number of monthly active users
@@ -1415,6 +1411,34 @@ resource_usage:
     dns-svcs_qty_custom_resolver_locations: 1 # Number of resolver locations
     dns-svcs_qty_glb_instances: 1 # Number of GLBs
     dns-svcs_qty_pools: 1 # Number of pools
+
+  ibm_resource_instance.instructlab:
+    # All InstructLab quantities are in millions of tokens
+    instructlab_syn_data_tokens: 10 # Synthetic data tokens
+    instructlab_syn_data_tokens_2e: 10 # Synthetic data tokens, 2x expedited
+    instructlab_syn_data_tokens_4e: 10 # Synthetic data tokens, 4x expedited
+    instructlab_model_train_tokens: 10 # Model train tokens
+    instructlab_model_train_tokens_2e: 10 # Model train tokens, 2x expedited
+    instructlab_model_train_tokens_4e: 10 # Model train tokens, 4x expedited
+    instructlab_model_test_input_tokens: 10 # Model test input tokens
+    instructlab_model_test_output_tokens: 10 # Model test output tokens
+    instructlab_qwen3_8b_input_tokens: 100 # Qwen3-8B input tokens
+    instructlab_qwen3_8b_output_tokens: 100 # Qwen3-8B output tokens
+    instructlab_gpt_oss_120b_input_tokens: 100 # GPT-OSS-120B input tokens
+    instructlab_gpt_oss_120b_output_tokens: 100 # GPT-OSS-120B output tokens
+    instructlab_gemma_4_31b_it_input_tokens: 100 # Gemma 4 31B IT input tokens
+    instructlab_gemma_4_31b_it_output_tokens: 100 # Gemma 4 31B IT output tokens
+    instructlab_granite_4_0_small_input_tokens: 100 # Granite 4.0 Small input tokens
+    instructlab_granite_4_0_small_output_tokens: 100 # Granite 4.0 Small output tokens
+    instructlab_granite_4_1_30b_input_tokens: 100 # Granite 4.1 30B input tokens
+    instructlab_granite_4_1_30b_output_tokens: 100 # Granite 4.1 30B output tokens
+    instructlab_granite_embedding_278m_input_tokens: 100 # Granite Embedding 278M Multilingual input tokens
+    instructlab_llama_3_3_70b_input_tokens: 100 # Llama 3.3 70B Instruct input tokens
+    instructlab_llama_3_3_70b_output_tokens: 100 # Llama 3.3 70B Instruct output tokens
+    instructlab_mistral_small_3_2_24b_input_tokens: 100 # Mistral Small 3.2 24B Instruct input tokens
+    instructlab_mistral_small_3_2_24b_output_tokens: 100 # Mistral Small 3.2 24B Instruct output tokens
+    instructlab_nemotron3_nano_30b_input_tokens: 100 # Nemotron 3 Nano 30B A3B FP8 input tokens
+    instructlab_nemotron3_nano_30b_output_tokens: 100 # Nemotron 3 Nano 30B A3B FP8 output tokens
 
   ibm_resource_instance.watsonx_orchestrate:
     wo_instance: 1 # The number of instances per month

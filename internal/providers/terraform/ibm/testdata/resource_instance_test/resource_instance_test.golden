@@ -55,6 +55,60 @@
  ibm_resource_instance.event_notifications_no_usage                                                                                          
  └─ Ingested Events                                                      Monthly cost depends on usage: $1.09 per Million Events             
                                                                                                                                              
+ ibm_resource_instance.instructlab_standard                                                                                                  
+ ├─ Synthetic data tokens                                                                   10  1M tokens                             $50.00 
+ ├─ Synthetic data tokens (2x expedited)                                                    10  1M tokens                            $100.00 
+ ├─ Synthetic data tokens (4x expedited)                                                    10  1M tokens                            $200.00 
+ ├─ Model train tokens                                                                      10  1M tokens                             $56.00 
+ ├─ Model train tokens (2x expedited)                                                       10  1M tokens                            $112.00 
+ ├─ Model train tokens (4x expedited)                                                       10  1M tokens                            $224.00 
+ ├─ Model test input tokens                                                                 10  1M tokens                             $10.00 
+ ├─ Model test output tokens                                                                10  1M tokens                             $30.00 
+ ├─ Qwen3-8B input tokens                                                                  100  1M tokens                             $10.00 
+ ├─ Qwen3-8B output tokens                                                                 100  1M tokens                             $40.00 
+ ├─ GPT-OSS-120B input tokens                                                              100  1M tokens                             $10.00 
+ ├─ GPT-OSS-120B output tokens                                                             100  1M tokens                             $45.00 
+ ├─ Gemma 4 31B IT input tokens                                                            100  1M tokens                             $15.00 
+ ├─ Gemma 4 31B IT output tokens                                                           100  1M tokens                             $50.00 
+ ├─ Granite 4.0 Small input tokens                                                         100  1M tokens                              $5.00 
+ ├─ Granite 4.0 Small output tokens                                                        100  1M tokens                             $22.00 
+ ├─ Granite 4.1 30B input tokens                                                           100  1M tokens                             $10.00 
+ ├─ Granite 4.1 30B output tokens                                                          100  1M tokens                             $25.00 
+ ├─ Granite Embedding 278M Multilingual input tokens                                       100  1M tokens                             $20.00 
+ ├─ Llama 3.3 70B Instruct input tokens                                                    100  1M tokens                             $30.00 
+ ├─ Llama 3.3 70B Instruct output tokens                                                   100  1M tokens                             $40.00 
+ ├─ Mistral Small 3.2 24B Instruct input tokens                                            100  1M tokens                              $8.00 
+ ├─ Mistral Small 3.2 24B Instruct output tokens                                           100  1M tokens                             $29.00 
+ ├─ Nemotron 3 Nano 30B A3B FP8 input tokens                                               100  1M tokens                              $5.00 
+ └─ Nemotron 3 Nano 30B A3B FP8 output tokens                                              100  1M tokens                             $13.00 
+                                                                                                                                             
+ ibm_resource_instance.instructlab_standard_no_quantity                                                                                      
+ ├─ Synthetic data tokens                                                Monthly cost depends on usage: $5.00 per 1M tokens                  
+ ├─ Synthetic data tokens (2x expedited)                                 Monthly cost depends on usage: $10.00 per 1M tokens                 
+ ├─ Synthetic data tokens (4x expedited)                                 Monthly cost depends on usage: $20.00 per 1M tokens                 
+ ├─ Model train tokens                                                   Monthly cost depends on usage: $5.60 per 1M tokens                  
+ ├─ Model train tokens (2x expedited)                                    Monthly cost depends on usage: $11.20 per 1M tokens                 
+ ├─ Model train tokens (4x expedited)                                    Monthly cost depends on usage: $22.40 per 1M tokens                 
+ ├─ Model test input tokens                                              Monthly cost depends on usage: $1.00 per 1M tokens                  
+ ├─ Model test output tokens                                             Monthly cost depends on usage: $3.00 per 1M tokens                  
+ ├─ Qwen3-8B input tokens                                                Monthly cost depends on usage: $0.10 per 1M tokens                  
+ ├─ Qwen3-8B output tokens                                               Monthly cost depends on usage: $0.40 per 1M tokens                  
+ ├─ GPT-OSS-120B input tokens                                            Monthly cost depends on usage: $0.10 per 1M tokens                  
+ ├─ GPT-OSS-120B output tokens                                           Monthly cost depends on usage: $0.45 per 1M tokens                  
+ ├─ Gemma 4 31B IT input tokens                                          Monthly cost depends on usage: $0.15 per 1M tokens                  
+ ├─ Gemma 4 31B IT output tokens                                         Monthly cost depends on usage: $0.50 per 1M tokens                  
+ ├─ Granite 4.0 Small input tokens                                       Monthly cost depends on usage: $0.05 per 1M tokens                  
+ ├─ Granite 4.0 Small output tokens                                      Monthly cost depends on usage: $0.22 per 1M tokens                  
+ ├─ Granite 4.1 30B input tokens                                         Monthly cost depends on usage: $0.10 per 1M tokens                  
+ ├─ Granite 4.1 30B output tokens                                        Monthly cost depends on usage: $0.25 per 1M tokens                  
+ ├─ Granite Embedding 278M Multilingual input tokens                     Monthly cost depends on usage: $0.20 per 1M tokens                  
+ ├─ Llama 3.3 70B Instruct input tokens                                  Monthly cost depends on usage: $0.30 per 1M tokens                  
+ ├─ Llama 3.3 70B Instruct output tokens                                 Monthly cost depends on usage: $0.40 per 1M tokens                  
+ ├─ Mistral Small 3.2 24B Instruct input tokens                          Monthly cost depends on usage: $0.08 per 1M tokens                  
+ ├─ Mistral Small 3.2 24B Instruct output tokens                         Monthly cost depends on usage: $0.29 per 1M tokens                  
+ ├─ Nemotron 3 Nano 30B A3B FP8 input tokens                             Monthly cost depends on usage: $0.05 per 1M tokens                  
+ └─ Nemotron 3 Nano 30B A3B FP8 output tokens                            Monthly cost depends on usage: $0.13 per 1M tokens                  
+                                                                                                                                             
  ibm_resource_instance.messagehub_enterprise                                                                                                 
  ├─ Base Capacity Unit-Hour                                                                  1  Hours                                  $7.44 
  ├─ Additional Capacity Unit-Hour                                                            1  Hours                                  $7.44 
@@ -261,8 +315,6 @@
  ├─ Resource Units (IBM Models)                                                            500  RU                                     $0.05 
  ├─ Resource Units (Third Party Models)                                                    500  RU                                     $0.05 
  ├─ Mistral Large Input Resource Unit                                                       10  RU                                     $0.03 
- ├─ InstructLab Data                                                                        10  RU                                     $0.00 
- ├─ InstructLab Tuning                                                                      10  RU                                     $0.00 
  ├─ Mistral Large Model Hosting Access                                                       1  Hours                                 $36.40 
  ├─ Mistral 1 GPU Model Hosting Access                                                       1  Hours                                  $9.12 
  ├─ Mistral 2 GPU Model Hosting Access                                                       1  Hours                                 $18.25 
@@ -296,8 +348,6 @@
  ├─ Resource Units (IBM Models)                                          Monthly cost depends on usage: $0.000106 per RU                     
  ├─ Resource Units (Third Party Models)                                  Monthly cost depends on usage: $0.000106 per RU                     
  ├─ Mistral Large Input Resource Unit                                    Monthly cost depends on usage: $0.00318 per RU                      
- ├─ InstructLab Data                                                     Monthly cost depends on usage: $0.00 per RU                         
- ├─ InstructLab Tuning                                                   Monthly cost depends on usage: $0.00 per RU                         
  ├─ Mistral Large Model Hosting Access                                   Monthly cost depends on usage: $36.40 per Hours                     
  ├─ Mistral 1 GPU Model Hosting Access                                   Monthly cost depends on usage: $9.12 per Hours                      
  ├─ Mistral 2 GPU Model Hosting Access                                   Monthly cost depends on usage: $18.25 per Hours                     
@@ -389,7 +439,7 @@
  ibm_resource_instance.wx_orchestrate_trial                                                                                                  
  └─ Trial plan                                                                               1                                         $0.00 
                                                                                                                                              
- OVERALL TOTAL                                                                                                                   $115,460.71 
+ OVERALL TOTAL                                                                                                                   $116,619.71 
 ──────────────────────────────────
-65 cloud resources were detected:
-∙ 65 were estimated, all of which include usage-based costs, see https://infracost.io/usage-file
+67 cloud resources were detected:
+∙ 67 were estimated, all of which include usage-based costs, see https://infracost.io/usage-file
