@@ -74,6 +74,7 @@ func LoadUsageFromGlobalCatalog(globalCatalogPath string) (*UsageFile, error) {
 	if err != nil {
 		return blankUsage, errors.Wrapf(err, "Request to usage failed")
 	}
+	defer resp.Body.Close()
 	data, err := io.ReadAll(resp.Body)
 	if err != nil {
 		return blankUsage, errors.Wrapf(err, "Reading fetched usage failed")
