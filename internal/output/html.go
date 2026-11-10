@@ -24,12 +24,12 @@ func ToHTML(out Root, opts Options) ([]byte, error) {
 	tmpl.Funcs(sprig.FuncMap())
 	tmpl.Funcs(template.FuncMap{
 		"safeHTML": func(s interface{}) template.HTML {
-			return template.HTML(fmt.Sprint(s)) // nolint:gosec
+			return template.HTML(fmt.Sprint(s)) // #nosec G203 The input is already escaped or safe in this case
 		},
 		"replaceNewLines": func(s string) template.HTML {
 			safe := template.HTMLEscapeString(s)
 			safe = strings.ReplaceAll(safe, "\n", "<br />")
-			return template.HTML(safe) // nolint:gosec
+			return template.HTML(safe) // #nosec G203 The output is escaped on line 29
 		},
 		"stripColor": ui.StripColor,
 		"contains":   contains,
@@ -73,6 +73,9 @@ func ToHTML(out Root, opts Options) ([]byte, error) {
 		return []byte{}, err
 	}
 
-	bufw.Flush()
+	err = bufw.Flush()
+	if err != nil {
+		log.Println(err)
+	}
 	return buf.Bytes(), nil
 }
