@@ -55,8 +55,6 @@ func GetWMLCostComponents(r *ResourceInstance) []*schema.CostComponent {
 			WMLIBMModelResourceUnitsCostComponent(r),
 			WML3rdPartyModelResourceUnitsCostComponent(r),
 			WMLMistralLargeInputResourceUnitsCostComponent(r),
-			WMLInstructLabDataResourceUnitsCostComponent(r),
-			WMLInstructLabTuningResourceUnitsCostComponent(r),
 			// Categorial GPU selection
 			WMLModelHostingGPUHoursCostComponent(r, "HOURS_MISTRAL_LARGE"),
 			WMLModelHostingGPUHoursCostComponent(r, "HOURS_MISTRAL_ONE_GPU"),
@@ -361,54 +359,6 @@ func WMLMistralLargeInputResourceUnitsCostComponent(r *ResourceInstance) *schema
 		},
 		PriceFilter: &schema.PriceFilter{
 			Unit: strPtr("MISTRAL_LARGE_INPUT_RESOURCE_UNITS"),
-		},
-	}
-}
-
-func WMLInstructLabDataResourceUnitsCostComponent(r *ResourceInstance) *schema.CostComponent {
-	var q *decimal.Decimal
-	if r.WML_InstructlabDataRU != nil {
-		q = decimalPtr(decimal.NewFromFloat(*r.WML_InstructlabDataRU))
-	}
-	return &schema.CostComponent{
-		Name:            "InstructLab Data",
-		Unit:            "RU",
-		UnitMultiplier:  decimal.NewFromInt(1),
-		MonthlyQuantity: q,
-		ProductFilter: &schema.ProductFilter{
-			VendorName: strPtr("ibm"),
-			Region:     strPtr(r.Location),
-			Service:    &r.Service,
-			AttributeFilters: []*schema.AttributeFilter{
-				{Key: "planName", Value: &r.Plan},
-			},
-		},
-		PriceFilter: &schema.PriceFilter{
-			Unit: strPtr("INSTRUCTLAB_DATA"),
-		},
-	}
-}
-
-func WMLInstructLabTuningResourceUnitsCostComponent(r *ResourceInstance) *schema.CostComponent {
-	var q *decimal.Decimal
-	if r.WML_InstructlabDataRU != nil {
-		q = decimalPtr(decimal.NewFromFloat(*r.WML_InstructlabDataRU))
-	}
-	return &schema.CostComponent{
-		Name:            "InstructLab Tuning",
-		Unit:            "RU",
-		UnitMultiplier:  decimal.NewFromInt(1),
-		MonthlyQuantity: q,
-		ProductFilter: &schema.ProductFilter{
-			VendorName: strPtr("ibm"),
-			Region:     strPtr(r.Location),
-			Service:    &r.Service,
-			AttributeFilters: []*schema.AttributeFilter{
-				{Key: "planName", Value: &r.Plan},
-			},
-		},
-		PriceFilter: &schema.PriceFilter{
-			Unit: strPtr("INSTRUCTLAB_TUNING"),
 		},
 	}
 }

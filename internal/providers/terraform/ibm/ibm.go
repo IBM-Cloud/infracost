@@ -99,6 +99,7 @@ var globalCatalogServiceId = map[string]catalogMetadata{
 	"ibm_pi_instance":               {"Power Systems Virtual Server", []string{}, nil, "https://cloud.ibm.com/docs/power-iaas?topic=power-iaas-pricing-virtual-server"},
 	"ibm_pi_volume":                 {"Power Systems Storage Volume", []string{}, nil, "https://cloud.ibm.com/docs/power-iaas?topic=power-iaas-pricing-virtual-server#storage-type"},
 	"ibm_tg_gateway":                {"f38a4da0-c353-11e9-83b6-a36a57a97a06", []string{}, nil, "https://cloud.ibm.com/interconnectivity/transit/provision"},
+	"instructlab":                   {"instructlab", []string{}, nil, "https://cloud.ibm.com/inference/overview"},
 	"kms":                           {"ee41347f-b18e-4ca6-bf80-b5467c63f9a6", []string{}, nil, "https://cloud.ibm.com/catalog/services/key-protect"},
 	"logdna":                        {"e13e1860-959c-11e8-871e-ad157af61ad7", []string{}, nil, "https://cloud.ibm.com/catalog/services/logdna"},
 	"logdnaat":                      {"dcc46a60-e13b-11e8-a015-757410dab16b", []string{}, nil, "https://cloud.ibm.com/catalog/services/logdnaat"},
