@@ -141,6 +141,8 @@ func WOMonthlyActiveUsersCostComponent(r *ResourceInstance) *schema.CostComponen
 			// price for additional users charged is per 1k quantity, rounded up,
 			// so 1001 additional users will equal 2 blocks of additional users
 			q = decimalPtr(decimal.NewFromFloat(math.Ceil(additional_users / users_per_block)))
+		} else {
+			q = decimalPtr(decimal.Zero)
 		}
 	}
 
