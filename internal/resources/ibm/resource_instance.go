@@ -67,9 +67,35 @@ type ResourceInstance struct {
 	WML_TextExtractCat2Pages *float64 `infracost_usage:"wml_text_extract_cat_2_pages"`
 	WML_IBMModelRU           *float64 `infracost_usage:"wml_ibm_model_ru"`
 	WML_3rdPartyModelRU      *float64 `infracost_usage:"wml_3rd_party_model_ru"`
-	WML_InstructlabDataRU    *float64 `infracost_usage:"wml_instructlab_data_ru"`
-	WML_InstructlabTuningRU  *float64 `infracost_usage:"wml_instructlab_tuning_ru"`
 	WML_ModelHostingHours    *float64 `infracost_usage:"wml_model_hosting_hours"`
+	// InstructLab (Red Hat AI Inference)
+	// Catalog https://cloud.ibm.com/catalog/services/instructlab
+	// All quantities are in millions of tokens.
+	InstructLab_SynDataTokens             *float64 `infracost_usage:"instructlab_syn_data_tokens"`
+	InstructLab_SynDataTokens2e           *float64 `infracost_usage:"instructlab_syn_data_tokens_2e"`
+	InstructLab_SynDataTokens4e           *float64 `infracost_usage:"instructlab_syn_data_tokens_4e"`
+	InstructLab_ModelTrainTokens          *float64 `infracost_usage:"instructlab_model_train_tokens"`
+	InstructLab_ModelTrainTokens2e        *float64 `infracost_usage:"instructlab_model_train_tokens_2e"`
+	InstructLab_ModelTrainTokens4e        *float64 `infracost_usage:"instructlab_model_train_tokens_4e"`
+	InstructLab_ModelTestInputTokens      *float64 `infracost_usage:"instructlab_model_test_input_tokens"`
+	InstructLab_ModelTestOutputTokens     *float64 `infracost_usage:"instructlab_model_test_output_tokens"`
+	InstructLab_Qwen3_8BInputTokens       *float64 `infracost_usage:"instructlab_qwen3_8b_input_tokens"`
+	InstructLab_Qwen3_8BOutputTokens      *float64 `infracost_usage:"instructlab_qwen3_8b_output_tokens"`
+	InstructLab_GptOss120BInputTokens     *float64 `infracost_usage:"instructlab_gpt_oss_120b_input_tokens"`
+	InstructLab_GptOss120BOutputTokens    *float64 `infracost_usage:"instructlab_gpt_oss_120b_output_tokens"`
+	InstructLab_Gemma431BInputTokens      *float64 `infracost_usage:"instructlab_gemma_4_31b_it_input_tokens"`
+	InstructLab_Gemma431BOutputTokens     *float64 `infracost_usage:"instructlab_gemma_4_31b_it_output_tokens"`
+	InstructLab_Granite40SmallInputTokens *float64 `infracost_usage:"instructlab_granite_4_0_small_input_tokens"`
+	InstructLab_Granite40SmallOutTokens   *float64 `infracost_usage:"instructlab_granite_4_0_small_output_tokens"`
+	InstructLab_Granite4130BInputTokens   *float64 `infracost_usage:"instructlab_granite_4_1_30b_input_tokens"`
+	InstructLab_Granite4130BOutputTokens  *float64 `infracost_usage:"instructlab_granite_4_1_30b_output_tokens"`
+	InstructLab_GraniteEmbeddingInTokens  *float64 `infracost_usage:"instructlab_granite_embedding_278m_input_tokens"`
+	InstructLab_Llama3370BInputTokens     *float64 `infracost_usage:"instructlab_llama_3_3_70b_input_tokens"`
+	InstructLab_Llama3370BOutputTokens    *float64 `infracost_usage:"instructlab_llama_3_3_70b_output_tokens"`
+	InstructLab_MistralSmallInputTokens   *float64 `infracost_usage:"instructlab_mistral_small_3_2_24b_input_tokens"`
+	InstructLab_MistralSmallOutputTokens  *float64 `infracost_usage:"instructlab_mistral_small_3_2_24b_output_tokens"`
+	InstructLab_NemotronNanoInputTokens   *float64 `infracost_usage:"instructlab_nemotron3_nano_30b_input_tokens"`
+	InstructLab_NemotronNanoOutputTokens  *float64 `infracost_usage:"instructlab_nemotron3_nano_30b_output_tokens"`
 	// Watson Assistant
 	WA_Instance *float64 `infracost_usage:"wa_instance"`
 	WA_mau      *float64 `infracost_usage:"wa_monthly_active_users"`
@@ -81,22 +107,15 @@ type ResourceInstance struct {
 	WD_CustomModels *float64 `infracost_usage:"wd_custom_models"`
 	WD_Collections  *float64 `infracost_usage:"wd_collections"`
 	// watsonx Orchestrate
-	WO_Instance               *float64 `infracost_usage:"wo_instance"`
-	WO_mau                    *float64 `infracost_usage:"wo_monthly_active_users"`
-	WO_vu                     *float64 `infracost_usage:"wo_monthly_voice_users"`
-	WO_skillruns              *float64 `infracost_usage:"wo_skill_runs"`
-	WO_Class1RU               *float64 `infracost_usage:"wo_class1_ru"`
-	WO_Class2RU               *float64 `infracost_usage:"wo_class2_ru"`
-	WO_Class3RU               *float64 `infracost_usage:"wo_class3_ru"`
-	WO_AgentOracleHCM         *float64 `infracost_usage:"wo_oracle_hcm_agents"`
-	WO_AgentWorkdayHCM        *float64 `infracost_usage:"wo_workday_hcm_agents"`
-	WO_AgentSAPSuccessFactors *float64 `infracost_usage:"wo_sap_success_factors_agents"`
-	WO_AgentSourcingContract  *float64 `infracost_usage:"wo_sourcing_contract_agents"`
-	WO_AgentLearningDev       *float64 `infracost_usage:"wo_learning_dev_oracle_agents"`
-	WO_AgentPurchasing        *float64 `infracost_usage:"wo_purchasing_agents"`
-	WO_AgentInvoiceMgmt       *float64 `infracost_usage:"wo_invoice_mgmt_agents"`
-	WO_AgentSupplierMgmt      *float64 `infracost_usage:"wo_supplier_mgmt_agents"`
-	WO_AgentSalesProspecting  *float64 `infracost_usage:"wo_sales_prospecting_agents"`
+	WO_Instance             *float64 `infracost_usage:"wo_instance"`
+	WO_mau                  *float64 `infracost_usage:"wo_monthly_active_users"`
+	WO_vu                   *float64 `infracost_usage:"wo_monthly_voice_users"`
+	WO_PremierVoiceUsers    *float64 `infracost_usage:"wo_premier_voice_users"`
+	WO_PremierLLMMessages   *float64 `infracost_usage:"wo_premier_llm_messages"`
+	WO_ThirdPartyMinutes    *float64 `infracost_usage:"wo_third_party_minutes"`
+	WO_ThirdPartyCharacters *float64 `infracost_usage:"wo_third_party_characters"`
+	WO_Messages             *float64 `infracost_usage:"wo_messages"`
+	WO_Minutes              *float64 `infracost_usage:"wo_minutes"`
 
 	// Security and Compliance Center (SCC)
 	SCC_Evaluations *float64 `infracost_usage:"scc_evaluations"`
@@ -174,9 +193,32 @@ var ResourceInstanceUsageSchema = []*schema.UsageItem{
 	{Key: "wml_text_extract_cat_2_pages", DefaultValue: 0, ValueType: schema.Float64},
 	{Key: "wml_ibm_model_ru", DefaultValue: 0, ValueType: schema.Float64},
 	{Key: "wml_3rd_party_model_ru", DefaultValue: 0, ValueType: schema.Float64},
-	{Key: "wml_instructlab_data_ru", DefaultValue: 0, ValueType: schema.Float64},
-	{Key: "wsl_instructlab_tuning_ru", DefaultValue: 0, ValueType: schema.Float64},
 	{Key: "wml_model_hosting_hours", DefaultValue: 0, ValueType: schema.Float64},
+	{Key: "instructlab_syn_data_tokens", DefaultValue: 0, ValueType: schema.Float64},
+	{Key: "instructlab_syn_data_tokens_2e", DefaultValue: 0, ValueType: schema.Float64},
+	{Key: "instructlab_syn_data_tokens_4e", DefaultValue: 0, ValueType: schema.Float64},
+	{Key: "instructlab_model_train_tokens", DefaultValue: 0, ValueType: schema.Float64},
+	{Key: "instructlab_model_train_tokens_2e", DefaultValue: 0, ValueType: schema.Float64},
+	{Key: "instructlab_model_train_tokens_4e", DefaultValue: 0, ValueType: schema.Float64},
+	{Key: "instructlab_model_test_input_tokens", DefaultValue: 0, ValueType: schema.Float64},
+	{Key: "instructlab_model_test_output_tokens", DefaultValue: 0, ValueType: schema.Float64},
+	{Key: "instructlab_qwen3_8b_input_tokens", DefaultValue: 0, ValueType: schema.Float64},
+	{Key: "instructlab_qwen3_8b_output_tokens", DefaultValue: 0, ValueType: schema.Float64},
+	{Key: "instructlab_gpt_oss_120b_input_tokens", DefaultValue: 0, ValueType: schema.Float64},
+	{Key: "instructlab_gpt_oss_120b_output_tokens", DefaultValue: 0, ValueType: schema.Float64},
+	{Key: "instructlab_gemma_4_31b_it_input_tokens", DefaultValue: 0, ValueType: schema.Float64},
+	{Key: "instructlab_gemma_4_31b_it_output_tokens", DefaultValue: 0, ValueType: schema.Float64},
+	{Key: "instructlab_granite_4_0_small_input_tokens", DefaultValue: 0, ValueType: schema.Float64},
+	{Key: "instructlab_granite_4_0_small_output_tokens", DefaultValue: 0, ValueType: schema.Float64},
+	{Key: "instructlab_granite_4_1_30b_input_tokens", DefaultValue: 0, ValueType: schema.Float64},
+	{Key: "instructlab_granite_4_1_30b_output_tokens", DefaultValue: 0, ValueType: schema.Float64},
+	{Key: "instructlab_granite_embedding_278m_input_tokens", DefaultValue: 0, ValueType: schema.Float64},
+	{Key: "instructlab_llama_3_3_70b_input_tokens", DefaultValue: 0, ValueType: schema.Float64},
+	{Key: "instructlab_llama_3_3_70b_output_tokens", DefaultValue: 0, ValueType: schema.Float64},
+	{Key: "instructlab_mistral_small_3_2_24b_input_tokens", DefaultValue: 0, ValueType: schema.Float64},
+	{Key: "instructlab_mistral_small_3_2_24b_output_tokens", DefaultValue: 0, ValueType: schema.Float64},
+	{Key: "instructlab_nemotron3_nano_30b_input_tokens", DefaultValue: 0, ValueType: schema.Float64},
+	{Key: "instructlab_nemotron3_nano_30b_output_tokens", DefaultValue: 0, ValueType: schema.Float64},
 	{Key: "wa_instance", DefaultValue: 0, ValueType: schema.Float64},
 	{Key: "wa_monthly_active_users", DefaultValue: 0, ValueType: schema.Float64},
 	{Key: "wa_monthly_voice_users", DefaultValue: 0, ValueType: schema.Float64},
@@ -188,10 +230,12 @@ var ResourceInstanceUsageSchema = []*schema.UsageItem{
 	{Key: "wo_instance", DefaultValue: 0, ValueType: schema.Float64},
 	{Key: "wo_monthly_active_users", DefaultValue: 0, ValueType: schema.Float64},
 	{Key: "wo_monthly_voice_users", DefaultValue: 0, ValueType: schema.Float64},
-	{Key: "wo_skill_runs", DefaultValue: 0, ValueType: schema.Float64},
-	{Key: "wo_class1_ru", DefaultValue: 0, ValueType: schema.Float64},
-	{Key: "wo_class2_ru", DefaultValue: 0, ValueType: schema.Float64},
-	{Key: "wo_class3_ru", DefaultValue: 0, ValueType: schema.Float64},
+	{Key: "wo_premier_voice_users", DefaultValue: 0, ValueType: schema.Float64},
+	{Key: "wo_premier_llm_messages", DefaultValue: 0, ValueType: schema.Float64},
+	{Key: "wo_third_party_minutes", DefaultValue: 0, ValueType: schema.Float64},
+	{Key: "wo_third_party_characters", DefaultValue: 0, ValueType: schema.Float64},
+	{Key: "wo_messages", DefaultValue: 0, ValueType: schema.Float64},
+	{Key: "wo_minutes", DefaultValue: 0, ValueType: schema.Float64},
 	{Key: "scc_evaluations", DefaultValue: 0, ValueType: schema.Float64},
 	{Key: "data-science-experience_CAPACITY_UNIT_HOURS", DefaultValue: 1, ValueType: schema.Float64},
 	{Key: "sysdig-secure_MULTI_CLOUD_CSPM_COMPUTE_INSTANCES", DefaultValue: 0, ValueType: schema.Float64},
@@ -236,6 +280,7 @@ var ResourceInstanceCostMap map[string]ResourceCostComponentsFunc = map[string]R
 	"discovery":               GetWDCostComponents,
 	"dns-svcs":                GetDNSServicesCostComponents,
 	"event-notifications":     GetEventNotificationsCostComponents,
+	"instructlab":             GetInstructLabCostComponents,
 	"kms":                     GetKMSCostComponents,
 	"logdna":                  GetLogDNACostComponents,
 	"logdnaat":                GetActivityTrackerCostComponents,
