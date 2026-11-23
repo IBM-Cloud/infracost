@@ -60,9 +60,33 @@ resource_usage:
         wml_text_extract_cat_2_pages: 10
         wml_ibm_model_ru: 500
         wml_3rd_party_model_ru: 500
-        wml_instructlab_data_ru: 10
-        wml_instructlab_tuning_ru: 10
         wml_model_hosting_hours: 1
+    ibm_resource_instance.instructlab_standard:
+        instructlab_syn_data_tokens: 10
+        instructlab_syn_data_tokens_2e: 10
+        instructlab_syn_data_tokens_4e: 10
+        instructlab_model_train_tokens: 10
+        instructlab_model_train_tokens_2e: 10
+        instructlab_model_train_tokens_4e: 10
+        instructlab_model_test_input_tokens: 10
+        instructlab_model_test_output_tokens: 10
+        instructlab_qwen3_8b_input_tokens: 100
+        instructlab_qwen3_8b_output_tokens: 100
+        instructlab_gpt_oss_120b_input_tokens: 100
+        instructlab_gpt_oss_120b_output_tokens: 100
+        instructlab_gemma_4_31b_it_input_tokens: 100
+        instructlab_gemma_4_31b_it_output_tokens: 100
+        instructlab_granite_4_0_small_input_tokens: 100
+        instructlab_granite_4_0_small_output_tokens: 100
+        instructlab_granite_4_1_30b_input_tokens: 100
+        instructlab_granite_4_1_30b_output_tokens: 100
+        instructlab_granite_embedding_278m_input_tokens: 100
+        instructlab_llama_3_3_70b_input_tokens: 100
+        instructlab_llama_3_3_70b_output_tokens: 100
+        instructlab_mistral_small_3_2_24b_input_tokens: 100
+        instructlab_mistral_small_3_2_24b_output_tokens: 100
+        instructlab_nemotron3_nano_30b_input_tokens: 100
+        instructlab_nemotron3_nano_30b_output_tokens: 100
     ibm_resource_instance.wa_instance_plus:
         wa_instance: 1
         wa_monthly_active_users: 2000
@@ -157,49 +181,37 @@ resource_usage:
     ibm_resource_instance.event_notifications[*]:
         event-notifications_MILLION_INGESTED_EVENTS: 1
 
-    ibm_resource_instance.wx_orchestrate_essentials:
+    ibm_resource_instance.wx_orchestrate_essentials_agentic_usage:
         wo_instance: 1
         wo_monthly_active_users: 5000
         wo_monthly_voice_users: 1
-        wo_skill_runs: 1
-        wo_class1_ru: 1
-        wo_class2_ru: 1
-        wo_class3_ru: 1
-
-    ibm_resource_instance.wx_orchestrate_standard:
-        wo_instance: 1
-        wo_monthly_active_users: 41000
-        wo_monthly_voice_users: 1
-        wo_skill_runs: 1
-        wo_class1_ru: 1
-        wo_class2_ru: 1
-        wo_class3_ru: 1
-
-    ibm_resource_instance.wx_orchestrate_essentials_agentic_usage:
-        wo_instance: 1
-        wo_monthly_active_users: 41000
-        wo_monthly_voice_users: 1
-        wo_oracle_hcm_agents: 1
-        wo_workday_hcm_agents: 1
-        wo_sap_success_factors_agents: 1
-        wo_sourcing_contract_agents: 1
-        wo_learning_dev_oracle_agents: 1
-        wo_purchasing_agents: 1
-        wo_invoice_mgmt_agents: 1
-        wo_supplier_mgmt_agents: 1
-        wo_sales_prospecting_agents: 1
+        wo_premier_voice_users: 1
+        wo_premier_llm_messages: 10001
+        wo_third_party_minutes: 100
+        wo_third_party_characters: 1001
 
     ibm_resource_instance.wx_orchestrate_standard_agentic_usage:
         wo_instance: 1
         wo_monthly_active_users: 41000
         wo_monthly_voice_users: 1
-
+        wo_premier_voice_users: 1
+        wo_premier_llm_messages: 10001
+        wo_third_party_minutes: 100
+        wo_third_party_characters: 1001
 
     ibm_resource_instance.wx_orchestrate_premium_agentic_usage:
         wo_instance: 1
         wo_monthly_active_users: 51000
         wo_monthly_voice_users: 1
+        wo_premier_voice_users: 1
+        wo_premier_llm_messages: 10001
+        wo_third_party_minutes: 100
+        wo_third_party_characters: 1001
 
+    ibm_resource_instance.wx_orchestrate_premium_agentic_messages_usage:
+        wo_instance: 1
+        wo_messages: 10001
+        wo_minutes: 100
 
     ibm_resource_instance.resource_instance_logs:
         logs_hours: 34
