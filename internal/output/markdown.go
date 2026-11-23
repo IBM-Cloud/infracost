@@ -10,6 +10,7 @@ import (
 	"github.com/Masterminds/sprig"
 	"github.com/pkg/errors"
 	"github.com/shopspring/decimal"
+	log "github.com/sirupsen/logrus"
 
 	"github.com/infracost/infracost/internal/ui"
 )
@@ -234,7 +235,10 @@ func ToMarkdown(out Root, opts Options, markdownOpts MarkdownOptions) ([]byte, e
 		return []byte{}, err
 	}
 
-	bufw.Flush()
+	err = bufw.Flush()
+	if err != nil {
+		log.Println(err)
+	}
 	msg := buf.Bytes()
 
 	msgByteLength := len(msg)

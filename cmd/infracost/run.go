@@ -436,7 +436,23 @@ func (r *parallelRunner) runProjectConfig(ctx *config.ProjectContext) (*projectO
 			)
 		}
 	} else {
-		usageFile = usage.NewBlankUsageFile()
+		if ctx.RunContext.Config.IBMUsage != "" {
+			usageFile, err = usage.LoadUsageFromGlobalCatalog(ctx.RunContext.Config.IBMUsage)
+			if err != nil {
+				return nil, err
+			}
+			invalidKeys, err := usageFile.InvalidKeys()
+			if err != nil {
+				log.Errorf("Error checking usage file keys: %v", err)
+			} else if len(invalidKeys) > 0 {
+				ui.PrintWarningf(r.cmd.ErrOrStderr(),
+					"The following usage file parameters are invalid and will be ignored: %s\n",
+					strings.Join(invalidKeys, ", "),
+				)
+			}
+		} else {
+			usageFile = usage.NewBlankUsageFile()
+		}
 	}
 
 	if len(usageData) > 0 {
