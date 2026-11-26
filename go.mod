@@ -91,7 +91,6 @@ require (
 	github.com/IBM/go-sdk-core/v5 v5.22.0
 	github.com/alecthomas/jsonschema v0.0.0-20211209230136-e2b41affa5c1
 	github.com/awslabs/goformation/v7 v7.2.5
-	github.com/dave/dst v0.28.0
 	github.com/go-git/go-billy/v5 v5.9.0
 	github.com/go-git/go-git/v5 v5.19.2
 	github.com/google/go-github/v41 v41.0.0
